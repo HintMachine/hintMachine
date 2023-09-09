@@ -14,7 +14,7 @@ using System.Timers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace XenotiltAP
+namespace HintMachine
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -130,18 +130,7 @@ namespace XenotiltAP
                 case "One Finger Death Punch":
                     firstLabel.Content = "Kills : ";
                     ProcessModule ofdpModule = process.MainModule;
-                    ulong adress = ProcessUtils64.GetThreadStack0(process);
-                    Console.WriteLine("Adress : " + adress);
-                    foreach (ProcessThread thread in process.Threads)
-                    {
-                        Microsoft.Win32.SafeHandles.SafeAccessTokenHandle handle = OpenThread(ThreadAccess.GET_CONTEXT | ThreadAccess.QUERY_INFORMATION, false, Convert.ToUInt32(thread.Id));
-                        Console.WriteLine("Handle : " +handle.DangerousGetHandle() + "| Thread : " + thread.Id);
-                        
-                        //NtQueryInformationThread(handle.DangerousGetHandle(),)
-                        //NtQueryInformationThread(handle,thread.b
-                        //GetModuleInformation();
-                    }
-                    //ProcessUtils64.CheatEngine
+                    
                     uint adr = ProcessUtils32.CheatengineSpecific.GetThreadStack0(process);
                     processHandle = OpenProcess(PROCESS_WM_READ, false, process.Id);
                     Console.WriteLine("Adress 32 : " + adr);
@@ -149,32 +138,13 @@ namespace XenotiltAP
                         Console.WriteLine(OpenThread(ThreadAccess.QUERY_INFORMATION, false, (uint)pt.Id).DangerousGetHandle().ToInt32());
                         
                     }
-                    int bytesReadOfdp = 0;
-                    byte[] bufferOfdp = new byte[4];
 
                     if (ofdpModule != null)
                     {
-
-                        //long adressToRead = ofdpModule.BaseAddress.ToInt64() - 0x8C8;
                         long adressToRead = adr;
 
                         Console.WriteLine(ProcessUtils32.CheatengineSpecific.ReadPointerChain_64<int>(processHandle, (uint)adressToRead, new int[] {-0x8c8, 0x644, 0x90 }));
-                        /*
-                        ReadProcessMemory((int)processHandle, adressToRead, bufferOfdp, bufferOfdp.Length, ref bytesReadOfdp);
-                        Console.WriteLine(BitConverter.ToInt64(bufferOfdp, 0) +
-                            " (" + bytesReadOfdp.ToString() + "bytes)");
 
-                        adressToRead = BitConverter.ToInt64(bufferOfdp, 0) + 0x644;
-                        ReadProcessMemory((int)processHandle, 0x060E56C8, bufferOfdp, bufferOfdp.Length, ref bytesReadOfdp);
-                        Console.WriteLine(BitConverter.ToInt64(bufferOfdp, 0) +
-                            " (" + bytesReadOfdp.ToString() + "bytes)");
-
-                        adressToRead = BitConverter.ToInt64(bufferOfdp, 0) + 0x90;
-                        //ReadProcessMemory((int)processHandle, adressToRead, bufferOfdp, bufferOfdp.Length, ref bytesReadOfdp);
-                        //Console.WriteLine(BitConverter.ToInt64(bufferOfdp, 0) +
-                        //    " (" + bytesReadOfdp.ToString() + "bytes)");
-                        */
-                        //adressToRead = BitConverter.ToInt64(bufferOfdp, 0) + 0x7C0;
                         survivalKillsAdress = adressToRead;
                         _timer = new System.Timers.Timer { AutoReset = false, Interval = 1000 };
                         _timer.Elapsed += TimerElapsed;
@@ -225,9 +195,7 @@ namespace XenotiltAP
 
         private void getAndDisplaySurvivalKills(IntPtr processHandle, byte[] buffer, int bytesRead)
         {
-            //ReadProcessMemory((int)processHandle, scoreAdress, buffer, buffer.Length, ref bytesRead);
             survivalKills = ProcessUtils32.CheatengineSpecific.ReadPointerChain_64<int>(processHandle, (uint)survivalKillsAdress, new int[] { -0x8c8, 0x644, 0x90 });
-            //survivalKills = BitConverter.ToInt64(buffer, 0);
             if (survivalKills > survivalKillsObjectif * (nbHintsSent + 1))
             {
                 nbHintsSent++;
@@ -243,12 +211,12 @@ namespace XenotiltAP
             });
 
         }
-
+        
         public void Main2()
         {
             loginAndGetItem();
         }
-
+        
         private void loginAndGetItem()
         {
 

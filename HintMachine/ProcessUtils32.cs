@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
-namespace XenotiltAP
+namespace HintMachine
 {
     public static class ProcessUtils32
     {
