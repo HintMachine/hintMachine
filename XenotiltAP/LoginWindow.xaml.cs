@@ -37,37 +37,25 @@ namespace XenotiltAP
             }
 
             //fill combobox
+            gameComboBox.Items.Add("One Finger Death Punch");
             gameComboBox.Items.Add("Xenotilt");
+
             gameComboBox.SelectedIndex = 0;
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //String[] adressAndPort = archipelagoAdress.Text.Split(':');
-            //ArchipelagoSession archipelagoSession = ArchipelagoSessionFactory.CreateSession(adressAndPort[0], Int32.Parse(adressAndPort[1]));
-            ArchipelagoSession archipelagoSession = ArchipelagoSessionFactory.CreateSession("archipelago.gg:52812");
-            //App.SingletonApp.session = archipelagoSession;
+
+            ArchipelagoSession archipelagoSession = ArchipelagoSessionFactory.CreateSession(archipelagoAdress.Text);
             LoginResult loginResult;
-            //RoomInfoPacket x = await archipelagoSession.ConnectAsync();
             try
             {
                 Console.WriteLine("Start Connect & Login");
-                //archipelagoSession.ConnectAsync();
-                // PlayerInfo player = archipelagoSession.Players.AllPlayers.Where(p => p.Name.Equals(slotName.Text)).FirstOrDefault();
+
                 String game;
-                //if (player != null)
-                //{
-                //    game = player.Game;
 
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Cant find player in slot.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                //   return;
-
-                //}
                 game = "";
-                loginResult = archipelagoSession.TryConnectAndLogin(game, slotName.Text, ItemsHandlingFlags.AllItems, new Version(0, 4, 2), new string[] { "AP", "TextOnly"}, null, null, true);
+                loginResult = archipelagoSession.TryConnectAndLogin(game, slotName.Text, ItemsHandlingFlags.AllItems, new Version(0, 4, 1), new string[] { "AP", "TextOnly"}, null, null, true);
             }
             catch (Exception ex)
             {

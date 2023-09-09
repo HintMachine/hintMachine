@@ -106,6 +106,8 @@
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProcessUtils32.cs" />
+    <Compile Include="ProcessUtils64.cs" />
     <Compile Include="TokenManipulator.cs" />
     <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
