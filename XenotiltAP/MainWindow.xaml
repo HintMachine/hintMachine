@@ -7,12 +7,12 @@
         mc:Ignorable="d"
         Title="HintMachine" Height="626" Width="1024">
     <Grid>
-        <Label Content="Score : " HorizontalAlignment="Left" Margin="9,52,0,0" VerticalAlignment="Top" Width="42"/>
-        <ProgressBar x:Name="progressBarScore" HorizontalAlignment="Left" Height="26" Margin="260,52,0,0" VerticalAlignment="Top" Width="248" Cursor="AppStarting"/>
-        <Label x:Name="scoreLabel" Content="0" HorizontalAlignment="Left" Margin="56,52,0,0" VerticalAlignment="Top" Width="199" HorizontalContentAlignment="Right"/>
-        <Label x:Name="pourcentageScoreLabel" Content="0%" HorizontalAlignment="Left" Margin="370,52,0,0" VerticalAlignment="Top" Height="26" FontSize="8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="28"/>
+        <Label x:Name="firstLabel" Content="" HorizontalAlignment="Left" Margin="9,52,0,0" VerticalAlignment="Top" Width="42"/>
+        <ProgressBar x:Name="progressBarFirst" HorizontalAlignment="Left" Height="26" Margin="260,52,0,0" VerticalAlignment="Top" Width="248" Cursor="AppStarting"/>
+        <Label x:Name="firstLabelValue" Content="0" HorizontalAlignment="Left" Margin="56,52,0,0" VerticalAlignment="Top" Width="199" HorizontalContentAlignment="Right"/>
+        <Label x:Name="pourcentageFirstLabel" Content="0%" HorizontalAlignment="Left" Margin="370,52,0,0" VerticalAlignment="Top" Height="26" FontSize="8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="28"/>
         <Label Content="Jeu : " HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="41"/>
-        <Label Content="Xenotilt" HorizontalAlignment="Left" Margin="51,21,0,0" VerticalAlignment="Top" Width="457"/>
+        <Label x:Name="gameName" Content="" HorizontalAlignment="Left" Margin="51,21,0,0" VerticalAlignment="Top" Width="457"/>
         <Label Content="Locked balls : " HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="87" Visibility="Hidden"/>
         <Label Content="0&#xD;&#xA;" HorizontalAlignment="Left" Margin="102,83,0,0" VerticalAlignment="Top" Width="153" Height="26" HorizontalContentAlignment="Right" Visibility="Hidden"/>
         <ProgressBar HorizontalAlignment="Left" Height="26" Margin="260,83,0,0" VerticalAlignment="Top" Width="248" Cursor="AppStarting" Visibility="Hidden"/>
