@@ -4,7 +4,7 @@ namespace HintMachine.Games
 {
     public class OneFingerDeathPunchConnector : IGameConnectorProcess
     {
-        private long _previousKills = 0;
+        private long _previousKills = long.MaxValue;
         private readonly HintQuest _killsQuest = new HintQuest("Kills", 450);
 
         public OneFingerDeathPunchConnector() : base("One Finger Death Punch")

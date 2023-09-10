@@ -5,7 +5,7 @@ namespace HintMachine.Games
 {
     public class XenotiltConnector : IGameConnectorProcess
     {
-        private long _previousScore = 0;
+        private long _previousScore = long.MaxValue;
         private readonly HintQuest _scoreQuest = new HintQuest("Score", 200000000);
 
         public XenotiltConnector() : base("Xenotilt", "mono-2.0-bdwgc.dll")

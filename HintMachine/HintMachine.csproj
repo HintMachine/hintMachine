@@ -116,7 +116,7 @@
     <Compile Include="IGameConnector.cs" />
     <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
     <Compile Include="Games\XenotiltConnector.cs" />
-    <Compile Include="IGameConnectorProcess32Bit.cs" />
+    <Compile Include="IGameConnectorProcess.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>

@@ -8,31 +8,31 @@ namespace HintMachine.Games
 {
     public class PuyoTetrisConnector : IGameConnectorProcess
     {
-        private long _previousLineCount = 0;
+        private ushort _previousLineCount = ushort.MaxValue;
         private readonly HintQuest _linesQuest = new HintQuest("Cleared Lines", 200);
 
-        private long _previousTetrises = 0;
+        private ushort _previousTetrises = ushort.MaxValue;
         private readonly HintQuest _tetrisesQuest = new HintQuest("Tetrises", 25);
 
-        private long _previousTspins = 0;
+        private ushort _previousTspins = ushort.MaxValue;
         private readonly HintQuest _tspinsQuest = new HintQuest("T-Spins", 40);
 
-        private long _previousCombos = 0;
+        private byte _previousCombos = byte.MaxValue;
         private readonly HintQuest _combosQuest = new HintQuest("Combos", 60);
 
-        private long _previousPerfectClears = 0;
+        private ushort _previousPerfectClears = ushort.MaxValue;
         private readonly HintQuest _perfectClearsQuest = new HintQuest("Perfect Clears", 5);
 
-        private long _previousBackToBack = 0;
+        private byte _previousBackToBack = byte.MaxValue;
         private readonly HintQuest _backToBackQuest = new HintQuest("Back-to-Back", 30);
 
-        private long _previousPoppedPuyos = 0;
+        private ushort _previousPoppedPuyos = ushort.MaxValue;
         private readonly HintQuest _poppedPuyosQuest = new HintQuest("Popped Puyos", 500);
 
-        private long _previousChain = 0;
+        private byte _previousChain = byte.MaxValue;
         private readonly HintQuest _chainsQuest = new HintQuest("Chains", 100);
 
-        private long _previousAllClears = 0;
+        private byte _previousAllClears = byte.MaxValue;
         private readonly HintQuest _allClearsQuest = new HintQuest("All Clears", 5);
 
         public PuyoTetrisConnector() : base("PuyoPuyoTetris"/*, "puyopuyotetris.exe"*/)
@@ -123,7 +123,6 @@ namespace HintMachine.Games
             if(poppedPuyosCount > _previousPoppedPuyos)
                 _poppedPuyosQuest.Add(poppedPuyosCount - _previousPoppedPuyos);
             _previousPoppedPuyos = poppedPuyosCount;
-
 
             byte chainCount = ReadUint8(puyoDataBaseAddr - 0x4);
             if(chainCount > _previousChain)
