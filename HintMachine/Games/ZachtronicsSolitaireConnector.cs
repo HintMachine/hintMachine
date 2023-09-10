@@ -7,10 +7,11 @@ namespace HintMachine.Games
 {
     public class ZachtronicsSolitaireConnector : IGameConnector
     {
-        private long _pollCount = 0;
-
         private int _previousWins = int.MaxValue;
         private readonly HintQuest _winsQuest = new HintQuest("Wins", 2);
+
+        FileSystemWatcher _watcher = null;
+        private bool _readSaveFileOnNextTick = false;
 
         public ZachtronicsSolitaireConnector()
         {
@@ -21,8 +22,17 @@ namespace HintMachine.Games
         {
             try
             {
-                FileStream file = new FileStream(FindSavefilePath(), FileMode.Open, FileAccess.Read);
-                file.Close();
+                // Read the file a first time to have the initial win count
+                _previousWins = ReadTotalWinCount();
+
+                // Setup a watcher to be notified when the file is changed
+                _watcher = new FileSystemWatcher();
+                _watcher.Path = FindSavefileDirectory();
+                _watcher.NotifyFilter = NotifyFilters.LastWrite;
+                _watcher.Filter = "save.dat";
+                _watcher.Changed += new FileSystemEventHandler(OnFileChanged);
+                _watcher.EnableRaisingEvents = true;
+
                 return true;
             }
             catch
@@ -31,7 +41,11 @@ namespace HintMachine.Games
             }
         }
 
-        public override void Disconnect() {}
+        public override void Disconnect()
+        {
+            _watcher.EnableRaisingEvents = false;
+            _watcher = null; 
+        }
 
         public override string GetDisplayName()
         {
@@ -40,14 +54,20 @@ namespace HintMachine.Games
 
         public override void Poll()
         {
-            // Only read the file once every 20 ticks (every 2 seconds)
-            if (++_pollCount % 20 != 0)
-                return;
+            if (_readSaveFileOnNextTick)
+            {
+                int totalWinCount = ReadTotalWinCount();
+                if (totalWinCount > _previousWins)
+                    _winsQuest.Add(totalWinCount - _previousWins);
+                _previousWins = totalWinCount;
 
-            int totalWinCount = ReadTotalWinCount();
-            if (totalWinCount > _previousWins)
-                _winsQuest.Add(totalWinCount - _previousWins);
-            _previousWins = totalWinCount;
+                _readSaveFileOnNextTick = false;
+            }
+        }
+
+        private void OnFileChanged(object source, FileSystemEventArgs e)
+        {
+            _readSaveFileOnNextTick = true;
         }
 
         private int ReadTotalWinCount()
@@ -55,7 +75,7 @@ namespace HintMachine.Games
             int totalWinCount = 0;
             try
             {
-                FileStream file = new FileStream(FindSavefilePath(), FileMode.Open, FileAccess.Read);
+                FileStream file = new FileStream(FindSavefileDirectory() + "save.dat", FileMode.Open, FileAccess.Read);
                 using (var streamReader = new StreamReader(file, Encoding.UTF8))
                 {
                     string text = streamReader.ReadToEnd();
@@ -68,7 +88,9 @@ namespace HintMachine.Games
                         if (keyval.Length < 2)
                             continue;
 
-                        if (keyval[0].Contains("WinCount"))
+                        if (keyval[0] == "Milan.WinCount")
+                            totalWinCount += int.Parse(keyval[1]) * 2; // Fortune's Foundation wins are worth double
+                        else if (keyval[0].Contains("WinCount"))
                             totalWinCount += int.Parse(keyval[1]);
                     }
                 }
@@ -80,10 +102,10 @@ namespace HintMachine.Games
             return totalWinCount;
         }
 
-        private string FindSavefilePath()
+        private string FindSavefileDirectory()
         {
             string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path += @"\My Games\The Zachtronics Solitaire Collection\NonSteamUser\save.dat";
+            path += @"\My Games\The Zachtronics Solitaire Collection\NonSteamUser\";
             return path;
         }
     }
