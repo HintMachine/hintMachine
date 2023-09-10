@@ -62,14 +62,14 @@ namespace HintMachine
             }
         }
 
-        public void GetOneRandomHint()
+        public string GetOneRandomHint()
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
             foreach(long locationId in _alreadyHintedLocations)
                 missingLocations.Remove(locationId);
 
             if (missingLocations.Count == 0)
-                return;
+                return "";
 
             Random rnd = new Random();
             int index = rnd.Next(missingLocations.Count);
@@ -83,9 +83,7 @@ namespace HintMachine
             string playerName = _session.Players.GetPlayerName(response.Locations[0].Player);
             string locationName = _session.Locations.GetLocationNameFromId(response.Locations[0].Location);
 
-            string hintText = playerName + "'s " + itemName + " can be found at '" + locationName + "'";
-            Console.WriteLine(hintText);
-            MessageBox.Show(hintText);
+            return playerName + "'s " + itemName + " can be found at '" + locationName + "'";
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Timers;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using System;
+using Archipelago.MultiClient.Net.Models;
 
 namespace HintMachine
 {
@@ -10,17 +12,17 @@ namespace HintMachine
     /// </summary>
     public partial class MainWindow : Window
     {
-        ArchipelagoHintSession archipelagoSession;
-        IGameConnector game;
-
-        private Timer _timer;
+        private readonly ArchipelagoHintSession _archipelagoSession;
+        private readonly IGameConnector _game;
+        private readonly Timer _timer;
 
         public MainWindow(ArchipelagoHintSession archipelagoSession, IGameConnector game)
         {
             InitializeComponent();
+            Title = "Hint Machine - " + game.GetDisplayName();
 
-            this.archipelagoSession = archipelagoSession;
-            this.game = game;
+            _archipelagoSession = archipelagoSession;
+            _game = game;
 
             foreach (HintQuest quest in game.quests)
             {
@@ -32,23 +34,32 @@ namespace HintMachine
             _timer.Elapsed += TimerElapsed;
             _timer.AutoReset = true;
             _timer.Enabled = true;
+
+            Log("Hint Machine is connected to " + game.GetDisplayName());
+            Log("You can start playing to complete objectives on the left panel and get random hints on your world.");
         }
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
-            game.Poll();
+            _game.Poll();
 
-            foreach(HintQuest quest in game.quests)
+            foreach(HintQuest quest in _game.quests)
             {
-                if(quest.CheckCompletion())
-                    archipelagoSession.GetOneRandomHint();
-
-                Dispatcher.Invoke(() =>
+                if (quest.CheckCompletion())
                 {
-                    quest.UpdateComponents();
-                });
+                    string hint = _archipelagoSession.GetOneRandomHint();
+                    if(hint.Length != 0)
+                        Log(hint);
+                }
+
+                Dispatcher.Invoke(() => { quest.UpdateComponents(); });
             }
         }
 
+        public void Log(string message)
+        {
+            Console.WriteLine(message);
+            messageLog.Text += message + "\n";
+        }
     }
 }

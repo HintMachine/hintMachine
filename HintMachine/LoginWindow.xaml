@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine"
         mc:Ignorable="d"
-        Title="HintMachine" Height="247" Width="461" Background="#FFEEEEEE" ResizeMode="NoResize">
+        Title="HintMachine" Height="247" Width="461" Background="#FFEEEEEE" ResizeMode="NoResize" Icon="/icon.png">
     <Grid Margin="0,24,0,0" HorizontalAlignment="Center" Width="397" Height="202" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="169*"/>
+            <RowDefinition Height="33*"/>
+        </Grid.RowDefinitions>
         <Label Content="Archipelago host :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="archipelagoAddress" Height="23" Margin="122,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="archipelago.gg:12345"/>
         

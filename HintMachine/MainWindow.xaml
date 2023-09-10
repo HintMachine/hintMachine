@@ -5,11 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine"
         mc:Ignorable="d"
-        Title="HintMachine" Height="366" Width="639" Background="#FFEEEEEE">
-    <Grid Name="questsGrid" Margin="12,12,12,12">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-    </Grid>
+        Title="HintMachine" Height="600" Width="1024" Background="#FFEEEEEE" Icon="/icon.png">
+	<Grid Name="mainGrid" Margin="12,12,12,12">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="300" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid Name="questsGrid">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+		</Grid>
+
+		<Border BorderThickness="1" BorderBrush="#FF888888" Background="#FFDDDDDD" Grid.Column="1" Margin="12,0,0,0">
+			<TextBlock Name="messageLog" Margin="6,4,6,4" FontSize="14" />
+		</Border>
+	</Grid>
+
 </Window>
