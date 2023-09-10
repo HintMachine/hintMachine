@@ -111,6 +111,7 @@
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="GamesList.cs" />
     <Compile Include="Games\PuyoTetrisConnector.cs" />
+    <Compile Include="Games\TetrisEffectConnector.cs" />
     <Compile Include="HintQuest.cs" />
     <Compile Include="IGameConnector.cs" />
     <Compile Include="Games\OneFingerDeathPunchConnector.cs" />

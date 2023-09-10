@@ -67,7 +67,10 @@ namespace HintMachine
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
             foreach(long locationId in _alreadyHintedLocations)
                 missingLocations.Remove(locationId);
-            
+
+            if (missingLocations.Count == 0)
+                return;
+
             Random rnd = new Random();
             int index = rnd.Next(missingLocations.Count);
             long hintedLocationId = _session.Locations.AllMissingLocations[index];
@@ -79,7 +82,10 @@ namespace HintMachine
             string itemName = _session.Items.GetItemName(response.Locations[0].Item);
             string playerName = _session.Players.GetPlayerName(response.Locations[0].Player);
             string locationName = _session.Locations.GetLocationNameFromId(response.Locations[0].Location);
-            Console.WriteLine(playerName + "'s " + itemName + " can be found at '" + locationName + "'");
+
+            string hintText = playerName + "'s " + itemName + " can be found at '" + locationName + "'";
+            Console.WriteLine(hintText);
+            MessageBox.Show(hintText);
         }
     }
 }

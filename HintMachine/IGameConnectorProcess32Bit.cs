@@ -130,6 +130,17 @@ namespace HintMachine
             return BitConverter.ToUInt16(buffer, 0);
         }
 
+        protected uint ReadUint32(long address)
+        {
+            if (processHandle == IntPtr.Zero)
+                return 0;
+
+            int bytesRead = 0;
+            byte[] buffer = new byte[sizeof(uint)];
+            ReadProcessMemory((int)processHandle, address, buffer, buffer.Length, ref bytesRead);
+            return BitConverter.ToUInt32(buffer, 0);
+        }
+
         protected long ReadInt64(long address)
         {
             if (processHandle == IntPtr.Zero)
