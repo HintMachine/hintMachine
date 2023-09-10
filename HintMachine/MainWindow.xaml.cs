@@ -59,7 +59,7 @@ namespace HintMachine
         public void Log(string message)
         {
             Console.WriteLine(message);
-            messageLog.Text += message + "\n";
+            Dispatcher.Invoke(() => { messageLog.Text += message + "\n"; });
         }
     }
 }
