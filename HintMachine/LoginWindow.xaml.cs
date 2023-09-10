@@ -1,21 +1,5 @@
-﻿using Archipelago.MultiClient.Net;
-using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Helpers;
-using Archipelago.MultiClient.Net.Packets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Principal;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HintMachine
 {
@@ -28,61 +12,49 @@ namespace HintMachine
         {
             InitializeComponent();
 
+            // Check that the app was launched with admin rights to be able to hook on any process
             WindowsIdentity identity = WindowsIdentity.GetCurrent();
             WindowsPrincipal principal = new WindowsPrincipal(identity);
             if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
             {
                 MessageBox.Show("Please launch as administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                Close();
             }
 
-            //fill combobox
-            gameComboBox.Items.Add("One Finger Death Punch");
-            gameComboBox.Items.Add("Xenotilt");
-
+            // Fill game selector combobox with supported game names
+            foreach (IGameConnector game in GamesList.GAMES)
+            {
+                gameComboBox.Items.Add(game.GetDisplayName());
+            }
             gameComboBox.SelectedIndex = 0;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            // Connect to Archipelago
+            ArchipelagoHintSession archipelagoSession = new ArchipelagoHintSession(archipelagoAddress.Text, slotName.Text);
 
-            ArchipelagoSession archipelagoSession = ArchipelagoSessionFactory.CreateSession(archipelagoAdress.Text);
-            LoginResult loginResult;
-            try
+            if (!archipelagoSession.isConnected)
             {
-                Console.WriteLine("Start Connect & Login");
-
-                String game;
-
-                game = "";
-                loginResult = archipelagoSession.TryConnectAndLogin(game, slotName.Text, ItemsHandlingFlags.AllItems, new Version(0, 4, 1), new string[] { "AP", "TextOnly"}, null, null, true);
+                MessageBox.Show("Could not connect to Archipelago: " + archipelagoSession.errorMessage, "Connection error",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-            catch (Exception ex)
+            
+            // Connect to selected game
+            string selectedGameName = gameComboBox.SelectedValue.ToString();
+            IGameConnector game = GamesList.FindGameFromName(selectedGameName);
+     
+            if(!game.Connect())
             {
-                loginResult = new LoginFailure(ex.GetBaseException().Message);
-            }
-
-            if (!loginResult.Successful)
-            {
-                LoginFailure loginFailure = (LoginFailure)loginResult;
-                string text = "Failed to Connect ";
-                foreach (string str in loginFailure.Errors)
-                {
-                    text = text + "\n    " + str;
-                }
-                foreach (ConnectionRefusedError connectionRefusedError in loginFailure.ErrorCodes)
-                {
-                    text += string.Format("\n    {0}", connectionRefusedError);
-                }
-                Console.WriteLine(text);
-                MessageBox.Show("Connection error", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Could not connect to the selected game. Please ensure it is currently running.", "Error",
+                                 MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-
-
-            new MainWindow(archipelagoSession,gameComboBox.SelectedValue.ToString()).Show();
-            this.Hide();
+            // If both connections succeeded, move on to MainWindow
+            new MainWindow(archipelagoSession, game).Show();
+            Hide();
         }
     }
 }

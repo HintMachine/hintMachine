@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -107,6 +108,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ArchipelagoHintSession.cs" />
+    <Compile Include="GamesList.cs" />
+    <Compile Include="Games\PuyoTetrisConnector.cs" />
+    <Compile Include="HintQuest.cs" />
+    <Compile Include="IGameConnector.cs" />
+    <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
+    <Compile Include="Games\XenotiltConnector.cs" />
+    <Compile Include="IGameConnectorProcess32Bit.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
