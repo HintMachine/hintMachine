@@ -1,4 +1,6 @@
-﻿using System.Security.Principal;
+﻿using System.Collections;
+using System.ComponentModel;
+using System.Security.Principal;
 using System.Windows;
 
 namespace HintMachine
@@ -21,11 +23,15 @@ namespace HintMachine
                 Close();
             }
 
+
             // Fill game selector combobox with supported game names
+
+            GamesList.GAMES.Sort((a,b) => a.GetDisplayName().CompareTo(b.GetDisplayName()));
             foreach (IGameConnector game in GamesList.GAMES)
             {
                 gameComboBox.Items.Add(game.GetDisplayName());
             }
+
             gameComboBox.SelectedIndex = 0;
         }
 
