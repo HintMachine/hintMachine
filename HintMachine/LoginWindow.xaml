@@ -5,15 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine"
         mc:Ignorable="d"
-        Title="HintMachine" Height="600" Width="800" Background="#FFEEEEEE">
-    <Grid>
-        <Label Content="Archipelago adress :" HorizontalAlignment="Left" Margin="240,147,0,0" VerticalAlignment="Top"/>
-        <Label Content="Slot name :" HorizontalAlignment="Left" Margin="240,178,0,0" VerticalAlignment="Top"/>
-        <Label Content="Game :" HorizontalAlignment="Left" Margin="240,209,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.205,-0.706"/>
-        <ComboBox x:Name="gameComboBox" HorizontalAlignment="Left" Margin="362,213,0,0" VerticalAlignment="Top" Width="150"/>
-        <TextBox x:Name="archipelagoAddress" HorizontalAlignment="Left" Height="23" Margin="362,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
-        <TextBox x:Name="slotName" HorizontalAlignment="Left" Height="23" Margin="362,182,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
-        <Button Content="Connect" HorizontalAlignment="Left" Margin="339,275,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        Title="HintMachine" Height="247" Width="461" Background="#FFEEEEEE" ResizeMode="NoResize">
+    <Grid Margin="0,24,0,0" HorizontalAlignment="Center" Width="397" Height="202" VerticalAlignment="Top">
+        <Label Content="Archipelago host :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="archipelagoAddress" Height="23" Margin="122,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="archipelago.gg:12345"/>
+        
+        <Label Content="Slot name :" HorizontalAlignment="Left" Margin="0,31,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="slotName" Height="23" Margin="122,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
+        <Label Content="Game :" HorizontalAlignment="Left" Margin="0,62,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.205,-0.706"/>
+        <ComboBox x:Name="gameComboBox" HorizontalAlignment="Left" Margin="122,64,0,0" VerticalAlignment="Top" Width="275"/>
+
+        <Button Content="Connect" HorizontalAlignment="Center" Margin="0,111,0,0" VerticalAlignment="Top" Width="233" Click="Button_Click" Height="37"/>
     </Grid>
 </Window>

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Shapes;
 
 namespace HintMachine.Games
 {
@@ -36,7 +35,7 @@ namespace HintMachine.Games
 
         public override string GetDisplayName()
         {
-            return "Zachtonics Solitaire Collection (GOG)";
+            return "Zachtronics Solitaire Collection (GOG)";
         }
 
         public override void Poll()
