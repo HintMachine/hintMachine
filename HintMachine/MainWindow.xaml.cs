@@ -41,7 +41,7 @@ namespace HintMachine
             foreach(HintQuest quest in game.quests)
             {
                 if(quest.CheckCompletion())
-                    archipelagoSession.getOneRandomHint();
+                    archipelagoSession.GetOneRandomHint();
 
                 Dispatcher.Invoke(() =>
                 {

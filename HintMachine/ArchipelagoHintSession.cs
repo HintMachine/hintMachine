@@ -62,7 +62,7 @@ namespace HintMachine
             }
         }
 
-        public void getOneRandomHint()
+        public void GetOneRandomHint()
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
             foreach(long locationId in _alreadyHintedLocations)

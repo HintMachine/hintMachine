@@ -6,12 +6,10 @@ namespace HintMachine.Games
     public class XenotiltConnector : IGameConnectorProcess32Bit
     {
         private long _previousScore = 0;
-
-        private readonly HintQuest _scoreQuest;
+        private readonly HintQuest _scoreQuest = new HintQuest("Score", 200000000);
 
         public XenotiltConnector() : base("Xenotilt", "mono-2.0-bdwgc.dll")
         {
-            _scoreQuest = new HintQuest("Score", 200000000);
             quests.Add(_scoreQuest);
         }
 

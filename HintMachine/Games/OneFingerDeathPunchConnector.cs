@@ -5,12 +5,10 @@ namespace HintMachine.Games
     public class OneFingerDeathPunchConnector : IGameConnectorProcess32Bit
     {
         private long _previousKills = 0;
-
-        private readonly HintQuest _killsQuest;
+        private readonly HintQuest _killsQuest = new HintQuest("Kills", 450);
 
         public OneFingerDeathPunchConnector() : base("One Finger Death Punch")
         {
-            _killsQuest = new HintQuest("Kills", 450);
             quests.Add(_killsQuest);
         }
 
