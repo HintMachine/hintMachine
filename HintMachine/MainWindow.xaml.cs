@@ -40,6 +40,7 @@ namespace HintMachine
         {
             // Close the app when closing the window
             base.OnClosed(e);
+            _timer.Enabled = false;
             _game.Disconnect();
             Application.Current.Shutdown();
         }
