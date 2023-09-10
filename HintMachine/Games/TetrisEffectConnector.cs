@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HintMachine.Games
 {
-    public class TetrisEffectConnector : IGameConnectorProcess32Bit
+    public class TetrisEffectConnector : IGameConnectorProcess
     {
         private long _previousScore = 0;
         private readonly HintQuest _scoreQuest = new HintQuest("Score", 20000);

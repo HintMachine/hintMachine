@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HintMachine.Games
 {
-    public class XenotiltConnector : IGameConnectorProcess32Bit
+    public class XenotiltConnector : IGameConnectorProcess
     {
         private long _previousScore = 0;
         private readonly HintQuest _scoreQuest = new HintQuest("Score", 200000000);

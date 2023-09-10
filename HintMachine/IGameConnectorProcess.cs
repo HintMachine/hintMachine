@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HintMachine
 {
-    public abstract class IGameConnectorProcess32Bit : IGameConnector
+    public abstract class IGameConnectorProcess : IGameConnector
     {
         const int PROCESS_WM_READ = 0x0010;
 
@@ -51,7 +51,7 @@ namespace HintMachine
         public ProcessModule module = null;
         public IntPtr processHandle = IntPtr.Zero;
 
-        public IGameConnectorProcess32Bit(string processName, string moduleName = "")
+        public IGameConnectorProcess(string processName, string moduleName = "")
         {
             this.processName = processName;
             this.moduleName = moduleName;
@@ -108,48 +108,60 @@ namespace HintMachine
             return addr;
         }
 
-        protected byte ReadUint8(long address)
+        protected byte[] ReadBytes(long address, int length)
         {
             if (processHandle == IntPtr.Zero)
-                return 0;
+            {
+                byte[] zeroByteArray = new byte[length];
+                for(int i = 0; i<length; ++i)
+                    zeroByteArray[i] = 0;
+                return zeroByteArray;
+            }
 
             int bytesRead = 0;
-            byte[] buffer = new byte[sizeof(byte)];
-            ReadProcessMemory((int)processHandle, address, buffer, buffer.Length, ref bytesRead);
-            return buffer[0];
+            byte[] buffer = new byte[length];
+            ReadProcessMemory((int)processHandle, address, buffer, length, ref bytesRead);
+            return buffer;
+        }
+
+        protected byte ReadUint8(long address)
+        {
+            return ReadBytes(address, sizeof(byte))[0];
         }
 
         protected ushort ReadUint16(long address)
         {
-            if (processHandle == IntPtr.Zero)
-                return 0;
-
-            int bytesRead = 0;
-            byte[] buffer = new byte[sizeof(ushort)];
-            ReadProcessMemory((int)processHandle, address, buffer, buffer.Length, ref bytesRead);
-            return BitConverter.ToUInt16(buffer, 0);
+            return BitConverter.ToUInt16(ReadBytes(address, sizeof(ushort)), 0);
         }
 
         protected uint ReadUint32(long address)
         {
-            if (processHandle == IntPtr.Zero)
-                return 0;
+            return BitConverter.ToUInt32(ReadBytes(address, sizeof(uint)), 0);
+        }
 
-            int bytesRead = 0;
-            byte[] buffer = new byte[sizeof(uint)];
-            ReadProcessMemory((int)processHandle, address, buffer, buffer.Length, ref bytesRead);
-            return BitConverter.ToUInt32(buffer, 0);
+        protected ulong ReadUint64(long address)
+        {
+            return BitConverter.ToUInt64(ReadBytes(address, sizeof(ulong)), 0);
+        }
+
+        protected sbyte ReadInt8(long address)
+        {
+            return (sbyte)ReadBytes(address, sizeof(sbyte))[0];
+        }
+
+        protected short ReadInt16(long address)
+        {
+            return BitConverter.ToInt16(ReadBytes(address, sizeof(short)), 0);
+        }
+
+        protected int ReadInt32(long address)
+        {
+            return BitConverter.ToInt32(ReadBytes(address, sizeof(int)), 0);
         }
 
         protected long ReadInt64(long address)
         {
-            if (processHandle == IntPtr.Zero)
-                return 0;
-
-            int bytesRead = 0;
-            byte[] buffer = new byte[sizeof(long)];
-            ReadProcessMemory((int)processHandle, address, buffer, buffer.Length, ref bytesRead);
-            return BitConverter.ToInt64(buffer, 0);
+            return BitConverter.ToInt64(ReadBytes(address, sizeof(long)), 0);
         }
     }
 }

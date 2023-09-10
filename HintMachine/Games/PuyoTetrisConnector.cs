@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HintMachine.Games
 {
-    public class PuyoTetrisConnector : IGameConnectorProcess32Bit
+    public class PuyoTetrisConnector : IGameConnectorProcess
     {
         private long _previousLineCount = 0;
         private readonly HintQuest _linesQuest = new HintQuest("Cleared Lines", 200);

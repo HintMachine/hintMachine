@@ -2,7 +2,7 @@
 
 namespace HintMachine.Games
 {
-    public class OneFingerDeathPunchConnector : IGameConnectorProcess32Bit
+    public class OneFingerDeathPunchConnector : IGameConnectorProcess
     {
         private long _previousKills = 0;
         private readonly HintQuest _killsQuest = new HintQuest("Kills", 450);
