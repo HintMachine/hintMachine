@@ -1,9 +1,6 @@
 ﻿using System.Windows;
 using System.Timers;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
 using System;
-using Archipelago.MultiClient.Net.Models;
 
 namespace HintMachine
 {
@@ -37,6 +34,14 @@ namespace HintMachine
 
             Log("Hint Machine is connected to " + game.GetDisplayName());
             Log("You can start playing to complete objectives on the left panel and get random hints on your world.");
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            // Close the app when closing the window
+            base.OnClosed(e);
+            _game.Disconnect();
+            Application.Current.Shutdown();
         }
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)

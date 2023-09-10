@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.ComponentModel;
+﻿using System;
 using System.Security.Principal;
 using System.Windows;
 
@@ -23,9 +22,7 @@ namespace HintMachine
                 Close();
             }
 
-
             // Fill game selector combobox with supported game names
-
             GamesList.GAMES.Sort((a,b) => a.GetDisplayName().CompareTo(b.GetDisplayName()));
             foreach (IGameConnector game in GamesList.GAMES)
             {
@@ -61,6 +58,13 @@ namespace HintMachine
             // If both connections succeeded, move on to MainWindow
             new MainWindow(archipelagoSession, game).Show();
             Hide();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            // Close the app when closing the window
+            base.OnClosed(e);
+            Application.Current.Shutdown();
         }
     }
 }
