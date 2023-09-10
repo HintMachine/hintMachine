@@ -9,7 +9,8 @@ namespace HintMachine
             new XenotiltConnector(),
             new OneFingerDeathPunchConnector(),
             new PuyoTetrisConnector(),
-            new TetrisEffectConnector()
+            new TetrisEffectConnector(),
+            new ZachtronicsSolitaireConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)
