@@ -13,6 +13,7 @@ namespace HintMachine
             new TetrisEffectConnector(),
             new ZachtronicsSolitaireConnector(),
             new GeometryWarsConnector(),
+            new GeometryWarsGalaxiesConnector(),
         };
         
         public static IGameConnector FindGameFromName(string name)
