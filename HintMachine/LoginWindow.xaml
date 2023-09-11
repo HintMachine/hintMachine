@@ -5,21 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine"
         mc:Ignorable="d"
-        Title="HintMachine" Height="247" Width="461" Background="#FFEEEEEE" ResizeMode="NoResize" Icon="/icon.png">
-    <Grid Margin="0,24,0,0" HorizontalAlignment="Center" Width="397" Height="202" VerticalAlignment="Top">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="169*"/>
-            <RowDefinition Height="33*"/>
-        </Grid.RowDefinitions>
+        Title="HintMachine" Height="186" Width="466" Background="#FFEEEEEE" ResizeMode="NoResize" Icon="/icon.png">
+    <Grid HorizontalAlignment="Center" Width="400" Height="160" VerticalAlignment="Top" Margin="0,16,0,0">
+
         <Label Content="Archipelago host :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="archipelagoAddress" Height="23" Margin="122,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="archipelago.gg:12345"/>
-        
+
         <Label Content="Slot name :" HorizontalAlignment="Left" Margin="0,31,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="slotName" Height="23" Margin="122,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
-        <Label Content="Game :" HorizontalAlignment="Left" Margin="0,62,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.205,-0.706"/>
-        <ComboBox x:Name="gameComboBox" HorizontalAlignment="Left" Margin="122,64,0,0" VerticalAlignment="Top" Width="275"/>
-
-        <Button Content="Connect" HorizontalAlignment="Center" Margin="0,111,0,0" VerticalAlignment="Top" Width="233" Click="Button_Click" Height="37"/>
+        <Button Content="Connect" HorizontalAlignment="Center" Margin="0,78,0,0" VerticalAlignment="Top" Width="233" Click="Button_Click" Height="37"/>
     </Grid>
 </Window>

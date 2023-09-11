@@ -76,14 +76,20 @@ namespace HintMachine
             long hintedLocationId = _session.Locations.AllMissingLocations[index];
 
             _alreadyHintedLocations.Add(hintedLocationId);
-            Task<LocationInfoPacket> t = _session.Locations.ScoutLocationsAsync(true, hintedLocationId);
-            LocationInfoPacket response = t.Result;
-           
-            string itemName = _session.Items.GetItemName(response.Locations[0].Item);
-            string playerName = _session.Players.GetPlayerName(response.Locations[0].Player);
-            string locationName = _session.Locations.GetLocationNameFromId(response.Locations[0].Location);
+            try
+            {
+                Task<LocationInfoPacket> t = _session.Locations.ScoutLocationsAsync(true, hintedLocationId);
+                LocationInfoPacket response = t.Result;
 
-            return playerName + "'s " + itemName + " can be found at '" + locationName + "'";
+                string itemName = _session.Items.GetItemName(response.Locations[0].Item);
+                string playerName = _session.Players.GetPlayerName(response.Locations[0].Player);
+                string locationName = _session.Locations.GetLocationNameFromId(response.Locations[0].Location);
+
+                return playerName + "'s " + itemName + " can be found at '" + locationName + "'";
+            } 
+            catch(NullReferenceException) {}
+
+            return "";
         }
     }
 }
