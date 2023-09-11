@@ -108,7 +108,7 @@ namespace HintMachine
             return addr;
         }
 
-        protected byte[] ReadBytes(long address, int length)
+        protected byte[] ReadBytes(long address, int length, bool isBigEndian = false)
         {
             if (processHandle == IntPtr.Zero)
             {
@@ -121,6 +121,11 @@ namespace HintMachine
             int bytesRead = 0;
             byte[] buffer = new byte[length];
             ReadProcessMemory((int)processHandle, address, buffer, length, ref bytesRead);
+
+            // If data is meant to be read as big endian, reverse it for BitConverter methods to work as they should
+            if (length > 1 && isBigEndian)
+                Array.Reverse(buffer);
+
             return buffer;
         }
 
@@ -129,19 +134,19 @@ namespace HintMachine
             return ReadBytes(address, sizeof(byte))[0];
         }
 
-        protected ushort ReadUint16(long address)
+        protected ushort ReadUint16(long address, bool isBigEndian = false)
         {
-            return BitConverter.ToUInt16(ReadBytes(address, sizeof(ushort)), 0);
+            return BitConverter.ToUInt16(ReadBytes(address, sizeof(ushort), isBigEndian), 0);
         }
 
-        protected uint ReadUint32(long address)
+        protected uint ReadUint32(long address, bool isBigEndian = false)
         {
-            return BitConverter.ToUInt32(ReadBytes(address, sizeof(uint)), 0);
+            return BitConverter.ToUInt32(ReadBytes(address, sizeof(uint), isBigEndian), 0);
         }
 
-        protected ulong ReadUint64(long address)
+        protected ulong ReadUint64(long address, bool isBigEndian = false)
         {
-            return BitConverter.ToUInt64(ReadBytes(address, sizeof(ulong)), 0);
+            return BitConverter.ToUInt64(ReadBytes(address, sizeof(ulong), isBigEndian), 0);
         }
 
         protected sbyte ReadInt8(long address)
@@ -149,19 +154,19 @@ namespace HintMachine
             return (sbyte)ReadBytes(address, sizeof(sbyte))[0];
         }
 
-        protected short ReadInt16(long address)
+        protected short ReadInt16(long address, bool isBigEndian = false)
         {
-            return BitConverter.ToInt16(ReadBytes(address, sizeof(short)), 0);
+            return BitConverter.ToInt16(ReadBytes(address, sizeof(short), isBigEndian), 0);
         }
 
-        protected int ReadInt32(long address)
+        protected int ReadInt32(long address, bool isBigEndian = false)
         {
-            return BitConverter.ToInt32(ReadBytes(address, sizeof(int)), 0);
+            return BitConverter.ToInt32(ReadBytes(address, sizeof(int), isBigEndian), 0);
         }
 
-        protected long ReadInt64(long address)
+        protected long ReadInt64(long address, bool isBigEndian = false)
         {
-            return BitConverter.ToInt64(ReadBytes(address, sizeof(long)), 0);
+            return BitConverter.ToInt64(ReadBytes(address, sizeof(long), isBigEndian), 0);
         }
     }
 }
