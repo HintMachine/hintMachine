@@ -12,6 +12,7 @@ namespace HintMachine
             new PuyoTetrisConnector(),
             new TetrisEffectConnector(),
             new ZachtronicsSolitaireConnector(),
+            new GeometryWarsConnector(),
             new GeometryWarsGalaxiesConnector(),
         };
         
