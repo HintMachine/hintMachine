@@ -108,6 +108,20 @@ namespace HintMachine
             return addr;
         }
 
+        protected long ResolvePointerPath32(long baseAddress, int[] offsets)
+        {
+            long addr = baseAddress;
+            foreach (int offset in offsets)
+            {
+                addr = ReadInt32(addr);
+                if (addr == 0)
+                    break;
+
+                addr += offset;
+            }
+            return addr;
+        }
+
         protected byte[] ReadBytes(long address, int length)
         {
             if (processHandle == IntPtr.Zero)
