@@ -17,6 +17,12 @@ namespace HintMachine.Games
         {
             return "Tetris Effect Connected (Steam)";
         }
+        public override string GetDescription()
+        {
+            return "Stack tetrominos and fill lines to clear them in the most visually " +
+                   "impressive implementation of Tetris ever made.\n\n" +
+                   "Tested on up-to-date Steam version.";
+        }
 
         public override bool Poll()
         {

@@ -49,7 +49,13 @@ namespace HintMachine.Games
 
         public override string GetDisplayName()
         {
-            return "Zachtronics Solitaire Collection (GOG)";
+            return "Zachtronics Solitaire Collection";
+        }
+        public override string GetDescription()
+        {
+            return "Play 8 different variants of Solitaire in this collection of games " +
+                   "initially created as mini-games for Zachtronics main titles.\n\n" +
+                   "Tested on GOG version, might work with other versions of the game.";
         }
 
         public override bool Poll()

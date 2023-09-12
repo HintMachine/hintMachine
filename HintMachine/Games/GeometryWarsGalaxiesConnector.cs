@@ -19,6 +19,12 @@ namespace HintMachine.Games
             return "Geometry Wars Galaxies (Wii)";
         }
 
+        public override string GetDescription()
+        {
+            return "Destroy geometric enemies in this classic and stylish twin-stick shooter in order to earn geoms and unlock hints.\n\n" +
+                   "Tested on European ROM on all recent versions of Dolphin 5 (64-bit).";
+        }
+
         public enum TypeEnum : uint
         {
             MEM_IMAGE = 0x1000000,

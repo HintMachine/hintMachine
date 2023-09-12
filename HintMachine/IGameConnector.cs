@@ -16,6 +16,11 @@ namespace HintMachine
         public abstract string GetDisplayName();
 
         /// <summary>
+        /// Abstract function meant to return a brief description for the game used in the various UI components
+        /// </summary>
+        public virtual string GetDescription() { return ""; }
+
+        /// <summary>
         /// Abstract function meant to handle the connection to the related game process / files
         /// required for the data fetching to work afterwards.
         /// </summary>

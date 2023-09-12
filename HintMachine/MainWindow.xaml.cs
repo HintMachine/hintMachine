@@ -75,6 +75,7 @@ namespace HintMachine
                 return;
             }
 
+            // Update hint quests
             foreach(HintQuest quest in _game.quests)
             {
                 if (quest.CheckCompletion())
@@ -122,8 +123,7 @@ namespace HintMachine
                 Settings.Game = selectedGameName;
                 Settings.SaveToFile();
 
-                Logger.Info("✔️ Successfully connected to " + game.GetDisplayName() + ". " +
-                            "Complete gauges on the left panel by playing the game in order to get random hints.");
+                Logger.Info("✔️ Successfully connected to " + game.GetDisplayName() + ". ");
             }
             else
             {
@@ -192,6 +192,19 @@ namespace HintMachine
         {
             new LoginWindow().Show();
             Close();
+        }
+
+        private void gameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedGameName = gameComboBox.SelectedValue.ToString();
+            IGameConnector game = GamesList.FindGameFromName(selectedGameName);
+
+            textblockGameDescription.Text = game.GetDescription();
+
+            if (textblockGameDescription.Text.Length != 0)
+                textblockGameDescription.Visibility = Visibility.Visible;
+            else
+                textblockGameDescription.Visibility = Visibility.Collapsed;
         }
     }
 }
