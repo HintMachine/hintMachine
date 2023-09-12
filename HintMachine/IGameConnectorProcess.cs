@@ -11,6 +11,7 @@ namespace HintMachine
     public abstract class IGameConnectorProcess : IGameConnector
     {
         const int PROCESS_WM_READ = 0x0010;
+        const int PROCESS_QUERY_INFORMATION = 0x0400;
 
         [Flags]
         public enum ThreadAccess : int
@@ -84,14 +85,16 @@ namespace HintMachine
                 }
             }
 
-            processHandle = OpenProcess(PROCESS_WM_READ, false, process.Id);
+            processHandle = OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, process.Id);
             
             return process != null && module != null && processHandle != IntPtr.Zero;
         }
 
         public override void Disconnect()
         {
-            // TODO
+            process = null;
+            module = null;
+            processHandle = IntPtr.Zero;
         }
 
         protected long ResolvePointerPath(long baseAddress, int[] offsets)

@@ -48,13 +48,15 @@ namespace HintMachine.Games
             return "Puyo Puyo Tetris";
         }
 
-        public override void Poll()
+        public override bool Poll()
         {
             if (process == null || module == null)
-                return;
+                return false;
 
             ReadTetrisData();
             ReadPuyoData();
+
+            return true;
         }
 
         private void ReadTetrisData()

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace HintMachine.Games
 {
@@ -15,23 +16,96 @@ namespace HintMachine.Games
 
         public override string GetDisplayName()
         {
-            return "Geometry Wars Galaxies";
+            return "Geometry Wars Galaxies (Wii)";
         }
 
-        public override void Poll()
+        public enum TypeEnum : uint
+        {
+            MEM_IMAGE = 0x1000000,
+            MEM_MAPPED = 0x40000,
+            MEM_PRIVATE = 0x20000
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        protected struct MEMORY_BASIC_INFORMATION
+        {
+            public IntPtr BaseAddress;
+            public IntPtr AllocationBase;
+            public uint AllocationProtect;
+            public IntPtr RegionSize;
+            public uint State;
+            public uint Protect;
+            public TypeEnum Type;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
+
+        private long _mem1Addr = 0;
+        private long _mem2Addr = 0;
+
+        private readonly byte[] MEM1_SIGNATURE = new byte[] { 0x52, 0x47, 0x4C, 0x50, 0x37, 0x44 };
+        private readonly byte[] MEM2_SIGNATURE = new byte[] { 0x02, 0x9F, 0x00, 0x10, 0x02, 0x9F, 0x00, 0x33 };
+
+        public override bool Connect()
+        {
+            if (!base.Connect())
+                return false;
+
+            MEMORY_BASIC_INFORMATION info = new MEMORY_BASIC_INFORMATION();
+            int mbiSize = Marshal.SizeOf(info);
+
+            IntPtr ptr = IntPtr.Zero;
+            while (VirtualQueryEx(processHandle, ptr, out info, (uint)mbiSize) == mbiSize)
+            {
+                if (info.Type == TypeEnum.MEM_MAPPED)
+                {
+                    if (_mem1Addr == 0 && (long)info.RegionSize == 0x2000000)
+                    {
+                        long regionBaseAddress = (long)info.BaseAddress;
+                        if (Enumerable.SequenceEqual(ReadBytes(regionBaseAddress, MEM1_SIGNATURE.Length), MEM1_SIGNATURE))
+                            _mem1Addr = regionBaseAddress;
+                    }
+                    else if (_mem2Addr == 0 && (long)info.RegionSize == 0x4000000)
+                    {
+                        long regionBaseAddress = (long)info.BaseAddress;
+                        if (Enumerable.SequenceEqual(ReadBytes(regionBaseAddress, MEM2_SIGNATURE.Length), MEM2_SIGNATURE))
+                            _mem2Addr = regionBaseAddress;
+                    }
+                }
+
+                if (_mem1Addr != 0 && _mem2Addr != 0)
+                    return true;
+
+                ptr = (IntPtr)(ptr.ToInt64() + (long)info.RegionSize);
+            }
+
+            return false;
+        }
+
+        public override void Disconnect()
+        {
+            base.Disconnect();
+            _mem1Addr = 0;
+            _mem2Addr = 0;
+        }
+
+        public override bool Poll()
         {
             if (process == null || module == null)
-                return;
+                return false;
 
-            long baseAddress = module.BaseAddress.ToInt64() + 0x1189050;
-            long geomsAddress = ResolvePointerPath(baseAddress, new int[] { 0x0, 0x43A2AF6 });
+            if (!Enumerable.SequenceEqual(ReadBytes(_mem1Addr, MEM1_SIGNATURE.Length), MEM1_SIGNATURE))
+                return false;
 
-            Console.WriteLine("geomsAddress = " + geomsAddress);
+            long geomsAddress = _mem2Addr + 0x23A2AF4;
 
-            uint geoms = ReadUint16(geomsAddress, true);
+            uint geoms = ReadUint32(geomsAddress, true);
             if (geoms > _previousGeoms)
                 _geomsQuest.Add(geoms - _previousGeoms);
             _previousGeoms = geoms;
+
+            return true;
         }
     }
 }

@@ -17,10 +17,10 @@ namespace HintMachine.Games
             return "One Finger Death Punch";
         }
 
-        public override void Poll()
+        public override bool Poll()
         {
             if (process == null || module == null)
-                return;
+                return false;
 
             uint baseAddress = ProcessUtils32.CheatengineSpecific.GetThreadStack0(process);
             long survivalKillsAddress = ResolvePointerPath(baseAddress, new int[] { -0x8c8, 0x644, 0x90 });
@@ -29,6 +29,8 @@ namespace HintMachine.Games
             if (survivalKills > _previousKills)
                 _killsQuest.Add(survivalKills - _previousKills);
             _previousKills = survivalKills;
+
+            return true;
         }
     }
 }

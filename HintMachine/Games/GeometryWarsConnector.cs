@@ -15,13 +15,13 @@ namespace HintMachine.Games
 
         public override string GetDisplayName()
         {
-            return "Geometry Wars : Retro Evolved";
+            return "Geometry Wars: Retro Evolved";
         }
 
-        public override void Poll()
+        public override bool Poll()
         {
             if (process == null || module == null)
-                return;
+                return false;
 
             long baseAddress = module.BaseAddress.ToInt64() + 0x00170084;
             long scoreAddress = ResolvePointerPath32(baseAddress, new int[] { 0x40 });
@@ -30,6 +30,8 @@ namespace HintMachine.Games
             if (score > _previousScore)
                 _scoreQuest.Add(score - _previousScore);
             _previousScore = score;
+
+            return true;
         }
     }
 }

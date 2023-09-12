@@ -31,6 +31,6 @@ namespace HintMachine
         /// Abstract function handling the actual data retrieval from the game process / files,
         /// storing them in connector attributes for further usage.
         /// </summary>
-        public abstract void Poll();
+        public abstract bool Poll();
     }
 }

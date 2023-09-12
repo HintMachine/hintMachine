@@ -18,10 +18,10 @@ namespace HintMachine.Games
             return "Xenotilt";
         }
 
-        public override void Poll()
+        public override bool Poll()
         {
             if (process == null || module == null)
-                return;
+                return false;
 
             long baseAddress = module.BaseAddress.ToInt64() + 0x7270B8;
             long scoreAddress = ResolvePointerPath(baseAddress, new int[] { 0x30, 0x7e0, 0x7C0 });
@@ -30,6 +30,8 @@ namespace HintMachine.Games
             if (score > _previousScore)
                 _scoreQuest.Add(score - _previousScore);
             _previousScore = score;
+
+            return true;
         }
     }
 }

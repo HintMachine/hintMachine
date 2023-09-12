@@ -67,7 +67,14 @@ namespace HintMachine
             if (_game == null)
                 return;
 
-            _game.Poll();
+            // Poll game connector, and cleanly close it if something wrong happens
+            if(!_game.Poll())
+            {
+                Logger.Error("❌ [Error] Connection with " + _game.GetDisplayName() + " was lost.");
+                _game.Disconnect();
+                _game = null;
+                return;
+            }
 
             foreach(HintQuest quest in _game.quests)
             {
