@@ -71,8 +71,7 @@ namespace HintMachine
             if(!_game.Poll())
             {
                 Logger.Error("❌ [Error] Connection with " + _game.GetDisplayName() + " was lost.");
-                _game.Disconnect();
-                _game = null;
+                DisconnectFromGame();
                 return;
             }
 
@@ -132,7 +131,8 @@ namespace HintMachine
                              "Please ensure it is currently running and try again.");
             }
         }
-        private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
+
+        public void DisconnectFromGame()
         {
             if (_game == null)
                 return;
@@ -140,16 +140,22 @@ namespace HintMachine
             _game.Disconnect();
             _game = null;
 
-            gameConnectGrid.Visibility = Visibility.Visible;
-            questsGrid.Visibility = Visibility.Hidden;
-            buttonChangeGame.Visibility = Visibility.Hidden;
+            Dispatcher.Invoke(() =>
+            {
+                gameConnectGrid.Visibility = Visibility.Visible;
+                questsGrid.Visibility = Visibility.Hidden;
+                buttonChangeGame.Visibility = Visibility.Hidden;
 
-            questsGrid.Children.Clear();
-            questsGrid.RowDefinitions.Clear();
+                questsGrid.Children.Clear();
+                questsGrid.RowDefinitions.Clear();
 
-            Title = WINDOW_TITLE;
-            labelGame.Content = "-";
-
+                Title = WINDOW_TITLE;
+                labelGame.Content = "-";
+            });
+        }
+        private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
+        {
+            DisconnectFromGame();
             Logger.Info("Disconnected from game.");
         }
 
