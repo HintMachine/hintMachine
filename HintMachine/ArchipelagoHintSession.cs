@@ -17,19 +17,23 @@ namespace HintMachine
         private static readonly Version VERSION = new Version(0, 4, 1);
 
         private ArchipelagoSession _session = null;
+        public string host = "";
+        public string slot = "";
         public bool isConnected = false;
         public string errorMessage = "";
         private List<long> _alreadyHintedLocations = new List<long>();
 
-        public ArchipelagoHintSession(string host, string slot)
+        public ArchipelagoHintSession(string host, string slot, string password)
         {
+            this.host = host;
+            this.slot = slot;
             _session = ArchipelagoSessionFactory.CreateSession(host);
 
             Console.WriteLine("Start Connect & Login");
             LoginResult ret;
             try
             {
-                ret = _session.TryConnectAndLogin("", slot, ItemsHandlingFlags.AllItems, VERSION, TAGS, null, null, true);
+                ret = _session.TryConnectAndLogin("", slot, ItemsHandlingFlags.AllItems, VERSION, TAGS, null, password, true);
             }
             catch (Exception ex)
             {
@@ -40,14 +44,13 @@ namespace HintMachine
             if (!isConnected)
             {
                 LoginFailure loginFailure = (LoginFailure)ret;
-                errorMessage = "Failed to Connect ";
                 foreach (string str in loginFailure.Errors)
                 {
-                    errorMessage += "\n    " + str;
+                    errorMessage += "\n" + str;
                 }
                 foreach (ConnectionRefusedError connectionRefusedError in loginFailure.ErrorCodes)
                 {
-                    errorMessage += string.Format("\n    {0}", connectionRefusedError);
+                    errorMessage += string.Format("\n{0}", connectionRefusedError);
                 }
                 return;
             }

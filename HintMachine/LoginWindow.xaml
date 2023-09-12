@@ -5,15 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine"
         mc:Ignorable="d"
-        Title="HintMachine" Height="186" Width="466" Background="#FFEEEEEE" ResizeMode="NoResize" Icon="/icon.png">
-    <Grid HorizontalAlignment="Center" Width="400" Height="160" VerticalAlignment="Top" Margin="0,16,0,0">
+        Title="HintMachine" Height="345" Width="466" Background="#FFEEEEEE" ResizeMode="NoResize" Icon="/assets/icon.png">
+    <Grid HorizontalAlignment="Center" Width="400" Height="160" VerticalAlignment="Top" Margin="0,138,0,0">
+        <Image HorizontalAlignment="Left" Height="110" Margin="122,-132,0,0" VerticalAlignment="Top" Width="180" Source="/Assets/logo_small.png"/>
+        
+        <Label Content="Archipelago host:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="inputHost" Height="23" Margin="122,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="archipelago.gg:12345"/>
 
-        <Label Content="Archipelago host :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="archipelagoAddress" Height="23" Margin="122,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="archipelago.gg:12345"/>
+        <Label Content="Slot name:" HorizontalAlignment="Left" Margin="0,31,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="inputSlot" Height="23" Margin="122,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
-        <Label Content="Slot name :" HorizontalAlignment="Left" Margin="0,31,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="slotName" Height="23" Margin="122,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Label Content="Password (optional):" HorizontalAlignment="Left" Margin="0,62,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="inputPassword" Height="23" Margin="122,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
-        <Button Content="Connect" HorizontalAlignment="Center" Margin="0,78,0,0" VerticalAlignment="Top" Width="233" Click="Button_Click" Height="37"/>
+        <Button Content="🔗 Connect to Archipelago" HorizontalAlignment="Center" Margin="0,113,0,0" VerticalAlignment="Top" Width="232" Click="OnConnectButtonClick" Height="37"/>
     </Grid>
 </Window>

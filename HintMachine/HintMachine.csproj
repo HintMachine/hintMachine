@@ -120,6 +120,7 @@
     <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
     <Compile Include="Games\XenotiltConnector.cs" />
     <Compile Include="IGameConnectorProcess.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
@@ -172,7 +173,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.png" />
+    <Resource Include="Assets\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\logo_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

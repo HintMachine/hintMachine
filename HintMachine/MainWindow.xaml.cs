@@ -3,6 +3,7 @@ using System.Timers;
 using System;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Archipelago.MultiClient.Net;
 
 namespace HintMachine
 {
@@ -13,15 +14,17 @@ namespace HintMachine
     {
         private const string WINDOW_TITLE = "HintMachine";
 
-        private readonly ArchipelagoHintSession _archipelagoSession = null;
+        private ArchipelagoHintSession _archipelagoSession = null;
         private IGameConnector _game = null;
-        private readonly Timer _timer = null;
+        private Timer _timer = null;
 
         public MainWindow(ArchipelagoHintSession archipelagoSession)
         {
             InitializeComponent();
 
             _archipelagoSession = archipelagoSession;
+            labelHost.Content = _archipelagoSession.host;
+            labelSlot.Content = _archipelagoSession.slot;
 
             // Populate game selector combobox with supported game names
             GamesList.GAMES.Sort((a, b) => a.GetDisplayName().CompareTo(b.GetDisplayName()));
@@ -33,24 +36,30 @@ namespace HintMachine
                     gameComboBox.SelectedItem = gameComboBox.Items[gameComboBox.Items.Count - 1];
             }
 
+            // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
             _timer.Elapsed += TimerElapsed;
             _timer.AutoReset = true;
             _timer.Enabled = true;
 
-            Log("------------ HintMachine 1.0 ------------", LogMessageType.INFO);
-            Log("Feeling stuck in your Archipelago world?\n" +
-                "Connect to a game and start playing to get random hints instead of eating a good old Burger King.", 
-                LogMessageType.INFO);
+            // Setup the global Logger to populate the message log view and log a few welcome messages
+            Logger.OnMessageLogged = OnMessageLogged;
+
+            Logger.Info("------------ HintMachine 1.0 ------------");
+            Logger.Info("Connected to Archipelago session at " + archipelagoSession.host + " as " + archipelagoSession.slot + ".");
+            Logger.Info("Feeling stuck in your Archipelago world?\n" +
+                        "Connect to a game and start playing to get random hints instead of eating good old Burger King.");
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            // Close the app when closing the window
             base.OnClosed(e);
+
+            if (_game != null)
+                _game.Disconnect();
+
             _timer.Enabled = false;
-            _game.Disconnect();
-            Application.Current.Shutdown();
+            _archipelagoSession = null;
         }
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)
@@ -64,13 +73,13 @@ namespace HintMachine
             {
                 if (quest.CheckCompletion())
                 {
-                    Log("Congratulations on achieving the '" + quest.displayName + "' objective. " +
-                        "Here's a hint for your efforts!", LogMessageType.INFO);
+                    Logger.Info("Congratulations on completing the '" + quest.displayName + "' objective. " +
+                                "Here's a hint for your efforts!");
                     string hint = _archipelagoSession.GetOneRandomHint();
                     if (hint.Length != 0)
-                        Log("❓ " + hint, LogMessageType.HINT);
+                        Logger.Hint("❓ " + hint);
                     else
-                        Log("[ERROR] Couldn't fetch hint?", LogMessageType.ERROR);
+                        Logger.Error("[ERROR] Couldn't fetch hint?");
                 }
 
                 Dispatcher.Invoke(() => { quest.UpdateComponents(); });
@@ -90,7 +99,7 @@ namespace HintMachine
                 _game = game;
 
                 Title = WINDOW_TITLE + " - " + _game.GetDisplayName();
-                gameName.Content = _game.GetDisplayName();
+                labelGame.Content = _game.GetDisplayName();
 
                 // Init game quests
                 foreach (HintQuest quest in _game.quests)
@@ -100,19 +109,20 @@ namespace HintMachine
                 }
 
                 gameConnectGrid.Visibility = Visibility.Hidden;
-                gameActivePanel.Visibility = Visibility.Visible;
+                questsGrid.Visibility = Visibility.Visible;
+                buttonChangeGame.Visibility = Visibility.Visible;
 
                 // Store selected game in settings file to select it first on next execution
                 Settings.Game = selectedGameName;
                 Settings.SaveToFile();
 
-                Log("✔️ Successfully connected to " + game.GetDisplayName() + ". " +
-                    "Complete gauges on the left panel by playing the game in order to get random hints.", LogMessageType.INFO);
+                Logger.Info("✔️ Successfully connected to " + game.GetDisplayName() + ". " +
+                            "Complete gauges on the left panel by playing the game in order to get random hints.");
             }
             else
             {
-                Log("❌ [Error] Could not connect to " + game.GetDisplayName() + ". " +
-                    "Please ensure it is currently running and try again.", LogMessageType.ERROR);
+                Logger.Error("❌ [Error] Could not connect to " + game.GetDisplayName() + ". " +
+                             "Please ensure it is currently running and try again.");
             }
         }
         private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
@@ -120,51 +130,31 @@ namespace HintMachine
             if (_game == null)
                 return;
 
+            _game.Disconnect();
             _game = null;
 
             gameConnectGrid.Visibility = Visibility.Visible;
-            gameActivePanel.Visibility = Visibility.Hidden;
+            questsGrid.Visibility = Visibility.Hidden;
+            buttonChangeGame.Visibility = Visibility.Hidden;
 
             questsGrid.Children.Clear();
             questsGrid.RowDefinitions.Clear();
 
             Title = WINDOW_TITLE;
+            labelGame.Content = "-";
 
-            Log("Disconnected from game.", LogMessageType.INFO);
+            Logger.Info("Disconnected from game.");
         }
 
-        public enum LogMessageType
+        public void OnMessageLogged(string message, LogMessageType logMessageType)
         {
-            RAW = 0,
-            INFO = 1,
-            WARNING = 2,
-            ERROR = 3,
-            HINT = 4,
-        }
-
-        private Color GetColorForLogMessageType(LogMessageType logMessageType)
-        {
-            if (logMessageType == LogMessageType.INFO)
-                return Color.FromRgb(50, 50, 150);
-            else if (logMessageType == LogMessageType.WARNING)
-                return Color.FromRgb(128, 100, 0);
-            else if (logMessageType == LogMessageType.ERROR)
-                return Color.FromRgb(180, 40, 40);
-            else if (logMessageType == LogMessageType.HINT)
-                return Color.FromRgb(40, 180, 40);
-            return Colors.Black;
-        }
-
-        public void Log(string message, LogMessageType logMessageType = LogMessageType.RAW)
-        {
-            Console.WriteLine(message);
             Dispatcher.Invoke(() =>
             {
                 TextBlock messageBlock = new TextBlock
                 {
                     Text = message,
                     TextWrapping = TextWrapping.Wrap,
-                    Foreground = new SolidColorBrush(GetColorForLogMessageType(logMessageType)),
+                    Foreground = new SolidColorBrush(Logger.GetColorForMessageType(logMessageType)),
                     Padding = new Thickness(6, 4, 6, 4),
                     FontSize = 14,
                 };
@@ -185,5 +175,10 @@ namespace HintMachine
             });
         }
 
+        private void OnArchipelagoDisconnectButtonClick(object sender, RoutedEventArgs e)
+        {
+            new LoginWindow().Show();
+            Close();
+        }
     }
 }
