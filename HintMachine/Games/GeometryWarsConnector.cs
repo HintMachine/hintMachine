@@ -18,6 +18,13 @@ namespace HintMachine.Games
         {
             return "Geometry Wars: Retro Evolved";
         }
+        
+        public override string GetDescription()
+        {
+            return "Kill geometric ennemies in this box shaped area twin stick shooter." +
+                "Tested on up-to-date Steam version.";
+        }
+
 
         public override bool Connect()
         {
