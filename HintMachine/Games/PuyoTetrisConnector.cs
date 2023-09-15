@@ -48,13 +48,22 @@ namespace HintMachine.Games
             return "Puyo Puyo Tetris";
         }
 
-        public override void Poll()
+        public override string GetDescription()
+        {
+            return "Puyo Puyo Tetris combines two legendary stacking games in ones, as its name suggests." +
+                   "Pop puyos and clear lines with style to earn as many hints as possible.\n\n" +
+                   "Tested on up-to-date Steam version.";
+        }
+
+        public override bool Poll()
         {
             if (process == null || module == null)
-                return;
+                return false;
 
             ReadTetrisData();
             ReadPuyoData();
+
+            return true;
         }
 
         private void ReadTetrisData()

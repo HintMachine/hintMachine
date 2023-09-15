@@ -17,11 +17,17 @@ namespace HintMachine.Games
         {
             return "Tetris Effect Connected (Steam)";
         }
+        public override string GetDescription()
+        {
+            return "Stack tetrominos and fill lines to clear them in the most visually " +
+                   "impressive implementation of Tetris ever made.\n\n" +
+                   "Tested on up-to-date Steam version.";
+        }
 
-        public override void Poll()
+        public override bool Poll()
         {
             if (process == null || module == null)
-                return;
+                return false;
 
             long baseAddress = module.BaseAddress.ToInt64() + 0x4ED0440;
             long scoreAddress = ResolvePointerPath(baseAddress, new int[] { 0x0, 0x20, 0x120, 0x0, 0x42C });
@@ -30,6 +36,8 @@ namespace HintMachine.Games
             if (score > _previousScore)
                 _scoreQuest.Add(score - _previousScore);
             _previousScore = score;
+
+            return true;
         }
     }
 }

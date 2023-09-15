@@ -88,7 +88,9 @@ namespace HintMachine
 
         public override void Disconnect()
         {
-            // TODO
+            process = null;
+            module = null;
+            processHandle = IntPtr.Zero;
         }
 
         protected long ResolvePointerPath(long baseAddress, int[] offsets)

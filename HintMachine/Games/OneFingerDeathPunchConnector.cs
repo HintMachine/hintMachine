@@ -22,10 +22,10 @@ namespace HintMachine.Games
             return "One Finger Death Punch";
         }
 
-        public override void Poll()
+        public override bool Poll()
         {
             if (process == null || module == null)
-                return;
+                return false;
 
             syncThreadStackAdr();
             long killsAddress = ResolvePointerPath32(Thread0Address.ToInt64() - 0x8cc, new int[] { 0x644, 0x90 });
@@ -37,7 +37,6 @@ namespace HintMachine.Games
         }
 
         private async void syncThreadStackAdr() {
-
             Thread0Address = (IntPtr)await getThread0Address();
         }
 
@@ -66,6 +65,5 @@ namespace HintMachine.Games
             }
             return Task.FromResult(0);
         }
-        
     }
 }

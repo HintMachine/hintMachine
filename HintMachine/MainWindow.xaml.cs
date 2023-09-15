@@ -67,8 +67,15 @@ namespace HintMachine
             if (_game == null)
                 return;
 
-            _game.Poll();
+            // Poll game connector, and cleanly close it if something wrong happens
+            if(!_game.Poll())
+            {
+                Logger.Error("❌ [Error] Connection with " + _game.GetDisplayName() + " was lost.");
+                DisconnectFromGame();
+                return;
+            }
 
+            // Update hint quests
             foreach(HintQuest quest in _game.quests)
             {
                 if (quest.CheckCompletion())
@@ -116,8 +123,7 @@ namespace HintMachine
                 Settings.Game = selectedGameName;
                 Settings.SaveToFile();
 
-                Logger.Info("✔️ Successfully connected to " + game.GetDisplayName() + ". " +
-                            "Complete gauges on the left panel by playing the game in order to get random hints.");
+                Logger.Info("✔️ Successfully connected to " + game.GetDisplayName() + ". ");
             }
             else
             {
@@ -125,7 +131,8 @@ namespace HintMachine
                              "Please ensure it is currently running and try again.");
             }
         }
-        private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
+
+        public void DisconnectFromGame()
         {
             if (_game == null)
                 return;
@@ -133,16 +140,22 @@ namespace HintMachine
             _game.Disconnect();
             _game = null;
 
-            gameConnectGrid.Visibility = Visibility.Visible;
-            questsGrid.Visibility = Visibility.Hidden;
-            buttonChangeGame.Visibility = Visibility.Hidden;
+            Dispatcher.Invoke(() =>
+            {
+                gameConnectGrid.Visibility = Visibility.Visible;
+                questsGrid.Visibility = Visibility.Hidden;
+                buttonChangeGame.Visibility = Visibility.Hidden;
 
-            questsGrid.Children.Clear();
-            questsGrid.RowDefinitions.Clear();
+                questsGrid.Children.Clear();
+                questsGrid.RowDefinitions.Clear();
 
-            Title = WINDOW_TITLE;
-            labelGame.Content = "-";
-
+                Title = WINDOW_TITLE;
+                labelGame.Content = "-";
+            });
+        }
+        private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
+        {
+            DisconnectFromGame();
             Logger.Info("Disconnected from game.");
         }
 
@@ -179,6 +192,19 @@ namespace HintMachine
         {
             new LoginWindow().Show();
             Close();
+        }
+
+        private void gameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedGameName = gameComboBox.SelectedValue.ToString();
+            IGameConnector game = GamesList.FindGameFromName(selectedGameName);
+
+            textblockGameDescription.Text = game.GetDescription();
+
+            if (textblockGameDescription.Text.Length != 0)
+                textblockGameDescription.Visibility = Visibility.Visible;
+            else
+                textblockGameDescription.Visibility = Visibility.Collapsed;
         }
     }
 }

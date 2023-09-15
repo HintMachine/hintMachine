@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="HintMachine" Height="600" Width="1024" MinHeight="400" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
+        Title="HintMachine" Height="600" Width="1024" MinHeight="600" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
     <Grid Name="mainGrid" Margin="12,12,12,12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="320" />
@@ -18,17 +18,16 @@
             </Grid.ColumnDefinitions>
         </Grid>
 
-        <Grid Name="gameConnectGrid" Margin="8,8,8,8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <StackPanel Name="gameConnectGrid" Margin="8,8,8,8">
+            <DockPanel LastChildFill="True" Margin="0,0,0,8">
+                <Label Content="Game :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <ComboBox x:Name="gameComboBox" Margin="8,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectionChanged="gameComboBox_SelectionChanged"/>
+            </DockPanel>
 
-            <Label Content="Game :" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.205,-0.706" Width="47"/>
-            <ComboBox x:Name="gameComboBox" HorizontalAlignment="Left" Margin="52,4,0,0" VerticalAlignment="Top" Width="252" Grid.ColumnSpan="2"/>
+            <TextBlock Name="textblockGameDescription" Padding="0,8,0,12" TextWrapping="Wrap" Visibility="Collapsed"></TextBlock>
 
-            <Button Content="🔗 Connect to game" HorizontalAlignment="Center" Margin="0,38,0,0" VerticalAlignment="Top" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
-        </Grid>
+            <Button Content="🔗 Connect to game" Margin="0,8,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
+        </StackPanel>
 
         <Border BorderThickness="1" BorderBrush="#FF888888" Grid.Column="0" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
             <Border.Background>

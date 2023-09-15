@@ -49,20 +49,35 @@ namespace HintMachine.Games
 
         public override string GetDisplayName()
         {
-            return "Zachtronics Solitaire Collection (GOG)";
+            return "Zachtronics Solitaire Collection";
+        }
+        public override string GetDescription()
+        {
+            return "Play 8 different variants of Solitaire in this collection of games " +
+                   "initially created as mini-games for Zachtronics main titles.\n\n" +
+                   "Tested on GOG version, might work with other versions of the game.";
         }
 
-        public override void Poll()
+        public override bool Poll()
         {
             if (_readSaveFileOnNextTick)
             {
-                int totalWinCount = ReadTotalWinCount();
-                if (totalWinCount > _previousWins)
-                    _winsQuest.Add(totalWinCount - _previousWins);
-                _previousWins = totalWinCount;
+                try
+                {
+                    int totalWinCount = ReadTotalWinCount();
+                    if (totalWinCount > _previousWins)
+                        _winsQuest.Add(totalWinCount - _previousWins);
+                    _previousWins = totalWinCount;
+                }
+                catch 
+                {
+                    return false; 
+                }
 
                 _readSaveFileOnNextTick = false;
             }
+
+            return true;
         }
 
         private void OnFileChanged(object source, FileSystemEventArgs e)
@@ -73,32 +88,29 @@ namespace HintMachine.Games
         private int ReadTotalWinCount()
         {
             int totalWinCount = 0;
-            try
+
+            FileStream file = new FileStream(FindSavefileDirectory() + "save.dat", FileMode.Open, FileAccess.Read);
+            using (var streamReader = new StreamReader(file, Encoding.UTF8))
             {
-                FileStream file = new FileStream(FindSavefileDirectory() + "save.dat", FileMode.Open, FileAccess.Read);
-                using (var streamReader = new StreamReader(file, Encoding.UTF8))
+                string text = streamReader.ReadToEnd();
+                string[] lines = text.Split('\n');
+
+                foreach (string line in lines)
                 {
-                    string text = streamReader.ReadToEnd();
-                    string[] lines = text.Split('\n');
+                    Regex regex = new Regex(" = ");
+                    string[] keyval = regex.Split(line);
+                    if (keyval.Length < 2)
+                        continue;
 
-                    foreach (string line in lines)
-                    {
-                        Regex regex = new Regex(" = ");
-                        string[] keyval = regex.Split(line);
-                        if (keyval.Length < 2)
-                            continue;
-
-                        if (keyval[0] == "Milan.WinCount")
-                            totalWinCount += int.Parse(keyval[1]) * 2; // Fortune's Foundation wins are worth double
-                        else if (keyval[0].Contains("WinCount"))
-                            totalWinCount += int.Parse(keyval[1]);
-                    }
+                    if (keyval[0] == "Milan.WinCount")
+                        totalWinCount += int.Parse(keyval[1]) * 2; // Fortune's Foundation wins are worth double
+                    else if (keyval[0].Contains("WinCount"))
+                        totalWinCount += int.Parse(keyval[1]);
                 }
-
-                file.Close();
             }
-            catch {}
-     
+
+            file.Close();
+
             return totalWinCount;
         }
 
