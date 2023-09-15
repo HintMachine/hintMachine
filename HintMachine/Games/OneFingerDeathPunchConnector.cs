@@ -28,18 +28,28 @@ namespace HintMachine.Games
                 return false;
 
             syncThreadStackAdr();
+            if (Thread0Address == IntPtr.Zero)
+                return false;
+
             long killsAddress = ResolvePointerPath32(Thread0Address.ToInt64() - 0x8cc, new int[] { 0x644, 0x90 });
 
             uint kills = ReadUint32(killsAddress);
             if (kills > _previousKills)
                 _killsQuest.Add(kills - _previousKills);
             _previousKills = kills;
+
+            return true;
         }
+
+        [DllImport("threadstack-finder.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern ulong getThreadstack0(ulong pid);
 
         private async void syncThreadStackAdr() {
-            Thread0Address = (IntPtr)await getThread0Address();
+            //Thread0Address = (IntPtr)await getThread0Address();
+            Thread0Address = (IntPtr)getThreadstack0((ulong)process.Id);
         }
 
+        /*
         private Task<int> getThread0Address()
         {
             var proc = new Process
@@ -65,5 +75,6 @@ namespace HintMachine.Games
             }
             return Task.FromResult(0);
         }
+        */
     }
 }
