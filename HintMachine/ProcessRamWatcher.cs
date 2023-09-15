@@ -244,6 +244,8 @@ namespace HintMachine
 //       public static extern ulong getThreadstack0(ulong pid);
         public void UpdateThreadstack0()
         {
+            threadstack0 = 0;
+
             var proc = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -255,6 +257,7 @@ namespace HintMachine
                     CreateNoWindow = true
                 }
             };
+
             proc.Start();
             while (!proc.StandardOutput.EndOfStream)
             {
@@ -266,8 +269,6 @@ namespace HintMachine
                     return;
                 }
             }
-
-            threadstack0 = 0;
         }
     }
 }
