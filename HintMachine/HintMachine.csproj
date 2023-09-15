@@ -135,11 +135,11 @@
     <Compile Include="IGameConnector.cs" />
     <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
     <Compile Include="Games\XenotiltConnector.cs" />
-    <Compile Include="IGameConnectorProcess.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProcessRamWatcher.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TokenManipulator.cs" />
     <Page Include="LoginWindow.xaml">
