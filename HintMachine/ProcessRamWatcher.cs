@@ -45,7 +45,6 @@ namespace HintMachine
         public ProcessModule module = null;
         public IntPtr processHandle = IntPtr.Zero;
         public long baseAddress = 0;
-        public long threadstack0 = 0;
 
         public ProcessRamWatcher(string processName, string moduleName = "")
         {
@@ -240,35 +239,12 @@ namespace HintMachine
             return regions;
         }
 
-//       [DllImport("threadstack-finder.dll", CallingConvention = CallingConvention.Cdecl)]
-//       public static extern ulong getThreadstack0(ulong pid);
-        public void UpdateThreadstack0()
+       [DllImport("threadstack-finder.dll", CallingConvention = CallingConvention.Cdecl)]
+       public static extern ulong getThreadstack0(ulong pid);
+
+        public long GetThreadstack0()
         {
-            threadstack0 = 0;
-
-            var proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "threadstack.exe",
-                    Arguments = process.Id + "",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
-                }
-            };
-
-            proc.Start();
-            while (!proc.StandardOutput.EndOfStream)
-            {
-                string line = proc.StandardOutput.ReadLine();
-                if (line.Contains("THREADSTACK 0 BASE ADDRESS: "))
-                {
-                    line = line.Substring(line.LastIndexOf(":") + 2);
-                    threadstack0 = int.Parse(line.Substring(2), System.Globalization.NumberStyles.HexNumber);
-                    return;
-                }
-            }
+            return (long)getThreadstack0((ulong)process.Id);
         }
     }
 }

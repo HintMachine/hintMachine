@@ -5,7 +5,7 @@
         private ProcessRamWatcher _ram = null;
         private long _previousKills = long.MaxValue;
         private readonly HintQuest _killsQuest = new HintQuest("Kills", 450);
-
+        private long _threadstack0 = 0;
         public OneFingerDeathPunchConnector()
         {
             quests.Add(_killsQuest);
@@ -29,8 +29,8 @@
             if (!_ram.TryConnect())
                 return false;
 
-            _ram.UpdateThreadstack0();
-            return (_ram.threadstack0 != 0);
+            _threadstack0 = _ram.GetThreadstack0();
+            return (_threadstack0 != 0);
         }
 
         public override void Disconnect()
@@ -40,7 +40,7 @@
 
         public override bool Poll()
         {
-            long killsAddress = _ram.ResolvePointerPath32(_ram.threadstack0 - 0x8cc, new int[] { 0x644, 0x90 });
+            long killsAddress = _ram.ResolvePointerPath32(_threadstack0 - 0x8cc, new int[] { 0x644, 0x90 });
             
             uint kills = _ram.ReadUint32(killsAddress);
             if (kills > _previousKills)
