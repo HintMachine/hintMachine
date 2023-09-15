@@ -68,7 +68,14 @@ namespace HintMachine
                 return;
 
             // Poll game connector, and cleanly close it if something wrong happens
-            if(!_game.Poll())
+            bool pollSuccessful = false;
+            try
+            {
+                pollSuccessful = _game.Poll();
+            }
+            catch { }
+
+            if (!pollSuccessful)
             {
                 Logger.Error("❌ [Error] Connection with " + _game.GetDisplayName() + " was lost.");
                 DisconnectFromGame();

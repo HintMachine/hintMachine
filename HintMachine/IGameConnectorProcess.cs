@@ -135,6 +135,8 @@ namespace HintMachine
             int bytesRead = 0;
             byte[] buffer = new byte[length];
             ReadProcessMemory((int)processHandle, address, buffer, length, ref bytesRead);
+            if (bytesRead < length)
+                throw new Exception("Could not read process memory");
 
             // If data is meant to be read as big endian, reverse it for BitConverter methods to work as they should
             if (length > 1 && isBigEndian)
