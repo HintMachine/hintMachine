@@ -22,6 +22,12 @@ namespace HintMachine.Games
             return "One Finger Death Punch";
         }
 
+        public override string GetDescription()
+        {
+            return "Fight using only your left and right mouse button. Your cursor can be anywhere on the screen" +
+                "Tested on up-to-date Steam version";
+        }
+
         public override bool Poll()
         {
             if (process == null || module == null)
@@ -34,6 +40,7 @@ namespace HintMachine.Games
             if (kills > _previousKills)
                 _killsQuest.Add(kills - _previousKills);
             _previousKills = kills;
+            return true;
         }
 
         private async void syncThreadStackAdr() {

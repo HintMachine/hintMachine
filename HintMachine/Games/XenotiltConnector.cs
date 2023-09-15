@@ -18,6 +18,11 @@ namespace HintMachine.Games
             return "Xenotilt";
         }
 
+        public override string GetDescription()
+        {
+            return "In this three parts pinball table, you will have to complete missions to earn a lot of points";
+        }
+
         public override bool Poll()
         {
             if (process == null || module == null)
