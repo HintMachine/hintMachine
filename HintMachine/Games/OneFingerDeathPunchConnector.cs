@@ -1,4 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace HintMachine.Games
 {
@@ -6,7 +11,7 @@ namespace HintMachine.Games
     {
         private long _previousKills = long.MaxValue;
         private readonly HintQuest _killsQuest = new HintQuest("Kills", 450);
-
+        IntPtr Thread0Address;
         public OneFingerDeathPunchConnector() : base("One Finger Death Punch")
         {
             quests.Add(_killsQuest);
@@ -22,13 +27,45 @@ namespace HintMachine.Games
             if (process == null || module == null)
                 return;
 
-            uint baseAddress = ProcessUtils32.CheatengineSpecific.GetThreadStack0(process);
-            long survivalKillsAddress = ResolvePointerPath(baseAddress, new int[] { -0x8c8, 0x644, 0x90 });
+            syncThreadStackAdr();
+            long killsAddress = ResolvePointerPath32(Thread0Address.ToInt64() - 0x8cc, new int[] { 0x644, 0x90 });
 
-            long survivalKills = ReadInt64(survivalKillsAddress);
-            if (survivalKills > _previousKills)
-                _killsQuest.Add(survivalKills - _previousKills);
-            _previousKills = survivalKills;
+            uint kills = ReadUint32(killsAddress);
+            if (kills > _previousKills)
+                _killsQuest.Add(kills - _previousKills);
+            _previousKills = kills;
         }
+
+        private async void syncThreadStackAdr() {
+
+            Thread0Address = (IntPtr)await getThread0Address();
+        }
+
+        private Task<int> getThread0Address()
+        {
+            var proc = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "threadstack.exe",
+                    Arguments = process.Id + "",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+            proc.Start();
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                string line = proc.StandardOutput.ReadLine();
+                if (line.Contains("THREADSTACK 0 BASE ADDRESS: "))
+                {
+                    line = line.Substring(line.LastIndexOf(":") + 2);
+                    return Task.FromResult(int.Parse(line.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                }
+            }
+            return Task.FromResult(0);
+        }
+        
     }
 }
