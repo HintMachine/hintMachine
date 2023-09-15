@@ -12,7 +12,6 @@ namespace HintMachine
     {
         const int PROCESS_WM_READ = 0x0010;
         const int PROCESS_QUERY_INFORMATION = 0x0400;
-
         [Flags]
         public enum ThreadAccess : int
         {
@@ -40,9 +39,6 @@ namespace HintMachine
         [DllImport("kernel32.dll")]
         public static extern bool ReadProcessMemory(int hProcess,
           Int64 lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
-
-        [DllImport("ntdll.dll")]
-        public static extern int NtQueryInformationThread(IntPtr processHandle, int threadInformationClass, IntPtr threadInformation, uint threadInformationLength, IntPtr returnLength);
 
         // ----------------------------------------------------------------------------------
 
