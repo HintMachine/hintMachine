@@ -95,11 +95,7 @@ namespace HintMachine
                 {
                     Logger.Info("Congratulations on completing the '" + quest.displayName + "' objective. " +
                                 "Here's a hint for your efforts!");
-                    string hint = _archipelagoSession.GetOneRandomHint();
-                    if (hint.Length != 0)
-                        Logger.Hint("❓ " + hint);
-                    else
-                        Logger.Error("[ERROR] Couldn't fetch hint?");
+                    _archipelagoSession.GetOneRandomHint();
                 }
 
                 Dispatcher.Invoke(() => { quest.UpdateComponents(); });

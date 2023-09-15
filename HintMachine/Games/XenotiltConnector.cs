@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace HintMachine.Games
+﻿namespace HintMachine.Games
 {
-    public class XenotiltConnector : IGameConnectorProcess
+    public class XenotiltConnector : IGameConnector
     {
+        private ProcessRamWatcher _ram = null;
         private long _previousScore = long.MaxValue;
         private readonly HintQuest _scoreQuest = new HintQuest("Score", 200000000);
 
-        public XenotiltConnector() : base("Xenotilt", "mono-2.0-bdwgc.dll")
+        public XenotiltConnector()
         {
             quests.Add(_scoreQuest);
         }
@@ -18,15 +16,22 @@ namespace HintMachine.Games
             return "Xenotilt";
         }
 
+        public override bool Connect()
+        {
+            _ram = new ProcessRamWatcher("Xenotilt", "mono-2.0-bdwgc.dll");
+            return _ram.TryConnect();
+        }
+
+        public override void Disconnect()
+        {
+            _ram = null;
+        }
+
         public override bool Poll()
         {
-            if (process == null || module == null)
-                return false;
-
-            long baseAddress = module.BaseAddress.ToInt64() + 0x7270B8;
-            long scoreAddress = ResolvePointerPath(baseAddress, new int[] { 0x30, 0x7e0, 0x7C0 });
+            long scoreAddress = _ram.ResolvePointerPath64(_ram.baseAddress + 0x7270B8, new int[] { 0x30, 0x7e0, 0x7C0 });
             
-            long score = ReadInt64(scoreAddress);
+            long score = _ram.ReadInt64(scoreAddress);
             if (score > _previousScore)
                 _scoreQuest.Add(score - _previousScore);
             _previousScore = score;

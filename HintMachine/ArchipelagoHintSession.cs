@@ -5,7 +5,6 @@ using Archipelago.MultiClient.Net.Packets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using static Archipelago.MultiClient.Net.Helpers.MessageLogHelper;
 
 namespace HintMachine
@@ -63,34 +62,24 @@ namespace HintMachine
                     _alreadyHintedLocations.Add(hint.LocationId);
             }
         }
-        public string GetOneRandomHint()
+        public void GetOneRandomHint()
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
-            foreach(long locationId in _alreadyHintedLocations)
+            foreach (long locationId in _alreadyHintedLocations)
                 missingLocations.Remove(locationId);
 
             if (missingLocations.Count == 0)
-                return "";
+                return;
 
             Random rnd = new Random();
             int index = rnd.Next(missingLocations.Count);
             long hintedLocationId = _session.Locations.AllMissingLocations[index];
 
             _alreadyHintedLocations.Add(hintedLocationId);
-            try
-            {
-                Task<LocationInfoPacket> t = _session.Locations.ScoutLocationsAsync(true, hintedLocationId);
-                LocationInfoPacket response = t.Result;
-
-                string itemName = _session.Items.GetItemName(response.Locations[0].Item);
-                string playerName = _session.Players.GetPlayerName(response.Locations[0].Player);
-                string locationName = _session.Locations.GetLocationNameFromId(response.Locations[0].Location);
-
-                return playerName + "'s " + itemName + " can be found at '" + locationName + "'";
-            } 
-            catch(NullReferenceException) {}
-
-            return "";
+            _session.Socket.SendPacket(new LocationScoutsPacket {
+                Locations = new long[] { hintedLocationId },
+                CreateAsHint = true
+            });
         }
 
         public void SendMessage(string message)
