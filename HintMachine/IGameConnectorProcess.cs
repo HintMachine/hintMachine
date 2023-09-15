@@ -184,5 +184,10 @@ namespace HintMachine
         {
             return BitConverter.ToInt64(ReadBytes(address, sizeof(long), isBigEndian), 0);
         }
+
+        protected double ReadDouble(long address, bool isBigEndian = false)
+        {
+            return BitConverter.ToDouble(ReadBytes(address, sizeof(long), isBigEndian), 0);
+        }
     }
 }

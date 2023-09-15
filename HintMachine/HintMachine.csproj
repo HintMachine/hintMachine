@@ -127,6 +127,7 @@
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="GamesList.cs" />
     <Compile Include="Games\GeometryWarsConnector.cs" />
+    <Compile Include="Games\NuclearThroneConnector.cs" />
     <Compile Include="Games\PuyoTetrisConnector.cs" />
     <Compile Include="Games\GeometryWarsGalaxiesConnector.cs" />
     <Compile Include="Games\ZachtronicsSolitaireConnector.cs" />
@@ -212,6 +213,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="threadstack-finder.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="threadstack.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

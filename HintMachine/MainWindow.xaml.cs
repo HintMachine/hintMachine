@@ -41,13 +41,13 @@ namespace HintMachine
                 if (connector.GetDisplayName() == Settings.Game)
                     gameComboBox.SelectedItem = gameComboBox.Items[gameComboBox.Items.Count - 1];
             }
-            
+            /*
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
             _timer.Elapsed += TimerElapsed;
             _timer.AutoReset = true;
             _timer.Enabled = true;
-            
+            */
             // Setup the global Logger to populate the message log view and log a few welcome messages
             Logger.OnMessageLogged = OnMessageLogged;
 
@@ -79,7 +79,10 @@ namespace HintMachine
             {
                 pollSuccessful = _game.Poll();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
 
             if (!pollSuccessful)
             {
@@ -89,17 +92,20 @@ namespace HintMachine
             }
 
             // Update hint quests
-            foreach(HintQuest quest in _game.quests)
+            foreach (HintQuest quest in _game.quests)
             {
                 if (quest.CheckCompletion())
                 {
                     Logger.Info("Congratulations on completing the '" + quest.displayName + "' objective. " +
                                 "Here's a hint for your efforts!");
-                    string hint = _archipelagoSession.GetOneRandomHint();
-                    if (hint.Length != 0)
-                        Logger.Hint("❓ " + hint);
-                    else
-                        Logger.Error("[ERROR] Couldn't fetch hint?");
+                    for (int i = 0; i < quest.hintsAwarded; i++)
+                    {
+                        string hint = _archipelagoSession.GetOneRandomHint();
+                        if (hint.Length != 0)
+                            Logger.Hint("❓ " + hint);
+                        else
+                            Logger.Error("[ERROR] Couldn't fetch hint?");
+                    }
                 }
 
                 Dispatcher.Invoke(() => { quest.UpdateComponents(); });
@@ -111,13 +117,14 @@ namespace HintMachine
             if (_game != null)
                 return;
 
-          
+
             // Connect to selected game
             string selectedGameName = gameComboBox.SelectedValue.ToString();
             IGameConnector game = GamesList.FindGameFromName(selectedGameName);
             if (game.Connect())
             {
                 _game = game;
+                _game.Poll();
                 Title = WINDOW_TITLE + " - " + _game.GetDisplayName();
                 labelGame.Content = _game.GetDisplayName();
 
