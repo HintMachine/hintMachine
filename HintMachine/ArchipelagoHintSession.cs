@@ -5,9 +5,8 @@ using Archipelago.MultiClient.Net.Packets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using static Archipelago.MultiClient.Net.Helpers.MessageLogHelper;
 
 namespace HintMachine
 {
@@ -64,7 +63,6 @@ namespace HintMachine
                     _alreadyHintedLocations.Add(hint.LocationId);
             }
         }
-
         public string GetOneRandomHint()
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
@@ -93,6 +91,16 @@ namespace HintMachine
             catch(NullReferenceException) {}
 
             return "";
+        }
+
+        public void SendMessage(string message)
+        {
+            _session.Socket.SendPacket(new SayPacket { Text = message });
+        }
+
+        public void SetupOnMessageReceivedEvent(MessageReceivedHandler handler)
+        {
+            _session.MessageLog.OnMessageReceived += handler;
         }
     }
 }
