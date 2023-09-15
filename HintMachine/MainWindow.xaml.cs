@@ -3,7 +3,11 @@ using System.Timers;
 using System;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Archipelago.MultiClient.Net;
+using System.Windows.Input;
+using Archipelago.MultiClient.Net.MessageLog.Messages;
+using Archipelago.MultiClient.Net.MessageLog.Parts;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace HintMachine
 {
@@ -23,6 +27,8 @@ namespace HintMachine
             InitializeComponent();
 
             _archipelagoSession = archipelagoSession;
+            _archipelagoSession.SetupOnMessageReceivedEvent(OnArchipelagoMessageReceived);
+
             labelHost.Content = _archipelagoSession.host;
             labelSlot.Content = _archipelagoSession.slot;
 
@@ -68,7 +74,14 @@ namespace HintMachine
                 return;
 
             // Poll game connector, and cleanly close it if something wrong happens
-            if(!_game.Poll())
+            bool pollSuccessful = false;
+            try
+            {
+                pollSuccessful = _game.Poll();
+            }
+            catch { }
+
+            if (!pollSuccessful)
             {
                 Logger.Error("❌ [Error] Connection with " + _game.GetDisplayName() + " was lost.");
                 DisconnectFromGame();
@@ -194,7 +207,7 @@ namespace HintMachine
             Close();
         }
 
-        private void gameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnSelectedGameConnectorChange(object sender, SelectionChangedEventArgs e)
         {
             string selectedGameName = gameComboBox.SelectedValue.ToString();
             IGameConnector game = GamesList.FindGameFromName(selectedGameName);
@@ -205,6 +218,56 @@ namespace HintMachine
                 textblockGameDescription.Visibility = Visibility.Visible;
             else
                 textblockGameDescription.Visibility = Visibility.Collapsed;
+        }
+
+        private void SendMessageToArchipelago()
+        {
+            if (inputChat.Text == "")
+                return;
+
+            _archipelagoSession.SendMessage(inputChat.Text);
+            inputChat.Text = "";
+        }
+
+        private void OnChatInputKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+                SendMessageToArchipelago();
+        }
+        private void OnSendButtonClick(object sender, RoutedEventArgs e)
+        {
+            SendMessageToArchipelago();
+        }
+
+        private void OnArchipelagoMessageReceived(LogMessage message)
+        {
+            string str = "";
+            LogMessageType type = LogMessageType.RAW;
+            List<MessagePart> parts = Enumerable.ToList(message.Parts);
+
+            if (message is JoinLogMessage || message is LeaveLogMessage)
+                return;
+
+            if (message is ChatLogMessage || message is ServerChatLogMessage)
+            {
+                str += "💬 ";
+            }
+            else if (message is HintItemSendLogMessage)
+            {
+                str += "❓ ";
+                type = LogMessageType.HINT;
+                parts.RemoveAt(0);
+                // TODO: Dim found hints? Hide them by default unless checked in settings?
+            }
+            else if (message is CommandResultLogMessage)
+            {
+                str += "  > ";
+            }
+
+            foreach (var part in parts)
+                str += part.Text;
+
+            Logger.Log(str, type);
         }
     }
 }

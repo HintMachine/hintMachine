@@ -50,7 +50,7 @@ namespace HintMachine.Games
 
         public override string GetDescription()
         {
-            return "Puyo Puyo Tetris combines two legendary stacking games in ones, as its name suggests." +
+            return "Puyo Puyo Tetris combines two legendary stacking games in ones, as its name suggests. " +
                    "Pop puyos and clear lines with style to earn as many hints as possible.\n\n" +
                    "Tested on up-to-date Steam version.";
         }

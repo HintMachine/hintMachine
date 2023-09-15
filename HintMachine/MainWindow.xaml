@@ -21,7 +21,7 @@
         <StackPanel Name="gameConnectGrid" Margin="8,8,8,8">
             <DockPanel LastChildFill="True" Margin="0,0,0,8">
                 <Label Content="Game :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <ComboBox x:Name="gameComboBox" Margin="8,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectionChanged="gameComboBox_SelectionChanged"/>
+                <ComboBox x:Name="gameComboBox" Margin="8,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectionChanged="OnSelectedGameConnectorChange"/>
             </DockPanel>
 
             <TextBlock Name="textblockGameDescription" Padding="0,8,0,12" TextWrapping="Wrap" Visibility="Collapsed"></TextBlock>
@@ -29,7 +29,7 @@
             <Button Content="🔗 Connect to game" Margin="0,8,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
         </StackPanel>
 
-        <Border BorderThickness="1" BorderBrush="#FF888888" Grid.Column="0" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
+        <Border BorderThickness="1" BorderBrush="#FFABADB3" Grid.Column="0" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
             <Border.Background>
                 <ImageBrush ImageSource="/logo_small.png" Stretch="Uniform" TileMode="None" Opacity="0.15"/>
             </Border.Background>
@@ -65,11 +65,17 @@
             </Grid>
         </Border>
 
-        <Border BorderThickness="1" BorderBrush="#FF888888" Background="#FFDDDDDD" Grid.Column="1" Margin="12,0,0,0">
-            <ScrollViewer Name="messageLogScrollViewer">
-                <StackPanel Name="messageLog"/>
-            </ScrollViewer>
-        </Border>
-    </Grid>
+        <DockPanel Grid.Column="1" Margin="12,0,0,0" LastChildFill="True">
+            <DockPanel DockPanel.Dock="Bottom" Margin="0,6,0,0" LastChildFill="True">
+                <Button DockPanel.Dock="Right" Width="60" Margin="4,0,0,0" Click="OnSendButtonClick">💬 Send</Button>
+                <TextBox x:Name="inputChat" Height="23" TextWrapping="Wrap" KeyDown="OnChatInputKeyDown" />
+            </DockPanel>
 
+            <Border BorderThickness="1" BorderBrush="#FFABADB3" Background="#FFDDDDDD" DockPanel.Dock="Top">
+                <ScrollViewer Name="messageLogScrollViewer" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Name="messageLog"/>
+                </ScrollViewer>
+            </Border>
+        </DockPanel>
+    </Grid>
 </Window>

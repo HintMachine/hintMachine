@@ -1,0 +1,94 @@
+﻿<Window x:Class="HintMachine.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="HintMachine" Height="600" Width="1024" MinHeight="600" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Background="#FFFFFFFF">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" />
+                <MenuItem Header="_Open" />
+                <MenuItem Header="_Save" />
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+        </Menu>
+
+        <Grid Name="mainGrid" Margin="12,12,12,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Name="questsGrid" Margin="8,8,8,8" Visibility="Hidden">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <StackPanel Name="gameConnectGrid" Margin="8,8,8,8">
+                <DockPanel LastChildFill="True" Margin="0,0,0,8">
+                    <Label Content="Game :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="gameComboBox" Margin="8,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectionChanged="OnSelectedGameConnectorChange"/>
+                </DockPanel>
+
+                <TextBlock Name="textblockGameDescription" Padding="0,8,0,12" TextWrapping="Wrap" Visibility="Collapsed"></TextBlock>
+
+                <Button Content="🔗 Connect to game" Margin="0,8,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
+            </StackPanel>
+
+            <Border BorderThickness="1" BorderBrush="#FFABADB3" Grid.Column="0" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
+                <Border.Background>
+                    <ImageBrush ImageSource="/logo_small.png" Stretch="Uniform" TileMode="None" Opacity="0.15"/>
+                </Border.Background>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+                    <Label Name="labelHost" Content="archipelago.gg:12345" Grid.Row="0" Grid.Column="1"/>
+
+                    <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
+                    <Label Name="labelSlot" Content="Player " Grid.Row="1" Grid.Column="1"/>
+
+                    <Label Content="Game: " FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>
+                    <Label Name="labelGame" Content="-" Grid.Row="2" Grid.Column="1"/>
+
+                    <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Name="buttonChangeGame" Content="◀️ Pick another game" Click="OnDisconnectFromGameButtonClick" Grid.Column="0" Margin="0,0,2,0" Visibility="Hidden"/>
+                        <Button Content="❌ Disconnect" Grid.Column="1" Margin="2,0,0,0" Click="OnArchipelagoDisconnectButtonClick"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <DockPanel Grid.Column="1" Margin="12,0,0,0" LastChildFill="True">
+                <DockPanel DockPanel.Dock="Bottom" Margin="0,6,0,0" LastChildFill="True">
+                    <Button DockPanel.Dock="Right" Width="60" Margin="4,0,0,0" Click="OnSendButtonClick">💬 Send</Button>
+                    <TextBox x:Name="inputChat" Height="23" TextWrapping="Wrap" KeyDown="OnChatInputKeyDown" />
+                </DockPanel>
+
+                <Border BorderThickness="1" BorderBrush="#FFABADB3" Background="#FFDDDDDD" DockPanel.Dock="Top">
+                    <ScrollViewer Name="messageLogScrollViewer" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Name="messageLog"/>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Window>
