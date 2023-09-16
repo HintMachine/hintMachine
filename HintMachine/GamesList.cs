@@ -14,7 +14,7 @@ namespace HintMachine
             new ZachtronicsSolitaireConnector(),
             new GeometryWarsConnector(),
             new GeometryWarsGalaxiesConnector(),
-            new NuclearThroneConnector()
+            //new NuclearThroneConnector() //Instabilities, must be investigated
         };
         
         public static IGameConnector FindGameFromName(string name)

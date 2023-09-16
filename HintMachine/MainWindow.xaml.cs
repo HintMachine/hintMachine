@@ -41,13 +41,13 @@ namespace HintMachine
                 if (connector.GetDisplayName() == Settings.Game)
                     gameComboBox.SelectedItem = gameComboBox.Items[gameComboBox.Items.Count - 1];
             }
-            /*
+            
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
             _timer.Elapsed += TimerElapsed;
             _timer.AutoReset = true;
             _timer.Enabled = true;
-            */
+            
             // Setup the global Logger to populate the message log view and log a few welcome messages
             Logger.OnMessageLogged = OnMessageLogged;
 
@@ -124,7 +124,7 @@ namespace HintMachine
             if (game.Connect())
             {
                 _game = game;
-                _game.Poll();
+                //_game.Poll();
                 Title = WINDOW_TITLE + " - " + _game.GetDisplayName();
                 labelGame.Content = _game.GetDisplayName();
 
