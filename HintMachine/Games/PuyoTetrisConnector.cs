@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace HintMachine.Games
 {
-    public class PuyoTetrisConnector : IGameConnectorProcess
+    public class PuyoTetrisConnector : IGameConnector
     {
+        private ProcessRamWatcher _ram = null;
+
         private ushort _previousLineCount = ushort.MaxValue;
         private readonly HintQuest _linesQuest = new HintQuest("Cleared Lines", 200);
 
@@ -35,7 +33,7 @@ namespace HintMachine.Games
         private byte _previousAllClears = byte.MaxValue;
         private readonly HintQuest _allClearsQuest = new HintQuest("All Clears", 5);
 
-        public PuyoTetrisConnector() : base("PuyoPuyoTetris"/*, "puyopuyotetris.exe"*/)
+        public PuyoTetrisConnector()
         {
             quests = new List<HintQuest>() {
                 _linesQuest, _tetrisesQuest, _tspinsQuest, _combosQuest, _perfectClearsQuest,
@@ -55,21 +53,28 @@ namespace HintMachine.Games
                    "Tested on up-to-date Steam version.";
         }
 
+        public override bool Connect()
+        {
+            _ram = new ProcessRamWatcher("PuyoPuyoTetris");
+            return _ram.TryConnect();
+        }
+
+        public override void Disconnect()
+        {
+            _ram = null;
+        }
+
         public override bool Poll()
         {
-            if (process == null || module == null)
-                return false;
-
             ReadTetrisData();
             ReadPuyoData();
-
             return true;
         }
 
         private void ReadTetrisData()
         {
-            long baseAddress = module.BaseAddress.ToInt64() + 0x461B20;
-            long tetrisDataBaseAddr = ResolvePointerPath(baseAddress, new int[] { 0x378, 0x28, 0x20, 0x30, 0x28, 0xA8, 0x3E8 });
+            int[] OFFSETS = new int[] { 0x378, 0x28, 0x20, 0x30, 0x28, 0xA8, 0x3E8 };
+            long tetrisDataBaseAddr = _ram.ResolvePointerPath64(_ram.baseAddress + 0x461B20, OFFSETS);
 
             if (tetrisDataBaseAddr == 0)
             {
@@ -82,34 +87,34 @@ namespace HintMachine.Games
                 return;
             }
             
-            ushort lineCount = ReadUint16(tetrisDataBaseAddr);
+            ushort lineCount = _ram.ReadUint16(tetrisDataBaseAddr);
             if (lineCount > _previousLineCount)
                 _linesQuest.Add(lineCount - _previousLineCount);
             _previousLineCount = lineCount;
 
-            ushort tetrisCount = ReadUint16(tetrisDataBaseAddr - 0x60);
+            ushort tetrisCount = _ram.ReadUint16(tetrisDataBaseAddr - 0x60);
             if (tetrisCount > _previousTetrises)
                 _tetrisesQuest.Add(tetrisCount - _previousTetrises);
             _previousTetrises = tetrisCount;
 
-            ushort tspinCount = ReadUint16(tetrisDataBaseAddr - 0x50);
+            ushort tspinCount = _ram.ReadUint16(tetrisDataBaseAddr - 0x50);
             if (tspinCount > _previousTspins)
                 _tspinsQuest.Add(tspinCount - _previousTspins);
             _previousTspins = tspinCount;
 
-            byte comboCount = ReadUint8(tetrisDataBaseAddr - 0xC);
+            byte comboCount = _ram.ReadUint8(tetrisDataBaseAddr - 0xC);
             if (comboCount > 0)
                 comboCount -= 1;
             if (comboCount > _previousCombos)
                 _combosQuest.Add(comboCount - _previousCombos);
             _previousCombos = comboCount;
 
-            ushort perfectClearCount = ReadUint16(tetrisDataBaseAddr - 0x54);
+            ushort perfectClearCount = _ram.ReadUint16(tetrisDataBaseAddr - 0x54);
             if(perfectClearCount > _previousPerfectClears)
                 _perfectClearsQuest.Add(perfectClearCount - _previousPerfectClears);
             _previousPerfectClears = perfectClearCount;
 
-            byte backToBackCount = ReadUint8(tetrisDataBaseAddr + 0xB);
+            byte backToBackCount = _ram.ReadUint8(tetrisDataBaseAddr + 0xB);
             if(backToBackCount > _previousBackToBack)
                 _backToBackQuest.Add(backToBackCount - _previousBackToBack);
             _previousBackToBack = backToBackCount;
@@ -117,8 +122,8 @@ namespace HintMachine.Games
 
         private void ReadPuyoData()
         {
-            long baseAddress = module.BaseAddress.ToInt64() + 0x598A20;
-            long puyoDataBaseAddr = ResolvePointerPath(baseAddress, new int[] { 0x38, 0x78, 0xE8, 0x28, 0x28, 0xA8, 0x134 });
+            int[] OFFSETS = new int[] { 0x38, 0x78, 0xE8, 0x28, 0x28, 0xA8, 0x134 };
+            long puyoDataBaseAddr = _ram.ResolvePointerPath64(_ram.baseAddress + 0x598A20, OFFSETS);
 
             if (puyoDataBaseAddr == 0)
             {
@@ -128,17 +133,17 @@ namespace HintMachine.Games
                 return;
             }
 
-            ushort poppedPuyosCount = ReadUint16(puyoDataBaseAddr + 0x154);
+            ushort poppedPuyosCount = _ram.ReadUint16(puyoDataBaseAddr + 0x154);
             if(poppedPuyosCount > _previousPoppedPuyos)
                 _poppedPuyosQuest.Add(poppedPuyosCount - _previousPoppedPuyos);
             _previousPoppedPuyos = poppedPuyosCount;
 
-            byte chainCount = ReadUint8(puyoDataBaseAddr - 0x4);
+            byte chainCount = _ram.ReadUint8(puyoDataBaseAddr - 0x4);
             if(chainCount > _previousChain)
                 _chainsQuest.Add(chainCount - _previousChain);
             _previousChain = chainCount;
 
-            byte allClearsCount = ReadUint8(puyoDataBaseAddr + 0x34);
+            byte allClearsCount = _ram.ReadUint8(puyoDataBaseAddr + 0x34);
             if(allClearsCount > _previousAllClears)
                 _allClearsQuest.Add(allClearsCount - _previousAllClears);
             _previousAllClears = allClearsCount;

@@ -32,6 +32,8 @@ namespace HintMachine
             labelHost.Content = _archipelagoSession.host;
             labelSlot.Content = _archipelagoSession.slot;
 
+            SetupChatFilterMenus();
+
             // Populate game selector combobox with supported game names
             GamesList.GAMES.Sort((a, b) => a.GetDisplayName().CompareTo(b.GetDisplayName()));
             foreach (IGameConnector connector in GamesList.GAMES)
@@ -41,7 +43,10 @@ namespace HintMachine
                 if (connector.GetDisplayName() == Settings.Game)
                     gameComboBox.SelectedItem = gameComboBox.Items[gameComboBox.Items.Count - 1];
             }
-            
+
+            if (gameComboBox.SelectedItem == null)
+                gameComboBox.SelectedItem = gameComboBox.Items[0];
+
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
             _timer.Elapsed += TimerElapsed;
@@ -51,7 +56,6 @@ namespace HintMachine
             // Setup the global Logger to populate the message log view and log a few welcome messages
             Logger.OnMessageLogged = OnMessageLogged;
 
-            Logger.Info("------------ HintMachine 1.0 ------------");
             Logger.Info("Connected to Archipelago session at " + archipelagoSession.host + " as " + archipelagoSession.slot + ".");
             Logger.Info("Feeling stuck in your Archipelago world?\n" +
                         "Connect to a game and start playing to get random hints instead of eating good old Burger King.");
@@ -66,6 +70,7 @@ namespace HintMachine
 
             _timer.Enabled = false;
             _archipelagoSession = null;
+            Settings.SaveToFile();
         }
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)
@@ -100,11 +105,7 @@ namespace HintMachine
                                 "Here's a hint for your efforts!");
                     for (int i = 0; i < quest.hintsAwarded; i++)
                     {
-                        string hint = _archipelagoSession.GetOneRandomHint();
-                        if (hint.Length != 0)
-                            Logger.Hint("❓ " + hint);
-                        else
-                            Logger.Error("[ERROR] Couldn't fetch hint?");
+                        _archipelagoSession.GetOneRandomHint();
                     }
                 }
 
@@ -253,28 +254,78 @@ namespace HintMachine
             List<MessagePart> parts = Enumerable.ToList(message.Parts);
 
             if (message is JoinLogMessage || message is LeaveLogMessage)
-                return;
-
-            if (message is ChatLogMessage || message is ServerChatLogMessage)
             {
-                str += "💬 ";
+                if(!Settings.DisplayJoinLeaveMessages)
+                    return; 
             }
             else if (message is HintItemSendLogMessage)
             {
+                if (!Settings.DisplayFoundHintMessages && message.ToString().EndsWith("(found)"))
+                    return;
+
                 str += "❓ ";
                 type = LogMessageType.HINT;
-                parts.RemoveAt(0);
-                // TODO: Dim found hints? Hide them by default unless checked in settings?
+                parts.RemoveAt(0); // Remove the [Hint] prefix
+            }
+            else if (message is ItemSendLogMessage)
+            {
+                if (!Settings.DisplayItemNotificationMessages)
+                    return;
+            }
+            else if (message is ChatLogMessage || message is ServerChatLogMessage)
+            {
+                if (!Settings.DisplayChatMessages)
+                    return;
+                str += "💬 ";
             }
             else if (message is CommandResultLogMessage)
-            {
                 str += "  > ";
-            }
+            else if (message is GoalLogMessage)
+                str += "👑 ";
 
             foreach (var part in parts)
                 str += part.Text;
 
             Logger.Log(str, type);
+        }
+
+        private void SetupChatFilterMenus()
+        {
+            Dictionary<MenuItem, bool> MENU_ITEMS = new Dictionary<MenuItem, bool>()
+            {
+                { menuDisplayChatMessages, Settings.DisplayChatMessages },
+                { menuDisplayFoundHints, Settings.DisplayFoundHintMessages },
+                { menuDisplayItemNotifications, Settings.DisplayItemNotificationMessages },
+                { menuDisplayJoinLeaveMessages, Settings.DisplayJoinLeaveMessages },
+            };
+
+            foreach(var kv in MENU_ITEMS)
+            {
+                kv.Key.IsChecked = kv.Value;
+                kv.Key.Checked += OnFilterChange;
+                kv.Key.Unchecked += OnFilterChange;
+            }
+        }
+
+        private void OnFilterChange(object sender, RoutedEventArgs e)
+        {
+            Settings.DisplayChatMessages = menuDisplayChatMessages.IsChecked;
+            Settings.DisplayFoundHintMessages = menuDisplayFoundHints.IsChecked;
+            Settings.DisplayItemNotificationMessages = menuDisplayItemNotifications.IsChecked;
+            Settings.DisplayJoinLeaveMessages = menuDisplayJoinLeaveMessages.IsChecked;
+        }
+
+        private void OnExitMenuClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void OnAboutClick(object sender, RoutedEventArgs e)
+        {
+            Logger.Info("-----------------------------------------------\n"
+                      + "HintMachine v1.0\n"
+                      + "Developed with ❤️ by Dinopony & Boffbad\n"
+                      + "-----------------------------------------------");
         }
     }
 }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace HintMachine.Games
 {
-    public class NuclearThroneConnector : IGameConnectorProcess
-    {
+    public class NuclearThroneConnector //: IGameConnector
+    {/*
         private double _previousHealth = 0;
         private double _previousLevel = 0;
         private bool rewardedLvMax = false;
@@ -75,5 +75,6 @@ namespace HintMachine.Games
 
             return true;
         }
+        */
     }
 }

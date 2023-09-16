@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace HintMachine.Games
+﻿namespace HintMachine.Games
 {
-    public class TetrisEffectConnector : IGameConnectorProcess
+    public class TetrisEffectConnector : IGameConnector
     {
+        private ProcessRamWatcher _ram = null;
         private uint _previousScore = uint.MaxValue;
         private readonly HintQuest _scoreQuest = new HintQuest("Score", 20000);
 
-        public TetrisEffectConnector() : base("TetrisEffect-Win64-Shipping")
+        public TetrisEffectConnector()
         {
             quests.Add(_scoreQuest);
         }
@@ -17,6 +15,7 @@ namespace HintMachine.Games
         {
             return "Tetris Effect Connected (Steam)";
         }
+
         public override string GetDescription()
         {
             return "Stack tetrominos and fill lines to clear them in the most visually " +
@@ -24,15 +23,23 @@ namespace HintMachine.Games
                    "Tested on up-to-date Steam version.";
         }
 
+        public override bool Connect()
+        {
+            _ram = new ProcessRamWatcher("TetrisEffect-Win64-Shipping");
+            return _ram.TryConnect();
+        }
+
+        public override void Disconnect()
+        {
+            _ram = null;
+        }
+
         public override bool Poll()
         {
-            if (process == null || module == null)
-                return false;
-
-            long baseAddress = module.BaseAddress.ToInt64() + 0x4ED0440;
-            long scoreAddress = ResolvePointerPath(baseAddress, new int[] { 0x0, 0x20, 0x120, 0x0, 0x42C });
+            int[] OFFSETS = new int[] { 0x0, 0x20, 0x120, 0x0, 0x42C };
+            long scoreAddress = _ram.ResolvePointerPath64(_ram.baseAddress + 0x4ED0440, OFFSETS);
             
-            uint score = ReadUint32(scoreAddress);
+            uint score = _ram.ReadUint32(scoreAddress);
             if (score > _previousScore)
                 _scoreQuest.Add(score - _previousScore);
             _previousScore = score;
