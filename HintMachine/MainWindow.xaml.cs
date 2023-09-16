@@ -43,7 +43,10 @@ namespace HintMachine
                 if (connector.GetDisplayName() == Settings.Game)
                     gameComboBox.SelectedItem = gameComboBox.Items[gameComboBox.Items.Count - 1];
             }
-            
+
+            if (gameComboBox.SelectedItem == null)
+                gameComboBox.SelectedItem = gameComboBox.Items[0];
+
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
             _timer.Elapsed += TimerElapsed;
@@ -248,6 +251,15 @@ namespace HintMachine
                 if(!Settings.DisplayJoinLeaveMessages)
                     return; 
             }
+            else if (message is HintItemSendLogMessage)
+            {
+                if (!Settings.DisplayFoundHintMessages && message.ToString().EndsWith("(found)"))
+                    return;
+
+                str += "❓ ";
+                type = LogMessageType.HINT;
+                parts.RemoveAt(0); // Remove the [Hint] prefix
+            }
             else if (message is ItemSendLogMessage)
             {
                 if (!Settings.DisplayItemNotificationMessages)
@@ -258,15 +270,6 @@ namespace HintMachine
                 if (!Settings.DisplayChatMessages)
                     return;
                 str += "💬 ";
-            }
-            else if (message is HintItemSendLogMessage)
-            {
-                if (!Settings.DisplayFoundHintMessages && message.ToString().EndsWith("(found)"))
-                    return;
-                
-                str += "❓ ";
-                type = LogMessageType.HINT;
-                parts.RemoveAt(0); // Remove the [Hint] prefix
             }
             else if (message is CommandResultLogMessage)
                 str += "  > ";

@@ -21,10 +21,9 @@ namespace HintMachine.Games
         
         public override string GetDescription()
         {
-            return "Kill geometric ennemies in this box shaped area twin stick shooter." +
-                "Tested on up-to-date Steam version.";
+            return "Kill geometric ennemies in this box shaped area twin stick shooter.\n\n" +
+                   "Tested on up-to-date Steam version.";
         }
-
 
         public override bool Connect()
         {

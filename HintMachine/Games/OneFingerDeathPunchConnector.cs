@@ -18,10 +18,9 @@
         
         public override string GetDescription()
         {
-            return "Fight using only your left and right mouse button. Your cursor can be anywhere on the screen" +
-                "Tested on up-to-date Steam version";
+            return "Fight using only your left and right mouse button. Your cursor can be anywhere on the screen.\n\n" +
+                   "Tested on up-to-date Steam version";
         }
-
 
         public override bool Connect()
         {

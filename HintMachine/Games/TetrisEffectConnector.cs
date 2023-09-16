@@ -15,6 +15,7 @@
         {
             return "Tetris Effect Connected (Steam)";
         }
+
         public override string GetDescription()
         {
             return "Stack tetrominos and fill lines to clear them in the most visually " +
