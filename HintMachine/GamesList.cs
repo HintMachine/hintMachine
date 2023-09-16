@@ -14,6 +14,7 @@ namespace HintMachine
             new ZachtronicsSolitaireConnector(),
             new GeometryWarsConnector(),
             new GeometryWarsGalaxiesConnector(),
+            new SonicBlueSpheresConnector(),
         };
         
         public static IGameConnector FindGameFromName(string name)

@@ -126,6 +126,8 @@
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="GamesList.cs" />
+    <Compile Include="Games\SonicBlueSpheresConnector.cs" />
+    <Compile Include="Games\IMegadriveConnector.cs" />
     <Compile Include="Games\GeometryWarsConnector.cs" />
     <Compile Include="Games\PuyoTetrisConnector.cs" />
     <Compile Include="Games\GeometryWarsGalaxiesConnector.cs" />
