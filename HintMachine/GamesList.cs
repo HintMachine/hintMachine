@@ -14,6 +14,7 @@ namespace HintMachine
             new ZachtronicsSolitaireConnector(),
             new GeometryWarsConnector(),
             new GeometryWarsGalaxiesConnector(),
+            new NuclearThroneConnector(), //Instabilities, must be investigated
             new SonicBlueSpheresConnector(),
         };
         

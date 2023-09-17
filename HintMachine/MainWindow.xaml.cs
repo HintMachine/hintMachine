@@ -46,7 +46,7 @@ namespace HintMachine
 
             if (gameComboBox.SelectedItem == null)
                 gameComboBox.SelectedItem = gameComboBox.Items[0];
-
+            
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
             _timer.Elapsed += TimerElapsed;
@@ -87,7 +87,10 @@ namespace HintMachine
             {
                 pollSuccessful = _game.Poll();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
 
             if (!pollSuccessful)
             {
@@ -97,13 +100,16 @@ namespace HintMachine
             }
 
             // Update hint quests
-            foreach(HintQuest quest in _game.quests)
+            foreach (HintQuest quest in _game.quests)
             {
                 if (quest.CheckCompletion())
                 {
                     Logger.Info("Congratulations on completing the '" + quest.displayName + "' objective. " +
                                 "Here's a hint for your efforts!");
-                    _archipelagoSession.GetOneRandomHint();
+                    for (int i = 0; i < quest.numberOfHintsGiven; i++)
+                    {
+                        _archipelagoSession.GetOneRandomHint();
+                    }
                 }
 
                 Dispatcher.Invoke(() => { quest.UpdateComponents(); });
@@ -115,13 +121,14 @@ namespace HintMachine
             if (_game != null)
                 return;
 
-          
+
             // Connect to selected game
             string selectedGameName = gameComboBox.SelectedValue.ToString();
             IGameConnector game = GamesList.FindGameFromName(selectedGameName);
             if (game.Connect())
             {
                 _game = game;
+                //_game.Poll();
                 Title = WINDOW_TITLE + " - " + _game.GetDisplayName();
                 labelGame.Content = _game.GetDisplayName();
 

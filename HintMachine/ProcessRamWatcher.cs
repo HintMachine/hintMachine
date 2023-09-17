@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace HintMachine
 {
@@ -153,6 +154,10 @@ namespace HintMachine
             return BitConverter.ToInt64(ReadBytes(address, sizeof(long), isBigEndian), 0);
         }
 
+        protected double ReadDouble(long address, bool isBigEndian = false)
+        {
+            return BitConverter.ToDouble(ReadBytes(address, sizeof(long), isBigEndian), 0);
+        }
         public long ResolvePointerPath32(long baseAddress, int[] offsets)
         {
             long addr = baseAddress;
@@ -245,6 +250,33 @@ namespace HintMachine
         public long GetThreadstack0()
         {
             return (long)getThreadstack0((ulong)process.Id);
+        }
+
+
+        public Task<int> getThread0Address()
+        {
+            var proc = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "threadstack.exe",
+                    Arguments = process.Id + "",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+            proc.Start();
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                string line = proc.StandardOutput.ReadLine();
+                if (line.Contains("THREADSTACK 0 BASE ADDRESS: "))
+                {
+                    line = line.Substring(line.LastIndexOf(":") + 2);
+                    return Task.FromResult(int.Parse(line.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                }
+            }
+            return Task.FromResult(0);
         }
     }
 }
