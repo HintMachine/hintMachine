@@ -10,18 +10,18 @@ namespace HintMachine
         public long currentValue = 0;
         public string questType;
         public bool hasBeenAwarded = false;
-        public int hintsAwarded = 1;
+        public int numberOfHintsGiven = 1;
 
         Label _label = null;
         ProgressBar _progressBar = null;
         TextBlock _progressBarOverlayText = null;
 
-        public HintQuest(string displayName, long goalValue, string questType = "cumulative", int hintsAwarded = 1)
+        public HintQuest(string displayName, long goalValue, string questType = "cumulative", int numberOfHintsGiven = 1)
         {
             this.displayName = displayName;
             this.goalValue = goalValue;
             this.questType = questType;
-            this.hintsAwarded = hintsAwarded;
+            this.numberOfHintsGiven = numberOfHintsGiven;
         }
 
         public void Add(long increment)

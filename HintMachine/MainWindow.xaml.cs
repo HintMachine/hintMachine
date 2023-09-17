@@ -46,7 +46,7 @@ namespace HintMachine
 
             if (gameComboBox.SelectedItem == null)
                 gameComboBox.SelectedItem = gameComboBox.Items[0];
-
+            
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
             _timer.Elapsed += TimerElapsed;
@@ -103,7 +103,7 @@ namespace HintMachine
                 {
                     Logger.Info("Congratulations on completing the '" + quest.displayName + "' objective. " +
                                 "Here's a hint for your efforts!");
-                    for (int i = 0; i < quest.hintsAwarded; i++)
+                    for (int i = 0; i < quest.numberOfHintsGiven; i++)
                     {
                         _archipelagoSession.GetOneRandomHint();
                     }

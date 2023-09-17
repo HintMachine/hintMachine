@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace HintMachine.Games
 {
-    public class NuclearThroneConnector //: IGameConnector
-    {/*
+    public class NuclearThroneConnector : IGameConnector
+    {
+        private ProcessRamWatcher _ram = null;
         private double _previousHealth = 0;
         private double _previousLevel = 0;
         private bool rewardedLvMax = false;
         private readonly HintQuest _levelQuest = new HintQuest("Reach level max", 10, "objective", 2);
-        private readonly HintQuest _killThroneQuest = new HintQuest("Kill Nuclear Throne", 1, "objective", 2);
-
-        public NuclearThroneConnector() : base("NuclearThroneTogether")
+        private readonly HintQuest _killThroneQuest = new HintQuest("Sit on the Nuclear Throne", 1, "objective", 2);
+        private IntPtr Thread0Address;
+        public NuclearThroneConnector()
         {
             //quests.Add(_levelQuest);
             quests.Add(_killThroneQuest);
@@ -30,51 +33,48 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            if (process == null || module == null)
-                return false;
+            syncThreadStackAdr();
 
-            //long baseAddress = module.BaseAddress.ToInt32() + 0x074E3ED8;
-            //long levelAddress = ResolvePointerPath32(baseAddress, new int[] { 0x58, 0xC, 0x5D8, 0x530 });
-
-            //double level = ReadDouble(levelAddress);
-            double level = 0;
-            long res;
-            if (long.TryParse(level.ToString(), out res))
-                _levelQuest.SetValue(res);
-            else
-                _levelQuest.SetValue(0);
-
-            if (level < _previousLevel)
+            int[] OFFSETS = new int[] { 0xA0, 0x60C, 0x104, 0x714, 0x0 };
+            try
             {
-                _levelQuest.hasBeenAwarded = false;
-            }
-            _previousLevel = level;
-
-            //Praying addresses in NuclearThroneTogether and nonmodded are the same
-            long baseThroneAdress = module.BaseAddress.ToInt32() + 0x081D2A24;
-
-                long throneLiveAddress = ResolvePointerPath32(baseThroneAdress, new int[] { 0x98, 0xC4, 0x8, 0x44, 0x10, 0x2d4, 0x0 });
-                //Check if throne has awoken
+                long throneLiveAddress = _ram.ResolvePointerPath32(Thread0Address.ToInt32() - 0x638, OFFSETS);
                 if (throneLiveAddress != 0)
                 {
-                    double currentThroneHealth = ReadDouble(throneLiveAddress);
-                Console.WriteLine("Health :" + currentThroneHealth);
-                    if (currentThroneHealth <= 0)
+                    uint score = _ram.ReadUint32(throneLiveAddress);
+                    if (score == 542461785)
                     {
-                        _killThroneQuest.Add(1);
+                        if (!_killThroneQuest.hasBeenAwarded)
+                        {
+                            _killThroneQuest.Add(1);
+                        }
                     }
-                    _previousHealth = currentThroneHealth;
-                }
-                else {
-                    if (_previousHealth != 0 && _previousHealth > 0)
+                    else
                     {
-                        _killThroneQuest.Add(1);
-                        _previousHealth = 0;
+                        _killThroneQuest.SetValue(0);
                     }
                 }
-
+            }
+            catch {}
             return true;
+            
         }
-        */
+
+
+        private async void syncThreadStackAdr()
+        {
+            Thread0Address = (IntPtr)await _ram.getThread0Address();
+        }
+
+        public override bool Connect()
+        {
+            _ram = new ProcessRamWatcher("nuclearthronetogether");
+            return _ram.TryConnect();
+        }
+
+        public override void Disconnect()
+        {
+            _ram = null;
+        }
     }
 }
