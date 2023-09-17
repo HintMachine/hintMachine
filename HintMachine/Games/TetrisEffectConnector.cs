@@ -13,7 +13,7 @@
 
         public override string GetDisplayName()
         {
-            return "Tetris Effect Connected (Steam)";
+            return "Tetris Effect Connected";
         }
 
         public override string GetDescription()

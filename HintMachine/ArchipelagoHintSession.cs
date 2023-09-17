@@ -82,6 +82,11 @@ namespace HintMachine
             });
         }
 
+        public void Disconnect()
+        {
+            _session.Socket.DisconnectAsync();
+        }
+
         public void SendMessage(string message)
         {
             _session.Socket.SendPacket(new SayPacket { Text = message });

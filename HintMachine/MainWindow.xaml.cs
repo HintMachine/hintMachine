@@ -69,7 +69,10 @@ namespace HintMachine
                 _game.Disconnect();
 
             _timer.Enabled = false;
+
+            _archipelagoSession.Disconnect();
             _archipelagoSession = null;
+
             Settings.SaveToFile();
         }
 
