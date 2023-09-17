@@ -8,20 +8,30 @@ namespace HintMachine
         public string displayName;
         public long goalValue;
         public long currentValue = 0;
+        public string questType;
+        public bool hasBeenAwarded = false;
+        public int numberOfHintsGiven = 1;
 
         Label _label = null;
         ProgressBar _progressBar = null;
         TextBlock _progressBarOverlayText = null;
 
-        public HintQuest(string displayName, long goalValue)
+        public HintQuest(string displayName, long goalValue, string questType = "cumulative", int numberOfHintsGiven = 1)
         {
             this.displayName = displayName;
             this.goalValue = goalValue;
+            this.questType = questType;
+            this.numberOfHintsGiven = numberOfHintsGiven;
         }
 
         public void Add(long increment)
         {
             currentValue += increment;
+        }
+
+        public void SetValue(long value)
+        {
+            currentValue = value;
         }
 
         public float GetProgression()
@@ -34,8 +44,22 @@ namespace HintMachine
             if (currentValue < goalValue)
                 return false;
 
-            currentValue -= goalValue;
-            return true;
+            if (currentValue == goalValue && questType.Equals("objective"))
+            {
+                if (hasBeenAwarded)
+                {
+                    return false;
+                }
+                else
+                {
+                    hasBeenAwarded = true;
+                    return true;
+                }
+            }
+            else { 
+                currentValue -= goalValue;
+                return true;
+            }
         }
 
         public void InitComponents(Grid questsGrid)
