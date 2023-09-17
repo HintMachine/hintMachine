@@ -180,17 +180,22 @@ namespace HintMachine
         {
             Dispatcher.Invoke(() =>
             {
-                TextBlock messageBlock = new TextBlock
+                TextBox messageBlock = new TextBox
                 {
                     Text = message,
                     TextWrapping = TextWrapping.Wrap,
                     Foreground = new SolidColorBrush(Logger.GetColorForMessageType(logMessageType)),
                     Padding = new Thickness(6, 4, 6, 4),
                     FontSize = 14,
+                    BorderThickness = new Thickness(0),
+                    IsReadOnly = true
                 };
 
                 if (messageLog.Children.Count % 2 == 1)
                     messageBlock.Background = new SolidColorBrush(Color.FromRgb(210, 210, 210));
+                else
+                    messageBlock.Background = Brushes.Transparent;
+
                 if (logMessageType == LogMessageType.ERROR)
                     messageBlock.FontWeight = FontWeights.Bold;
 
