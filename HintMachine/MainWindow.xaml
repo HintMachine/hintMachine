@@ -85,7 +85,7 @@
                 </Grid>
             </Border>
 
-            <TabControl Margin="12,0,0,0" Grid.Column="1">
+            <TabControl Name="tabControl" Margin="12,0,0,0" Grid.Column="1" SelectionChanged="OnTabChange">
                 <TabItem Header="Message log" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
                     <DockPanel LastChildFill="True">
                         <DockPanel DockPanel.Dock="Bottom" Margin="0,2,0,0" LastChildFill="True">
@@ -97,10 +97,16 @@
                     </DockPanel>
                 </TabItem>
                 <TabItem Header="Hints">
-                    <local:HintsView x:Name="hintsList"/>
+                    <DockPanel LastChildFill="True" Margin="8">
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                            <Button DockPanel.Dock="Right" HorizontalAlignment="Left" Margin="0,0,0,8" Padding="5" Background="#FFA8E0A9" Click="OnManualHintButtonClick">❓ Request a hint</Button>
+                            <Label Name="availableHintsLabel" DockPanel.Dock="Left">You have 0 remaining hints, you will get a new hint in 0 checks.</Label>
+                        </DockPanel>
+                        
+                        <local:HintsView x:Name="hintsList" DockPanel.Dock="Bottom"/>
+                    </DockPanel>
                 </TabItem>
             </TabControl>
-
         </Grid>
     </DockPanel>
 </Window>

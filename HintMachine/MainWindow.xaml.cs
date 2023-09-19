@@ -7,9 +7,6 @@ using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.MessageLog.Parts;
 using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Documents;
-using Archipelago.MultiClient.Net;
 
 namespace HintMachine
 {
@@ -309,6 +306,38 @@ namespace HintMachine
                       + "HintMachine v1.0\n"
                       + "Developed with ❤️ by Dinopony & Boffbad\n"
                       + "-----------------------------------------------");
+
+        private void SetupHintsTab()
+        {
+            // Calculate the available hints
+            availableHintsLabel.Content = "You have " + _archipelagoSession.GetAvailableHintsWithHintPoints()
+                                        + " remaining hints, you will get a new hint in " +
+                                        _archipelagoSession.GetCheckCountBeforeNextHint() + " checks.";
+        }
+
+        private void OnTabChange(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is TabControl && tabControl.SelectedIndex == 1)
+                SetupHintsTab();
+        }
+
+        private void OnManualItemHint(string itemName)
+        {
+            _archipelagoSession.SendMessage("!hint " + itemName);
+            tabControl.SelectedIndex = 0;
+        }
+        private void OnManualLocationHint(string locationName)
+        {
+            _archipelagoSession.SendMessage("!hint_location " + locationName);
+            tabControl.SelectedIndex = 0;
+        }
+
+        private void OnManualHintButtonClick(object sender, RoutedEventArgs e)
+        {
+            ManualHintWindow window = new ManualHintWindow(_archipelagoSession);
+            window.LocationHintCallback = OnManualLocationHint;
+            window.ItemHintCallback = OnManualItemHint;
+            window.ShowDialog();
         }
     }
 }

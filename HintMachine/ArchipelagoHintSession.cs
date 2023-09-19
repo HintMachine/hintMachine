@@ -1,11 +1,13 @@
 ﻿using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HintMachine.Games;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using static Archipelago.MultiClient.Net.Helpers.MessageLogHelper;
 
 namespace HintMachine
@@ -92,6 +94,27 @@ namespace HintMachine
             return returned;
         }
 
+        public List<string> GetMissingLocationNames()
+        {
+            List<string> returned = new List<string>();
+            foreach (long id in _session.Locations.AllMissingLocations)
+                if(!_alreadyHintedLocations.Contains(id))
+                    returned.Add(_session.Locations.GetLocationNameFromId(id));
+            return returned;
+        }
+
+        public List<string> GetItemNames()
+        {
+            List<string> returned = new List<string>();
+            int slotID = _session.ConnectionInfo.Slot;
+            var game = _session.Players.AllPlayers.ElementAt(slotID).Game;
+            var coll = _session.DataStorage.GetItemNameGroups(game);
+            foreach (var itemName in coll["Everything"])
+                returned.Add(itemName);
+
+            return returned;
+        }
+
         public void GetOneRandomHint()
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
@@ -123,6 +146,26 @@ namespace HintMachine
                     _alreadyHintedLocations.Add(hint.LocationId);
 
             HintsView?.UpdateItems(GetHints());
+        }
+
+        public int GetAvailableHintsWithHintPoints()
+        {
+            int points = _session.RoomState.HintPoints;
+            int cost = (int)(_session.Locations.AllLocations.Count * 0.01m * _session.RoomState.HintCostPercentage);
+            return points / cost;
+        }
+
+        public int GetCheckCountBeforeNextHint()
+        {
+            int points = _session.RoomState.HintPoints;
+            int cost = (int)(_session.Locations.AllLocations.Count * 0.01m * _session.RoomState.HintCostPercentage);
+            while (points >= cost)
+                points -= cost;
+
+            int pointsToNextHint = cost - points;
+            int pointsPerCheck = _session.RoomState.LocationCheckPoints;
+
+            return (int)Math.Ceiling((float)pointsToNextHint / (float)pointsPerCheck);
         }
 
         public void Disconnect()

@@ -148,6 +148,9 @@
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ManualHintWindow.xaml.cs">
+      <DependentUpon>ManualHintWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MessageLog.xaml.cs">
       <DependentUpon>MessageLog.xaml</DependentUpon>
     </Compile>
@@ -174,6 +177,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ManualHintWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MessageLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
