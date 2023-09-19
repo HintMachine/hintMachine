@@ -306,6 +306,8 @@ namespace HintMachine
                       + "HintMachine v1.0\n"
                       + "Developed with ❤️ by Dinopony & Boffbad\n"
                       + "-----------------------------------------------");
+            tabControl.SelectedIndex = 0;
+        }
 
         private void SetupHintsTab()
         {
