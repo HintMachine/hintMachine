@@ -2,7 +2,6 @@
 using System.Timers;
 using System;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Input;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.MessageLog.Parts;
@@ -187,33 +186,7 @@ namespace HintMachine
         {
             Dispatcher.Invoke(() =>
             {
-                TextBox messageBlock = new TextBox
-                {
-                    Text = message,
-                    TextWrapping = TextWrapping.Wrap,
-                    Foreground = new SolidColorBrush(Logger.GetColorForMessageType(logMessageType)),
-                    Padding = new Thickness(6, 4, 6, 4),
-                    FontSize = 14,
-                    BorderThickness = new Thickness(0),
-                    IsReadOnly = true
-                };
-
-                if (messageLog.Children.Count % 2 == 1)
-                    messageBlock.Background = new SolidColorBrush(Color.FromRgb(210, 210, 210));
-                else
-                    messageBlock.Background = Brushes.Transparent;
-
-                if (logMessageType == LogMessageType.ERROR)
-                    messageBlock.FontWeight = FontWeights.Bold;
-
-                // If view was already at the bottom before adding the element, auto-scroll to prevent the user from
-                // having to scroll manually each time there are new messages
-                bool scrollToBottom = (messageLogScrollViewer.VerticalOffset == messageLogScrollViewer.ScrollableHeight);
-
-                messageLog.Children.Add(messageBlock);
-
-                if (scrollToBottom)
-                    messageLogScrollViewer.ScrollToBottom();
+                messageLog.AddMessage(message, logMessageType);
             });
         }
 

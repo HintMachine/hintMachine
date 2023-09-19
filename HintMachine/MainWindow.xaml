@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HintMachine"
         mc:Ignorable="d"
         Title="HintMachine" Height="600" Width="1024" MinHeight="600" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
 
@@ -50,7 +51,7 @@
 
             <Border BorderThickness="1" BorderBrush="#FFABADB3" Grid.Column="0" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
                 <Border.Background>
-                    <ImageBrush ImageSource="/logo_small.png" Stretch="Uniform" TileMode="None" Opacity="0.15"/>
+                    <ImageBrush ImageSource="/Assets/logo_small.png" Stretch="Uniform" TileMode="None" Opacity="0.15"/>
                 </Border.Background>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -90,11 +91,7 @@
                     <TextBox x:Name="inputChat" Height="23" TextWrapping="Wrap" KeyDown="OnChatInputKeyDown" />
                 </DockPanel>
 
-                <Border BorderThickness="1" BorderBrush="#FFABADB3" Background="#FFDDDDDD" DockPanel.Dock="Top">
-                    <ScrollViewer Name="messageLogScrollViewer" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Name="messageLog"/>
-                    </ScrollViewer>
-                </Border>
+                <local:MessageLog x:Name="messageLog"/>
             </DockPanel>
         </Grid>
     </DockPanel>
