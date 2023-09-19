@@ -10,7 +10,7 @@ namespace HintMachine.Games
     {
         private ProcessRamWatcher _ram = null;
         private uint _previousGeoms = uint.MaxValue;
-        private readonly HintQuest _geomsQuest = new HintQuest("Geoms collected", 1000);
+        private readonly HintQuest _geomsQuest = new HintQuest("Geoms collected", 10000);
        
         private long _mem1Addr = 0;
         private long _mem2Addr = 0;
