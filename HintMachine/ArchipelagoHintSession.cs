@@ -2,6 +2,7 @@
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
+using HintMachine.Games;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace HintMachine
         public bool isConnected = false;
         public string errorMessage = "";
         private List<long> _alreadyHintedLocations = new List<long>();
+
+        public HintsView HintsView { get; set; } = null;
 
         public ArchipelagoHintSession(string host, string slot, string password)
         {
@@ -53,15 +56,42 @@ namespace HintMachine
                 return;
             }
 
-            // List all locations that were hinted at the time of connection
-            // TODO: What about locations that are hinted outside of this client during exec?
-            Hint[] hints = _session.DataStorage.GetHints();
-            foreach(Hint hint in hints)
-            {
-                if(hint.FindingPlayer == _session.ConnectionInfo.Slot)
-                    _alreadyHintedLocations.Add(hint.LocationId);
-            }
+            // Add a tracking event to detect further hints...
+            _session.DataStorage.TrackHints(OnHintObtained);
+            // ...and call that event a first time with all already obtained hints
+            OnHintObtained(_session.DataStorage.GetHints());
         }
+
+        public List<HintDetails> GetHints()
+        {
+            List<HintDetails> returned = new List<HintDetails>();
+            Hint[] hints = _session.DataStorage.GetHints();
+
+            foreach (Hint hint in hints)
+            {
+                if (hint.Found)
+                    continue;
+
+                returned.Add(new HintDetails
+                {
+                    ReceivingPlayer = hint.ReceivingPlayer,
+                    FindingPlayer = hint.FindingPlayer,
+                    ItemId = hint.ItemId,
+                    LocationId = hint.LocationId,
+                    ItemFlags = hint.ItemFlags,
+                    Found = hint.Found,
+                    Entrance = hint.Entrance,
+
+                    ReceivingPlayerName = _session.Players.GetPlayerName(hint.ReceivingPlayer),
+                    FindingPlayerName = _session.Players.GetPlayerName(hint.FindingPlayer),
+                    ItemName = _session.Items.GetItemName(hint.ItemId),
+                    LocationName = _session.Locations.GetLocationNameFromId(hint.LocationId),
+                });
+            }
+
+            return returned;
+        }
+
         public void GetOneRandomHint()
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
@@ -80,6 +110,19 @@ namespace HintMachine
                 Locations = new long[] { hintedLocationId },
                 CreateAsHint = true
             });
+
+            _session.DataStorage.GetHints();
+        }
+
+        public void OnHintObtained(Hint[] hints)
+        {
+            // Add the hints to the list of already known locations so that we won't 
+            // try to give a random hint for those
+            foreach (Hint hint in hints)
+                if (hint.FindingPlayer == _session.ConnectionInfo.Slot)
+                    _alreadyHintedLocations.Add(hint.LocationId);
+
+            HintsView?.UpdateItems(GetHints());
         }
 
         public void Disconnect()

@@ -128,6 +128,7 @@
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="GamesList.cs" />
+    <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />
     <Compile Include="Games\IMegadriveConnector.cs" />
     <Compile Include="Games\GeometryWarsConnector.cs" />
@@ -137,6 +138,9 @@
     <Compile Include="Games\ZachtronicsSolitaireConnector.cs" />
     <Compile Include="Games\TetrisEffectConnector.cs" />
     <Compile Include="HintQuest.cs" />
+    <Compile Include="HintsView.xaml.cs">
+      <DependentUpon>HintsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IGameConnector.cs" />
     <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
     <Compile Include="Games\XenotiltConnector.cs" />
@@ -150,6 +154,10 @@
     <Compile Include="ProcessRamWatcher.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TokenManipulator.cs" />
+    <Page Include="HintsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

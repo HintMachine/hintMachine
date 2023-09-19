@@ -7,6 +7,9 @@ using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.MessageLog.Parts;
 using System.Linq;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Documents;
+using Archipelago.MultiClient.Net;
 
 namespace HintMachine
 {
@@ -24,6 +27,8 @@ namespace HintMachine
 
             _archipelagoSession = archipelagoSession;
             _archipelagoSession.SetupOnMessageReceivedEvent(OnArchipelagoMessageReceived);
+            _archipelagoSession.HintsView = hintsList;
+            hintsList.UpdateItems(_archipelagoSession.GetHints());
 
             labelHost.Text = _archipelagoSession.host;
             labelSlot.Text = _archipelagoSession.slot;

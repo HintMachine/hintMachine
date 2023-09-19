@@ -7,8 +7,6 @@ namespace HintMachine
 {
     public partial class MessageLog : UserControl
     {
-
-
         public MessageLog()
         {
             InitializeComponent();
