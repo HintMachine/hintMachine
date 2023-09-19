@@ -66,13 +66,13 @@
                     </Grid.RowDefinitions>
 
                     <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
-                    <Label Name="labelHost" Content="archipelago.gg:12345" Grid.Row="0" Grid.Column="1"/>
+                    <TextBlock Name="labelHost" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">archipelago.gg:12345</TextBlock>
 
                     <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
-                    <Label Name="labelSlot" Content="Player " Grid.Row="1" Grid.Column="1"/>
+                    <TextBlock Name="labelSlot" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">Player</TextBlock>
 
                     <Label Content="Game: " FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>
-                    <Label Name="labelGame" Content="-" Grid.Row="2" Grid.Column="1"/>
+                    <TextBlock Name="labelGame" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">-</TextBlock>
 
                     <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
                         <Grid.ColumnDefinitions>

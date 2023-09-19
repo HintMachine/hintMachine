@@ -10,9 +10,6 @@ using System.Collections.Generic;
 
 namespace HintMachine
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private const string WINDOW_TITLE = "HintMachine";
@@ -28,8 +25,8 @@ namespace HintMachine
             _archipelagoSession = archipelagoSession;
             _archipelagoSession.SetupOnMessageReceivedEvent(OnArchipelagoMessageReceived);
 
-            labelHost.Content = _archipelagoSession.host;
-            labelSlot.Content = _archipelagoSession.slot;
+            labelHost.Text = _archipelagoSession.host;
+            labelSlot.Text = _archipelagoSession.slot;
 
             SetupChatFilterMenus();
 
@@ -129,7 +126,7 @@ namespace HintMachine
                 _game = game;
                 //_game.Poll();
                 Title = WINDOW_TITLE + " - " + _game.GetDisplayName();
-                labelGame.Content = _game.GetDisplayName();
+                labelGame.Text = _game.GetDisplayName();
 
                 // Init game quests
                 foreach (HintQuest quest in _game.quests)
@@ -173,7 +170,7 @@ namespace HintMachine
                 questsGrid.RowDefinitions.Clear();
 
                 Title = WINDOW_TITLE;
-                labelGame.Content = "-";
+                labelGame.Text = "-";
             });
         }
         private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
