@@ -1,13 +1,11 @@
 ﻿using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HintMachine.Games;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using static Archipelago.MultiClient.Net.Helpers.MessageLogHelper;
 
 namespace HintMachine
@@ -22,7 +20,8 @@ namespace HintMachine
         public string slot = "";
         public bool isConnected = false;
         public string errorMessage = "";
-        private List<long> _alreadyHintedLocations = new List<long>();
+
+        public List<HintDetails> KnownHints { get; set; } = new List<HintDetails>();
 
         public HintsView HintsView { get; set; } = null;
 
@@ -59,46 +58,18 @@ namespace HintMachine
             }
 
             // Add a tracking event to detect further hints...
-            _session.DataStorage.TrackHints(OnHintObtained);
+            _session.DataStorage.TrackHints(OnHintObtained, false);
             // ...and call that event a first time with all already obtained hints
             OnHintObtained(_session.DataStorage.GetHints());
         }
 
-        public List<HintDetails> GetHints()
-        {
-            List<HintDetails> returned = new List<HintDetails>();
-            Hint[] hints = _session.DataStorage.GetHints();
-
-            foreach (Hint hint in hints)
-            {
-                if (hint.Found)
-                    continue;
-
-                returned.Add(new HintDetails
-                {
-                    ReceivingPlayer = hint.ReceivingPlayer,
-                    FindingPlayer = hint.FindingPlayer,
-                    ItemId = hint.ItemId,
-                    LocationId = hint.LocationId,
-                    ItemFlags = hint.ItemFlags,
-                    Found = hint.Found,
-                    Entrance = hint.Entrance,
-
-                    ReceivingPlayerName = _session.Players.GetPlayerName(hint.ReceivingPlayer),
-                    FindingPlayerName = _session.Players.GetPlayerName(hint.FindingPlayer),
-                    ItemName = _session.Items.GetItemName(hint.ItemId),
-                    LocationName = _session.Locations.GetLocationNameFromId(hint.LocationId),
-                });
-            }
-
-            return returned;
-        }
-
         public List<string> GetMissingLocationNames()
         {
+            List<long> alreadyHintedLocations = GetAlreadyHintedLocations();
+
             List<string> returned = new List<string>();
             foreach (long id in _session.Locations.AllMissingLocations)
-                if(!_alreadyHintedLocations.Contains(id))
+                if(!alreadyHintedLocations.Contains(id))
                     returned.Add(_session.Locations.GetLocationNameFromId(id));
             return returned;
         }
@@ -118,7 +89,7 @@ namespace HintMachine
         public void GetOneRandomHint()
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
-            foreach (long locationId in _alreadyHintedLocations)
+            foreach (long locationId in GetAlreadyHintedLocations())
                 missingLocations.Remove(locationId);
 
             if (missingLocations.Count == 0)
@@ -128,13 +99,11 @@ namespace HintMachine
             int index = rnd.Next(missingLocations.Count);
             long hintedLocationId = _session.Locations.AllMissingLocations[index];
 
-            _alreadyHintedLocations.Add(hintedLocationId);
+            Logger.Info("Hinted location = " + _session.Locations.GetLocationNameFromId(hintedLocationId));
             _session.Socket.SendPacket(new LocationScoutsPacket {
                 Locations = new long[] { hintedLocationId },
                 CreateAsHint = true
             });
-
-            _session.DataStorage.GetHints();
         }
 
         public void OnHintObtained(Hint[] hints)
@@ -142,10 +111,35 @@ namespace HintMachine
             // Add the hints to the list of already known locations so that we won't 
             // try to give a random hint for those
             foreach (Hint hint in hints)
-                if (hint.FindingPlayer == _session.ConnectionInfo.Slot)
-                    _alreadyHintedLocations.Add(hint.LocationId);
+            {
+                KnownHints.Add(new HintDetails
+                {
+                    ReceivingPlayer = hint.ReceivingPlayer,
+                    FindingPlayer = hint.FindingPlayer,
+                    ItemId = hint.ItemId,
+                    LocationId = hint.LocationId,
+                    ItemFlags = hint.ItemFlags,
+                    Found = hint.Found,
+                    Entrance = hint.Entrance,
 
-            HintsView?.UpdateItems(GetHints());
+                    ReceivingPlayerName = _session.Players.GetPlayerName(hint.ReceivingPlayer),
+                    FindingPlayerName = _session.Players.GetPlayerName(hint.FindingPlayer),
+                    ItemName = _session.Items.GetItemName(hint.ItemId),
+                    LocationName = _session.Locations.GetLocationNameFromId(hint.LocationId),
+                });
+            }
+
+            HintsView?.UpdateItems(KnownHints);
+        }
+
+        public List<long> GetAlreadyHintedLocations()
+        {
+            List<long> returned = new List<long>();
+            foreach (HintDetails hint in KnownHints)
+                if (hint.FindingPlayer == _session.ConnectionInfo.Slot)
+                    returned.Add(hint.LocationId);
+
+            return returned;
         }
 
         public int GetAvailableHintsWithHintPoints()

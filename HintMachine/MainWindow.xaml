@@ -40,8 +40,8 @@
 
             <StackPanel Name="gameConnectGrid" Margin="8,8,8,8">
                 <DockPanel LastChildFill="True" Margin="0,0,0,8">
-                    <Label Content="Game :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="gameComboBox" Margin="8,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectionChanged="OnSelectedGameConnectorChange"/>
+                    <Label Content="Game :" HorizontalAlignment="Left"/>
+                    <ComboBox x:Name="gameComboBox" Margin="8,0,0,0" HorizontalAlignment="Stretch" SelectionChanged="OnSelectedGameConnectorChange"/>
                 </DockPanel>
 
                 <TextBlock Name="textblockGameDescription" Padding="0,8,0,12" TextWrapping="Wrap" Visibility="Collapsed"></TextBlock>
