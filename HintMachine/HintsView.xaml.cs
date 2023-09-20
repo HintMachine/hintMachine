@@ -1,5 +1,7 @@
 ﻿using Archipelago.MultiClient.Net;
+using HintMachine.Games;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,9 +15,14 @@ namespace HintMachine
             InitializeComponent();
         }
 
-        public void UpdateItems(IEnumerable enumerable)
+        public void UpdateItems(List<HintDetails> knownHints)
         {
-            hintsList.ItemsSource = enumerable;
+            List<HintDetails> knownNotFoundHints = new List<HintDetails>();
+            foreach (HintDetails hint in knownHints)
+                if (!hint.Found)
+                    knownNotFoundHints.Add(hint);
+
+            hintsList.ItemsSource = knownNotFoundHints;
         }
 
         private void OnHintsListColumnClick(object sender, RoutedEventArgs e)
