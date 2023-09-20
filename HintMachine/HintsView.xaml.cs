@@ -1,4 +1,5 @@
 ﻿using Archipelago.MultiClient.Net;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows;
@@ -15,7 +16,14 @@ namespace HintMachine
 
         public void UpdateItems(IEnumerable enumerable)
         {
-            hintsList.ItemsSource = enumerable;
+            try
+            {
+                hintsList.ItemsSource = enumerable;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception : " + ex.StackTrace);
+            }
         }
 
         private void OnHintsListColumnClick(object sender, RoutedEventArgs e)

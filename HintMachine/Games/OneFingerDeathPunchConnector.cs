@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using System;
+
+namespace HintMachine.Games
 {
     public class OneFingerDeathPunchConnector : IGameConnector
     {
@@ -6,6 +8,7 @@
         private long _previousKills = long.MaxValue;
         private readonly HintQuest _killsQuest = new HintQuest("Kills", 450);
         private long _threadstack0 = 0;
+        private IntPtr Thread0Address;
         public OneFingerDeathPunchConnector()
         {
             quests.Add(_killsQuest);
@@ -27,9 +30,8 @@
             _ram = new ProcessRamWatcher("One Finger Death Punch");
             if (!_ram.TryConnect())
                 return false;
-
-            _threadstack0 = _ram.GetThreadstack0();
-            return (_threadstack0 != 0);
+\
+            return true;
         }
 
         public override void Disconnect()
@@ -39,7 +41,8 @@
 
         public override bool Poll()
         {
-            long killsAddress = _ram.ResolvePointerPath32(_threadstack0 - 0x8cc, new int[] { 0x644, 0x90 });
+            syncThreadStackAdr();
+            long killsAddress = _ram.ResolvePointerPath32(Thread0Address.ToInt32() - 0x8cc, new int[] { 0x644, 0x90 });
             
             uint kills = _ram.ReadUint32(killsAddress);
             if (kills > _previousKills)
@@ -48,5 +51,11 @@
 
             return true;
         }
+
+        private async void syncThreadStackAdr()
+        {
+            Thread0Address = (IntPtr)await _ram.getThread0Address();
+        }
+
     }
 }

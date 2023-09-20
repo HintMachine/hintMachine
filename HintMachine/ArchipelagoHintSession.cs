@@ -67,8 +67,14 @@ namespace HintMachine
         public List<HintDetails> GetHints()
         {
             List<HintDetails> returned = new List<HintDetails>();
-            Hint[] hints = _session.DataStorage.GetHints();
-
+            Hint[] hints = { };
+            try
+            {
+                hints = _session.DataStorage.GetHints();
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Exception : " +  ex.StackTrace );
+            }
             foreach (Hint hint in hints)
             {
                 if (hint.Found)
