@@ -30,7 +30,7 @@ namespace HintMachine.Games
             _ram = new ProcessRamWatcher("One Finger Death Punch");
             if (!_ram.TryConnect())
                 return false;
-\
+
             return true;
         }
 
