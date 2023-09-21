@@ -17,6 +17,7 @@ namespace HintMachine
             new NuclearThroneConnector(), //Instabilities, must be investigated
             new SonicBlueSpheresConnector(),
             new StargunnerConnector(),
+            new BustAMove4Connector(),
         };
         
         public static IGameConnector FindGameFromName(string name)
