@@ -1,4 +1,5 @@
 ﻿using Archipelago.MultiClient.Net;
+using System;
 using HintMachine.Games;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace HintMachine
 
         public void UpdateItems(List<HintDetails> knownHints)
         {
+
             List<HintDetails> knownNotFoundHints = new List<HintDetails>();
             foreach (HintDetails hint in knownHints)
                 if (!hint.Found)
