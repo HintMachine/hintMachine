@@ -25,7 +25,7 @@ namespace HintMachine
             _archipelagoSession = archipelagoSession;
             _archipelagoSession.SetupOnMessageReceivedEvent(OnArchipelagoMessageReceived);
             _archipelagoSession.HintsView = hintsList;
-            hintsList.UpdateItems(_archipelagoSession.GetHints());
+            hintsList.UpdateItems(_archipelagoSession.KnownHints);
 
             labelHost.Text = _archipelagoSession.host;
             labelSlot.Text = _archipelagoSession.slot;
@@ -328,6 +328,7 @@ namespace HintMachine
             _archipelagoSession.SendMessage("!hint " + itemName);
             tabControl.SelectedIndex = 0;
         }
+
         private void OnManualLocationHint(string locationName)
         {
             _archipelagoSession.SendMessage("!hint_location " + locationName);
