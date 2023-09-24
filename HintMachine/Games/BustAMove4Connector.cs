@@ -11,7 +11,7 @@ namespace HintMachine.Games
     {
         private ProcessRamWatcher _ram = null;
         private sbyte _previousWins = 0;
-        private readonly HintQuest _WinQuest = new HintQuest("Wins", 2);
+        private readonly HintQuest _WinQuest = new HintQuest("Wins", 3);
         private long baseAddr = 0;
         private long winAddr = 0;
 

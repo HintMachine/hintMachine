@@ -122,7 +122,7 @@ namespace HintMachine
             return returned;
         }
 
-        public void GetOneRandomHint()
+        public void GetOneRandomHint(String gameName)
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
             foreach (long locationId in GetAlreadyHintedLocations())
@@ -134,8 +134,8 @@ namespace HintMachine
             Random rnd = new Random();
             int index = rnd.Next(missingLocations.Count);
             long hintedLocationId = _session.Locations.AllMissingLocations[index];
-
-            Logger.Info("Hinted location = " + _session.Locations.GetLocationNameFromId(hintedLocationId));
+            
+            SendMessage("I just found a hint using the HintMachine playing " + gameName + " !");
             _session.Socket.SendPacket(new LocationScoutsPacket {
                 Locations = new long[] { hintedLocationId },
                 CreateAsHint = true

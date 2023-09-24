@@ -32,9 +32,7 @@ namespace HintMachine.Games
             _ram = new ProcessRamWatcher("DOSBox");
             if (!_ram.TryConnect())
                 return false;
-
-            //List<MemoryRegion> regions = _ram.ListMemoryRegions(0x1D4A380, MemoryRegionType.MEM_MAPPED);
-
+            
             baseAddr = _ram.ReadInt64(0x1D4A380);
             _livesAddr = baseAddr + 0x5914C;
             _scoreAddr = baseAddr + 0x59160;
@@ -46,6 +44,12 @@ namespace HintMachine.Games
         public override void Disconnect()
         {
             _ram = null;
+        }
+
+        public override string GetDescription()
+        {
+            return "Blast your enemies with a huge variety of wepons in this side-scrolling shooter." +
+                   "Tested on up-to-date GOG version.";
         }
 
         public override string GetDisplayName()
@@ -62,7 +66,6 @@ namespace HintMachine.Games
                 Console.WriteLine("Start of game !");
             }
             if ((livesNum == 0 || livesNum > 10) && gameStarted) {
-
                 gameStarted = false;
                 Console.WriteLine("End of game !");
             }

@@ -102,11 +102,9 @@ namespace HintMachine
             {
                 if (quest.CheckCompletion())
                 {
-                    Logger.Info("Congratulations on completing the '" + quest.displayName + "' objective. " +
-                                "Here's a hint for your efforts!");
                     for (int i = 0; i < quest.numberOfHintsGiven; i++)
                     {
-                        _archipelagoSession.GetOneRandomHint();
+                        _archipelagoSession.GetOneRandomHint(_game.GetDisplayName());
                     }
                 }
 
@@ -126,7 +124,6 @@ namespace HintMachine
             if (game.Connect())
             {
                 _game = game;
-                //_game.Poll();
                 Title = WINDOW_TITLE + " - " + _game.GetDisplayName();
                 labelGame.Text = _game.GetDisplayName();
 

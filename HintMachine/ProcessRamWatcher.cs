@@ -75,7 +75,7 @@ namespace HintMachine
             {
                 foreach (ProcessModule m in process.Modules)
                 {
-                    if (m.FileName.Equals(_moduleName))
+                    if (m.FileName.Contains(_moduleName))
                     {
                         module = m;
                         break;

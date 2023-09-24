@@ -7,7 +7,7 @@ namespace HintMachine.Games
     {
         private ProcessRamWatcher _ram = null;
         private uint _previousScore = uint.MaxValue;
-        private readonly HintQuest _scoreQuest = new HintQuest("Score", 20000);
+        private readonly HintQuest _scoreQuest = new HintQuest("Score", 50000);
 
         public GeometryWarsConnector()
         {

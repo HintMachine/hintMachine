@@ -18,7 +18,8 @@
         
         public override string GetDescription()
         {
-            return "In this three parts pinball table, you will have to complete missions to earn a lot of points";
+            return "In this three parts pinball table, you will have to complete missions to earn a lot of points." +
+                "Tested on the .282 version";
         }
 
         public override bool Connect()

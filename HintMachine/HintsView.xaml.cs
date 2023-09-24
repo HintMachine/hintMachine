@@ -25,7 +25,7 @@ namespace HintMachine
                     knownNotFoundHints.Add(hint);
             Dispatcher.Invoke(() =>
             {
-                hintsList.ItemsSource = knownNotFoundHints; //TODO different thread
+                hintsList.ItemsSource = knownNotFoundHints;
             });
         }
 
