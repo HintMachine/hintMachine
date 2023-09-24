@@ -58,7 +58,7 @@ namespace HintMachine
             }
 
             // Add a tracking event to detect further hints...
-            _session.DataStorage.TrackHints(OnHintObtained);
+            _session.DataStorage.TrackHints(OnHintObtained, false);
             // ...and call that event a first time with all already obtained hints
             OnHintObtained(_session.DataStorage.GetHints());
         }
