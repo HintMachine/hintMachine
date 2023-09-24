@@ -58,7 +58,7 @@ namespace HintMachine
             }
 
             // Add a tracking event to detect further hints...
-            _session.DataStorage.TrackHints(OnHintObtained, false);
+            _session.DataStorage.TrackHints(OnHintObtained);
             // ...and call that event a first time with all already obtained hints
             OnHintObtained(_session.DataStorage.GetHints());
         }
@@ -122,7 +122,7 @@ namespace HintMachine
             return returned;
         }
 
-        public void GetOneRandomHint(String gameName)
+        public void GetOneRandomHint(string gameName)
         {
             List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
             foreach (long locationId in GetAlreadyHintedLocations())
@@ -135,7 +135,7 @@ namespace HintMachine
             int index = rnd.Next(missingLocations.Count);
             long hintedLocationId = _session.Locations.AllMissingLocations[index];
             
-            SendMessage("I just found a hint using the HintMachine playing " + gameName + " !");
+            SendMessage("I just found a hint using the HintMachine playing " + gameName + "!");
             _session.Socket.SendPacket(new LocationScoutsPacket {
                 Locations = new long[] { hintedLocationId },
                 CreateAsHint = true
@@ -146,6 +146,7 @@ namespace HintMachine
         {
             // Add the hints to the list of already known locations so that we won't 
             // try to give a random hint for those
+            KnownHints.Clear();
             foreach (Hint hint in hints)
             {
                 KnownHints.Add(new HintDetails
