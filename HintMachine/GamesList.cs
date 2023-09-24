@@ -18,6 +18,7 @@ namespace HintMachine
             new SonicBlueSpheresConnector(),
             new StargunnerConnector(),
             new BustAMove4Connector(),
+            new Rollcage2Connector(),
         };
         
         public static IGameConnector FindGameFromName(string name)

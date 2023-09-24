@@ -23,8 +23,10 @@ namespace HintMachine
             foreach (HintDetails hint in knownHints)
                 if (!hint.Found)
                     knownNotFoundHints.Add(hint);
-
-            hintsList.ItemsSource = knownNotFoundHints;
+            Dispatcher.Invoke(() =>
+            {
+                hintsList.ItemsSource = knownNotFoundHints; //TODO different thread
+            });
         }
 
         private void OnHintsListColumnClick(object sender, RoutedEventArgs e)
