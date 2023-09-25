@@ -11,7 +11,7 @@ namespace HintMachine.Games
         private double _previousHealth = 0;
         private double _previousLevel = 0;
         private bool rewardedLvMax = false;
-        private readonly HintQuest _killThroneQuest = new HintQuest("Sit on the Nuclear Throne and wait for the credits end", 1, "objective", 2);
+        private readonly HintQuest _killThroneQuest = new HintQuest("Sit on the Nuclear Throne \n and wait for the credits end", 1, "objective", 2);
         private IntPtr Thread0Address;
         public NuclearThroneConnector()
         {
