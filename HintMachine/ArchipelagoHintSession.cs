@@ -1,5 +1,6 @@
 ﻿using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HintMachine.Games;
@@ -18,6 +19,7 @@ namespace HintMachine
         private ArchipelagoSession _session = null;
         public string host = "";
         public string slot = "";
+        public string password = "";
         public bool isConnected = false;
         public string errorMessage = "";
 
@@ -29,6 +31,7 @@ namespace HintMachine
         {
             this.host = host;
             this.slot = slot;
+            this.password = password;
             _session = ArchipelagoSessionFactory.CreateSession(host);
 
             Console.WriteLine("Start Connect & Login");
@@ -212,6 +215,14 @@ namespace HintMachine
         public void SetupOnMessageReceivedEvent(MessageReceivedHandler handler)
         {
             _session.MessageLog.OnMessageReceived += handler;
+        }
+
+        public List<string> GetPlayerNames()
+        {
+            List<string> names = new List<string>();
+            foreach (PlayerInfo info in _session.Players.AllPlayers)
+                names.Add(info.Name);
+            return names;
         }
     }
 }

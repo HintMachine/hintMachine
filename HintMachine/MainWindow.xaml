@@ -11,6 +11,7 @@
         <Menu DockPanel.Dock="Top" Background="#FFFFFFFF">
             <MenuItem Header="_File">
                 <MenuItem Header="_Disconnect from Archipelago server" Click="OnArchipelagoDisconnectButtonClick" />
+                <MenuItem Name="menuReconnect" Header="_Reconnect as..." ></MenuItem>
                 <Separator />
                 <MenuItem Header="_Exit" Click="OnExitMenuClick"/>
             </MenuItem>

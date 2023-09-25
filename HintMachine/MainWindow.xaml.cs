@@ -25,12 +25,8 @@ namespace HintMachine
             _archipelagoSession = archipelagoSession;
             _archipelagoSession.SetupOnMessageReceivedEvent(OnArchipelagoMessageReceived);
             _archipelagoSession.HintsView = hintsList;
-            hintsList.UpdateItems(_archipelagoSession.KnownHints);
 
             labelHost.Text = _archipelagoSession.host;
-            labelSlot.Text = _archipelagoSession.slot;
-
-            SetupChatFilterMenus();
 
             // Populate game selector combobox with supported game names
             GamesList.GAMES.Sort((a, b) => a.GetDisplayName().CompareTo(b.GetDisplayName()));
@@ -44,19 +40,50 @@ namespace HintMachine
 
             if (gameComboBox.SelectedItem == null)
                 gameComboBox.SelectedItem = gameComboBox.Items[0];
-            
+
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
             _timer.Elapsed += TimerElapsed;
             _timer.AutoReset = true;
             _timer.Enabled = true;
-            
-            // Setup the global Logger to populate the message log view and log a few welcome messages
+
+            // Setup the message log by connecting it to the global Logger
+            SetupChatFilterMenus();
             Logger.OnMessageLogged = OnMessageLogged;
 
-            Logger.Info("Connected to Archipelago session at " + archipelagoSession.host + " as " + archipelagoSession.slot + ".");
+            OnSlotConnected();
+
             Logger.Info("Feeling stuck in your Archipelago world?\n" +
                         "Connect to a game and start playing to get random hints instead of eating good old Burger King.");
+        }
+
+        protected void OnSlotConnected()
+        {
+            labelSlot.Text = _archipelagoSession.slot;
+
+            hintsList.UpdateItems(_archipelagoSession.KnownHints);
+
+            // Setup "Reconnect as..." menu
+            menuReconnect.Items.Clear();
+            foreach (string playerName in _archipelagoSession.GetPlayerNames())
+            {
+                if (playerName == "Server")
+                    continue;
+
+                MenuItem subItem = new MenuItem { Header = playerName };
+
+                if (playerName != _archipelagoSession.slot)
+                    subItem.Click += (s, e) => { OnReconnectAsPlayerClick(playerName); };
+                else
+                {
+                    subItem.IsEnabled = false;
+                    subItem.IsChecked = true;
+                }
+
+                menuReconnect.Items.Add(subItem);
+            }
+
+            Logger.Info("Connected to Archipelago session at " + _archipelagoSession.host + " as " + _archipelagoSession.slot + ".");
         }
 
         protected override void OnClosed(EventArgs e)
@@ -338,6 +365,26 @@ namespace HintMachine
             window.LocationHintCallback = OnManualLocationHint;
             window.ItemHintCallback = OnManualItemHint;
             window.ShowDialog();
+        }
+
+        private void OnReconnectAsPlayerClick(string slotName)
+        {
+            string host = _archipelagoSession.host;
+            string password = _archipelagoSession.password;
+            
+            _archipelagoSession.Disconnect();
+
+            _archipelagoSession = new ArchipelagoHintSession(host, slotName, password);
+            if (!_archipelagoSession.isConnected)
+            {
+                MessageBox.Show("Could not reconnect to Archipelago server.", "Connection error",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+                new LoginWindow().Show();
+                Close();
+                return;
+            }
+
+            OnSlotConnected();
         }
     }
 }
