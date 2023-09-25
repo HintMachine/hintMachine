@@ -100,7 +100,7 @@
                 <TabItem Header="Hints">
                     <DockPanel LastChildFill="True" Margin="8">
                         <DockPanel DockPanel.Dock="Top" LastChildFill="True">
-                            <Button DockPanel.Dock="Right" HorizontalAlignment="Left" Margin="0,0,0,8" Padding="5" Background="#FFA8E0A9" Click="OnManualHintButtonClick">❓ Request a hint</Button>
+                            <Button Name="manualHintButton" DockPanel.Dock="Right" HorizontalAlignment="Left" Margin="0,0,0,8" Padding="5" Background="#FFA8E0A9" Click="OnManualHintButtonClick">❓ Request a hint</Button>
                             <Label Name="availableHintsLabel" DockPanel.Dock="Left">You have 0 remaining hints, you will get a new hint in 0 checks.</Label>
                         </DockPanel>
                         

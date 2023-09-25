@@ -61,6 +61,7 @@ namespace HintMachine
         {
             labelSlot.Text = _archipelagoSession.slot;
 
+            SetupHintsTab();
             hintsList.UpdateItems(_archipelagoSession.KnownHints);
 
             // Setup "Reconnect as..." menu
@@ -336,9 +337,12 @@ namespace HintMachine
         private void SetupHintsTab()
         {
             // Calculate the available hints
-            availableHintsLabel.Content = "You have " + _archipelagoSession.GetAvailableHintsWithHintPoints()
+            int remainingHints = _archipelagoSession.GetAvailableHintsWithHintPoints();
+            availableHintsLabel.Content = "You have " + remainingHints
                                         + " remaining hints, you will get a new hint in " +
                                         _archipelagoSession.GetCheckCountBeforeNextHint() + " checks.";
+
+            manualHintButton.IsEnabled = (remainingHints > 0);
         }
 
         private void OnTabChange(object sender, RoutedEventArgs e)
