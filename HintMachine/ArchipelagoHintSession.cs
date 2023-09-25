@@ -38,7 +38,7 @@ namespace HintMachine
             LoginResult ret;
             try
             {
-                ret = _session.TryConnectAndLogin("", slot, ItemsHandlingFlags.AllItems, VERSION, TAGS, null, password, true);
+                ret = _session.TryConnectAndLogin("", slot, ItemsHandlingFlags.IncludeOwnItems, VERSION, TAGS, null, password, true);
             }
             catch (Exception ex)
             {

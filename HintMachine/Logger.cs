@@ -15,6 +15,12 @@ namespace HintMachine
         WARNING = 2,
         ERROR = 3,
         HINT = 4,
+        CHAT = 5,
+        ITEM_RECEIVED = 6,
+        ITEM_SENT = 7,
+        GOAL = 8,
+        SERVER_RESPONSE = 9,
+        JOIN_LEAVE = 10,
     }
 
     public abstract class Logger
@@ -49,18 +55,6 @@ namespace HintMachine
         public static void Hint(string message)
         {
             Log(message, LogMessageType.HINT);
-        }
-        public static Color GetColorForMessageType(LogMessageType logMessageType)
-        {
-            if (logMessageType == LogMessageType.INFO)
-                return Color.FromRgb(50, 50, 150);
-            else if (logMessageType == LogMessageType.WARNING)
-                return Color.FromRgb(128, 100, 0);
-            else if (logMessageType == LogMessageType.ERROR)
-                return Color.FromRgb(180, 40, 40);
-            else if (logMessageType == LogMessageType.HINT)
-                return Color.FromRgb(40, 180, 40);
-            return Colors.Black;
         }
     }
 

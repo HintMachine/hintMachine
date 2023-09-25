@@ -10,20 +10,23 @@ namespace HintMachine
         public static string Slot = "";
         public static string Game = "";
         public static bool DisplayChatMessages = true;
-        public static bool DisplayItemNotificationMessages = true;
         public static bool DisplayFoundHintMessages = false;
         public static bool DisplayJoinLeaveMessages = false;
+        public static bool DisplayItemReceivedMessages = true;
+        public static bool DisplayItemSentMessages = false;
 
         public static void SaveToFile()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>() {
-                { "host",                            Host },
-                { "slot",                            Slot },
-                { "game",                            Game },
-                { "displayChatMessages",             DisplayChatMessages.ToString() },
-                { "displayItemNotificationMessages", DisplayItemNotificationMessages.ToString() },
-                { "displayFoundHintMessages",        DisplayFoundHintMessages.ToString() },
-                { "displayJoinLeaveMessages",        DisplayJoinLeaveMessages.ToString() },
+                { "host",                           Host },
+                { "slot",                           Slot },
+                { "game",                           Game },
+                { "displayChatMessages",            DisplayChatMessages.ToString() },
+                { "displayFoundHintMessages",       DisplayFoundHintMessages.ToString() },
+                { "displayJoinLeaveMessages",       DisplayJoinLeaveMessages.ToString() },
+                { "displayItemReceivedMessages",    DisplayItemReceivedMessages.ToString() },
+                { "displayItemSentMessages",        DisplayItemSentMessages.ToString() },
+
             };
             File.WriteAllLines("settings.cfg", dict.Select(x => x.Key + "=" + x.Value).ToArray());
         }
@@ -48,12 +51,14 @@ namespace HintMachine
                         Game = value;
                     else if (line.StartsWith("displayChatMessages"))
                         DisplayChatMessages = bool.Parse(value);
-                    else if (line.StartsWith("displayItemNotificationMessages"))
-                        DisplayItemNotificationMessages = bool.Parse(value);
                     else if (line.StartsWith("displayFoundHintMessages"))
                         DisplayFoundHintMessages = bool.Parse(value);
                     else if (line.StartsWith("displayJoinLeaveMessages"))
                         DisplayJoinLeaveMessages = bool.Parse(value);
+                    else if (line.StartsWith("displayItemReceivedMessages"))
+                        DisplayItemReceivedMessages = bool.Parse(value);
+                    else if (line.StartsWith("displayItemSentMessages"))
+                        DisplayItemSentMessages = bool.Parse(value);
                 }
             }
             catch { }

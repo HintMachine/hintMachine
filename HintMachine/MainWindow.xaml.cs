@@ -120,7 +120,7 @@ namespace HintMachine
 
             if (!pollSuccessful)
             {
-                Logger.Error("❌ [Error] Connection with " + _game.GetDisplayName() + " was lost.");
+                Logger.Error("Connection with " + _game.GetDisplayName() + " was lost.");
                 DisconnectFromGame();
                 return;
             }
@@ -174,7 +174,7 @@ namespace HintMachine
             }
             else
             {
-                Logger.Error("❌ [Error] Could not connect to " + game.GetDisplayName() + ". " +
+                Logger.Error("Could not connect to " + game.GetDisplayName() + ". " +
                              "Please ensure it is currently running and try again.");
             }
         }
@@ -259,34 +259,27 @@ namespace HintMachine
             List<MessagePart> parts = Enumerable.ToList(message.Parts);
 
             if (message is JoinLogMessage || message is LeaveLogMessage)
-            {
-                if(!Settings.DisplayJoinLeaveMessages)
-                    return; 
-            }
+                type = LogMessageType.JOIN_LEAVE;
             else if (message is HintItemSendLogMessage)
             {
-                if (!Settings.DisplayFoundHintMessages && message.ToString().EndsWith("(found)"))
-                    return;
-
-                str += "❓ ";
                 type = LogMessageType.HINT;
                 parts.RemoveAt(0); // Remove the [Hint] prefix
             }
             else if (message is ItemSendLogMessage)
             {
-                if (!Settings.DisplayItemNotificationMessages)
+                if (((ItemSendLogMessage)message).Sender.Name == _archipelagoSession.slot)
+                    type = LogMessageType.ITEM_SENT;
+                else if (((ItemSendLogMessage)message).Receiver.Name == _archipelagoSession.slot)
+                    type = LogMessageType.ITEM_RECEIVED;
+                else 
                     return;
             }
             else if (message is ChatLogMessage || message is ServerChatLogMessage)
-            {
-                if (!Settings.DisplayChatMessages)
-                    return;
-                str += "💬 ";
-            }
+                type = LogMessageType.CHAT;
             else if (message is CommandResultLogMessage)
-                str += "  > ";
+                type = LogMessageType.SERVER_RESPONSE;
             else if (message is GoalLogMessage)
-                str += "👑 ";
+                type = LogMessageType.GOAL;
 
             foreach (var part in parts)
                 str += part.Text;
@@ -300,8 +293,9 @@ namespace HintMachine
             {
                 { menuDisplayChatMessages, Settings.DisplayChatMessages },
                 { menuDisplayFoundHints, Settings.DisplayFoundHintMessages },
-                { menuDisplayItemNotifications, Settings.DisplayItemNotificationMessages },
                 { menuDisplayJoinLeaveMessages, Settings.DisplayJoinLeaveMessages },
+                { menuDisplayReceivedItems, Settings.DisplayItemReceivedMessages },
+                { menuDisplaySentItems, Settings.DisplayItemSentMessages },
             };
 
             foreach(var kv in MENU_ITEMS)
@@ -316,8 +310,10 @@ namespace HintMachine
         {
             Settings.DisplayChatMessages = menuDisplayChatMessages.IsChecked;
             Settings.DisplayFoundHintMessages = menuDisplayFoundHints.IsChecked;
-            Settings.DisplayItemNotificationMessages = menuDisplayItemNotifications.IsChecked;
             Settings.DisplayJoinLeaveMessages = menuDisplayJoinLeaveMessages.IsChecked;
+            Settings.DisplayItemReceivedMessages = menuDisplayReceivedItems.IsChecked;
+            Settings.DisplayItemSentMessages = menuDisplaySentItems.IsChecked;
+            messageLog.UpdateMessagesVisibility();
         }
 
         private void OnExitMenuClick(object sender, RoutedEventArgs e)

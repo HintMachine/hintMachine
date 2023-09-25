@@ -17,9 +17,10 @@
             </MenuItem>
             <MenuItem Header="Chat filters">
                 <MenuItem Name="menuDisplayChatMessages" Header="Chat messages" IsCheckable="True" />
-                <MenuItem Name="menuDisplayItemNotifications" Header="Obtained item notifications" IsCheckable="True" />
                 <MenuItem Name="menuDisplayFoundHints" Header="Hints on found items" IsCheckable="True" />
                 <MenuItem Name="menuDisplayJoinLeaveMessages" Header="Join / leave notifications" IsCheckable="True" />
+                <MenuItem Name="menuDisplaySentItems" Header="Sent items notifications" IsCheckable="True" />
+                <MenuItem Name="menuDisplayReceivedItems" Header="Received items notifications" IsCheckable="True" />
             </MenuItem>
             <MenuItem Header="?">
                 <MenuItem Header="_About HintMachine" Click="OnAboutClick" />
