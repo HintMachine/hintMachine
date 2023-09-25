@@ -25,13 +25,13 @@ namespace HintMachine.Games
         private readonly HintQuest _backToBackQuest = new HintQuest("Back-to-Back", 30);
 
         private ushort _previousPoppedPuyos = ushort.MaxValue;
-        private readonly HintQuest _poppedPuyosQuest = new HintQuest("Popped Puyos", 500);
+        private readonly HintQuest _poppedPuyosQuest = new HintQuest("Popped Puyos", 300);
 
         private byte _previousChain = byte.MaxValue;
         private readonly HintQuest _chainsQuest = new HintQuest("Chains", 100);
 
         private byte _previousAllClears = byte.MaxValue;
-        private readonly HintQuest _allClearsQuest = new HintQuest("All Clears", 5);
+        private readonly HintQuest _allClearsQuest = new HintQuest("All Clears", 3);
 
         public PuyoTetrisConnector()
         {
