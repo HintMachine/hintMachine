@@ -10,8 +10,6 @@ namespace HintMachine
     {
         private class Message
         {
-            public string Text { get; set; } = string.Empty;
-            
             public LogMessageType MessageType { get; set; } = LogMessageType.RAW;
             
             public Rectangle Rectangle { get; set; } = null;
@@ -19,7 +17,7 @@ namespace HintMachine
             public TextBox TextBox { get; set; } = null;
         }
 
-        private readonly int MAX_DISPLAYED_MESSAGES = 150;
+        private readonly int MAX_DISPLAYED_MESSAGES = 100;
 
         private List<Message> _messages = new List<Message>();
 
@@ -43,42 +41,55 @@ namespace HintMachine
             Color backgroundColor = textColor;
             backgroundColor.A = 20;
 
-            Message newMessage = new Message
+            // If there already are other messages and the last message has the same type, we can "merge"
+            // this message with the previous one for performance reasons. We only do this for SERVER_RESPONSE
+            // messages since they are the most prone to flooding (e.g. with !missing)
+            Message lastMessage = (_messages.Count > 0) ? _messages[_messages.Count - 1] : null;
+            if(lastMessage != null && lastMessage.MessageType == logMessageType && logMessageType == LogMessageType.SERVER_RESPONSE)
             {
-                Text = message,
-                MessageType = logMessageType,
-                Rectangle = new Rectangle
+                lastMessage.TextBox.Text += "\n" + GetPrefixForMessageType(logMessageType) + message;
+            }
+            else
+            {
+                // Usual case: just add a new message
+                Message newMessage = new Message
                 {
-                    // Add a colored decoration rectangle to quickly see message type
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                    Width = 5,
-                    Fill = new SolidColorBrush(GetColorForMessageType(logMessageType))
-                },
-                TextBox = new TextBox
-                {
-                    // Add a readonly TextBox containing the message text
-                    // (we use a TextBox instead of a TextBlock to enable text selection) 
-                    Text = GetPrefixForMessageType(logMessageType) + message,
-                    TextWrapping = TextWrapping.Wrap,
-                    Foreground = new SolidColorBrush(textColor),
-                    Padding = new Thickness(6, 4, 6, 4),
-                    FontSize = 14,
-                    BorderThickness = new Thickness(0),
-                    IsReadOnly = true,
-                    Background = new SolidColorBrush(backgroundColor),
-                }
-            };
+                    MessageType = logMessageType,
+                    Rectangle = new Rectangle
+                    {
+                        // Add a colored decoration rectangle to quickly see message type
+                        VerticalAlignment = VerticalAlignment.Stretch,
+                        Width = 5,
+                        Fill = new SolidColorBrush(GetColorForMessageType(logMessageType))
+                    },
+                    TextBox = new TextBox
+                    {
+                        // Add a readonly TextBox containing the message text
+                        // (we use a TextBox instead of a TextBlock to enable text selection) 
+                        Text = GetPrefixForMessageType(logMessageType) + message,
+                        TextWrapping = TextWrapping.Wrap,
+                        Foreground = new SolidColorBrush(textColor),
+                        Padding = new Thickness(6, 4, 6, 4),
+                        FontSize = 14,
+                        BorderThickness = new Thickness(0),
+                        IsReadOnly = true,
+                        Background = new SolidColorBrush(backgroundColor),
+                        
+                    }
+                };
 
-            Grid.SetColumn(newMessage.Rectangle, 0);
-            Grid.SetRow(newMessage.Rectangle, rowID);
-            grid.Children.Add(newMessage.Rectangle);
+                _messages.Add(newMessage);
+                UpdateMessagesVisibility();
 
-            Grid.SetColumn(newMessage.TextBox, 1);
-            Grid.SetRow(newMessage.TextBox, rowID);
-            grid.Children.Add(newMessage.TextBox);
+                Grid.SetColumn(newMessage.Rectangle, 0);
+                Grid.SetRow(newMessage.Rectangle, rowID);
+                grid.Children.Add(newMessage.Rectangle);
 
-            _messages.Add(newMessage);
-
+                Grid.SetColumn(newMessage.TextBox, 1);
+                Grid.SetRow(newMessage.TextBox, rowID);
+                grid.Children.Add(newMessage.TextBox);
+            }
+    
             if (scrollToBottom)
                 scrollViewer.ScrollToBottom();
         }
@@ -91,7 +102,7 @@ namespace HintMachine
             // Hide all filtered messages
             foreach (Message message in _messages)
             {
-                bool visible = CanDisplayMessage(message.Text, message.MessageType);
+                bool visible = CanDisplayMessage(message.TextBox.Text, message.MessageType);
                 message.Rectangle.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
                 message.TextBox.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
             }
