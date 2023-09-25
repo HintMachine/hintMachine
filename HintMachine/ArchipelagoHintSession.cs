@@ -65,42 +65,6 @@ namespace HintMachine
             // ...and call that event a first time with all already obtained hints
             OnHintObtained(_session.DataStorage.GetHints());
         }
-        
-        public List<HintDetails> GetHints()
-        {
-            List<HintDetails> returned = new List<HintDetails>();
-            Hint[] hints = { };
-            try
-            {
-                hints = _session.DataStorage.GetHints();
-            }
-            catch (Exception ex) {
-                Console.WriteLine("Exception : " +  ex.StackTrace );
-            }
-            foreach (Hint hint in hints)
-            {
-                if (hint.Found)
-                    continue;
-
-                returned.Add(new HintDetails
-                {
-                    ReceivingPlayer = hint.ReceivingPlayer,
-                    FindingPlayer = hint.FindingPlayer,
-                    ItemId = hint.ItemId,
-                    LocationId = hint.LocationId,
-                    ItemFlags = hint.ItemFlags,
-                    Found = hint.Found,
-                    Entrance = hint.Entrance,
-
-                    ReceivingPlayerName = _session.Players.GetPlayerName(hint.ReceivingPlayer),
-                    FindingPlayerName = _session.Players.GetPlayerName(hint.FindingPlayer),
-                    ItemName = _session.Items.GetItemName(hint.ItemId),
-                    LocationName = _session.Locations.GetLocationNameFromId(hint.LocationId),
-                });
-            }
-
-            return returned;
-        }
 
         public List<string> GetMissingLocationNames()
         {
@@ -152,6 +116,10 @@ namespace HintMachine
             KnownHints.Clear();
             foreach (Hint hint in hints)
             {
+                string locationName = _session.Locations.GetLocationNameFromId(hint.LocationId);
+                if (hint.Entrance != "")
+                    locationName += " (" + hint.Entrance + ")"; 
+
                 KnownHints.Add(new HintDetails
                 {
                     ReceivingPlayer = hint.ReceivingPlayer,
@@ -165,7 +133,7 @@ namespace HintMachine
                     ReceivingPlayerName = _session.Players.GetPlayerName(hint.ReceivingPlayer),
                     FindingPlayerName = _session.Players.GetPlayerName(hint.FindingPlayer),
                     ItemName = _session.Items.GetItemName(hint.ItemId),
-                    LocationName = _session.Locations.GetLocationNameFromId(hint.LocationId),
+                    LocationName = locationName,
                 });
             }
 
