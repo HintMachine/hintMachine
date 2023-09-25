@@ -18,11 +18,11 @@ namespace HintMachine
 
         public void UpdateItems(List<HintDetails> knownHints)
         {
-
             List<HintDetails> knownNotFoundHints = new List<HintDetails>();
             foreach (HintDetails hint in knownHints)
                 if (!hint.Found)
                     knownNotFoundHints.Add(hint);
+
             Dispatcher.Invoke(() =>
             {
                 hintsList.ItemsSource = knownNotFoundHints;

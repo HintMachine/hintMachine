@@ -8,7 +8,7 @@ namespace HintMachine.Games
     public class ZachtronicsSolitaireConnector : IGameConnector
     {
         private int _previousWins = int.MaxValue;
-        private readonly HintQuest _winsQuest = new HintQuest("Wins", 2);
+        private readonly HintQuest _winsQuest = new HintQuest("Wins", 1);
 
         FileSystemWatcher _watcher = null;
         private bool _readSaveFileOnNextTick = false;
