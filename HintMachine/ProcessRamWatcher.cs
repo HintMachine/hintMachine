@@ -51,10 +51,6 @@ namespace HintMachine
         {
             _processName = processName;
             _moduleName = moduleName;
-
-            TokenManipulator.AddPrivilege("SeDebugPrivilege");
-            TokenManipulator.AddPrivilege("SeSystemEnvironmentPrivilege");
-            Process.EnterDebugMode();
         }
 
         public bool TryConnect()

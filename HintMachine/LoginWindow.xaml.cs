@@ -20,15 +20,6 @@ namespace HintMachine
             Settings.LoadFromFile();
             inputHost.Text = Settings.Host;
             inputSlot.Text = Settings.Slot;
-
-            // Check that the app was launched with admin rights to be able to hook on any process
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
-            {
-                MessageBox.Show("Please launch as administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
-            }
         }
 
         private void OnConnectButtonClick(object sender, RoutedEventArgs e)
