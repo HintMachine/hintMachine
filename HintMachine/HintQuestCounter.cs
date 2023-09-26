@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace HintMachine
 {
@@ -108,6 +109,7 @@ namespace HintMachine
                 _labelDetail = new Label
                 {
                     Content = "(?)",
+                    Foreground = new SolidColorBrush(Color.FromRgb(0, 150, 200)),
                     Margin = new Thickness(-4, 0, 8, 4),
                     FontWeight = FontWeights.Bold,
                     ToolTip = Description,
