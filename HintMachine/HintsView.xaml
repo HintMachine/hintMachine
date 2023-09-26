@@ -10,7 +10,7 @@
                     Checked="OnCheckboxProgressionChecked" Unchecked="OnCheckboxProgressionChecked"/>
         <ListView Name="hintsList" DockPanel.Dock="Top">
             <ListView.View>
-                <GridView>
+                <GridView x:Name="gv">
                     <GridViewColumn DisplayMemberBinding="{Binding Path=ReceivingPlayerName}">
                         <GridViewColumn.Header>
                             <GridViewColumnHeader Tag="ReceivingPlayerName" Click="OnHintsListColumnClick">Receiving player</GridViewColumnHeader>
