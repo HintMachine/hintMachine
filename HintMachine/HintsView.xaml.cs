@@ -21,20 +21,21 @@ namespace HintMachine
             _fullHintsList = knownHints;
 
             List<HintDetails> filteredHints = new List<HintDetails>();
-            foreach (HintDetails hint in knownHints)
-            {
-                // Filter out already found items
-                if (hint.Found)
-                    continue;
-                // Filter out non-progression items if related checkbox is checked
-                if (checkboxProgression.IsChecked == true && !hint.ItemFlags.HasFlag(ItemFlags.Advancement))
-                    continue;
-
-                filteredHints.Add(hint);
-            }
-            
             Dispatcher.Invoke(() =>
             {
+                foreach (HintDetails hint in knownHints)
+                {
+                    // Filter out already found items
+                    if (hint.Found)
+                        continue;
+                    // Filter out non-progression items if related checkbox is checked
+                    if (checkboxProgression.IsChecked != null && checkboxProgression.IsChecked.Value && !hint.ItemFlags.HasFlag(ItemFlags.Advancement))
+                        continue;
+
+                    filteredHints.Add(hint);
+                }
+
+
                 hintsList.ItemsSource = filteredHints;
 
                 // Adjust all columns' size to fit their contents, as if the column header was double-clicked
@@ -75,7 +76,7 @@ namespace HintMachine
 
         private void OnCheckboxProgressionChecked(object sender, RoutedEventArgs e)
         {
-            if(hintsList != null && _fullHintsList != null)
+            if (hintsList != null && _fullHintsList != null)
                 UpdateItems(_fullHintsList);
         }
     }

@@ -331,7 +331,7 @@ namespace HintMachine
         {
             Logger.Info("-----------------------------------------------\n"
                       + Globals.ProgramName + " v" + Globals.ProgramVersion + "\n"
-                      + "Developed with ❤️ by Dinopony & Boffbad\n"
+                      + "Developed with ❤️ by Dinopony & CalDrac \n"
                       + "-----------------------------------------------");
             tabControl.SelectedIndex = 0;
         }
