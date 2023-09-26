@@ -2,10 +2,11 @@
 using System.Windows.Controls;
 
 namespace HintMachine
-{ 
+{
     public class HintQuest
     {
         public string displayName;
+        public string detailedQuest;
         public long goalValue;
         public long currentValue = 0;
         public string questType;
@@ -13,15 +14,17 @@ namespace HintMachine
         public int numberOfHintsGiven = 1;
 
         Label _label = null;
+        Label _labelDetail = null;
         ProgressBar _progressBar = null;
         TextBlock _progressBarOverlayText = null;
 
-        public HintQuest(string displayName, long goalValue, string questType = "cumulative", int numberOfHintsGiven = 1)
+        public HintQuest(string displayName, long goalValue, string questType = "cumulative", int numberOfHintsGiven = 1, string detailedQuest = "")
         {
             this.displayName = displayName;
             this.goalValue = goalValue;
             this.questType = questType;
             this.numberOfHintsGiven = numberOfHintsGiven;
+            this.detailedQuest = detailedQuest;
         }
 
         public void Add(long increment)
@@ -56,7 +59,8 @@ namespace HintMachine
                     return true;
                 }
             }
-            else { 
+            else
+            {
                 currentValue -= goalValue;
                 return true;
             }
@@ -74,8 +78,20 @@ namespace HintMachine
             _label.Margin = new Thickness(0, 0, 8, 4);
             _label.FontWeight = FontWeights.Bold;
             Grid.SetColumn(_label, 0);
-            Grid.SetRow(_label, questsGrid.RowDefinitions.Count-1);
+            Grid.SetRow(_label, questsGrid.RowDefinitions.Count - 1);
             questsGrid.Children.Add(_label);
+
+            _labelDetail = new Label();
+            if (detailedQuest.Trim().Length != 0)
+                _labelDetail.Content = "(?)";
+            ToolTip t = new ToolTip();
+            t.Content = detailedQuest;
+            _labelDetail.ToolTip = t;
+            _labelDetail.Margin = new Thickness(-4, 0, 8, 4);
+            _labelDetail.FontWeight = FontWeights.Bold;
+            Grid.SetColumn(_labelDetail, 1);
+            Grid.SetRow(_labelDetail, questsGrid.RowDefinitions.Count - 1);
+            questsGrid.Children.Add(_labelDetail);
 
             // Add a grid containing overlapped ProgressBar + TextBlock to have an overlay text over the progressbar
             _progressBar = new ProgressBar();
@@ -90,15 +106,16 @@ namespace HintMachine
             progressBarGrid.Margin = new Thickness(0, 0, 0, 4);
             progressBarGrid.Children.Add(_progressBar);
             progressBarGrid.Children.Add(_progressBarOverlayText);
-            Grid.SetColumn(progressBarGrid, 1);
+            Grid.SetColumn(progressBarGrid, 2);
             Grid.SetRow(progressBarGrid, questsGrid.RowDefinitions.Count - 1);
             questsGrid.Children.Add(progressBarGrid);
+           
         }
 
         public void UpdateComponents()
         {
             _progressBar.Value = currentValue;
-            _progressBarOverlayText.Text = currentValue + " / " + goalValue;
+            _progressBarOverlayText.Text = currentValue + " / " + goalValue;   
         }
     }
 }

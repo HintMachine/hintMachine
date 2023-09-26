@@ -36,11 +36,12 @@
             <Grid Name="questsGrid" Margin="8,8,8,8" Visibility="Hidden">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
             </Grid>
 
-            <StackPanel Name="gameConnectGrid" Margin="8,8,8,8">
+            <StackPanel Name="gameConnectGrid" Margin="8,8,8,8" Visibility="Visible">
                 <DockPanel LastChildFill="True" Margin="0,0,0,8">
                     <Label Content="Game :" HorizontalAlignment="Left"/>
                     <ComboBox x:Name="gameComboBox" Margin="8,0,0,0" HorizontalAlignment="Stretch" SelectionChanged="OnSelectedGameConnectorChange"/>

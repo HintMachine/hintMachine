@@ -6,7 +6,7 @@ namespace HintMachine.Games
     {
         private ProcessRamWatcher _ram = null;
         private long _previousKills = long.MaxValue;
-        private readonly HintQuest _killsQuest = new HintQuest("Kills", 450);
+        private readonly HintQuest _killsQuest = new HintQuest("Kills", 450,"cumulative",1, "Kill enemies in story mode or survival to progress");
         private long _threadstack0 = 0;
         private IntPtr Thread0Address;
         public OneFingerDeathPunchConnector()

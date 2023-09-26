@@ -118,25 +118,27 @@ namespace HintMachine
                 Console.WriteLine(ex.StackTrace);
             }
 
-            if (!pollSuccessful)
+            if (!pollSuccessful && _game != null)
             {
                 Logger.Error("Connection with " + _game.GetDisplayName() + " was lost.");
                 DisconnectFromGame();
                 return;
             }
-
-            // Update hint quests
-            foreach (HintQuest quest in _game.quests)
+            if (_game != null)
             {
-                if (quest.CheckCompletion())
+                // Update hint quests
+                foreach (HintQuest quest in _game.quests)
                 {
-                    for (int i = 0; i < quest.numberOfHintsGiven; i++)
+                    if (quest.CheckCompletion())
                     {
-                        _archipelagoSession.GetOneRandomHint(_game.GetDisplayName());
+                        for (int i = 0; i < quest.numberOfHintsGiven; i++)
+                        {
+                            _archipelagoSession.GetOneRandomHint(_game.GetDisplayName());
+                        }
                     }
-                }
 
-                Dispatcher.Invoke(() => { quest.UpdateComponents(); });
+                    Dispatcher.Invoke(() => { quest.UpdateComponents(); });
+                }
             }
         }
 
@@ -271,7 +273,7 @@ namespace HintMachine
                     type = LogMessageType.ITEM_SENT;
                 else if (((ItemSendLogMessage)message).Receiver.Name == _archipelagoSession.slot)
                     type = LogMessageType.ITEM_RECEIVED;
-                else 
+                else
                     return;
             }
             else if (message is ChatLogMessage || message is ServerChatLogMessage)
@@ -298,7 +300,7 @@ namespace HintMachine
                 { menuDisplaySentItems, Settings.DisplayItemSentMessages },
             };
 
-            foreach(var kv in MENU_ITEMS)
+            foreach (var kv in MENU_ITEMS)
             {
                 kv.Key.IsChecked = kv.Value;
                 kv.Key.Checked += OnFilterChange;
@@ -371,7 +373,7 @@ namespace HintMachine
         {
             string host = _archipelagoSession.host;
             string password = _archipelagoSession.password;
-            
+
             _archipelagoSession.Disconnect();
 
             _archipelagoSession = new ArchipelagoHintSession(host, slotName, password);

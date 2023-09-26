@@ -239,9 +239,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="threadstack-finder.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="threadstack-finder.dll" />
     <Content Include="threadstack.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
