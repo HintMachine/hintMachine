@@ -12,8 +12,6 @@ namespace HintMachine
 {
     public partial class MainWindow : Window
     {
-        private const string WINDOW_TITLE = "HintMachine";
-
         private ArchipelagoHintSession _archipelagoSession = null;
         private IGameConnector _game = null;
         private Timer _timer = null;
@@ -50,8 +48,8 @@ namespace HintMachine
         /// </summary>
         protected void PopulateGamesCombobox()
         {
-            GamesList.Games.Sort((a, b) => a.Name.CompareTo(b.Name));
-            foreach (IGameConnector connector in GamesList.Games)
+            Globals.Games.Sort((a, b) => a.Name.CompareTo(b.Name));
+            foreach (IGameConnector connector in Globals.Games)
             {
                 gameComboBox.Items.Add(connector.Name);
 
@@ -154,11 +152,11 @@ namespace HintMachine
 
             // Connect to selected game
             string selectedGameName = gameComboBox.SelectedValue.ToString();
-            IGameConnector game = GamesList.FindGameFromName(selectedGameName);
+            IGameConnector game = Globals.FindGameFromName(selectedGameName);
             if (game.Connect())
             {
                 _game = game;
-                Title = WINDOW_TITLE + " - " + _game.Name;
+                Title = Globals.ProgramName + " - " + _game.Name;
                 labelGame.Text = _game.Name;
 
                 // Init game quests
@@ -202,7 +200,7 @@ namespace HintMachine
                 questsGrid.Children.Clear();
                 questsGrid.RowDefinitions.Clear();
 
-                Title = WINDOW_TITLE;
+                Title = Globals.ProgramName;
                 labelGame.Text = "-";
             });
         }
@@ -230,7 +228,7 @@ namespace HintMachine
         private void OnSelectedGameConnectorChange(object sender, SelectionChangedEventArgs e)
         {
             string selectedGameName = gameComboBox.SelectedValue.ToString();
-            IGameConnector game = GamesList.FindGameFromName(selectedGameName);
+            IGameConnector game = Globals.FindGameFromName(selectedGameName);
 
             textblockGameDescription.Text = game.Description;
 
@@ -332,7 +330,7 @@ namespace HintMachine
         private void OnAboutClick(object sender, RoutedEventArgs e)
         {
             Logger.Info("-----------------------------------------------\n"
-                      + "HintMachine v1.0\n"
+                      + Globals.ProgramName + " v" + Globals.ProgramVersion + "\n"
                       + "Developed with ❤️ by Dinopony & Boffbad\n"
                       + "-----------------------------------------------");
             tabControl.SelectedIndex = 0;

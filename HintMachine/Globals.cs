@@ -1,10 +1,14 @@
-﻿using HintMachine.Games;
+﻿
+using HintMachine.Games;
 using System.Collections.Generic;
 
 namespace HintMachine
 {
-    public abstract class GamesList
+    internal static class Globals
     {
+        public const string ProgramName = "HintMachine";
+        public const string ProgramVersion = "1.0";
+
         public static List<IGameConnector> Games = new List<IGameConnector>()
         {
             new XenotiltConnector(),
@@ -20,7 +24,7 @@ namespace HintMachine
             new BustAMove4Connector(),
             new Rollcage2Connector(),
         };
-        
+
         public static IGameConnector FindGameFromName(string name)
         {
             foreach (IGameConnector game in Games)

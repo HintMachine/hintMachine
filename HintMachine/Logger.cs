@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace HintMachine
 {
@@ -23,7 +17,7 @@ namespace HintMachine
         JOIN_LEAVE = 10,
     }
 
-    public abstract class Logger
+    public static class Logger
     {
         public delegate void OnMessageLoggedCallback(string message, LogMessageType type);
 
