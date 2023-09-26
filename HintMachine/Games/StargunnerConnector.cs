@@ -11,7 +11,7 @@ namespace HintMachine.Games
     {
         private ProcessRamWatcher _ram = null;
         private readonly HintQuest _scoreQuest = new HintQuest("Score", 500000);
-        private readonly HintQuest _creditsQuest = new HintQuest("Credits", 5000);
+        private readonly HintQuest _creditsQuest = new HintQuest("Credits", 5000,"cumulative",1,"Collect green gems to obtain credits");
 
         private long baseAddr = 0;
         private long _livesAddr = 0;
