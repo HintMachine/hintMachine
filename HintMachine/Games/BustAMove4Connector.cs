@@ -25,7 +25,7 @@
             if (!_ram.TryConnect())
                 return false;
 
-            _winAddr = _ram.baseAddress + 0x62634A;
+            _winAddr = _ram.BaseAddress + 0x62634A;
             return true;
         }
 

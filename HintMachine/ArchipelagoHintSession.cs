@@ -16,54 +16,83 @@ namespace HintMachine
         private static readonly string[] TAGS = { "AP", "TextOnly" };
         private static readonly Version VERSION = new Version(0, 4, 1);
 
-        private ArchipelagoSession _session = null;
-        public string host = "";
-        public string slot = "";
-        public string password = "";
-        public bool isConnected = false;
-        public string errorMessage = "";
+        public ArchipelagoSession Client { get; private set; }
 
-        public List<HintDetails> KnownHints { get; set; } = new List<HintDetails>();
+        /// <summary>
+        /// The hostname of the Archipelago server used for this session
+        /// </summary>
+        public string Host { get; private set; }
 
-        public HintsView HintsView { get; set; } = null;
+        /// <summary>
+        /// The name of the slot (player) we are connected as for this session
+        /// </summary>
+        public string Slot { get; private set; }
+
+        /// <summary>
+        /// The password that was used to attempt connection. It needs to be kept for fast reconnect
+        /// features where it will be reused to connect to another slot for the same host.
+        /// </summary>
+        public string Password { get; private set; }
+
+        /// <summary>
+        /// A boolean set to true if connection to the Archipelago server was successful, false otherwise.
+        /// If false, try reading the contents of the ErrorMessage property to get the cause.
+        /// </summary>
+        public bool IsConnected { get; set; } = false;
+
+        /// <summary>
+        /// The cause of the connection failure if there was one.
+        /// </summary>
+        public string ErrorMessage { get; set; } = "";
+
+        /// <summary>
+        /// An exhaustive list of currently known hints with additionnal details
+        /// </summary>
+        public List<HintDetails> KnownHints { get; private set; } = new List<HintDetails>();
+
+        public delegate void HintsUpdateHandler(List<HintDetails> hints);
+        /// <summary>
+        /// An event triggered when a new hint is obtained
+        /// </summary>
+        public event HintsUpdateHandler OnHintsUpdate;
 
         public ArchipelagoHintSession(string host, string slot, string password)
         {
-            this.host = host;
-            this.slot = slot;
-            this.password = password;
-            _session = ArchipelagoSessionFactory.CreateSession(host);
+            Host = host;
+            Slot = slot;
+            Password = password;
+            Client = ArchipelagoSessionFactory.CreateSession(host);
 
             Console.WriteLine("Start Connect & Login");
             LoginResult ret;
             try
             {
-                ret = _session.TryConnectAndLogin("", slot, ItemsHandlingFlags.IncludeOwnItems, VERSION, TAGS, null, password, true);
+                ret = Client.TryConnectAndLogin("", slot, ItemsHandlingFlags.IncludeOwnItems, VERSION, TAGS, null, password, true);
             }
             catch (Exception ex)
             {
                 ret = new LoginFailure(ex.GetBaseException().Message);
             }
 
-            isConnected = ret.Successful;
-            if (!isConnected)
+            IsConnected = ret.Successful;
+            if (!IsConnected)
             {
                 LoginFailure loginFailure = (LoginFailure)ret;
                 foreach (string str in loginFailure.Errors)
                 {
-                    errorMessage += "\n" + str;
+                    ErrorMessage += "\n" + str;
                 }
                 foreach (ConnectionRefusedError connectionRefusedError in loginFailure.ErrorCodes)
                 {
-                    errorMessage += string.Format("\n{0}", connectionRefusedError);
+                    ErrorMessage += string.Format("\n{0}", connectionRefusedError);
                 }
                 return;
             }
 
             // Add a tracking event to detect further hints...
-            _session.DataStorage.TrackHints(OnHintObtained, false);
+            Client.DataStorage.TrackHints(OnHintReceivedHandler, false);
             // ...and call that event a first time with all already obtained hints
-            OnHintObtained(_session.DataStorage.GetHints());
+            OnHintReceivedHandler(Client.DataStorage.GetHints());
         }
 
         public List<string> GetMissingLocationNames()
@@ -71,18 +100,18 @@ namespace HintMachine
             List<long> alreadyHintedLocations = GetAlreadyHintedLocations();
 
             List<string> returned = new List<string>();
-            foreach (long id in _session.Locations.AllMissingLocations)
+            foreach (long id in Client.Locations.AllMissingLocations)
                 if(!alreadyHintedLocations.Contains(id))
-                    returned.Add(_session.Locations.GetLocationNameFromId(id));
+                    returned.Add(Client.Locations.GetLocationNameFromId(id));
             return returned;
         }
 
         public List<string> GetItemNames()
         {
             List<string> returned = new List<string>();
-            int slotID = _session.ConnectionInfo.Slot;
-            var game = _session.Players.AllPlayers.ElementAt(slotID).Game;
-            var coll = _session.DataStorage.GetItemNameGroups(game);
+            int slotID = Client.ConnectionInfo.Slot;
+            var game = Client.Players.AllPlayers.ElementAt(slotID).Game;
+            var coll = Client.DataStorage.GetItemNameGroups(game);
             foreach (var itemName in coll["Everything"])
                 returned.Add(itemName);
 
@@ -91,7 +120,7 @@ namespace HintMachine
 
         public void GetOneRandomHint(string gameName)
         {
-            List<long> missingLocations = _session.Locations.AllMissingLocations.ToList();
+            List<long> missingLocations = Client.Locations.AllMissingLocations.ToList();
             foreach (long locationId in GetAlreadyHintedLocations())
                 missingLocations.Remove(locationId);
 
@@ -100,23 +129,23 @@ namespace HintMachine
 
             Random rnd = new Random();
             int index = rnd.Next(missingLocations.Count);
-            long hintedLocationId = _session.Locations.AllMissingLocations[index];
+            long hintedLocationId = Client.Locations.AllMissingLocations[index];
             
             SendMessage("I just got a hint using HintMachine while playing " + gameName + "!");
-            _session.Socket.SendPacket(new LocationScoutsPacket {
+            Client.Socket.SendPacket(new LocationScoutsPacket {
                 Locations = new long[] { hintedLocationId },
                 CreateAsHint = true
             });
         }
 
-        public void OnHintObtained(Hint[] hints)
+        private void OnHintReceivedHandler(Hint[] hints)
         {
             // Add the hints to the list of already known locations so that we won't 
             // try to give a random hint for those
             KnownHints.Clear();
             foreach (Hint hint in hints)
             {
-                string locationName = _session.Locations.GetLocationNameFromId(hint.LocationId);
+                string locationName = Client.Locations.GetLocationNameFromId(hint.LocationId);
                 if (hint.Entrance != "")
                     locationName += " (" + hint.Entrance + ")"; 
 
@@ -130,21 +159,21 @@ namespace HintMachine
                     Found = hint.Found,
                     Entrance = hint.Entrance,
 
-                    ReceivingPlayerName = _session.Players.GetPlayerName(hint.ReceivingPlayer),
-                    FindingPlayerName = _session.Players.GetPlayerName(hint.FindingPlayer),
-                    ItemName = _session.Items.GetItemName(hint.ItemId),
+                    ReceivingPlayerName = Client.Players.GetPlayerName(hint.ReceivingPlayer),
+                    FindingPlayerName = Client.Players.GetPlayerName(hint.FindingPlayer),
+                    ItemName = Client.Items.GetItemName(hint.ItemId),
                     LocationName = locationName,
                 });
             }
 
-            HintsView?.UpdateItems(KnownHints);
+            OnHintsUpdate?.Invoke(KnownHints);
         }
 
         public List<long> GetAlreadyHintedLocations()
         {
             List<long> returned = new List<long>();
             foreach (HintDetails hint in KnownHints)
-                if (hint.FindingPlayer == _session.ConnectionInfo.Slot)
+                if (hint.FindingPlayer == Client.ConnectionInfo.Slot)
                     returned.Add(hint.LocationId);
 
             return returned;
@@ -152,43 +181,38 @@ namespace HintMachine
 
         public int GetAvailableHintsWithHintPoints()
         {
-            int points = _session.RoomState.HintPoints;
-            int cost = (int)(_session.Locations.AllLocations.Count * 0.01m * _session.RoomState.HintCostPercentage);
+            int points = Client.RoomState.HintPoints;
+            int cost = (int)(Client.Locations.AllLocations.Count * 0.01m * Client.RoomState.HintCostPercentage);
             return points / cost;
         }
 
         public int GetCheckCountBeforeNextHint()
         {
-            int points = _session.RoomState.HintPoints;
-            int cost = (int)(_session.Locations.AllLocations.Count * 0.01m * _session.RoomState.HintCostPercentage);
+            int points = Client.RoomState.HintPoints;
+            int cost = (int)(Client.Locations.AllLocations.Count * 0.01m * Client.RoomState.HintCostPercentage);
             while (points >= cost)
                 points -= cost;
 
             int pointsToNextHint = cost - points;
-            int pointsPerCheck = _session.RoomState.LocationCheckPoints;
+            int pointsPerCheck = Client.RoomState.LocationCheckPoints;
 
             return (int)Math.Ceiling((float)pointsToNextHint / (float)pointsPerCheck);
         }
 
         public void Disconnect()
         {
-            _session.Socket.DisconnectAsync();
+            Client.Socket.DisconnectAsync();
         }
 
         public void SendMessage(string message)
         {
-            _session.Socket.SendPacket(new SayPacket { Text = message });
-        }
-
-        public void SetupOnMessageReceivedEvent(MessageReceivedHandler handler)
-        {
-            _session.MessageLog.OnMessageReceived += handler;
+            Client.Socket.SendPacket(new SayPacket { Text = message });
         }
 
         public List<string> GetPlayerNames()
         {
             List<string> names = new List<string>();
-            foreach (PlayerInfo info in _session.Players.AllPlayers)
+            foreach (PlayerInfo info in Client.Players.AllPlayers)
                 names.Add(info.Name);
             return names;
         }

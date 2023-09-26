@@ -8,6 +8,8 @@ namespace HintMachine
 {
     public class ProcessRamWatcher
     {
+        #region EXTERNAL_DECLARATIONS
+
         const int PROCESS_WM_READ = 0x0010;
         const int PROCESS_QUERY_INFORMATION = 0x0400;
         [Flags]
@@ -38,14 +40,52 @@ namespace HintMachine
         public static extern bool ReadProcessMemory(int hProcess,
           Int64 lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
 
+        public enum MemoryRegionType : uint
+        {
+            MEM_IMAGE = 0x1000000,
+            MEM_MAPPED = 0x40000,
+            MEM_PRIVATE = 0x20000,
+            MEM_UNDEFINED = 0x0
+        }
+
+        public struct MemoryRegion
+        {
+            public long BaseAddress;
+            public long Size;
+            public MemoryRegionType Type;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        protected struct MEMORY_BASIC_INFORMATION
+        {
+            public IntPtr BaseAddress;
+            public IntPtr AllocationBase;
+            public uint AllocationProtect;
+            public IntPtr RegionSize;
+            public uint State;
+            public uint Protect;
+            public MemoryRegionType Type;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
+
+        /*
+        [DllImport("threadstack-finder.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern ulong getThreadstack0(ulong pid);
+        */
+
+        #endregion
+
         // ----------------------------------------------------------------------------------
-        
+
         private string _processName;
         private string _moduleName;
-        public Process process = null;
-        public ProcessModule module = null;
-        public IntPtr processHandle = IntPtr.Zero;
-        public long baseAddress = 0;
+        private Process _process = null;
+        private ProcessModule _module = null;
+        private IntPtr _processHandle = IntPtr.Zero;
+
+        public long BaseAddress { get; set; } = 0;
 
         public ProcessRamWatcher(string processName, string moduleName = "")
         {
@@ -59,37 +99,37 @@ namespace HintMachine
             if (processes.Length == 0)
                 return false;
 
-            process = processes[0];
-            if (process == null)
+            _process = processes[0];
+            if (_process == null)
                 return false;
 
             if (_moduleName == "")
             {
-                module = process.MainModule;
+                _module = _process.MainModule;
             }
             else
             {
-                foreach (ProcessModule m in process.Modules)
+                foreach (ProcessModule m in _process.Modules)
                 {
                     if (m.FileName.Contains(_moduleName))
                     {
-                        module = m;
+                        _module = m;
                         break;
                     }
                 }
             }
 
-            if (module == null)
+            if (_module == null)
                 return false;
-            baseAddress = module.BaseAddress.ToInt64();
+            BaseAddress = _module.BaseAddress.ToInt64();
 
-            processHandle = OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, process.Id);
-            return processHandle != IntPtr.Zero;
+            _processHandle = OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, _process.Id);
+            return _processHandle != IntPtr.Zero;
         }
 
         public byte[] ReadBytes(long address, int length, bool isBigEndian = false)
         {
-            if (processHandle == IntPtr.Zero)
+            if (_processHandle == IntPtr.Zero)
             {
                 byte[] zeroByteArray = new byte[length];
                 for (int i = 0; i < length; ++i)
@@ -99,7 +139,7 @@ namespace HintMachine
 
             int bytesRead = 0;
             byte[] buffer = new byte[length];
-            ReadProcessMemory((int)processHandle, address, buffer, length, ref bytesRead);
+            ReadProcessMemory((int)_processHandle, address, buffer, length, ref bytesRead);
             if (bytesRead < length)
                 throw new Exception("Could not read process memory");
 
@@ -179,36 +219,6 @@ namespace HintMachine
             return ResolvePointerPath(baseAddress, offsets, true);
         }
 
-        public enum MemoryRegionType: uint
-        {
-            MEM_IMAGE = 0x1000000,
-            MEM_MAPPED = 0x40000,
-            MEM_PRIVATE = 0x20000,
-            MEM_UNDEFINED = 0x0
-        }
-
-        public struct MemoryRegion
-        {
-            public long BaseAddress;
-            public long Size;
-            public MemoryRegionType Type;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        protected struct MEMORY_BASIC_INFORMATION
-        {
-            public IntPtr BaseAddress;
-            public IntPtr AllocationBase;
-            public uint AllocationProtect;
-            public IntPtr RegionSize;
-            public uint State;
-            public uint Protect;
-            public MemoryRegionType Type;
-        }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
-
         public List<MemoryRegion> ListMemoryRegions(long size = 0, MemoryRegionType type = MemoryRegionType.MEM_UNDEFINED)
         {
             List<MemoryRegion> regions = new List<MemoryRegion>();
@@ -217,7 +227,7 @@ namespace HintMachine
             int mbiSize = Marshal.SizeOf(info);
 
             IntPtr ptr = IntPtr.Zero;
-            while (VirtualQueryEx(processHandle, ptr, out info, (uint)mbiSize) == mbiSize)
+            while (VirtualQueryEx(_processHandle, ptr, out info, (uint)mbiSize) == mbiSize)
             {
                 bool validType = (type == info.Type || type == MemoryRegionType.MEM_UNDEFINED);
                 bool validSize = (size == (long)info.RegionSize || size == 0);
@@ -238,23 +248,20 @@ namespace HintMachine
         }
         
         /*
-        [DllImport("threadstack-finder.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong getThreadstack0(ulong pid);
-
         public long GetThreadstack0()
         {
             return (long)getThreadstack0((ulong)process.Id);
         }
         */
 
-        public Task<int> getThread0Address()
+        public Task<int> GetThreadstack0Address()
         {
             var proc = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "threadstack.exe",
-                    Arguments = process.Id + "",
+                    Arguments = _process.Id + "",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true

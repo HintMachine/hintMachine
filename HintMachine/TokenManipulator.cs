@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace HintMachine
 {
+    /*
     public class TokenManipulator
     {
         [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
@@ -51,4 +52,5 @@ namespace HintMachine
             }
         }
     }
+    */
 }

@@ -31,7 +31,7 @@
 
         public override bool Poll()
         {
-            long scoreAddress = _ram.ResolvePointerPath32(_ram.baseAddress + 0x170084, new int[] { 0x40 });
+            long scoreAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x170084, new int[] { 0x40 });
             _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress));
 
             return true;

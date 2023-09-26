@@ -5,7 +5,7 @@ namespace HintMachine
 {
     public abstract class GamesList
     {
-        public static List<IGameConnector> GAMES = new List<IGameConnector>()
+        public static List<IGameConnector> Games = new List<IGameConnector>()
         {
             new XenotiltConnector(),
             new OneFingerDeathPunchConnector(),
@@ -23,7 +23,7 @@ namespace HintMachine
         
         public static IGameConnector FindGameFromName(string name)
         {
-            foreach (IGameConnector game in GAMES)
+            foreach (IGameConnector game in Games)
                 if (game.Name == name)
                     return game;
 

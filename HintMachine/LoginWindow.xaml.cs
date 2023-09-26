@@ -30,9 +30,9 @@ namespace HintMachine
             string password = inputPassword.Text;
 
             ArchipelagoHintSession archipelagoSession = new ArchipelagoHintSession(host, slot, password);
-            if (!archipelagoSession.isConnected)
+            if (!archipelagoSession.IsConnected)
             {
-                MessageBox.Show("Could not connect to Archipelago: " + archipelagoSession.errorMessage, "Connection error",
+                MessageBox.Show("Could not connect to Archipelago: " + archipelagoSession.ErrorMessage, "Connection error",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }

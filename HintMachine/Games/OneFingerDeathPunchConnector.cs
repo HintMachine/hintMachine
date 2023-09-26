@@ -48,7 +48,7 @@ namespace HintMachine.Games
 
         private async void syncThreadStackAdr()
         {
-            _threadstack0Address = (IntPtr)await _ram.getThread0Address();
+            _threadstack0Address = (IntPtr)await _ram.GetThreadstack0Address();
         }
 
     }
