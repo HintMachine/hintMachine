@@ -154,33 +154,31 @@ namespace HintMachine
         {
             return BitConverter.ToDouble(ReadBytes(address, sizeof(long), isBigEndian), 0);
         }
-        public long ResolvePointerPath32(long baseAddress, int[] offsets)
+
+        private long ResolvePointerPath(long baseAddress, int[] offsets, bool x64)
         {
             long addr = baseAddress;
             foreach (int offset in offsets)
             {
-                addr = ReadInt32(addr);
+                addr = x64 ? ReadInt64(addr) : ReadInt32(addr);
                 if (addr == 0)
-                    break;
+                    return 0;
 
                 addr += offset;
             }
             return addr;
+        }
+
+        public long ResolvePointerPath32(long baseAddress, int[] offsets)
+        {
+            return ResolvePointerPath(baseAddress, offsets, false);
         }
 
         public long ResolvePointerPath64(long baseAddress, int[] offsets)
         {
-            long addr = baseAddress;
-            foreach (int offset in offsets)
-            {
-                addr = ReadInt64(addr);
-                if (addr == 0)
-                    break;
-
-                addr += offset;
-            }
-            return addr;
+            return ResolvePointerPath(baseAddress, offsets, true);
         }
+
         public enum MemoryRegionType: uint
         {
             MEM_IMAGE = 0x1000000,
@@ -195,7 +193,6 @@ namespace HintMachine
             public long Size;
             public MemoryRegionType Type;
         }
-
 
         [StructLayout(LayoutKind.Sequential)]
         protected struct MEMORY_BASIC_INFORMATION
@@ -239,15 +236,16 @@ namespace HintMachine
 
             return regions;
         }
-
-       [DllImport("threadstack-finder.dll", CallingConvention = CallingConvention.Cdecl)]
-       public static extern ulong getThreadstack0(ulong pid);
+        
+        /*
+        [DllImport("threadstack-finder.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern ulong getThreadstack0(ulong pid);
 
         public long GetThreadstack0()
         {
             return (long)getThreadstack0((ulong)process.Id);
         }
-
+        */
 
         public Task<int> getThread0Address()
         {

@@ -37,7 +37,8 @@ namespace HintMachine
             {
                 hintsList.ItemsSource = filteredHints;
 
-                foreach (GridViewColumn c in gv.Columns)
+                // Adjust all columns' size to fit their contents, as if the column header was double-clicked
+                foreach (GridViewColumn c in grid.Columns)
                 {
                     // Code below was found in GridViewColumnHeader.OnGripperDoubleClicked() event handler (using Reflector)
                     // i.e. it is the same code that is executed when the gripper is double clicked

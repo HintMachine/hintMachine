@@ -9,8 +9,12 @@ namespace HintMachine.Games
     public class GeometryWarsGalaxiesConnector : IGameConnector
     {
         private ProcessRamWatcher _ram = null;
-        private uint _previousGeoms = uint.MaxValue;
-        private readonly HintQuest _geomsQuest = new HintQuest("Geoms collected", 10000);
+
+        private readonly HintQuestCumulative _geomsQuest = new HintQuestCumulative
+        {
+            Name = "Geoms collected",
+            GoalValue = 10000
+        };
        
         private long _mem1Addr = 0;
         private long _mem2Addr = 0;
@@ -73,10 +77,8 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            uint geoms = _ram.ReadUint32(_mem2Addr + 0x23A2AF4, true);
-            if (geoms > _previousGeoms)
-                _geomsQuest.Add(geoms - _previousGeoms);
-            _previousGeoms = geoms;
+            long geomsAddr = _mem2Addr + 0x23A2AF4;
+            _geomsQuest.UpdateValue(_ram.ReadUint32(geomsAddr, true));
 
             return true;
         }

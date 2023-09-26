@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace HintMachine.Games
+﻿namespace HintMachine.Games
 {
     public class GeometryWarsConnector : IGameConnector
     {
         private ProcessRamWatcher _ram = null;
-        private uint _previousScore = uint.MaxValue;
-        private readonly HintQuest _scoreQuest = new HintQuest("Score", 50000);
+
+        private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
+        {
+            Name = "Score",
+            GoalValue = 50000
+        };
 
         public GeometryWarsConnector()
         {
@@ -39,11 +40,7 @@ namespace HintMachine.Games
         public override bool Poll()
         {
             long scoreAddress = _ram.ResolvePointerPath32(_ram.baseAddress + 0x170084, new int[] { 0x40 });
-
-            uint score = _ram.ReadUint32(scoreAddress);
-            if (score > _previousScore)
-                _scoreQuest.Add(score - _previousScore);
-            _previousScore = score;
+            _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress));
 
             return true;
         }

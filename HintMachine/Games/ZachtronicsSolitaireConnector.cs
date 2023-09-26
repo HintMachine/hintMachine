@@ -7,8 +7,11 @@ namespace HintMachine.Games
 {
     public class ZachtronicsSolitaireConnector : IGameConnector
     {
-        private int _previousWins = int.MaxValue;
-        private readonly HintQuest _winsQuest = new HintQuest("Wins", 1);
+        private readonly HintQuestCumulative _winsQuest = new HintQuestCumulative {
+            Name = "Wins",
+            GoalValue = 1,
+            Description = "Fortune's Foundation wins are worth double"
+        };
 
         FileSystemWatcher _watcher = null;
         private bool _readSaveFileOnNextTick = false;
@@ -23,7 +26,7 @@ namespace HintMachine.Games
             try
             {
                 // Read the file a first time to have the initial win count
-                _previousWins = ReadTotalWinCount();
+                _winsQuest.UpdateValue(ReadTotalWinCount());
 
                 // Setup a watcher to be notified when the file is changed
                 _watcher = new FileSystemWatcher();
@@ -64,10 +67,7 @@ namespace HintMachine.Games
             {
                 try
                 {
-                    int totalWinCount = ReadTotalWinCount();
-                    if (totalWinCount > _previousWins)
-                        _winsQuest.Add(totalWinCount - _previousWins);
-                    _previousWins = totalWinCount;
+                    _winsQuest.UpdateValue(ReadTotalWinCount());
                 }
                 catch 
                 {

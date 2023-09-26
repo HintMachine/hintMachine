@@ -5,10 +5,16 @@ namespace HintMachine.Games
     public class OneFingerDeathPunchConnector : IGameConnector
     {
         private ProcessRamWatcher _ram = null;
-        private long _previousKills = long.MaxValue;
-        private readonly HintQuest _killsQuest = new HintQuest("Kills", 450,"cumulative",1, "Kill enemies in story mode or survival to progress");
-        private long _threadstack0 = 0;
-        private IntPtr Thread0Address;
+
+        private readonly HintQuestCumulative _killsQuest = new HintQuestCumulative
+        {
+            Name = "Kills",
+            GoalValue = 450,
+            Description = "Kill enemies in story mode or survival to progress"
+        };
+
+        private IntPtr _threadstack0Address;
+
         public OneFingerDeathPunchConnector()
         {
             quests.Add(_killsQuest);
@@ -42,19 +48,16 @@ namespace HintMachine.Games
         public override bool Poll()
         {
             syncThreadStackAdr();
-            long killsAddress = _ram.ResolvePointerPath32(Thread0Address.ToInt32() - 0x8cc, new int[] { 0x644, 0x90 });
-            
-            uint kills = _ram.ReadUint32(killsAddress);
-            if (kills > _previousKills)
-                _killsQuest.Add(kills - _previousKills);
-            _previousKills = kills;
+
+            long killsAddress = _ram.ResolvePointerPath32(_threadstack0Address.ToInt32() - 0x8cc, new int[] { 0x644, 0x90 });
+            _killsQuest.UpdateValue(_ram.ReadUint32(killsAddress));
 
             return true;
         }
 
         private async void syncThreadStackAdr()
         {
-            Thread0Address = (IntPtr)await _ram.getThread0Address();
+            _threadstack0Address = (IntPtr)await _ram.getThread0Address();
         }
 
     }

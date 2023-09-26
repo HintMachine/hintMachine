@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static HintMachine.ProcessRamWatcher;
-
-namespace HintMachine.Games
+﻿namespace HintMachine.Games
 {
     class BustAMove4Connector : IGameConnector
     {
+        private readonly HintQuestCumulative _winQuest = new HintQuestCumulative
+        {
+            Name = "Wins",
+            GoalValue = 3
+        };
+
         private ProcessRamWatcher _ram = null;
-        private sbyte _previousWins = 0;
-        private readonly HintQuest _WinQuest = new HintQuest("Wins", 3);
-        private long baseAddr = 0;
-        private long winAddr = 0;
+        private long _winAddr = 0;
 
-
-        public BustAMove4Connector() {
-            quests.Add(_WinQuest);
+        public BustAMove4Connector()
+        {
+            quests.Add(_winQuest);
         }
 
         public override bool Connect()
@@ -26,7 +22,7 @@ namespace HintMachine.Games
             if (!_ram.TryConnect())
                 return false;
 
-            winAddr = _ram.baseAddress + 0x62634A;
+            _winAddr = _ram.baseAddress + 0x62634A;
             return true;
         }
 
@@ -48,13 +44,7 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            sbyte nbWins =_ram.ReadInt8(winAddr);
-            if (nbWins > _previousWins)
-            {
-                _WinQuest.Add(nbWins - _previousWins);
-            }
-            _previousWins = nbWins;
-            
+            _winQuest.UpdateValue(_ram.ReadInt8(_winAddr));
             return true;
         }
     }

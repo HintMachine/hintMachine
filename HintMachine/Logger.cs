@@ -37,6 +37,13 @@ namespace HintMachine
                 OnMessageLogged(message, logMessageType);
         }
 
+        public static void Debug(string message)
+        {
+#if DEBUG
+            Log(message, LogMessageType.RAW);
+#endif
+        }
+
         public static void Info(string message)
         {
             Log(message, LogMessageType.INFO);

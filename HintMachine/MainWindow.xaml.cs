@@ -131,7 +131,7 @@ namespace HintMachine
                 {
                     if (quest.CheckCompletion())
                     {
-                        for (int i = 0; i < quest.numberOfHintsGiven; i++)
+                        for (int i = 0; i < quest.AwardedHints ; i++)
                         {
                             _archipelagoSession.GetOneRandomHint(_game.GetDisplayName());
                         }
@@ -202,6 +202,7 @@ namespace HintMachine
                 labelGame.Text = "-";
             });
         }
+
         private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
         {
             DisconnectFromGame();
@@ -249,6 +250,7 @@ namespace HintMachine
             if (e.Key == Key.Return)
                 SendMessageToArchipelago();
         }
+
         private void OnSendButtonClick(object sender, RoutedEventArgs e)
         {
             SendMessageToArchipelago();
@@ -256,7 +258,6 @@ namespace HintMachine
 
         private void OnArchipelagoMessageReceived(LogMessage message)
         {
-            string str = "";
             LogMessageType type = LogMessageType.RAW;
             List<MessagePart> parts = Enumerable.ToList(message.Parts);
 
@@ -283,6 +284,7 @@ namespace HintMachine
             else if (message is GoalLogMessage)
                 type = LogMessageType.GOAL;
 
+            string str = "";
             foreach (var part in parts)
                 str += part.Text;
 

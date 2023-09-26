@@ -139,6 +139,8 @@
     <Compile Include="Games\GeometryWarsGalaxiesConnector.cs" />
     <Compile Include="Games\ZachtronicsSolitaireConnector.cs" />
     <Compile Include="Games\TetrisEffectConnector.cs" />
+    <Compile Include="HintQuestCounter.cs" />
+    <Compile Include="HintQuestCumulative.cs" />
     <Compile Include="HintQuest.cs" />
     <Compile Include="HintsView.xaml.cs">
       <DependentUpon>HintsView.xaml</DependentUpon>

@@ -2,9 +2,13 @@
 {
     public class XenotiltConnector : IGameConnector
     {
+        private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
+        {
+            Name = "Score",
+            GoalValue = 200000000,
+        };
+
         private ProcessRamWatcher _ram = null;
-        private long _previousScore = long.MaxValue;
-        private readonly HintQuest _scoreQuest = new HintQuest("Score", 200000000);
 
         public XenotiltConnector()
         {
@@ -36,11 +40,7 @@
         public override bool Poll()
         {
             long scoreAddress = _ram.ResolvePointerPath64(_ram.baseAddress + 0x7270B8, new int[] { 0x30, 0x7e0, 0x7C0 });
-            
-            long score = _ram.ReadInt64(scoreAddress);
-            if (score > _previousScore)
-                _scoreQuest.Add(score - _previousScore);
-            _previousScore = score;
+            _scoreQuest.UpdateValue(_ram.ReadInt64(scoreAddress));
 
             return true;
         }

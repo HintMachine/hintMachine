@@ -2,9 +2,13 @@
 {
     public class TetrisEffectConnector : IGameConnector
     {
+        private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
+        {
+            Name = "Score",
+            GoalValue = 20000,
+        };
+
         private ProcessRamWatcher _ram = null;
-        private uint _previousScore = uint.MaxValue;
-        private readonly HintQuest _scoreQuest = new HintQuest("Score", 20000);
 
         public TetrisEffectConnector()
         {
@@ -38,11 +42,9 @@
         {
             int[] OFFSETS = new int[] { 0x0, 0x20, 0x120, 0x0, 0x42C };
             long scoreAddress = _ram.ResolvePointerPath64(_ram.baseAddress + 0x4ED0440, OFFSETS);
-            
-            uint score = _ram.ReadUint32(scoreAddress);
-            if (score > _previousScore)
-                _scoreQuest.Add(score - _previousScore);
-            _previousScore = score;
+
+
+            _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress));
 
             return true;
         }

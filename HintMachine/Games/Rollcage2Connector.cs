@@ -1,25 +1,21 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HintMachine.Games
 {
     class Rollcage2Connector : IGameConnector
     {
-
-        private long baseAddr = 0;
         private ProcessRamWatcher _ram = null;
-        private uint _previousFirstPlace = 0;
         private long _placeAddr = 0;
         private long _lapsAddr = 0;
         bool isFirst = false;
-        Boolean raceStarted = false;
-        int laps = 0;
-        int place = 0;
-        private readonly HintQuest _firstPlacesQuest = new HintQuest("Finish first", 4);
+        bool raceStarted = false;
+
+        private readonly HintQuestCounter _firstPlacesQuest = new HintQuestCounter
+        {
+            Name = "Finish first",
+            GoalValue = 4
+        };
 
         public Rollcage2Connector()
         {
@@ -31,7 +27,6 @@ namespace HintMachine.Games
             _ram = new ProcessRamWatcher("EmuHawk");
             if (!_ram.TryConnect())
                 return false;
-            baseAddr = _ram.baseAddress;
             _placeAddr = 0x36F003A36A1;
             _lapsAddr =  0x36F003A36A0;
             return true;
@@ -64,7 +59,7 @@ namespace HintMachine.Games
             if (laps > 100 && raceStarted) {
                 
                 if (raceStarted && isFirst) {
-                    _firstPlacesQuest.Add(1);
+                    _firstPlacesQuest.CurrentValue += 1;
                 }
                 raceStarted = false;
             }

@@ -2,17 +2,24 @@
 {
     public class SonicBlueSpheresConnector : IMegadriveConnector
     {
-        private bool _canWin = true;
-        private readonly HintQuest _levelsQuest = new HintQuest("Completed Levels", 2);
+        private readonly HintQuestCounter _levelsQuest = new HintQuestCounter
+        {
+            Name = "Completed Levels",
+            GoalValue = 1,
+            TimeoutBetweenIncrements = 60,
+        };
+        private readonly HintQuestCumulative _ringsQuest = new HintQuestCumulative
+        {
+            Name = "Collected Rings",
+            GoalValue = 100,
+        };
 
-        private bool _canPerfect = true;
-        private ushort _previousCollectedRings = 0;
-        private readonly HintQuest _perfectsQuest = new HintQuest("Perfect Levels", 1);
+        private ushort _previousBlueSpheresWinAnimProgress = 0;
 
         public SonicBlueSpheresConnector() : base()
         {
             quests.Add(_levelsQuest);
-            quests.Add(_perfectsQuest);
+            quests.Add(_ringsQuest);
         }
 
         public override string GetDisplayName()
@@ -51,33 +58,12 @@
         public override bool Poll()
         {
             ushort blueSpheresWinAnimProgress = _ram.ReadUint16(_megadriveRamBaseAddr + 0xE44A);
-            if (blueSpheresWinAnimProgress > 0 && _canWin)
-            {
-                _levelsQuest.Add(1);
-                _canWin = false; // We got our win once, no need to trigger it again
-            }
-            else
-            {
-                ushort remainingBlueSpheres = _ram.ReadUint16(_megadriveRamBaseAddr + 0xE438);
-                if (remainingBlueSpheres > 0)
-                    _canWin = true; // There are blue spheres, that means we are playing and can win again
-            }
+            if (blueSpheresWinAnimProgress > 0 && _previousBlueSpheresWinAnimProgress == 0)
+                _levelsQuest.CurrentValue += 1;
+            _previousBlueSpheresWinAnimProgress = blueSpheresWinAnimProgress;
 
             ushort collectedRings = _ram.ReadUint16(_megadriveRamBaseAddr + 0xE43A);
-            if(collectedRings > _previousCollectedRings)
-            {
-                ushort remainingRings = _ram.ReadUint16(_megadriveRamBaseAddr + 0xE442);
-                if (remainingRings == 0 && _canPerfect)
-                {
-                    _perfectsQuest.Add(1);
-                    _canPerfect = false; // We got our perfect once, no need to trigger it again
-                }
-                else if (remainingRings > 0)
-                {
-                    _canPerfect = true; // There are rings, that means we are playing in a level where we can perfect again
-                }
-            }
-            _previousCollectedRings = collectedRings;
+            _ringsQuest.UpdateValue(collectedRings);
 
             return true;
         }

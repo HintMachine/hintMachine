@@ -1,18 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace HintMachine.Games
 {
     public class NuclearThroneConnector : IGameConnector
     {
+        private readonly HintQuestCounter _killThroneQuest = new HintQuestCounter
+        {
+            Name = "Wins",
+            Description = "Sit on the Nuclear Throne and wait for the credits to end",
+            AwardedHints = 2
+        };
+
         private ProcessRamWatcher _ram = null;
-        private double _previousHealth = 0;
-        private double _previousLevel = 0;
-        private bool rewardedLvMax = false;
-        private readonly HintQuest _killThroneQuest = new HintQuest("Sit on the Nuclear Throne \n and wait for the credits end", 1, "objective", 2);
         private IntPtr Thread0Address;
+        private uint _previousWinValue = 0;
+
         public NuclearThroneConnector()
         {
             quests.Add(_killThroneQuest);
@@ -25,8 +27,8 @@ namespace HintMachine.Games
 
         public override string GetDescription()
         {
-            return "Kill your way to the Nuclear Throne \n" +
-                "NuclearThroneTogether mod is required \n";
+            return "Kill your way to the Nuclear Throne\n\n" +
+                   "NuclearThroneTogether mod is required.\n";
         }
 
         public override bool Poll()
@@ -37,27 +39,18 @@ namespace HintMachine.Games
             try
             {
                 long throneAliveAddress = _ram.ResolvePointerPath32(Thread0Address.ToInt32() - 0x638, OFFSETS);
-                if (throneAliveAddress != 0)
-                {
-                    uint winValue = _ram.ReadUint32(throneAliveAddress);
-                    if (winValue == 542461785)
-                    {
-                        if (!_killThroneQuest.hasBeenAwarded)
-                        {
-                            _killThroneQuest.Add(1);
-                        }
-                    }
-                    else
-                    {
-                        _killThroneQuest.SetValue(0);
-                    }
-                }
+                if (throneAliveAddress == 0)
+                    return true;
+                
+                uint winValue = _ram.ReadUint32(throneAliveAddress);
+                if (winValue == 542461785 && _previousWinValue != winValue)
+                    _killThroneQuest.CurrentValue += 1;
+                _previousWinValue = winValue;
             }
             catch {}
             return true;
             
         }
-
 
         private async void syncThreadStackAdr()
         {
