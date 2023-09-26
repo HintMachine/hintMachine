@@ -12,23 +12,25 @@ namespace HintMachine.Games
         };
 
         private ProcessRamWatcher _ram = null;
-        private IntPtr Thread0Address;
+        private IntPtr _threadstack0Addr;
         private uint _previousWinValue = 0;
 
         public NuclearThroneConnector()
         {
-            quests.Add(_killThroneQuest);
+            Name = "Nuclear Throne";
+            Description = "Kill your way to the Nuclear Throne\n\n" +
+                          "NuclearThroneTogether mod is required.";
+            Quests.Add(_killThroneQuest);
+        }
+        public override bool Connect()
+        {
+            _ram = new ProcessRamWatcher("nuclearthronetogether");
+            return _ram.TryConnect();
         }
 
-        public override string GetDisplayName()
+        public override void Disconnect()
         {
-            return "Nuclear Throne";
-        }
-
-        public override string GetDescription()
-        {
-            return "Kill your way to the Nuclear Throne\n\n" +
-                   "NuclearThroneTogether mod is required.\n";
+            _ram = null;
         }
 
         public override bool Poll()
@@ -38,7 +40,7 @@ namespace HintMachine.Games
             int[] OFFSETS = new int[] { 0xA0, 0x60C, 0x104, 0x714, 0x0 };
             try
             {
-                long throneAliveAddress = _ram.ResolvePointerPath32(Thread0Address.ToInt32() - 0x638, OFFSETS);
+                long throneAliveAddress = _ram.ResolvePointerPath32(_threadstack0Addr.ToInt32() - 0x638, OFFSETS);
                 if (throneAliveAddress == 0)
                     return true;
                 
@@ -54,18 +56,7 @@ namespace HintMachine.Games
 
         private async void syncThreadStackAdr()
         {
-            Thread0Address = (IntPtr)await _ram.getThread0Address();
-        }
-
-        public override bool Connect()
-        {
-            _ram = new ProcessRamWatcher("nuclearthronetogether");
-            return _ram.TryConnect();
-        }
-
-        public override void Disconnect()
-        {
-            _ram = null;
+            _threadstack0Addr = (IntPtr)await _ram.getThread0Address();
         }
     }
 }

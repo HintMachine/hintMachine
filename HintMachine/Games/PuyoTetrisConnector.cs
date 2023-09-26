@@ -54,22 +54,14 @@ namespace HintMachine.Games
 
         public PuyoTetrisConnector()
         {
-            quests = new List<HintQuest>() {
+            Name = "Puyo Puyo Tetris";
+            Description = "Puyo Puyo Tetris combines two legendary stacking games in ones, as its name suggests. " +
+                          "Pop puyos and clear lines with style to earn as many hints as possible.\n\n" +
+                          "Tested on up-to-date Steam version.";
+            Quests = new List<HintQuest>() {
                 _linesQuest, _tetrisesQuest, _tspinsQuest, _combosQuest, _perfectClearsQuest,
                 _poppedPuyosQuest, _chainsQuest, _allClearsQuest
             };
-        }
-
-        public override string GetDisplayName()
-        {
-            return "Puyo Puyo Tetris";
-        }
-
-        public override string GetDescription()
-        {
-            return "Puyo Puyo Tetris combines two legendary stacking games in ones, as its name suggests. " +
-                   "Pop puyos and clear lines with style to earn as many hints as possible.\n\n" +
-                   "Tested on up-to-date Steam version.";
         }
 
         public override bool Connect()

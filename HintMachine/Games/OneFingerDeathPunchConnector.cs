@@ -4,8 +4,6 @@ namespace HintMachine.Games
 {
     public class OneFingerDeathPunchConnector : IGameConnector
     {
-        private ProcessRamWatcher _ram = null;
-
         private readonly HintQuestCumulative _killsQuest = new HintQuestCumulative
         {
             Name = "Kills",
@@ -13,22 +11,15 @@ namespace HintMachine.Games
             Description = "Kill enemies in story mode or survival to progress"
         };
 
+        private ProcessRamWatcher _ram = null;
         private IntPtr _threadstack0Address;
 
         public OneFingerDeathPunchConnector()
         {
-            quests.Add(_killsQuest);
-        }
-
-        public override string GetDisplayName()
-        {
-            return "One Finger Death Punch";
-        }
-        
-        public override string GetDescription()
-        {
-            return "Fight using only your left and right mouse button. Your cursor can be anywhere on the screen.\n\n" +
-                   "Tested on up-to-date Steam version";
+            Name = "One Finger Death Punch";
+            Description = "Fight using only your left and right mouse button. Your cursor can be anywhere on the screen.\n\n" +
+                          "Tested on up-to-date Steam version";
+            Quests.Add(_killsQuest);
         }
 
         public override bool Connect()

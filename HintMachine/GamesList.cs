@@ -24,7 +24,7 @@ namespace HintMachine
         public static IGameConnector FindGameFromName(string name)
         {
             foreach (IGameConnector game in GAMES)
-                if (game.GetDisplayName() == name)
+                if (game.Name == name)
                     return game;
 
             return null;

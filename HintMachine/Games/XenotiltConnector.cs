@@ -12,18 +12,10 @@
 
         public XenotiltConnector()
         {
-            quests.Add(_scoreQuest);
-        }
-
-        public override string GetDisplayName()
-        {
-            return "Xenotilt";
-        }
-        
-        public override string GetDescription()
-        {
-            return "In this three parts pinball table, you will have to complete missions to earn a lot of points." +
-                "Tested on the .282 version";
+            Name = "Xenotilt";
+            Description = "In this three parts pinball table, you will have to complete missions to earn a lot of points.\n\n" +
+                          "Tested on the .282 version";
+            Quests.Add(_scoreQuest);
         }
 
         public override bool Connect()

@@ -12,18 +12,10 @@
 
         public GeometryWarsConnector()
         {
-            quests.Add(_scoreQuest);
-        }
-
-        public override string GetDisplayName()
-        {
-            return "Geometry Wars: Retro Evolved";
-        }
-        
-        public override string GetDescription()
-        {
-            return "Kill geometric ennemies in this box shaped area twin stick shooter.\n\n" +
-                   "Tested on up-to-date Steam version.";
+            Name = "Geometry Wars: Retro Evolved";
+            Description = "Kill geometric ennemies in this box shaped area twin stick shooter.\n\n" +
+                          "Tested on up-to-date Steam version.";
+            Quests.Add(_scoreQuest);
         }
 
         public override bool Connect()

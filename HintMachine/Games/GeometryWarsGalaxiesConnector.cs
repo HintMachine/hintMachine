@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using static HintMachine.ProcessRamWatcher;
 
 namespace HintMachine.Games
@@ -21,18 +19,10 @@ namespace HintMachine.Games
 
         public GeometryWarsGalaxiesConnector()
         {
-            quests.Add(_geomsQuest);
-        }
-
-        public override string GetDisplayName()
-        {
-            return "Geometry Wars Galaxies (Wii)";
-        }
-
-        public override string GetDescription()
-        {
-            return "Destroy geometric enemies in this classic and stylish twin-stick shooter in order to earn geoms and unlock hints.\n\n" +
-                   "Tested on European ROM on all recent versions of Dolphin 5 (64-bit).";
+            Name = "Geometry Wars Galaxies (Wii)";
+            Description = "Destroy geometric enemies in this classic and stylish twin-stick shooter in order to earn geoms and unlock hints.\n\n" +
+                          "Tested on European ROM on all recent versions of Dolphin 5 (64-bit).";
+            Quests.Add(_geomsQuest);
         }
 
         public override bool Connect()

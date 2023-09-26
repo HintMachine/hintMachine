@@ -29,12 +29,12 @@ namespace HintMachine
             labelHost.Text = _archipelagoSession.host;
 
             // Populate game selector combobox with supported game names
-            GamesList.GAMES.Sort((a, b) => a.GetDisplayName().CompareTo(b.GetDisplayName()));
+            GamesList.GAMES.Sort((a, b) => a.Name.CompareTo(b.Name));
             foreach (IGameConnector connector in GamesList.GAMES)
             {
-                gameComboBox.Items.Add(connector.GetDisplayName());
+                gameComboBox.Items.Add(connector.Name);
 
-                if (connector.GetDisplayName() == Settings.Game)
+                if (connector.Name == Settings.Game)
                     gameComboBox.SelectedItem = gameComboBox.Items[gameComboBox.Items.Count - 1];
             }
 
@@ -120,20 +120,20 @@ namespace HintMachine
 
             if (!pollSuccessful && _game != null)
             {
-                Logger.Error("Connection with " + _game.GetDisplayName() + " was lost.");
+                Logger.Error("Connection with " + _game.Name + " was lost.");
                 DisconnectFromGame();
                 return;
             }
             if (_game != null)
             {
                 // Update hint quests
-                foreach (HintQuest quest in _game.quests)
+                foreach (HintQuest quest in _game.Quests)
                 {
                     if (quest.CheckCompletion())
                     {
                         for (int i = 0; i < quest.AwardedHints ; i++)
                         {
-                            _archipelagoSession.GetOneRandomHint(_game.GetDisplayName());
+                            _archipelagoSession.GetOneRandomHint(_game.Name);
                         }
                     }
 
@@ -154,11 +154,11 @@ namespace HintMachine
             if (game.Connect())
             {
                 _game = game;
-                Title = WINDOW_TITLE + " - " + _game.GetDisplayName();
-                labelGame.Text = _game.GetDisplayName();
+                Title = WINDOW_TITLE + " - " + _game.Name;
+                labelGame.Text = _game.Name;
 
                 // Init game quests
-                foreach (HintQuest quest in _game.quests)
+                foreach (HintQuest quest in _game.Quests)
                 {
                     quest.InitComponents(questsGrid);
                     quest.UpdateComponents();
@@ -172,11 +172,11 @@ namespace HintMachine
                 Settings.Game = selectedGameName;
                 Settings.SaveToFile();
 
-                Logger.Info("✔️ Successfully connected to " + game.GetDisplayName() + ". ");
+                Logger.Info("✔️ Successfully connected to " + game.Name + ". ");
             }
             else
             {
-                Logger.Error("Could not connect to " + game.GetDisplayName() + ". " +
+                Logger.Error("Could not connect to " + game.Name + ". " +
                              "Please ensure it is currently running and try again.");
             }
         }
@@ -228,7 +228,7 @@ namespace HintMachine
             string selectedGameName = gameComboBox.SelectedValue.ToString();
             IGameConnector game = GamesList.FindGameFromName(selectedGameName);
 
-            textblockGameDescription.Text = game.GetDescription();
+            textblockGameDescription.Text = game.Description;
 
             if (textblockGameDescription.Text.Length != 0)
                 textblockGameDescription.Visibility = Visibility.Visible;

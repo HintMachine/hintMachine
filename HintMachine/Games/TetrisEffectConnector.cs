@@ -12,19 +12,11 @@
 
         public TetrisEffectConnector()
         {
-            quests.Add(_scoreQuest);
-        }
-
-        public override string GetDisplayName()
-        {
-            return "Tetris Effect Connected";
-        }
-
-        public override string GetDescription()
-        {
-            return "Stack tetrominos and fill lines to clear them in the most visually " +
-                   "impressive implementation of Tetris ever made.\n\n" +
-                   "Tested on up-to-date Steam version.";
+            Name = "Tetris Effect Connected";
+            Description = "Stack tetrominos and fill lines to clear them in the most visually " +
+                          "impressive implementation of Tetris ever made.\n\n" +
+                          "Tested on up-to-date Steam version.";
+            Quests.Add(_scoreQuest);
         }
 
         public override bool Connect()
@@ -42,8 +34,6 @@
         {
             int[] OFFSETS = new int[] { 0x0, 0x20, 0x120, 0x0, 0x42C };
             long scoreAddress = _ram.ResolvePointerPath64(_ram.baseAddress + 0x4ED0440, OFFSETS);
-
-
             _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress));
 
             return true;

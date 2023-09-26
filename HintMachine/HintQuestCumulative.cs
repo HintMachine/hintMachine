@@ -8,6 +8,11 @@
             DESCENDING
         }
 
+        /// <summary>
+        /// The direction of the tracking.
+        /// If ASCENDING, value increments will be tracked and added to the quest progress.
+        /// If DESCENDING, value decrements will be tracked instead.
+        /// </summary>
         public CumulativeDirection Direction { get; set; } = CumulativeDirection.ASCENDING;
 
         private long _lastMemoryReading = long.MaxValue;

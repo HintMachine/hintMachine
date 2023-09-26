@@ -13,12 +13,17 @@ namespace HintMachine.Games
             Description = "Fortune's Foundation wins are worth double"
         };
 
-        FileSystemWatcher _watcher = null;
+        private FileSystemWatcher _watcher = null;
         private bool _readSaveFileOnNextTick = false;
 
         public ZachtronicsSolitaireConnector()
         {
-            quests.Add(_winsQuest);
+            Name = "Zachtronics Solitaire Collection";
+            Description = "Play 8 different variants of Solitaire in this collection of games " +
+                          "initially created as mini-games for Zachtronics main titles.\n\n" +
+                          "Tested on GOG version, might work with other versions of the game.";
+
+            Quests.Add(_winsQuest);
         }
 
         public override bool Connect()
@@ -48,17 +53,6 @@ namespace HintMachine.Games
         {
             _watcher.EnableRaisingEvents = false;
             _watcher = null; 
-        }
-
-        public override string GetDisplayName()
-        {
-            return "Zachtronics Solitaire Collection";
-        }
-        public override string GetDescription()
-        {
-            return "Play 8 different variants of Solitaire in this collection of games " +
-                   "initially created as mini-games for Zachtronics main titles.\n\n" +
-                   "Tested on GOG version, might work with other versions of the game.";
         }
 
         public override bool Poll()

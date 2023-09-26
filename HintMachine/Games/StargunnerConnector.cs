@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HintMachine.Games
+﻿namespace HintMachine.Games
 {
     class StargunnerConnector : IGameConnector
     {
@@ -26,8 +24,11 @@ namespace HintMachine.Games
 
         public StargunnerConnector()
         {
-            quests.Add(_scoreQuest);
-            quests.Add(_creditsQuest);
+            Name = "Stargunner";
+            Description = "Blast your enemies with a huge variety of wepons in this side-scrolling shooter.\n\n" +
+                          "Tested on up-to-date GOG version.";
+            Quests.Add(_scoreQuest);
+            Quests.Add(_creditsQuest);
         }
 
         public override bool Connect()
@@ -47,17 +48,6 @@ namespace HintMachine.Games
         public override void Disconnect()
         {
             _ram = null;
-        }
-
-        public override string GetDescription()
-        {
-            return "Blast your enemies with a huge variety of wepons in this side-scrolling shooter." +
-                   "Tested on up-to-date GOG version.";
-        }
-
-        public override string GetDisplayName()
-        {
-            return "Stargunner (GOG)";
         }
 
         public override bool Poll()

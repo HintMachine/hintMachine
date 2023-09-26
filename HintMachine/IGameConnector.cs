@@ -4,17 +4,20 @@ namespace HintMachine
 {
     public abstract class IGameConnector
     {
-        public List<HintQuest> quests = new List<HintQuest>();
+        /// <summary>
+        /// Display name for this game used in the various UI components
+        /// </summary>
+        public string Name { get; protected set; } = "Unnamed Game";
 
         /// <summary>
-        /// Abstract function meant to return the display name for this game used in the various UI components
+        /// Brief description for the game used in the various UI components
         /// </summary>
-        public abstract string GetDisplayName();
+        public string Description { get; protected set; } = "";
 
         /// <summary>
-        /// Abstract function meant to return a brief description for the game used in the various UI components
+        /// List of quests available for this game
         /// </summary>
-        public virtual string GetDescription() { return ""; }
+        public List<HintQuest> Quests { get; protected set; } = new List<HintQuest>();
 
         /// <summary>
         /// Abstract function meant to handle the connection to the related game process / files

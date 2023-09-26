@@ -13,7 +13,10 @@
 
         public BustAMove4Connector()
         {
-            quests.Add(_winQuest);
+            Name = "Bust a Move 4 (PS1)";
+            Description = "Match 3 gems of the same color and flood your opponent with combos.\n\n" +
+                          "Tested on European ROM on ePSXe 1.7.0.";
+            Quests.Add(_winQuest);
         }
 
         public override bool Connect()
@@ -29,17 +32,6 @@
         public override void Disconnect()
         {
             _ram = null;
-        }
-
-        public override string GetDescription()
-        {
-            return "Match 3 gems of the same color and flood your opponent with combos.\n\n" +
-                   "Tested on European ROM on ePSXe 1.7.0.";
-        }
-
-        public override string GetDisplayName()
-        {
-            return "Bust a Move 4 (PS1)";
         }
 
         public override bool Poll()

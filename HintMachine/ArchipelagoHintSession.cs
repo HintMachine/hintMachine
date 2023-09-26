@@ -102,7 +102,7 @@ namespace HintMachine
             int index = rnd.Next(missingLocations.Count);
             long hintedLocationId = _session.Locations.AllMissingLocations[index];
             
-            SendMessage("I just found a hint using HintMachine while playing " + gameName + "!");
+            SendMessage("I just got a hint using HintMachine while playing " + gameName + "!");
             _session.Socket.SendPacket(new LocationScoutsPacket {
                 Locations = new long[] { hintedLocationId },
                 CreateAsHint = true
