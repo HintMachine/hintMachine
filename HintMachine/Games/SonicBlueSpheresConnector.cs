@@ -5,13 +5,13 @@
         private readonly HintQuestCounter _levelsQuest = new HintQuestCounter
         {
             Name = "Completed Levels",
-            GoalValue = 1,
+            GoalValue = 2,
             TimeoutBetweenIncrements = 60,
         };
         private readonly HintQuestCumulative _ringsQuest = new HintQuestCumulative
         {
             Name = "Collected Rings",
-            GoalValue = 100,
+            GoalValue = 200,
         };
 
         private ushort _previousBlueSpheresWinAnimProgress = 0;
