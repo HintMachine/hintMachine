@@ -29,7 +29,7 @@ namespace HintMachine
                 if (hint.Found)
                     continue;
                 // Filter out non-progression items if related checkbox is checked
-                if (checkboxProgression.IsChecked ?? true && !hint.ItemFlags.HasFlag(ItemFlags.Advancement))
+                if ((CheckboxProgression.IsChecked ?? true) && (!hint.ItemFlags.HasFlag(ItemFlags.Advancement)))
                     continue;
 
                 filteredHints.Add(hint);
@@ -37,7 +37,7 @@ namespace HintMachine
 
             Dispatcher.Invoke(() =>
             {
-                hintsList.ItemsSource = filteredHints;
+                ListViewHints.ItemsSource = filteredHints;
 
                 // Adjust all columns' size to fit their contents, as if the column header was double-clicked
                 foreach (GridViewColumn c in grid.Columns)
@@ -58,7 +58,7 @@ namespace HintMachine
             string sortBy = column.Tag.ToString();
 
             ListSortDirection direction = ListSortDirection.Ascending;
-            foreach (SortDescription desc in hintsList.Items.SortDescriptions)
+            foreach (SortDescription desc in ListViewHints.Items.SortDescriptions)
             {
                 if (desc.PropertyName == sortBy)
                 {
@@ -69,13 +69,13 @@ namespace HintMachine
                 }
             }
 
-            hintsList.Items.SortDescriptions.Clear();
-            hintsList.Items.SortDescriptions.Add(new SortDescription(sortBy, direction));
+            ListViewHints.Items.SortDescriptions.Clear();
+            ListViewHints.Items.SortDescriptions.Add(new SortDescription(sortBy, direction));
         }
 
         private void OnCheckboxProgressionChecked(object sender, RoutedEventArgs e)
         {
-            if (hintsList != null && _fullHintsList != null)
+            if (ListViewHints != null && _fullHintsList != null)
                 UpdateItems(_fullHintsList);
         }
     }

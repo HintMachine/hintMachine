@@ -6,9 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
-        <CheckBox Name="checkboxProgression" Content="Only show hints for progression items" IsChecked="True" DockPanel.Dock="Bottom" 
+        <CheckBox Name="CheckboxProgression" Content="Only show hints for progression items" IsChecked="True" DockPanel.Dock="Bottom" 
                     Margin="0,6,0,0" Checked="OnCheckboxProgressionChecked" Unchecked="OnCheckboxProgressionChecked"/>
-        <ListView Name="hintsList" DockPanel.Dock="Top">
+        <ListView Name="ListViewHints" DockPanel.Dock="Top">
             <ListView.View>
                 <GridView x:Name="grid">
                     <GridViewColumn DisplayMemberBinding="{Binding Path=ReceivingPlayerName}">
