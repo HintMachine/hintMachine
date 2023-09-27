@@ -17,29 +17,28 @@ namespace HintMachine
             public TextBox TextBox { get; set; } = null;
         }
 
-        private readonly int MAX_DISPLAYED_MESSAGES = 100;
+        // ----------------------------------------------------------------------------------
 
+        private const int MAX_DISPLAYED_MESSAGES = 100;
         private List<Message> _messages = new List<Message>();
+
+        // ----------------------------------------------------------------------------------
 
         public MessageLog()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Add the given message to the message log widget.
+        /// <param name="message">the text contents of the message</param>
+        /// <param name="logMessageType">the type of the message, which will influence its color and its decoration</param>
+        /// </summary>
         public void AddMessage(string message, LogMessageType logMessageType)
         {
             // If view was already at the bottom before adding the element, auto-scroll to prevent the user from
             // having to scroll manually each time there are new messages
-            bool scrollToBottom = (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight);
-
-            int rowID = grid.RowDefinitions.Count;
-            RowDefinition rowDef = new RowDefinition();
-            rowDef.Height = GridLength.Auto;
-            grid.RowDefinitions.Add(rowDef);
-
-            Color textColor = GetColorForMessageType(logMessageType);
-            Color backgroundColor = textColor;
-            backgroundColor.A = 20;
+            bool scrollToBottom = (ScrollViewer.VerticalOffset == ScrollViewer.ScrollableHeight);
 
             // If there already are other messages and the last message has the same type, we can "merge"
             // this message with the previous one for performance reasons. We only do this for SERVER_RESPONSE
@@ -51,6 +50,15 @@ namespace HintMachine
             }
             else
             {
+                int rowID = GridMessages.RowDefinitions.Count;
+                RowDefinition rowDef = new RowDefinition();
+                rowDef.Height = GridLength.Auto;
+                GridMessages.RowDefinitions.Add(rowDef);
+
+                Color textColor = GetColorForMessageType(logMessageType);
+                Color backgroundColor = textColor;
+                backgroundColor.A = 20;
+
                 // Usual case: just add a new message
                 Message newMessage = new Message
                 {
@@ -60,7 +68,7 @@ namespace HintMachine
                         // Add a colored decoration rectangle to quickly see message type
                         VerticalAlignment = VerticalAlignment.Stretch,
                         Width = 5,
-                        Fill = new SolidColorBrush(GetColorForMessageType(logMessageType))
+                        Fill = new SolidColorBrush(textColor)
                     },
                     TextBox = new TextBox
                     {
@@ -83,21 +91,27 @@ namespace HintMachine
 
                 Grid.SetColumn(newMessage.Rectangle, 0);
                 Grid.SetRow(newMessage.Rectangle, rowID);
-                grid.Children.Add(newMessage.Rectangle);
+                GridMessages.Children.Add(newMessage.Rectangle);
 
                 Grid.SetColumn(newMessage.TextBox, 1);
                 Grid.SetRow(newMessage.TextBox, rowID);
-                grid.Children.Add(newMessage.TextBox);
+                GridMessages.Children.Add(newMessage.TextBox);
             }
     
             if (scrollToBottom)
-                scrollViewer.ScrollToBottom();
+                ScrollViewer.ScrollToBottom();
         }
 
+        /// <summary>
+        /// Update the visibility of every message inside the message log according to the current rules.
+        /// This takes chat filters and chat max size into account, filtering unwanted / old messages out.
+        /// This method should to be called whenever chat filters are changed or when a message is added to
+        /// potentially erase older messages.
+        /// </summary>
         public void UpdateMessagesVisibility()
         {
             // Store scroll distance to bottom to put it back after hiding / showing new messages
-            double distanceToBottom = scrollViewer.ScrollableHeight - scrollViewer.VerticalOffset;
+            double distanceToBottom = ScrollViewer.ScrollableHeight - ScrollViewer.VerticalOffset;
 
             // Hide all filtered messages
             foreach (Message message in _messages)
@@ -122,7 +136,7 @@ namespace HintMachine
 
             // Put back the same scroll distance as originally
             if (distanceToBottom > 0)
-                scrollViewer.ScrollToVerticalOffset(scrollViewer.ScrollableHeight - distanceToBottom);
+                ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ScrollableHeight - distanceToBottom);
         }
 
         public static Color GetColorForMessageType(LogMessageType logMessageType)

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace HintMachine
 {
-    internal class Settings
+    public static class Settings
     {
         public static string Host = "archipelago.gg:12345";
         public static string Slot = "";
@@ -15,6 +15,11 @@ namespace HintMachine
         public static bool DisplayItemReceivedMessages = true;
         public static bool DisplayItemSentMessages = false;
 
+        // ----------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Save all user settings to a dedicated file alongside the application (named "settings.cfg")
+        /// </summary>
         public static void SaveToFile()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>() {
@@ -31,6 +36,9 @@ namespace HintMachine
             File.WriteAllLines("settings.cfg", dict.Select(x => x.Key + "=" + x.Value).ToArray());
         }
 
+        /// <summary>
+        /// Load all user settings from the dedicated file alongside the application (named "settings.cfg")
+        /// </summary>
         public static void LoadFromFile()
         {
             try

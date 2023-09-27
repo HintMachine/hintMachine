@@ -10,6 +10,8 @@ namespace HintMachine
     public partial class HintsView : UserControl
     {
         private List<HintDetails> _fullHintsList = null;
+        
+        // ----------------------------------------------------------------------------------
 
         public HintsView()
         {
@@ -21,29 +23,26 @@ namespace HintMachine
             _fullHintsList = knownHints;
 
             List<HintDetails> filteredHints = new List<HintDetails>();
+            foreach (HintDetails hint in knownHints)
+            {
+                // Filter out already found items
+                if (hint.Found)
+                    continue;
+                // Filter out non-progression items if related checkbox is checked
+                if (checkboxProgression.IsChecked ?? true && !hint.ItemFlags.HasFlag(ItemFlags.Advancement))
+                    continue;
+
+                filteredHints.Add(hint);
+            }
+
             Dispatcher.Invoke(() =>
             {
-                foreach (HintDetails hint in knownHints)
-                {
-                    // Filter out already found items
-                    if (hint.Found)
-                        continue;
-                    // Filter out non-progression items if related checkbox is checked
-                    if (checkboxProgression.IsChecked != null && checkboxProgression.IsChecked.Value && !hint.ItemFlags.HasFlag(ItemFlags.Advancement))
-                        continue;
-
-                    filteredHints.Add(hint);
-                }
-
-
                 hintsList.ItemsSource = filteredHints;
 
                 // Adjust all columns' size to fit their contents, as if the column header was double-clicked
                 foreach (GridViewColumn c in grid.Columns)
                 {
                     // Code below was found in GridViewColumnHeader.OnGripperDoubleClicked() event handler (using Reflector)
-                    // i.e. it is the same code that is executed when the gripper is double clicked
-                    // if (adjustAllColumns || App.StaticGabeLib.FieldDefsGrid[colNum].DispGrid)
                     if (double.IsNaN(c.Width))
                     {
                         c.Width = c.ActualWidth;

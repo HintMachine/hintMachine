@@ -16,6 +16,8 @@ namespace HintMachine
         private IGameConnector _game = null;
         private Timer _timer = null;
 
+        // ----------------------------------------------------------------------------------
+
         public MainWindow(ArchipelagoHintSession archipelagoSession)
         {
             InitializeComponent();
@@ -37,14 +39,14 @@ namespace HintMachine
 
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _timer = new Timer { AutoReset = true, Interval = 100 };
-            _timer.Elapsed += TimerElapsed;
+            _timer.Elapsed += OnTimerTick;
             _timer.AutoReset = true;
             _timer.Enabled = true;
 
         }
 
         /// <summary>
-        /// Populate game selector combobox with supported game names
+        /// Populate game selector combobox with all currently supported game names
         /// </summary>
         protected void PopulateGamesCombobox()
         {
@@ -105,7 +107,7 @@ namespace HintMachine
             Settings.SaveToFile();
         }
 
-        private void TimerElapsed(object sender, ElapsedEventArgs e)
+        private void OnTimerTick(object sender, ElapsedEventArgs e)
         {
             if (_game == null)
                 return;
@@ -170,9 +172,8 @@ namespace HintMachine
                 questsGrid.Visibility = Visibility.Visible;
                 buttonChangeGame.Visibility = Visibility.Visible;
 
-                // Store selected game in settings file to select it first on next execution
+                // Store last selected game in settings to automatically select it on next execution
                 Settings.Game = selectedGameName;
-                Settings.SaveToFile();
 
                 Logger.Info("✔️ Successfully connected to " + game.Name + ". ");
             }
@@ -312,6 +313,21 @@ namespace HintMachine
             }
         }
 
+        /// <summary>
+        /// A setup procedure called on init and whenever the "Hints" tab is opened by the user to
+        /// update the hints view and other elements contained in this tab.
+        /// </summary>
+        private void SetupHintsTab()
+        {
+            // Calculate the available hints
+            int remainingHints = _archipelagoSession.GetAvailableHintsWithHintPoints();
+            int checksBeforeHint = _archipelagoSession.GetCheckCountBeforeNextHint();
+            availableHintsLabel.Content = $"You have {remainingHints} remaining hints, you will get a new hint in {checksBeforeHint} checks.";
+
+            manualHintButton.IsEnabled = (remainingHints > 0);
+            hintsList.UpdateItems(_archipelagoSession.KnownHints);
+        }
+
         private void OnFilterChange(object sender, RoutedEventArgs e)
         {
             Settings.DisplayChatMessages = menuDisplayChatMessages.IsChecked;
@@ -330,22 +346,11 @@ namespace HintMachine
         private void OnAboutClick(object sender, RoutedEventArgs e)
         {
             Logger.Info("-----------------------------------------------\n"
-                      + Globals.ProgramName + " v" + Globals.ProgramVersion + "\n"
+                      + $"{Globals.ProgramName} v{Globals.ProgramVersion}\n"
                       + "Developed with ❤️ by Dinopony & CalDrac \n"
                       + "-----------------------------------------------");
+            // Force a switch to the message log tab to see the newly added message
             tabControl.SelectedIndex = 0;
-        }
-
-        private void SetupHintsTab()
-        {
-            // Calculate the available hints
-            int remainingHints = _archipelagoSession.GetAvailableHintsWithHintPoints();
-            availableHintsLabel.Content = "You have " + remainingHints
-                                        + " remaining hints, you will get a new hint in " +
-                                        _archipelagoSession.GetCheckCountBeforeNextHint() + " checks.";
-
-            manualHintButton.IsEnabled = (remainingHints > 0);
-            hintsList.UpdateItems(_archipelagoSession.KnownHints);
         }
 
         private void OnTabChange(object sender, RoutedEventArgs e)
@@ -357,20 +362,22 @@ namespace HintMachine
         private void OnManualItemHint(string itemName)
         {
             _archipelagoSession.SendMessage("!hint " + itemName);
+            // Force a switch to the message log tab to see the response to the hint request
             tabControl.SelectedIndex = 0;
         }
 
         private void OnManualLocationHint(string locationName)
         {
             _archipelagoSession.SendMessage("!hint_location " + locationName);
+            // Force a switch to the message log tab to see the response to the hint request
             tabControl.SelectedIndex = 0;
         }
 
         private void OnManualHintButtonClick(object sender, RoutedEventArgs e)
         {
             ManualHintWindow window = new ManualHintWindow(_archipelagoSession);
-            window.LocationHintCallback = OnManualLocationHint;
-            window.ItemHintCallback = OnManualItemHint;
+            window.HintLocationCallback = OnManualLocationHint;
+            window.HintItemCallback = OnManualItemHint;
             window.ShowDialog();
         }
 

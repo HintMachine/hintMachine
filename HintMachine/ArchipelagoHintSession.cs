@@ -56,6 +56,8 @@ namespace HintMachine
         /// </summary>
         public event HintsUpdateHandler OnHintsUpdate;
 
+        // ----------------------------------------------------------------------------------
+
         public ArchipelagoHintSession(string host, string slot, string password)
         {
             Host = host;

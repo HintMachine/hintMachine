@@ -18,32 +18,33 @@ namespace HintMachine
             InitializeComponent();
 
             Settings.LoadFromFile();
-            inputHost.Text = Settings.Host;
-            inputSlot.Text = Settings.Slot;
+            InputHost.Text = Settings.Host;
+            InputSlot.Text = Settings.Slot;
         }
 
         private void OnConnectButtonClick(object sender, RoutedEventArgs e)
         {
             // Try connecting to Archipelago
-            string host = inputHost.Text;
-            string slot = inputSlot.Text;
-            string password = inputPassword.Text;
+            string host = InputHost.Text;
+            string slot = InputSlot.Text;
+            string password = InputPassword.Text;
 
             ArchipelagoHintSession archipelagoSession = new ArchipelagoHintSession(host, slot, password);
-            if (!archipelagoSession.IsConnected)
+            if (archipelagoSession.IsConnected)
             {
-                MessageBox.Show("Could not connect to Archipelago: " + archipelagoSession.ErrorMessage, "Connection error",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            
-            // If connectionn succeeded, store the fields contents for next execution and move on to MainWindow
-            Settings.Host = host;
-            Settings.Slot = slot;
-            Settings.SaveToFile();
+                // If connectionn succeeded, store the fields contents for next execution and move on to MainWindow
+                Settings.Host = host;
+                Settings.Slot = slot;
+                Settings.SaveToFile();
 
-            new MainWindow(archipelagoSession).Show();
-            Close();
+                new MainWindow(archipelagoSession).Show();
+                Close();
+            }
+            else
+            {
+                MessageBox.Show($"Could not connect to Archipelago: {archipelagoSession.ErrorMessage}", "Connection error",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

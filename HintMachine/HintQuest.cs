@@ -21,6 +21,8 @@ namespace HintMachine
         /// </summary>
         public int AwardedHints { get; set; } = 1;
 
+        // ----------------------------------------------------------------------------------
+
         public HintQuest()
         {}
 

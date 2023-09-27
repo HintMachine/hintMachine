@@ -13,7 +13,6 @@ namespace HintMachine
         /// </summary>
         public long GoalValue { get; set; } = 1;
 
-        
         /// <summary>
         /// The current value reflecting current quest progression
         /// </summary>
@@ -54,6 +53,8 @@ namespace HintMachine
         private ProgressBar _progressBar = null;
         private TextBlock _progressBarOverlayText = null;
 
+        // ----------------------------------------------------------------------------------
+
         public HintQuestCounter()
         {}
  
@@ -69,20 +70,6 @@ namespace HintMachine
 
             CurrentValue -= GoalValue;
             return true;
-
-            /*
-            if (CurrentValue == GoalValue && Type == QuestType.OBJECTIVE)
-            {
-                if (HasBeenAwarded)
-                {
-                    return false;
-                }
-                else
-                {
-                    HasBeenAwarded = true;
-                    return true;
-                }
-            }*/
         }
 
         public override void InitComponents(Grid questsGrid)
@@ -126,14 +113,13 @@ namespace HintMachine
                 Minimum = 0,
                 Maximum = GoalValue,
             };
-            _progressBarOverlayText = new TextBlock()
+            _progressBarOverlayText = new TextBlock
             {
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
             };
 
-            Grid progressBarGrid = new Grid();
-            progressBarGrid.Margin = new Thickness(0, 0, 0, 4);
+            Grid progressBarGrid = new Grid { Margin = new Thickness(0, 0, 0, 4) };
             progressBarGrid.Children.Add(_progressBar);
             progressBarGrid.Children.Add(_progressBarOverlayText);
             Grid.SetColumn(progressBarGrid, 2);

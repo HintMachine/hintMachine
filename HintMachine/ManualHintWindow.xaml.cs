@@ -20,54 +20,53 @@ namespace HintMachine
     /// </summary>
     public partial class ManualHintWindow : Window
     {
-        public delegate void ActionManualLocationHint(string locationName);
-        public delegate void ActionManualItemHint(string itemName);
+        public Action<String> HintLocationCallback { get; set; }
+        public Action<String> HintItemCallback { get; set; }
 
-        public ActionManualLocationHint LocationHintCallback { get; set; }
-        public ActionManualItemHint ItemHintCallback { get; set; }
+        // ----------------------------------------------------------------------------------
 
         public ManualHintWindow(ArchipelagoHintSession archipelago)
         {
             InitializeComponent();
 
             foreach (string itemName in archipelago.GetItemNames())
-                hintItemCombobox.Items.Add(itemName);
+                ComboboxHintedItem.Items.Add(itemName);
             foreach (string locName in archipelago.GetMissingLocationNames())
-                hintLocationCombobox.Items.Add(locName);
+                ComboboxHintedLocation.Items.Add(locName);
 
-            radioItem.IsChecked = true;
+            RadioHintItem.IsChecked = true;
 
-            if (hintLocationCombobox.Items.Count > 0)
-                hintLocationCombobox.SelectedItem = hintLocationCombobox.Items[0];
+            if (ComboboxHintedLocation.Items.Count > 0)
+                ComboboxHintedLocation.SelectedItem = ComboboxHintedLocation.Items[0];
             else
             {
-                radioLocation.IsEnabled = false;
-                hintLocationCombobox.IsEnabled = false;
-                radioItem.IsChecked = true;
+                RadioHintLocation.IsEnabled = false;
+                ComboboxHintedLocation.IsEnabled = false;
+                RadioHintItem.IsChecked = true;
             }
 
-            if (hintItemCombobox.Items.Count > 0)
-                hintItemCombobox.SelectedItem = hintItemCombobox.Items[0];
+            if (ComboboxHintedItem.Items.Count > 0)
+                ComboboxHintedItem.SelectedItem = ComboboxHintedItem.Items[0];
             else
             {
-                radioItem.IsEnabled = false;
-                hintItemCombobox.IsEnabled = false;
-                radioLocation.IsChecked = true;
+                RadioHintItem.IsEnabled = false;
+                ComboboxHintedItem.IsEnabled = false;
+                RadioHintLocation.IsChecked = true;
             }
 
-            if (!radioItem.IsEnabled && !radioLocation.IsEnabled)
+            if (!RadioHintItem.IsEnabled && !RadioHintLocation.IsEnabled)
                 Close();
         }
 
         private void OnValidateButtonClick(object sender, RoutedEventArgs e)
         {
-            if (radioItem.IsChecked == true && ItemHintCallback != null)
+            if (RadioHintItem.IsChecked == true)
             {
-                ItemHintCallback(hintItemCombobox.SelectedValue.ToString());
+                HintItemCallback?.Invoke(ComboboxHintedItem.SelectedValue.ToString());
             }
-            else if(radioLocation.IsChecked == true && LocationHintCallback != null)
+            else if(RadioHintLocation.IsChecked == true)
             {
-                LocationHintCallback(hintLocationCombobox.SelectedValue.ToString());
+                HintLocationCallback?.Invoke(ComboboxHintedLocation.SelectedValue.ToString());
             }
             Close();
         }
@@ -80,10 +79,10 @@ namespace HintMachine
         private void OnComboboxChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = e.Source as ComboBox;
-            if (comboBox == hintItemCombobox)
-                radioItem.IsChecked = true;
+            if (comboBox == ComboboxHintedItem)
+                RadioHintItem.IsChecked = true;
             else
-                radioLocation.IsChecked = true;
+                RadioHintLocation.IsChecked = true;
         }
     }
 }

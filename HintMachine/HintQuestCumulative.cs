@@ -17,6 +17,8 @@
 
         private long _lastMemoryReading = long.MaxValue;
 
+        // ----------------------------------------------------------------------------------
+
         public HintQuestCumulative()
         {}
 

@@ -17,11 +17,15 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <RadioButton Name="radioItem" GroupName="radio" Grid.Row="0" Grid.Column="0" Content="Hint an item:" VerticalAlignment="Center" Margin="0,0,0,10" />
-            <ComboBox x:Name="hintItemCombobox" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,10" SelectionChanged="OnComboboxChanged"/>
+            <RadioButton Name="RadioHintItem" GroupName="radio" Grid.Row="0" Grid.Column="0" Content="Hint an item:" 
+                        VerticalAlignment="Center" Margin="0,0,0,10" />
+            <ComboBox x:Name="ComboboxHintedItem" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,10" 
+                        SelectionChanged="OnComboboxChanged"/>
 
-            <RadioButton Name="radioLocation" GroupName="radio" Grid.Row="1" Grid.Column="0" Content="Hint a location:" VerticalAlignment="Center" />
-            <ComboBox x:Name="hintLocationCombobox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0" SelectionChanged="OnComboboxChanged"/>
+            <RadioButton Name="RadioHintLocation" GroupName="radio" Grid.Row="1" Grid.Column="0" Content="Hint a location:" 
+                        VerticalAlignment="Center" />
+            <ComboBox x:Name="ComboboxHintedLocation" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0" 
+                        SelectionChanged="OnComboboxChanged"/>
         </Grid>
 
         <DockPanel LastChildFill="False" Margin="0, 10, 0, 0">
