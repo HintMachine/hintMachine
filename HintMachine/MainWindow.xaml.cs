@@ -7,6 +7,11 @@ using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.MessageLog.Parts;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Windows.Media;
+using System.Media;
+using WMPLib;
 
 namespace HintMachine
 {
@@ -140,6 +145,11 @@ namespace HintMachine
                         {
                             _archipelagoSession.GetOneRandomHint(_game.Name);
                         }
+                        //play sound
+                        WindowsMediaPlayer wmp = new WindowsMediaPlayer();
+                        string exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                        wmp.URL = exePath + "\\Assets\\Notification.wav";
+                        wmp.controls.play();
                     }
 
                     Dispatcher.Invoke(() => { quest.UpdateComponents(); });
