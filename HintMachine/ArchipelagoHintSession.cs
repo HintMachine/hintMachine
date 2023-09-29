@@ -93,6 +93,8 @@ namespace HintMachine
                 return;
             }
 
+            Client.MessageLog.OnMessageReceived += OnArchipelagoMessageReceived;
+
             // Add a tracking event to detect further hints...
             Client.DataStorage.TrackHints(OnHintReceivedHandler, false);
             // ...and call that event a first time with all already obtained hints
@@ -170,7 +172,6 @@ namespace HintMachine
                 });
             }
 
-            Client.MessageLog.OnMessageReceived += OnArchipelagoMessageReceived;
             OnHintsUpdate?.Invoke(KnownHints);
         }
 
