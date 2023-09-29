@@ -13,8 +13,9 @@
         public GeometryWarsConnector()
         {
             Name = "Geometry Wars: Retro Evolved";
-            Description = "Kill geometric ennemies in this box shaped area twin stick shooter.\n\n" +
-                          "Tested on up-to-date Steam version.";
+            Description = "Kill geometric ennemies in this box shaped area twin stick shooter.";
+            SupportedVersions = "Tested on up-to-date Steam version.";
+
             Quests.Add(_scoreQuest);
         }
 

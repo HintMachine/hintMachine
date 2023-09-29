@@ -18,8 +18,9 @@
         public Rollcage2Connector()
         {
             Name = "Rollcage Stage 2 (PS1)";
-            Description = "Race on the floor, on the ceilling, blast your opponents with items and finish first.\n\n" +
-                          "Tested on BizHawk version 2.9.1 .";
+            Description = "Race on the floor, on the ceilling, blast your opponents with items and finish first.";
+            SupportedVersions = "Tested on BizHawk version 2.9.1.";
+
             Quests.Add(_firstPlacesQuest);
         }
 

@@ -18,8 +18,9 @@ namespace HintMachine.Games
         public NuclearThroneConnector()
         {
             Name = "Nuclear Throne";
-            Description = "Kill your way to the Nuclear Throne\n\n" +
-                          "NuclearThroneTogether mod is required.";
+            Description = "Kill your way to the Nuclear Throne";
+            SupportedVersions = "Requires NuclearThroneTogether mod.";
+
             Quests.Add(_killThroneQuest);
         }
         public override bool Connect()

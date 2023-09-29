@@ -17,8 +17,9 @@ namespace HintMachine.Games
         public OneFingerDeathPunchConnector()
         {
             Name = "One Finger Death Punch";
-            Description = "Fight using only your left and right mouse button. Your cursor can be anywhere on the screen.\n\n" +
-                          "Tested on up-to-date Steam version";
+            Description = "Fight using only your left and right mouse button. Your cursor can be anywhere on the screen.";
+            SupportedVersions = "Tested on up-to-date Steam version";
+
             Quests.Add(_killsQuest);
         }
 

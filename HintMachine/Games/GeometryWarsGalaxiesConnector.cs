@@ -20,8 +20,10 @@ namespace HintMachine.Games
         public GeometryWarsGalaxiesConnector()
         {
             Name = "Geometry Wars Galaxies (Wii)";
-            Description = "Destroy geometric enemies in this classic and stylish twin-stick shooter in order to earn geoms and unlock hints.\n\n" +
-                          "Tested on European ROM on all recent versions of Dolphin 5 (64-bit).";
+            Description = "Destroy geometric enemies in this classic and stylish twin-stick shooter " +
+                          "in order to earn geoms and unlock hints.";
+            SupportedVersions = "Tested on European ROM on all recent versions of Dolphin 5 (64-bit).";
+
             Quests.Add(_geomsQuest);
         }
 

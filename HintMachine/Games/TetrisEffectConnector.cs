@@ -14,8 +14,9 @@
         {
             Name = "Tetris Effect Connected";
             Description = "Stack tetrominos and fill lines to clear them in the most visually " +
-                          "impressive implementation of Tetris ever made.\n\n" +
-                          "Tested on up-to-date Steam version.";
+                          "impressive implementation of Tetris ever made.";
+            SupportedVersions = "Tested on up-to-date Steam version.";
+
             Quests.Add(_scoreQuest);
         }
 

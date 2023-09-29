@@ -13,8 +13,9 @@
         public XenotiltConnector()
         {
             Name = "Xenotilt";
-            Description = "In this three parts pinball table, you will have to complete missions to earn a lot of points.\n\n" +
-                          "Tested on the .282 version";
+            Description = "In this three parts pinball table, you will have to complete missions to earn a lot of points.";
+            SupportedVersions = "Tested on the .282 version";
+
             Quests.Add(_scoreQuest);
         }
 

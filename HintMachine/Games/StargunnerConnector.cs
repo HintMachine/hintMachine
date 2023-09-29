@@ -25,8 +25,9 @@
         public StargunnerConnector()
         {
             Name = "Stargunner";
-            Description = "Blast your enemies with a huge variety of wepons in this side-scrolling shooter.\n\n" +
-                          "Tested on up-to-date GOG version.";
+            Description = "Blast your enemies with a huge variety of wepons in this side-scrolling shooter.";
+            SupportedVersions = "Tested on up-to-date GOG version.";
+
             Quests.Add(_scoreQuest);
             Quests.Add(_creditsQuest);
         }

@@ -15,6 +15,11 @@ namespace HintMachine
         public string Description { get; protected set; } = "";
 
         /// <summary>
+        /// String detailing which versions of the game have been tested to work with this connector
+        /// </summary>
+        public string SupportedVersions { get; protected set; } = "";
+
+        /// <summary>
         /// List of quests available for this game
         /// </summary>
         public List<HintQuest> Quests { get; protected set; } = new List<HintQuest>();

@@ -22,9 +22,9 @@
             Description = "When you plugged the Sonic The Hedgehog cartridge into the Sonic & Knuckles cartridge " +
                           "using the wondrous Lock-On Technology™, it brought you to a secret standalone version " +
                           "of the \"Get Blue Spheres\" minigame from Sonic The Hedgehog 3.\n\n" +
-                          "Play an almost infinite stream of procedurally generated levels, collect all the Blue Spheres and get hints!\n\n" +
-                          "Emulator: Bizhawk (using default Genesis Plus GX core)\n" +
-                          "ROM: 'Sonic & Knuckles + Sonic the Hedgehog' or 'Blue Spheres Plus'";
+                          "Play an almost infinite stream of procedurally generated levels, collect all the Blue Spheres and get hints!";
+            SupportedVersions = "Emulator: Bizhawk (using default Genesis Plus GX core)\n" +
+                                "ROM: 'Sonic & Knuckles + Sonic the Hedgehog' or 'Blue Spheres Plus'";
 
             Quests.Add(_levelsQuest);
             Quests.Add(_ringsQuest);

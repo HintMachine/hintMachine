@@ -9,8 +9,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Windows.Media;
-using System.Media;
 using WMPLib;
 
 namespace HintMachine
@@ -241,7 +239,7 @@ namespace HintMachine
             string selectedGameName = gameComboBox.SelectedValue.ToString();
             IGameConnector game = Globals.FindGameFromName(selectedGameName);
 
-            textblockGameDescription.Text = game.Description;
+            textblockGameDescription.Text = $"{game.Description}\n\n{game.SupportedVersions}";
 
             if (textblockGameDescription.Text.Length != 0)
                 textblockGameDescription.Visibility = Visibility.Visible;

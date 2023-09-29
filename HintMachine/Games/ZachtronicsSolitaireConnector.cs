@@ -20,8 +20,8 @@ namespace HintMachine.Games
         {
             Name = "Zachtronics Solitaire Collection";
             Description = "Play 8 different variants of Solitaire in this collection of games " +
-                          "initially created as mini-games for Zachtronics main titles.\n\n" +
-                          "Tested on GOG version, might work with other versions of the game.";
+                          "initially created as mini-games for Zachtronics main titles.";
+            SupportedVersions = "Tested on GOG version.";
 
             Quests.Add(_winsQuest);
         }
