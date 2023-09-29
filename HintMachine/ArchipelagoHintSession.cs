@@ -1,6 +1,8 @@
 ﻿using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
+using Archipelago.MultiClient.Net.MessageLog.Messages;
+using Archipelago.MultiClient.Net.MessageLog.Parts;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HintMachine.Games;
@@ -168,7 +170,43 @@ namespace HintMachine
                 });
             }
 
+            Client.MessageLog.OnMessageReceived += OnArchipelagoMessageReceived;
             OnHintsUpdate?.Invoke(KnownHints);
+        }
+
+        private void OnArchipelagoMessageReceived(LogMessage message)
+        {
+            LogMessageType type = LogMessageType.RAW;
+            List<MessagePart> parts = Enumerable.ToList(message.Parts);
+
+            if (message is JoinLogMessage || message is LeaveLogMessage)
+                type = LogMessageType.JOIN_LEAVE;
+            else if (message is HintItemSendLogMessage)
+            {
+                type = LogMessageType.HINT;
+                parts.RemoveAt(0); // Remove the [Hint] prefix
+            }
+            else if (message is ItemSendLogMessage)
+            {
+                if (((ItemSendLogMessage)message).Sender.Name == Slot)
+                    type = LogMessageType.ITEM_SENT;
+                else if (((ItemSendLogMessage)message).Receiver.Name == Slot)
+                    type = LogMessageType.ITEM_RECEIVED;
+                else
+                    return;
+            }
+            else if (message is ChatLogMessage || message is ServerChatLogMessage)
+                type = LogMessageType.CHAT;
+            else if (message is CommandResultLogMessage)
+                type = LogMessageType.SERVER_RESPONSE;
+            else if (message is GoalLogMessage)
+                type = LogMessageType.GOAL;
+
+            string str = "";
+            foreach (var part in parts)
+                str += part.Text;
+
+            Logger.Log(str, type);
         }
 
         public List<long> GetAlreadyHintedLocations()

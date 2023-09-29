@@ -3,9 +3,6 @@ using System.Timers;
 using System;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Archipelago.MultiClient.Net.MessageLog.Messages;
-using Archipelago.MultiClient.Net.MessageLog.Parts;
-using System.Linq;
 using System.Collections.Generic;
 using WMPLib;
 
@@ -25,8 +22,6 @@ namespace HintMachine
             InitializeComponent();
 
             _archipelagoSession = archipelagoSession;
-            _archipelagoSession.Client.MessageLog.OnMessageReceived += OnArchipelagoMessageReceived;
-            _archipelagoSession.OnHintsUpdate += HintsView.UpdateItems;
 
             LabelHost.Text = _archipelagoSession.Host;
 
@@ -61,7 +56,7 @@ namespace HintMachine
             {
                 gameComboBox.Items.Add(connector.Name);
 
-                if (connector.Name == Settings.Game)
+                if (connector.Name == Settings.LastConnectedGame)
                     gameComboBox.SelectedItem = gameComboBox.Items[gameComboBox.Items.Count - 1];
             }
 
@@ -71,6 +66,8 @@ namespace HintMachine
 
         protected void OnSlotConnected()
         {
+            _archipelagoSession.OnHintsUpdate += HintsView.UpdateItems;
+
             LabelSlot.Text = _archipelagoSession.Slot;
 
             SetupHintsTab();
@@ -180,7 +177,7 @@ namespace HintMachine
                 ButtonChangeGame.Visibility = Visibility.Visible;
 
                 // Store last selected game in settings to automatically select it on next execution
-                Settings.Game = selectedGameName;
+                Settings.LastConnectedGame = selectedGameName;
 
                 Logger.Info("✔️ Successfully connected to " + game.Name + ". ");
             }
@@ -264,41 +261,6 @@ namespace HintMachine
         private void OnSendButtonClick(object sender, RoutedEventArgs e)
         {
             SendMessageToArchipelago();
-        }
-
-        private void OnArchipelagoMessageReceived(LogMessage message)
-        {
-            LogMessageType type = LogMessageType.RAW;
-            List<MessagePart> parts = Enumerable.ToList(message.Parts);
-
-            if (message is JoinLogMessage || message is LeaveLogMessage)
-                type = LogMessageType.JOIN_LEAVE;
-            else if (message is HintItemSendLogMessage)
-            {
-                type = LogMessageType.HINT;
-                parts.RemoveAt(0); // Remove the [Hint] prefix
-            }
-            else if (message is ItemSendLogMessage)
-            {
-                if (((ItemSendLogMessage)message).Sender.Name == _archipelagoSession.Slot)
-                    type = LogMessageType.ITEM_SENT;
-                else if (((ItemSendLogMessage)message).Receiver.Name == _archipelagoSession.Slot)
-                    type = LogMessageType.ITEM_RECEIVED;
-                else
-                    return;
-            }
-            else if (message is ChatLogMessage || message is ServerChatLogMessage)
-                type = LogMessageType.CHAT;
-            else if (message is CommandResultLogMessage)
-                type = LogMessageType.SERVER_RESPONSE;
-            else if (message is GoalLogMessage)
-                type = LogMessageType.GOAL;
-
-            string str = "";
-            foreach (var part in parts)
-                str += part.Text;
-
-            Logger.Log(str, type);
         }
 
         private void SetupChatFilterMenus()

@@ -8,7 +8,7 @@ namespace HintMachine
     {
         public static string Host = "archipelago.gg:12345";
         public static string Slot = "";
-        public static string Game = "";
+        public static string LastConnectedGame = "";
         public static bool DisplayChatMessages = true;
         public static bool DisplayFoundHintMessages = false;
         public static bool DisplayJoinLeaveMessages = false;
@@ -26,7 +26,7 @@ namespace HintMachine
             Dictionary<string, string> dict = new Dictionary<string, string>() {
                 { "host",                           Host },
                 { "slot",                           Slot },
-                { "game",                           Game },
+                { "game",                           LastConnectedGame },
                 { "displayChatMessages",            DisplayChatMessages.ToString() },
                 { "displayFoundHintMessages",       DisplayFoundHintMessages.ToString() },
                 { "displayJoinLeaveMessages",       DisplayJoinLeaveMessages.ToString() },
@@ -57,7 +57,7 @@ namespace HintMachine
                     else if (line.StartsWith("slot"))
                         Slot = value;
                     else if (line.StartsWith("game"))
-                        Game = value;
+                        LastConnectedGame = value;
                     else if (line.StartsWith("displayChatMessages"))
                         DisplayChatMessages = bool.Parse(value);
                     else if (line.StartsWith("displayFoundHintMessages"))
