@@ -205,6 +205,8 @@ namespace HintMachine
                 type = LogMessageType.SERVER_RESPONSE;
             else if (message is GoalLogMessage)
                 type = LogMessageType.GOAL;
+            else if (message is TutorialLogMessage)
+                return;
 
             string str = "";
             foreach (var part in parts)

@@ -190,7 +190,7 @@ namespace HintMachine
             else if (logMessageType == LogMessageType.JOIN_LEAVE)
                 return "👋 ";
             else if (logMessageType == LogMessageType.SERVER_RESPONSE)
-                return "   ➤ ";
+                return "    ";
 
             return "";
         }

@@ -31,17 +31,17 @@ namespace HintMachine
             SetupChatFilterMenus();
             PopulateGamesCombobox();
 
-            _archipelagoSession = archipelagoSession;
-            OnArchipelagoSessionChange();
-
             // Setup the message log by connecting it to the global Logger
-            Logger.OnMessageLogged += (string message, LogMessageType logMessageType) => 
+            Logger.OnMessageLogged += (string message, LogMessageType logMessageType) =>
             {
                 Dispatcher.Invoke(() =>
                 {
                     MessageLog.AddMessage(message, logMessageType);
                 });
             };
+
+            _archipelagoSession = archipelagoSession;
+            OnArchipelagoSessionChange();
 
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _pollTickTimer = new Timer {
@@ -347,10 +347,10 @@ namespace HintMachine
 
         private void OnAboutClick(object sender, RoutedEventArgs e)
         {
-            Logger.Info("-----------------------------------------------\n"
-                      + $"{Globals.ProgramName} v{Globals.ProgramVersion}\n"
-                      + "Developed with ❤️ by Dinopony & CalDrac \n"
-                      + "-----------------------------------------------");
+            Logger.Info("--------------------------------------------------------------------\n"
+                      + $"                               {Globals.ProgramName} v{Globals.ProgramVersion}\n"
+                      + "           Developed with ❤️ by Dinopony & CalDrac \n"
+                      + "--------------------------------------------------------------------");
             TabControl.SelectedIndex = TAB_MESSAGE_LOG;
         }
 
