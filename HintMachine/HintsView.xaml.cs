@@ -10,7 +10,7 @@ namespace HintMachine
     public partial class HintsView : UserControl
     {
         private List<HintDetails> _fullHintsList = null;
-        
+
         // ----------------------------------------------------------------------------------
 
         public HintsView()
@@ -23,20 +23,21 @@ namespace HintMachine
             _fullHintsList = knownHints;
 
             List<HintDetails> filteredHints = new List<HintDetails>();
-            foreach (HintDetails hint in knownHints)
-            {
-                // Filter out already found items
-                if (hint.Found)
-                    continue;
-                // Filter out non-progression items if related checkbox is checked
-                if ((CheckboxProgression.IsChecked ?? true) && (!hint.ItemFlags.HasFlag(ItemFlags.Advancement)))
-                    continue;
-
-                filteredHints.Add(hint);
-            }
-
             Dispatcher.Invoke(() =>
             {
+                foreach (HintDetails hint in knownHints)
+                {
+                    // Filter out already found items
+                    if (hint.Found)
+                        continue;
+                    // Filter out non-progression items if related checkbox is checked
+                    if ((CheckboxProgression.IsChecked ?? true) && (!hint.ItemFlags.HasFlag(ItemFlags.Advancement)))
+                        continue;
+
+                    filteredHints.Add(hint);
+                }
+
+
                 ListViewHints.ItemsSource = filteredHints;
 
                 // Adjust all columns' size to fit their contents, as if the column header was double-clicked
