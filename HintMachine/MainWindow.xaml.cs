@@ -82,7 +82,7 @@ namespace HintMachine
                 if (playerName == "Server")
                     continue;
 
-                MenuItem subItem = new MenuItem { Header = playerName };
+                MenuItem subItem = new MenuItem { Header = playerName.Replace("_", "__") };
 
                 if (playerName != _archipelagoSession.Slot)
                     subItem.Click += (s, e) => { OnReconnectAsPlayerClick(playerName); };

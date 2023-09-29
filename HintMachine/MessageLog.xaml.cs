@@ -58,7 +58,7 @@ namespace HintMachine
                 Color textColor = GetColorForMessageType(logMessageType);
                 Color backgroundColor = textColor;
                 backgroundColor.A = 20;
-
+              
                 // Usual case: just add a new message
                 Message newMessage = new Message
                 {
@@ -85,6 +85,12 @@ namespace HintMachine
                         
                     }
                 };
+
+                if (logMessageType == LogMessageType.HINT && !Settings.DisplayFoundHintMessages && message.EndsWith("(found)"))
+                {
+                    newMessage.Rectangle.Opacity = 0.6;
+                    newMessage.TextBox.Opacity = 0.6;
+                }
 
                 _messages.Add(newMessage);
                 UpdateMessagesVisibility();

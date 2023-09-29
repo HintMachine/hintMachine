@@ -10,7 +10,7 @@ namespace HintMachine
         public static string Slot = "";
         public static string LastConnectedGame = "";
         public static bool DisplayChatMessages = true;
-        public static bool DisplayFoundHintMessages = false;
+        public static bool DisplayFoundHintMessages = true;
         public static bool DisplayJoinLeaveMessages = false;
         public static bool DisplayItemReceivedMessages = true;
         public static bool DisplayItemSentMessages = false;

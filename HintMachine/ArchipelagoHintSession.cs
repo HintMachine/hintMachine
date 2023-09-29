@@ -112,6 +112,8 @@ namespace HintMachine
             foreach (long id in Client.Locations.AllMissingLocations)
                 if(!alreadyHintedLocations.Contains(id))
                     returned.Add(Client.Locations.GetLocationNameFromId(id));
+
+            returned.Sort();
             return returned;
         }
 
@@ -190,11 +192,11 @@ namespace HintMachine
                 type = LogMessageType.HINT;
                 parts.RemoveAt(0); // Remove the [Hint] prefix
             }
-            else if (message is ItemSendLogMessage)
+            else if (message is ItemSendLogMessage itemMessage)
             {
-                if (((ItemSendLogMessage)message).Sender.Name == Slot)
+                if (itemMessage.Sender.Name == Slot)
                     type = LogMessageType.ITEM_SENT;
-                else if (((ItemSendLogMessage)message).Receiver.Name == Slot)
+                else if (itemMessage.Receiver.Name == Slot)
                     type = LogMessageType.ITEM_RECEIVED;
                 else
                     return;
