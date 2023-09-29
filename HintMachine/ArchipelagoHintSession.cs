@@ -98,7 +98,10 @@ namespace HintMachine
             // Add a tracking event to detect further hints...
             Client.DataStorage.TrackHints(OnHintReceivedHandler, false);
             // ...and call that event a first time with all already obtained hints
-            OnHintReceivedHandler(Client.DataStorage.GetHints());
+            Client.DataStorage[$"_read_hints_{Client.ConnectionInfo.Team}_{Client.ConnectionInfo.Slot}"].GetAsync<Hint[]>().ContinueWith(x => 
+            {
+                OnHintReceivedHandler(x.Result);
+            });
         }
 
         public List<string> GetMissingLocationNames()
