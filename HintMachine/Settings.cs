@@ -14,6 +14,7 @@ namespace HintMachine
         public static bool DisplayJoinLeaveMessages = false;
         public static bool DisplayItemReceivedMessages = true;
         public static bool DisplayItemSentMessages = false;
+        public static bool PlaySoundOnHint = true;
 
         // ----------------------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ namespace HintMachine
                 { "displayJoinLeaveMessages",       DisplayJoinLeaveMessages.ToString() },
                 { "displayItemReceivedMessages",    DisplayItemReceivedMessages.ToString() },
                 { "displayItemSentMessages",        DisplayItemSentMessages.ToString() },
-
+                { "playSoundOnHint",                PlaySoundOnHint.ToString() },
             };
             File.WriteAllLines("settings.cfg", dict.Select(x => x.Key + "=" + x.Value).ToArray());
         }
@@ -67,6 +68,8 @@ namespace HintMachine
                         DisplayItemReceivedMessages = bool.Parse(value);
                     else if (line.StartsWith("displayItemSentMessages"))
                         DisplayItemSentMessages = bool.Parse(value);
+                    else if (line.StartsWith("playSoundOnHint"))
+                        PlaySoundOnHint = bool.Parse(value);
                 }
             }
             catch { }

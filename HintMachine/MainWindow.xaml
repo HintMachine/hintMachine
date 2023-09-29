@@ -15,12 +15,15 @@
                 <Separator />
                 <MenuItem Header="_Exit" Click="OnExitMenuClick"/>
             </MenuItem>
-            <MenuItem Header="Chat filters">
-                <MenuItem Name="menuDisplayChatMessages" Header="Chat messages" IsCheckable="True" />
-                <MenuItem Name="menuDisplayFoundHints" Header="Hints on found items" IsCheckable="True" />
-                <MenuItem Name="menuDisplayJoinLeaveMessages" Header="Join / leave notifications" IsCheckable="True" />
-                <MenuItem Name="menuDisplaySentItems" Header="Sent items notifications" IsCheckable="True" />
-                <MenuItem Name="menuDisplayReceivedItems" Header="Received items notifications" IsCheckable="True" />
+            <MenuItem Header="Settings">
+                <MenuItem Name="menuSoundNotification" Header="Play a sound when earning a hint" IsCheckable="True" />
+                <MenuItem Header="Chat filters">
+                    <MenuItem Name="menuDisplayChatMessages" Header="Chat messages" IsCheckable="True" />
+                    <MenuItem Name="menuDisplayFoundHints" Header="Hints on found items" IsCheckable="True" />
+                    <MenuItem Name="menuDisplayJoinLeaveMessages" Header="Join / leave notifications" IsCheckable="True" />
+                    <MenuItem Name="menuDisplaySentItems" Header="Sent items notifications" IsCheckable="True" />
+                    <MenuItem Name="menuDisplayReceivedItems" Header="Received items notifications" IsCheckable="True" />
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="?">
                 <MenuItem Header="_About HintMachine" Click="OnAboutClick" />

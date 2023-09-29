@@ -7,8 +7,6 @@ using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.MessageLog.Parts;
 using System.Linq;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using WMPLib;
 
 namespace HintMachine
@@ -18,6 +16,7 @@ namespace HintMachine
         private ArchipelagoHintSession _archipelagoSession = null;
         private IGameConnector _game = null;
         private Timer _timer = null;
+        private WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
 
         // ----------------------------------------------------------------------------------
 
@@ -46,6 +45,10 @@ namespace HintMachine
             _timer.AutoReset = true;
             _timer.Enabled = true;
 
+            // Setup the sound player that is used to play a notification sound when getting a hint
+            _soundPlayer.settings.autoStart = false;
+            _soundPlayer.URL = Globals.NotificationSoundPath;
+            _soundPlayer.settings.volume = 30;
         }
 
         /// <summary>
@@ -125,13 +128,13 @@ namespace HintMachine
             {
                 Console.WriteLine(ex.StackTrace);
             }
-
             if (!pollSuccessful && _game != null)
             {
                 Logger.Error("Connection with " + _game.Name + " was lost.");
                 DisconnectFromGame();
                 return;
             }
+
             if (_game != null)
             {
                 // Update hint quests
@@ -139,15 +142,11 @@ namespace HintMachine
                 {
                     if (quest.CheckCompletion())
                     {
-                        for (int i = 0; i < quest.AwardedHints ; i++)
-                        {
+                        if (Settings.PlaySoundOnHint)
+                            _soundPlayer.controls.play();
+
+                        for (int i = 0; i < quest.AwardedHints; i++)
                             _archipelagoSession.GetOneRandomHint(_game.Name);
-                        }
-                        //play sound
-                        WindowsMediaPlayer wmp = new WindowsMediaPlayer();
-                        string exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                        wmp.URL = exePath + "\\Assets\\Notification.wav";
-                        wmp.controls.play();
                     }
 
                     Dispatcher.Invoke(() => { quest.UpdateComponents(); });
@@ -311,13 +310,14 @@ namespace HintMachine
                 { menuDisplayJoinLeaveMessages, Settings.DisplayJoinLeaveMessages },
                 { menuDisplayReceivedItems, Settings.DisplayItemReceivedMessages },
                 { menuDisplaySentItems, Settings.DisplayItemSentMessages },
+                { menuSoundNotification, Settings.PlaySoundOnHint },
             };
 
             foreach (var kv in MENU_ITEMS)
             {
                 kv.Key.IsChecked = kv.Value;
-                kv.Key.Checked += OnFilterChange;
-                kv.Key.Unchecked += OnFilterChange;
+                kv.Key.Checked += OnSettingChange;
+                kv.Key.Unchecked += OnSettingChange;
             }
         }
 
@@ -336,13 +336,14 @@ namespace HintMachine
             hintsList.UpdateItems(_archipelagoSession.KnownHints);
         }
 
-        private void OnFilterChange(object sender, RoutedEventArgs e)
+        private void OnSettingChange(object sender, RoutedEventArgs e)
         {
             Settings.DisplayChatMessages = menuDisplayChatMessages.IsChecked;
             Settings.DisplayFoundHintMessages = menuDisplayFoundHints.IsChecked;
             Settings.DisplayJoinLeaveMessages = menuDisplayJoinLeaveMessages.IsChecked;
             Settings.DisplayItemReceivedMessages = menuDisplayReceivedItems.IsChecked;
             Settings.DisplayItemSentMessages = menuDisplaySentItems.IsChecked;
+            Settings.PlaySoundOnHint = menuSoundNotification.IsChecked;
             messageLog.UpdateMessagesVisibility();
         }
 

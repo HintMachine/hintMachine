@@ -1,6 +1,8 @@
 ﻿
 using HintMachine.Games;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace HintMachine
 {
@@ -9,7 +11,10 @@ namespace HintMachine
         public const string ProgramName = "HintMachine";
         public const string ProgramVersion = "1.0";
 
-        public static List<IGameConnector> Games = new List<IGameConnector>()
+        public static readonly string NotificationSoundPath = 
+            $@"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\Assets\Notification.wav";
+
+        public static readonly List<IGameConnector> Games = new List<IGameConnector>()
         {
             new XenotiltConnector(),
             new OneFingerDeathPunchConnector(),
