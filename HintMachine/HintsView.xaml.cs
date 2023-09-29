@@ -23,34 +23,31 @@ namespace HintMachine
             _fullHintsList = knownHints;
 
             List<HintDetails> filteredHints = new List<HintDetails>();
-            Dispatcher.Invoke(() =>
+            
+            foreach (HintDetails hint in knownHints)
             {
-                foreach (HintDetails hint in knownHints)
+                // Filter out already found items
+                if (hint.Found)
+                    continue;
+                // Filter out non-progression items if related checkbox is checked
+                if ((CheckboxProgression.IsChecked ?? true) && (!hint.ItemFlags.HasFlag(ItemFlags.Advancement)))
+                    continue;
+
+                filteredHints.Add(hint);
+            }
+
+            ListViewHints.ItemsSource = filteredHints;
+
+            // Adjust all columns' size to fit their contents, as if the column header was double-clicked
+            foreach (GridViewColumn c in grid.Columns)
+            {
+                // Code below was found in GridViewColumnHeader.OnGripperDoubleClicked() event handler (using Reflector)
+                if (double.IsNaN(c.Width))
                 {
-                    // Filter out already found items
-                    if (hint.Found)
-                        continue;
-                    // Filter out non-progression items if related checkbox is checked
-                    if ((CheckboxProgression.IsChecked ?? true) && (!hint.ItemFlags.HasFlag(ItemFlags.Advancement)))
-                        continue;
-
-                    filteredHints.Add(hint);
+                    c.Width = c.ActualWidth;
                 }
-
-
-                ListViewHints.ItemsSource = filteredHints;
-
-                // Adjust all columns' size to fit their contents, as if the column header was double-clicked
-                foreach (GridViewColumn c in grid.Columns)
-                {
-                    // Code below was found in GridViewColumnHeader.OnGripperDoubleClicked() event handler (using Reflector)
-                    if (double.IsNaN(c.Width))
-                    {
-                        c.Width = c.ActualWidth;
-                    }
-                    c.Width = double.NaN;
-                }
-            });
+                c.Width = double.NaN;
+            }
         }
 
         private void OnHintsListColumnClick(object sender, RoutedEventArgs e)

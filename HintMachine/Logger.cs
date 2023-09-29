@@ -21,21 +21,20 @@ namespace HintMachine
     {
         public delegate void OnMessageLoggedCallback(string message, LogMessageType type);
 
-        public static OnMessageLoggedCallback OnMessageLogged = null;
+        public static event OnMessageLoggedCallback OnMessageLogged;
 
         public static void Log(string message, LogMessageType logMessageType = LogMessageType.RAW)
         {
             Console.WriteLine(message);
-
-            if(OnMessageLogged != null)
-                OnMessageLogged(message, logMessageType);
+            OnMessageLogged?.Invoke(message, logMessageType);
         }
 
         public static void Debug(string message)
         {
-#if DEBUG
-            Log(message, LogMessageType.RAW);
-#endif
+            // Only has an effect in debug builds
+            #if DEBUG
+                Log(message, LogMessageType.RAW);
+            #endif
         }
 
         public static void Info(string message)
@@ -52,12 +51,5 @@ namespace HintMachine
         {
             Log(message, LogMessageType.ERROR);
         }
-
-        public static void Hint(string message)
-        {
-            Log(message, LogMessageType.HINT);
-        }
     }
-
-
 }

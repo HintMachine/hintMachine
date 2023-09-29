@@ -5,14 +5,22 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections.Generic;
 using WMPLib;
+using HintMachine.Games;
+using System.Linq;
 
 namespace HintMachine
 {
     public partial class MainWindow : Window
     {
+        public const int TAB_MESSAGE_LOG = 0;
+        public const int TAB_HINTS = 1;
+
         private ArchipelagoHintSession _archipelagoSession = null;
+      
         private IGameConnector _game = null;
-        private readonly Timer _timer = null;
+        private readonly object _gameLock = new object();
+        private readonly Timer _pollTickTimer = null;
+
         private readonly WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
 
         // ----------------------------------------------------------------------------------
@@ -20,30 +28,36 @@ namespace HintMachine
         public MainWindow(ArchipelagoHintSession archipelagoSession)
         {
             InitializeComponent();
-
-            _archipelagoSession = archipelagoSession;
-
-            LabelHost.Text = _archipelagoSession.Host;
-
-            // Setup the message log by connecting it to the global Logger
             SetupChatFilterMenus();
-            Logger.OnMessageLogged = OnMessageLogged;
-            OnSlotConnected();
-            Logger.Info("Feeling stuck in your Archipelago world?\n" +
-                        "Connect to a game and start playing to get random hints instead of eating good old Burger King.");
-
             PopulateGamesCombobox();
 
+            _archipelagoSession = archipelagoSession;
+            OnArchipelagoSessionChange();
+
+            // Setup the message log by connecting it to the global Logger
+            Logger.OnMessageLogged += (string message, LogMessageType logMessageType) => 
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    MessageLog.AddMessage(message, logMessageType);
+                });
+            };
+
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
-            _timer = new Timer { AutoReset = true, Interval = 100 };
-            _timer.Elapsed += OnTimerTick;
-            _timer.AutoReset = true;
-            _timer.Enabled = true;
+            _pollTickTimer = new Timer {
+                AutoReset = true,
+                Interval = 100,
+                Enabled = true,
+            };
+            _pollTickTimer.Elapsed += OnTimerTick;
 
             // Setup the sound player that is used to play a notification sound when getting a hint
             _soundPlayer.settings.autoStart = false;
             _soundPlayer.URL = Globals.NotificationSoundPath;
             _soundPlayer.settings.volume = 30;
+
+            Logger.Info("Feeling stuck in your Archipelago world?\n" +
+                        "Connect to a game and start playing to get random hints instead of eating good old Burger King.");
         }
 
         /// <summary>
@@ -51,28 +65,17 @@ namespace HintMachine
         /// </summary>
         protected void PopulateGamesCombobox()
         {
-            Globals.Games.Sort((a, b) => a.Name.CompareTo(b.Name));
-            foreach (IGameConnector connector in Globals.Games)
-            {
-                gameComboBox.Items.Add(connector.Name);
+            ComboboxGame.Items.Clear();
+            foreach (string gameName in Globals.Games.OrderBy(g => g.Name).Select(g => g.Name))
+                ComboboxGame.Items.Add(gameName);
 
-                if (connector.Name == Settings.LastConnectedGame)
-                    gameComboBox.SelectedItem = gameComboBox.Items[gameComboBox.Items.Count - 1];
-            }
-
-            if (gameComboBox.SelectedItem == null)
-                gameComboBox.SelectedItem = gameComboBox.Items[0];
+            ComboboxGame.SelectedValue = Settings.LastConnectedGame;
+            if (ComboboxGame.SelectedItem == null)
+                ComboboxGame.SelectedItem = ComboboxGame.Items[0];
         }
 
-        protected void OnSlotConnected()
+        protected void PopulateReconnectAsMenu()
         {
-            _archipelagoSession.OnHintsUpdate += HintsView.UpdateItems;
-
-            LabelSlot.Text = _archipelagoSession.Slot;
-
-            SetupHintsTab();
-
-            // Setup "Reconnect as..." menu
             MenuReconnect.Items.Clear();
             foreach (string playerName in _archipelagoSession.GetPlayerNames())
             {
@@ -91,6 +94,26 @@ namespace HintMachine
 
                 MenuReconnect.Items.Add(subItem);
             }
+        }
+
+        protected void OnArchipelagoSessionChange()
+        {
+            _archipelagoSession.OnHintsUpdate += (List<HintDetails> knownHints) =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    if (TabControl.SelectedIndex == TAB_HINTS)
+                        HintsView.UpdateItems(knownHints);
+                });
+            };
+            
+            LabelHost.Text = _archipelagoSession.Host;
+            LabelSlot.Text = _archipelagoSession.Slot;
+            PopulateReconnectAsMenu();
+
+            // If the tab currently being open is the hints tab, refresh the hints view and the available hints count
+            if (TabControl.SelectedIndex == TAB_HINTS)
+                SetupHintsTab();
 
             Logger.Info("Connected to Archipelago session at " + _archipelagoSession.Host + " as " + _archipelagoSession.Slot + ".");
         }
@@ -99,10 +122,11 @@ namespace HintMachine
         {
             base.OnClosed(e);
 
-            if (_game != null)
-                _game.Disconnect();
-
-            _timer.Enabled = false;
+            lock (_gameLock)
+            {
+                _game?.Disconnect();
+                _pollTickTimer.Enabled = false;
+            }
 
             _archipelagoSession.Disconnect();
             _archipelagoSession = null;
@@ -112,102 +136,111 @@ namespace HintMachine
 
         private void OnTimerTick(object sender, ElapsedEventArgs e)
         {
-            if (_game == null)
-                return;
+            lock (_gameLock)
+            {
+                if (_game == null)
+                    return;
 
-            // Poll game connector, and cleanly close it if something wrong happens
-            bool pollSuccessful = false;
-            try
-            {
-                pollSuccessful = _game.Poll();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-            }
-            if (!pollSuccessful && _game != null)
-            {
-                Logger.Error("Connection with " + _game.Name + " was lost.");
-                DisconnectFromGame();
-                return;
-            }
-
-            if (_game != null)
-            {
-                // Update hint quests
-                foreach (HintQuest quest in _game.Quests)
+                // Poll game connector, and cleanly close it if something wrong happens
+                bool pollSuccessful = false;
+                try
                 {
-                    if (quest.CheckCompletion())
+                    pollSuccessful = _game.Poll();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                }
+                if (!pollSuccessful && _game != null)
+                {
+                    Logger.Error("Connection with " + _game.Name + " was lost.");
+                    DisconnectFromGame();
+                    return;
+                }
+
+                if (_game != null)
+                {
+                    // Update hint quests
+                    foreach (HintQuest quest in _game.Quests)
                     {
-                        if (Settings.PlaySoundOnHint)
-                            _soundPlayer.controls.play();
+                        if (quest.CheckCompletion())
+                        {
+                            if (Settings.PlaySoundOnHint)
+                                _soundPlayer.controls.play();
 
-                        for (int i = 0; i < quest.AwardedHints; i++)
-                            _archipelagoSession.GetOneRandomHint(_game.Name);
+                            for (int i = 0; i < quest.AwardedHints; i++)
+                                _archipelagoSession.GetOneRandomHint(_game.Name);
+                        }
+
+                        Dispatcher.Invoke(() => { quest.UpdateComponents(); });
                     }
-
-                    Dispatcher.Invoke(() => { quest.UpdateComponents(); });
                 }
             }
         }
 
         private void OnConnectToGameButtonClick(object sender, RoutedEventArgs e)
         {
-            if (_game != null)
-                return;
-
-            // Connect to selected game
-            string selectedGameName = gameComboBox.SelectedValue.ToString();
-            IGameConnector game = Globals.FindGameFromName(selectedGameName);
-            if (game.Connect())
+            lock (_gameLock)
             {
-                _game = game;
-                Title = Globals.ProgramName + " - " + _game.Name;
-                LabelGame.Text = _game.Name;
+                if (_game != null)
+                    return;
 
-                // Init game quests
-                foreach (HintQuest quest in _game.Quests)
+                // Connect to selected game
+                string selectedGameName = ComboboxGame.SelectedValue.ToString();
+                IGameConnector game = Globals.FindGameFromName(selectedGameName);
+                if (game.Connect())
                 {
-                    quest.InitComponents(GridQuests);
-                    quest.UpdateComponents();
+                    _game = game;
+                    Title = Globals.ProgramName + " - " + _game.Name;
+                    LabelGame.Text = _game.Name;
+
+                    // Init game quests
+                    foreach (HintQuest quest in _game.Quests)
+                    {
+                        quest.InitComponents(GridQuests);
+                        quest.UpdateComponents();
+                    }
+
+                    GridGameConnect.Visibility = Visibility.Hidden;
+                    GridQuests.Visibility = Visibility.Visible;
+                    ButtonChangeGame.Visibility = Visibility.Visible;
+
+                    // Store last selected game in settings to automatically select it on next execution
+                    Settings.LastConnectedGame = selectedGameName;
+
+                    Logger.Info("✔️ Successfully connected to " + game.Name + ". ");
                 }
-
-                GridGameConnect.Visibility = Visibility.Hidden;
-                GridQuests.Visibility = Visibility.Visible;
-                ButtonChangeGame.Visibility = Visibility.Visible;
-
-                // Store last selected game in settings to automatically select it on next execution
-                Settings.LastConnectedGame = selectedGameName;
-
-                Logger.Info("✔️ Successfully connected to " + game.Name + ". ");
-            }
-            else
-            {
-                Logger.Error("Could not connect to " + game.Name + ". " +
-                             "Please ensure it is currently running and try again.");
+                else
+                {
+                    Logger.Error("Could not connect to " + game.Name + ". " +
+                                 "Please ensure it is currently running and try again.");
+                }
             }
         }
 
         public void DisconnectFromGame()
         {
-            if (_game == null)
-                return;
-
-            _game.Disconnect();
-            _game = null;
-
-            Dispatcher.Invoke(() =>
+            lock (_gameLock)
             {
-                GridGameConnect.Visibility = Visibility.Visible;
-                GridQuests.Visibility = Visibility.Hidden;
-                ButtonChangeGame.Visibility = Visibility.Hidden;
+                if (_game == null)
+                    return;
 
-                GridQuests.Children.Clear();
-                GridQuests.RowDefinitions.Clear();
+                _game.Disconnect();
+                _game = null;
 
-                Title = Globals.ProgramName;
-                LabelGame.Text = "-";
-            });
+                Dispatcher.Invoke(() =>
+                {
+                    GridGameConnect.Visibility = Visibility.Visible;
+                    GridQuests.Visibility = Visibility.Hidden;
+                    ButtonChangeGame.Visibility = Visibility.Hidden;
+
+                    GridQuests.Children.Clear();
+                    GridQuests.RowDefinitions.Clear();
+
+                    Title = Globals.ProgramName;
+                    LabelGame.Text = "-";
+                });
+            }
         }
 
         private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
@@ -216,12 +249,9 @@ namespace HintMachine
             Logger.Info("Disconnected from game.");
         }
 
-        public void OnMessageLogged(string message, LogMessageType logMessageType)
+        public void OnMessageLogged()
         {
-            Dispatcher.Invoke(() =>
-            {
-                MessageLog.AddMessage(message, logMessageType);
-            });
+
         }
 
         private void OnArchipelagoDisconnectButtonClick(object sender, RoutedEventArgs e)
@@ -232,7 +262,7 @@ namespace HintMachine
 
         private void OnSelectedGameConnectorChange(object sender, SelectionChangedEventArgs e)
         {
-            string selectedGameName = gameComboBox.SelectedValue.ToString();
+            string selectedGameName = ComboboxGame.SelectedValue.ToString();
             IGameConnector game = Globals.FindGameFromName(selectedGameName);
 
             TextblockGameDescription.Text = $"{game.Description}\n\n{game.SupportedVersions}";
@@ -289,12 +319,13 @@ namespace HintMachine
         /// </summary>
         private void SetupHintsTab()
         {
-            // Calculate the available hints
+            // Calculate the available hints using hint points
             int remainingHints = _archipelagoSession.GetAvailableHintsWithHintPoints();
             int checksBeforeHint = _archipelagoSession.GetCheckCountBeforeNextHint();
+            ButtonManualHint.IsEnabled = (remainingHints > 0);
             LabelAvailableHints.Content = $"You have {remainingHints} remaining hints, you will get a new hint in {checksBeforeHint} checks.";
 
-            ButtonManualHint.IsEnabled = (remainingHints > 0);
+            // Update the hints list view
             HintsView.UpdateItems(_archipelagoSession.KnownHints);
         }
 
@@ -320,28 +351,24 @@ namespace HintMachine
                       + $"{Globals.ProgramName} v{Globals.ProgramVersion}\n"
                       + "Developed with ❤️ by Dinopony & CalDrac \n"
                       + "-----------------------------------------------");
-            // Force a switch to the message log tab to see the newly added message
-            TabControl.SelectedIndex = 0;
-        }
-
-        private void OnTabChange(object sender, RoutedEventArgs e)
-        {
-            if (e.Source is TabControl && TabControl.SelectedIndex == 1)
-                SetupHintsTab();
+            TabControl.SelectedIndex = TAB_MESSAGE_LOG;
         }
 
         private void OnManualItemHint(string itemName)
         {
             _archipelagoSession.SendMessage("!hint " + itemName);
-            // Force a switch to the message log tab to see the response to the hint request
-            TabControl.SelectedIndex = 0;
+            TabControl.SelectedIndex = TAB_MESSAGE_LOG;
         }
 
         private void OnManualLocationHint(string locationName)
         {
             _archipelagoSession.SendMessage("!hint_location " + locationName);
-            // Force a switch to the message log tab to see the response to the hint request
-            TabControl.SelectedIndex = 0;
+            TabControl.SelectedIndex = TAB_MESSAGE_LOG;
+        }
+        private void OnTabChange(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is TabControl && TabControl.SelectedIndex == TAB_HINTS)
+                SetupHintsTab();
         }
 
         private void OnManualHintButtonClick(object sender, RoutedEventArgs e)
@@ -369,7 +396,7 @@ namespace HintMachine
                 return;
             }
 
-            OnSlotConnected();
+            OnArchipelagoSessionChange();
         }
     }
 }

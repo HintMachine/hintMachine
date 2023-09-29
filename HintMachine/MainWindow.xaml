@@ -47,7 +47,7 @@
             <StackPanel Name="GridGameConnect" Margin="8,8,8,8" Visibility="Visible">
                 <DockPanel LastChildFill="True" Margin="0,0,0,8">
                     <Label Content="Game :" HorizontalAlignment="Left"/>
-                    <ComboBox x:Name="gameComboBox" Margin="8,0,0,0" HorizontalAlignment="Stretch" SelectionChanged="OnSelectedGameConnectorChange"/>
+                    <ComboBox x:Name="ComboboxGame" Margin="8,0,0,0" HorizontalAlignment="Stretch" SelectionChanged="OnSelectedGameConnectorChange"/>
                 </DockPanel>
 
                 <TextBlock Name="TextblockGameDescription" Padding="0,8,0,12" TextWrapping="Wrap" Visibility="Collapsed"></TextBlock>
