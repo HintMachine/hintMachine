@@ -234,8 +234,10 @@ namespace HintMachine
             IntPtr ptr = IntPtr.Zero;
             while (VirtualQueryEx(_processHandle, ptr, out info, (uint)mbiSize) == mbiSize)
             {
+                ptr = (IntPtr)(ptr.ToInt64() + (long)info.RegionSize);
+
                 // Check region type if it was specified
-                if(type != MemoryRegionType.MEM_UNDEFINED && type != info.Type)
+                if (type != MemoryRegionType.MEM_UNDEFINED && type != info.Type)
                     continue;
 
                 // Check region size if it was specified
@@ -248,8 +250,6 @@ namespace HintMachine
                     Size = (long)info.RegionSize,
                     Type = info.Type,
                 });
-
-                ptr = (IntPtr)(ptr.ToInt64() + (long)info.RegionSize);
             }
 
             return regions;
