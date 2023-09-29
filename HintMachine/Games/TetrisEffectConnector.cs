@@ -34,7 +34,8 @@
         {
             int[] OFFSETS = new int[] { 0x0, 0x20, 0x120, 0x0, 0x42C };
             long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x4ED0440, OFFSETS);
-            _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress));
+            if(scoreAddress != 0)
+                _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress));
 
             return true;
         }
