@@ -15,8 +15,8 @@ namespace HintMachine
     {
         private ArchipelagoHintSession _archipelagoSession = null;
         private IGameConnector _game = null;
-        private Timer _timer = null;
-        private WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
+        private readonly Timer _timer = null;
+        private readonly WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
 
         // ----------------------------------------------------------------------------------
 
@@ -26,9 +26,9 @@ namespace HintMachine
 
             _archipelagoSession = archipelagoSession;
             _archipelagoSession.Client.MessageLog.OnMessageReceived += OnArchipelagoMessageReceived;
-            _archipelagoSession.OnHintsUpdate += hintsList.UpdateItems;
+            _archipelagoSession.OnHintsUpdate += HintsView.UpdateItems;
 
-            labelHost.Text = _archipelagoSession.Host;
+            LabelHost.Text = _archipelagoSession.Host;
 
             // Setup the message log by connecting it to the global Logger
             SetupChatFilterMenus();
@@ -71,12 +71,12 @@ namespace HintMachine
 
         protected void OnSlotConnected()
         {
-            labelSlot.Text = _archipelagoSession.Slot;
+            LabelSlot.Text = _archipelagoSession.Slot;
 
             SetupHintsTab();
 
             // Setup "Reconnect as..." menu
-            menuReconnect.Items.Clear();
+            MenuReconnect.Items.Clear();
             foreach (string playerName in _archipelagoSession.GetPlayerNames())
             {
                 if (playerName == "Server")
@@ -92,7 +92,7 @@ namespace HintMachine
                     subItem.IsChecked = true;
                 }
 
-                menuReconnect.Items.Add(subItem);
+                MenuReconnect.Items.Add(subItem);
             }
 
             Logger.Info("Connected to Archipelago session at " + _archipelagoSession.Host + " as " + _archipelagoSession.Slot + ".");
@@ -166,18 +166,18 @@ namespace HintMachine
             {
                 _game = game;
                 Title = Globals.ProgramName + " - " + _game.Name;
-                labelGame.Text = _game.Name;
+                LabelGame.Text = _game.Name;
 
                 // Init game quests
                 foreach (HintQuest quest in _game.Quests)
                 {
-                    quest.InitComponents(questsGrid);
+                    quest.InitComponents(GridQuests);
                     quest.UpdateComponents();
                 }
 
-                gameConnectGrid.Visibility = Visibility.Hidden;
-                questsGrid.Visibility = Visibility.Visible;
-                buttonChangeGame.Visibility = Visibility.Visible;
+                GridGameConnect.Visibility = Visibility.Hidden;
+                GridQuests.Visibility = Visibility.Visible;
+                ButtonChangeGame.Visibility = Visibility.Visible;
 
                 // Store last selected game in settings to automatically select it on next execution
                 Settings.Game = selectedGameName;
@@ -201,15 +201,15 @@ namespace HintMachine
 
             Dispatcher.Invoke(() =>
             {
-                gameConnectGrid.Visibility = Visibility.Visible;
-                questsGrid.Visibility = Visibility.Hidden;
-                buttonChangeGame.Visibility = Visibility.Hidden;
+                GridGameConnect.Visibility = Visibility.Visible;
+                GridQuests.Visibility = Visibility.Hidden;
+                ButtonChangeGame.Visibility = Visibility.Hidden;
 
-                questsGrid.Children.Clear();
-                questsGrid.RowDefinitions.Clear();
+                GridQuests.Children.Clear();
+                GridQuests.RowDefinitions.Clear();
 
                 Title = Globals.ProgramName;
-                labelGame.Text = "-";
+                LabelGame.Text = "-";
             });
         }
 
@@ -223,7 +223,7 @@ namespace HintMachine
         {
             Dispatcher.Invoke(() =>
             {
-                messageLog.AddMessage(message, logMessageType);
+                MessageLog.AddMessage(message, logMessageType);
             });
         }
 
@@ -238,21 +238,21 @@ namespace HintMachine
             string selectedGameName = gameComboBox.SelectedValue.ToString();
             IGameConnector game = Globals.FindGameFromName(selectedGameName);
 
-            textblockGameDescription.Text = $"{game.Description}\n\n{game.SupportedVersions}";
+            TextblockGameDescription.Text = $"{game.Description}\n\n{game.SupportedVersions}";
 
-            if (textblockGameDescription.Text.Length != 0)
-                textblockGameDescription.Visibility = Visibility.Visible;
+            if (TextblockGameDescription.Text.Length != 0)
+                TextblockGameDescription.Visibility = Visibility.Visible;
             else
-                textblockGameDescription.Visibility = Visibility.Collapsed;
+                TextblockGameDescription.Visibility = Visibility.Collapsed;
         }
 
         private void SendMessageToArchipelago()
         {
-            if (inputChat.Text == "")
+            if (TextboxChatInput.Text == "")
                 return;
 
-            _archipelagoSession.SendMessage(inputChat.Text);
-            inputChat.Text = "";
+            _archipelagoSession.SendMessage(TextboxChatInput.Text);
+            TextboxChatInput.Text = "";
         }
 
         private void OnChatInputKeyDown(object sender, KeyEventArgs e)
@@ -305,12 +305,12 @@ namespace HintMachine
         {
             Dictionary<MenuItem, bool> MENU_ITEMS = new Dictionary<MenuItem, bool>()
             {
-                { menuDisplayChatMessages, Settings.DisplayChatMessages },
-                { menuDisplayFoundHints, Settings.DisplayFoundHintMessages },
-                { menuDisplayJoinLeaveMessages, Settings.DisplayJoinLeaveMessages },
-                { menuDisplayReceivedItems, Settings.DisplayItemReceivedMessages },
-                { menuDisplaySentItems, Settings.DisplayItemSentMessages },
-                { menuSoundNotification, Settings.PlaySoundOnHint },
+                { MenuDisplayChatMessages, Settings.DisplayChatMessages },
+                { MenuDisplayFoundHints, Settings.DisplayFoundHintMessages },
+                { MenuDisplayJoinLeaveMessages, Settings.DisplayJoinLeaveMessages },
+                { MenuDisplayReceivedItems, Settings.DisplayItemReceivedMessages },
+                { MenuDisplaySentItems, Settings.DisplayItemSentMessages },
+                { MenuSoundNotification, Settings.PlaySoundOnHint },
             };
 
             foreach (var kv in MENU_ITEMS)
@@ -330,21 +330,21 @@ namespace HintMachine
             // Calculate the available hints
             int remainingHints = _archipelagoSession.GetAvailableHintsWithHintPoints();
             int checksBeforeHint = _archipelagoSession.GetCheckCountBeforeNextHint();
-            availableHintsLabel.Content = $"You have {remainingHints} remaining hints, you will get a new hint in {checksBeforeHint} checks.";
+            LabelAvailableHints.Content = $"You have {remainingHints} remaining hints, you will get a new hint in {checksBeforeHint} checks.";
 
-            manualHintButton.IsEnabled = (remainingHints > 0);
-            hintsList.UpdateItems(_archipelagoSession.KnownHints);
+            ButtonManualHint.IsEnabled = (remainingHints > 0);
+            HintsView.UpdateItems(_archipelagoSession.KnownHints);
         }
 
         private void OnSettingChange(object sender, RoutedEventArgs e)
         {
-            Settings.DisplayChatMessages = menuDisplayChatMessages.IsChecked;
-            Settings.DisplayFoundHintMessages = menuDisplayFoundHints.IsChecked;
-            Settings.DisplayJoinLeaveMessages = menuDisplayJoinLeaveMessages.IsChecked;
-            Settings.DisplayItemReceivedMessages = menuDisplayReceivedItems.IsChecked;
-            Settings.DisplayItemSentMessages = menuDisplaySentItems.IsChecked;
-            Settings.PlaySoundOnHint = menuSoundNotification.IsChecked;
-            messageLog.UpdateMessagesVisibility();
+            Settings.DisplayChatMessages = MenuDisplayChatMessages.IsChecked;
+            Settings.DisplayFoundHintMessages = MenuDisplayFoundHints.IsChecked;
+            Settings.DisplayJoinLeaveMessages = MenuDisplayJoinLeaveMessages.IsChecked;
+            Settings.DisplayItemReceivedMessages = MenuDisplayReceivedItems.IsChecked;
+            Settings.DisplayItemSentMessages = MenuDisplaySentItems.IsChecked;
+            Settings.PlaySoundOnHint = MenuSoundNotification.IsChecked;
+            MessageLog.UpdateMessagesVisibility();
         }
 
         private void OnExitMenuClick(object sender, RoutedEventArgs e)
@@ -359,12 +359,12 @@ namespace HintMachine
                       + "Developed with ❤️ by Dinopony & CalDrac \n"
                       + "-----------------------------------------------");
             // Force a switch to the message log tab to see the newly added message
-            tabControl.SelectedIndex = 0;
+            TabControl.SelectedIndex = 0;
         }
 
         private void OnTabChange(object sender, RoutedEventArgs e)
         {
-            if (e.Source is TabControl && tabControl.SelectedIndex == 1)
+            if (e.Source is TabControl && TabControl.SelectedIndex == 1)
                 SetupHintsTab();
         }
 
@@ -372,14 +372,14 @@ namespace HintMachine
         {
             _archipelagoSession.SendMessage("!hint " + itemName);
             // Force a switch to the message log tab to see the response to the hint request
-            tabControl.SelectedIndex = 0;
+            TabControl.SelectedIndex = 0;
         }
 
         private void OnManualLocationHint(string locationName)
         {
             _archipelagoSession.SendMessage("!hint_location " + locationName);
             // Force a switch to the message log tab to see the response to the hint request
-            tabControl.SelectedIndex = 0;
+            TabControl.SelectedIndex = 0;
         }
 
         private void OnManualHintButtonClick(object sender, RoutedEventArgs e)
