@@ -285,12 +285,50 @@ namespace HintMachine
         private void OnChatInputKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
-                SendMessageToArchipelago();
+                SendMessageToChatBox();
+            
         }
 
         private void OnSendButtonClick(object sender, RoutedEventArgs e)
         {
+            SendMessageToChatBox();
+        }
+
+        private void SendMessageToChatBox() {
+            if (TextboxChatInput.Text.ToLower() == "!charly" || TextboxChatInput.Text.ToLower() == "!lulu" || TextboxChatInput.Text.ToLower() == "!hitmachine" || TextboxChatInput.Text.ToLower() == "!hintmachine")
+            {
+                //EasterEgg 
+                DisplayEasterEgg(TextboxChatInput.Text.ToLower());
+                TextboxChatInput.Text = "";
+                return;
+            }
             SendMessageToArchipelago();
+        }
+
+        private void DisplayEasterEgg(string v)
+        {
+            string toDisplay = "";
+            int index;
+            var random = new Random();
+            switch (v)
+            {
+                case "!charly":
+                    index = random.Next(Globals.CharlyMachineFacts.Count);
+                    toDisplay = Globals.CharlyMachineFacts[index];
+                    break;
+                case "!lulu":
+                    index = random.Next(Globals.LuluMachineFacts.Count);
+                    toDisplay = Globals.LuluMachineFacts[index];
+                    break;
+                case "!hitmachine":
+                case "!hintmachine":
+                    index = random.Next(Globals.HitMachineFacts.Count);
+                    toDisplay = Globals.HitMachineFacts[index];
+                    break;
+                default:
+                    break;
+            }
+            Logger.Info(toDisplay);
         }
 
         private void SetupChatFilterMenus()
