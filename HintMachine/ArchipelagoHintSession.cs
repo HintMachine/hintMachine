@@ -264,5 +264,15 @@ namespace HintMachine
                 names.Add(info.Name);
             return names;
         }
+
+        public int GetChecksCount(string slot) {
+            return 0;
+        }
+
+        public int GetChecksFound(string slot)
+        {
+            return 0;
+        }
+
     }
 }

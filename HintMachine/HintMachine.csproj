@@ -145,6 +145,10 @@
     <Compile Include="HintQuestCounter.cs" />
     <Compile Include="HintQuestCumulative.cs" />
     <Compile Include="HintQuest.cs" />
+    <Compile Include="PlayerDetails.cs" />
+    <Compile Include="PlayersView.xaml.cs">
+      <DependentUpon>PlayersView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HintsView.xaml.cs">
       <DependentUpon>HintsView.xaml</DependentUpon>
     </Compile>
@@ -164,6 +168,10 @@
     <Compile Include="ProcessRamWatcher.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TokenManipulator.cs" />
+    <Page Include="PlayersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="HintsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

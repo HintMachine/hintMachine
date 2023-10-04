@@ -14,6 +14,7 @@ namespace HintMachine
     {
         public const int TAB_MESSAGE_LOG = 0;
         public const int TAB_HINTS = 1;
+        public const int TAB_PLAYERS = 2;
 
         private ArchipelagoHintSession _archipelagoSession = null;
       
@@ -104,6 +105,11 @@ namespace HintMachine
                 {
                     if (TabControl.SelectedIndex == TAB_HINTS)
                         HintsView.UpdateItems(knownHints);
+                    if (TabControl.SelectedIndex == TAB_PLAYERS)
+                    {
+                        PlayersView.UpdatePlayers(_archipelagoSession);
+                    }
+                        //PlayersView.UpdateItems(playerList);
                 });
             };
             
@@ -114,6 +120,8 @@ namespace HintMachine
             // If the tab currently being open is the hints tab, refresh the hints view and the available hints count
             if (TabControl.SelectedIndex == TAB_HINTS)
                 SetupHintsTab();
+            if (TabControl.SelectedIndex == TAB_PLAYERS)
+                SetupPlayersTab();
 
             Logger.Info("Connected to Archipelago session at " + _archipelagoSession.Host + " as " + _archipelagoSession.Slot + ".");
         }
@@ -367,6 +375,22 @@ namespace HintMachine
             HintsView.UpdateItems(_archipelagoSession.KnownHints);
         }
 
+        /// <summary>
+        /// A setup procedure called on init and whenever the "Players" tab is opened by the user to
+        /// update the players view and other elements contained in this tab.
+        /// </summary>
+        private void SetupPlayersTab()
+        {
+            // Calculate the available hints using hint points
+            //int remainingHints = _archipelagoSession.GetAvailableHintsWithHintPoints();
+            //int checksBeforeHint = _archipelagoSession.GetCheckCountBeforeNextHint();
+            //ButtonManualHint.IsEnabled = (remainingHints > 0);
+            //LabelAvailableHints.Content = $"You have {remainingHints} remaining hints, you will get a new hint in {checksBeforeHint} checks.";
+
+            // Update the hints list view
+            PlayersView.UpdatePlayers(_archipelagoSession);
+        }
+
         private void OnSettingChange(object sender, RoutedEventArgs e)
         {
             Settings.DisplayChatMessages = MenuDisplayChatMessages.IsChecked;
@@ -407,6 +431,8 @@ namespace HintMachine
         {
             if (e.Source is TabControl && TabControl.SelectedIndex == TAB_HINTS)
                 SetupHintsTab();
+            if (e.Source is TabControl && TabControl.SelectedIndex == TAB_PLAYERS)
+                SetupPlayersTab();
         }
 
         private void OnManualHintButtonClick(object sender, RoutedEventArgs e)

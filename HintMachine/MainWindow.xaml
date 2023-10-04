@@ -112,6 +112,16 @@
                         <local:HintsView x:Name="HintsView" DockPanel.Dock="Bottom"/>
                     </DockPanel>
                 </TabItem>
+                <TabItem Header="Players" Margin="-2,-2,-2,0">
+                    <DockPanel LastChildFill="True" Margin="8">
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                            <!--<Button x:Name="ButtonManualHint1" DockPanel.Dock="Right" HorizontalAlignment="Left" Margin="0,0,0,8" Padding="5" Background="#FFA8E0A9" Click="OnManualHintButtonClick" Content="❓ Request a hint"/>-->
+                            <Label x:Name="LabelAvailableHints1" DockPanel.Dock="Left" Content="You have 0 remaining hints, you will get a new hint in 0 checks."/>
+                        </DockPanel>
+
+                        <local:PlayersView x:Name="PlayersView" DockPanel.Dock="Bottom"/>
+                    </DockPanel>
+                </TabItem>
             </TabControl>
         </Grid>
     </DockPanel>
