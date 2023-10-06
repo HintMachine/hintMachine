@@ -273,62 +273,59 @@ namespace HintMachine
                 TextblockGameDescription.Visibility = Visibility.Collapsed;
         }
 
-        private void SendMessageToArchipelago()
-        {
-            if (TextboxChatInput.Text == "")
-                return;
-
-            _archipelagoSession.SendMessage(TextboxChatInput.Text);
-            TextboxChatInput.Text = "";
-        }
-
         private void OnChatInputKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
-                SendMessageToChatBox();
+                ProcessInputMessage();
             
         }
 
         private void OnSendButtonClick(object sender, RoutedEventArgs e)
         {
-            SendMessageToChatBox();
+            ProcessInputMessage();
         }
 
-        private void SendMessageToChatBox() {
-            if (TextboxChatInput.Text.ToLower() == "!charly" || TextboxChatInput.Text.ToLower() == "!lulu" || TextboxChatInput.Text.ToLower() == "!hitmachine" || TextboxChatInput.Text.ToLower() == "!hintmachine")
-            {
-                //EasterEgg 
-                DisplayEasterEgg(TextboxChatInput.Text.ToLower());
-                TextboxChatInput.Text = "";
-                return;
-            }
-            SendMessageToArchipelago();
-        }
-
-        private void DisplayEasterEgg(string v)
+        private void ProcessInputMessage()
         {
-            string toDisplay = "";
-            int index;
-            var random = new Random();
-            switch (v)
+            if (TextboxChatInput.Text == "")
+                return;
+
+            if (!ProcessCustomCommands(TextboxChatInput.Text.ToLower()))
             {
-                case "!charly":
-                    index = random.Next(Globals.CharlyMachineFacts.Count);
-                    toDisplay = Globals.CharlyMachineFacts[index];
-                    break;
-                case "!lulu":
-                    index = random.Next(Globals.LuluMachineFacts.Count);
-                    toDisplay = Globals.LuluMachineFacts[index];
-                    break;
-                case "!hitmachine":
-                case "!hintmachine":
-                    index = random.Next(Globals.HitMachineFacts.Count);
-                    toDisplay = Globals.HitMachineFacts[index];
-                    break;
-                default:
-                    break;
+                // Message was not a custom command, forward it to Archipelago server as a regular message
+                _archipelagoSession.SendMessage(TextboxChatInput.Text);
             }
-            Logger.Info(toDisplay);
+
+            TextboxChatInput.Text = "";
+        }
+
+        private bool ProcessCustomCommands(string v)
+        {
+            if (v == "!charly")
+            {
+                int index = new Random().Next(Globals.CharlyMachineFacts.Count);
+                Logger.Info(Globals.CharlyMachineFacts[index]);
+                return true;
+            }
+            else if(v == "!lulu")
+            {
+                int index = new Random().Next(Globals.LuluMachineFacts.Count);
+                Logger.Info(Globals.LuluMachineFacts[index]);
+                return true;
+            }
+            else if (v == "!hitmachine" || v == "!hintmachine")
+            {
+                int index = new Random().Next(Globals.HitMachineFacts.Count);
+                Logger.Info(Globals.HitMachineFacts[index]);
+                return true;
+            }
+            else if(v == "!about")
+            {
+                OnAboutClick(null, null);
+                return true;
+            }
+
+            return false;
         }
 
         private void SetupChatFilterMenus()

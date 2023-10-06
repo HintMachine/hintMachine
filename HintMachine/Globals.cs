@@ -42,7 +42,8 @@ namespace HintMachine
         public static readonly List<string> HitMachineFacts = new List<string>() {
             "Le saviez vous ? Avant d'être présenté par Charly et Lulu, le Hit Machine était animé par Ophelie Winter et Yves Noel.",
             "Le saviez vous ? Le Hit Machine a été diffusé sur M6 entre 1994 et 2009",
-            "Le saviez vous ? Le developpement de la HintMachine a demarré en Septembre 2023"
+            "Le saviez vous ? Le developpement de la HintMachine a demarré en Septembre 2023.",
+            "✨ Je m'appelle Charly - Et je m'appelle Lulu - On sur M6 - pour le HitMachine ✨",
         };
         public static readonly List<string> CharlyMachineFacts = new List<string>() {
             "Le saviez vous ? Charly se nomme Charly Nestor.",
@@ -50,7 +51,7 @@ namespace HintMachine
         };
         public static readonly List<string> LuluMachineFacts = new List<string>() {
             "Le saviez vous ? Lulu se nomme Jean-Marc Lubin",
-            "Le saviez vous ? Lulu a commencé sa carriere télé en 1990"
+            "Le saviez vous ? Lulu a commencé sa carriere télé en 1990",
         };
     }
 }
