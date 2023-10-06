@@ -441,6 +441,8 @@ namespace HintMachine
                 return;
             }
 
+            Settings.Slot = slotName;
+            Settings.SaveToFile();
             OnArchipelagoSessionChange();
         }
     }
