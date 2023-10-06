@@ -9,7 +9,7 @@ using HintMachine.Games;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Archipelago.MultiClient.Net.Helpers.MessageLogHelper;
+using System.Timers;
 
 namespace HintMachine
 {
@@ -58,6 +58,16 @@ namespace HintMachine
         /// </summary>
         public event HintsUpdateHandler OnHintsUpdate;
 
+        /// <summary>
+        /// The amount of remaining random hints the client has to ask the server
+        /// </summary>
+        public int PendingRandomHints { get; set; } = 0;
+
+        /// <summary>
+        /// A timer that directs the pace at which random location hints are asked to the server
+        /// </summary>
+        private readonly Timer _randomHintTimer = null;
+
         // ----------------------------------------------------------------------------------
 
         public ArchipelagoHintSession(string host, string slot, string password)
@@ -72,6 +82,14 @@ namespace HintMachine
             try
             {
                 ret = Client.TryConnectAndLogin("", slot, ItemsHandlingFlags.IncludeOwnItems, VERSION, TAGS, null, password, true);
+
+                _randomHintTimer = new Timer
+                {
+                    AutoReset = true,
+                    Interval = 500,
+                    Enabled = true,
+                };
+                _randomHintTimer.Elapsed += OnHintTimerTick;
             }
             catch (Exception ex)
             {
@@ -129,22 +147,29 @@ namespace HintMachine
             return returned;
         }
 
-        public void GetOneRandomHint(string gameName)
+        public void OnHintTimerTick(object sender, ElapsedEventArgs e)
         {
+            if (PendingRandomHints <= 0)
+                return;
+            PendingRandomHints -= 1;
+
             List<long> missingLocations = Client.Locations.AllMissingLocations.ToList();
             foreach (long locationId in GetAlreadyHintedLocations())
                 missingLocations.Remove(locationId);
 
             if (missingLocations.Count == 0)
+            {
+                PendingRandomHints = 0;
                 return;
+            }
 
             Random rnd = new Random();
             int index = rnd.Next(missingLocations.Count);
-            long hintedLocationId = Client.Locations.AllMissingLocations[index];
-            
-            SendMessage("I just got a hint using HintMachine while playing " + gameName + "!");
-            Client.Socket.SendPacket(new LocationScoutsPacket {
-                Locations = new long[] { hintedLocationId },
+            long pendingHintLocationID = Client.Locations.AllMissingLocations[index];
+
+            Client.Socket.SendPacket(new LocationScoutsPacket
+            {
+                Locations = new long[] { pendingHintLocationID },
                 CreateAsHint = true
             });
         }
@@ -158,7 +183,7 @@ namespace HintMachine
             {
                 string locationName = Client.Locations.GetLocationNameFromId(hint.LocationId);
                 if (hint.Entrance != "")
-                    locationName += " (" + hint.Entrance + ")"; 
+                    locationName += $" ({hint.Entrance})";
 
                 KnownHints.Add(new HintDetails
                 {

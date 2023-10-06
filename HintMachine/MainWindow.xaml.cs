@@ -153,7 +153,7 @@ namespace HintMachine
                 }
                 if (!pollSuccessful && _game != null)
                 {
-                    Logger.Error("Connection with " + _game.Name + " was lost.");
+                    Logger.Error($"Connection with {_game.Name} was lost.");
                     DisconnectFromGame();
                     return;
                 }
@@ -167,9 +167,9 @@ namespace HintMachine
                         {
                             if (Settings.PlaySoundOnHint)
                                 _soundPlayer.controls.play();
+                            _archipelagoSession.SendMessage($"I just got a hint using HintMachine while playing {_game.Name}!");
 
-                            for (int i = 0; i < quest.AwardedHints; i++)
-                                _archipelagoSession.GetOneRandomHint(_game.Name);
+                            _archipelagoSession.PendingRandomHints += quest.AwardedHints;
                         }
 
                         Dispatcher.Invoke(() => { quest.UpdateComponents(); });
@@ -208,11 +208,11 @@ namespace HintMachine
                     // Store last selected game in settings to automatically select it on next execution
                     Settings.LastConnectedGame = selectedGameName;
 
-                    Logger.Info("✔️ Successfully connected to " + game.Name + ". ");
+                    Logger.Info($"✔️ Successfully connected to {game.Name}. ");
                 }
                 else
                 {
-                    Logger.Error("Could not connect to " + game.Name + ". " +
+                    Logger.Error($"Could not connect to {game.Name}. " +
                                  "Please ensure it is currently running and try again.");
                 }
             }
@@ -325,6 +325,14 @@ namespace HintMachine
                 return true;
             }
 
+#if DEBUG   // Debug commands
+            else if (v == "!gethint")
+            {
+                _archipelagoSession.PendingRandomHints += 1;
+                return true;
+            }
+#endif
+
             return false;
         }
 
@@ -408,9 +416,11 @@ namespace HintMachine
 
         private void OnManualHintButtonClick(object sender, RoutedEventArgs e)
         {
-            ManualHintWindow window = new ManualHintWindow(_archipelagoSession);
-            window.HintLocationCallback = OnManualLocationHint;
-            window.HintItemCallback = OnManualItemHint;
+            ManualHintWindow window = new ManualHintWindow(_archipelagoSession)
+            {
+                HintLocationCallback = OnManualLocationHint,
+                HintItemCallback = OnManualItemHint
+            };
             window.ShowDialog();
         }
 
