@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine"
         mc:Ignorable="d"
-        Title="HintMachine" Height="345" Width="466" Background="#FFEEEEEE" ResizeMode="NoResize" Icon="/assets/icon.png">
+        Title="HintMachine" Height="345" Width="466" Background="#FFEEEEEE" ResizeMode="CanMinimize" Icon="/assets/icon.png">
     <Grid HorizontalAlignment="Center" Width="400" Height="160" VerticalAlignment="Top" Margin="0,138,0,0">
         <Image HorizontalAlignment="Left" Height="110" Margin="122,-132,0,0" VerticalAlignment="Top" Width="180" 
                 Source="/Assets/logo_small.png"/>
