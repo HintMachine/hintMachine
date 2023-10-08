@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using WMPLib;
 using HintMachine.Games;
 using System.Linq;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace HintMachine
 {
@@ -19,7 +21,7 @@ namespace HintMachine
       
         private IGameConnector _game = null;
         private readonly object _gameLock = new object();
-        private readonly Timer _pollTickTimer = null;
+        private GameWatcherThread _pollTickThread = null;
 
         private readonly WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
 
@@ -34,22 +36,17 @@ namespace HintMachine
             // Setup the message log by connecting it to the global Logger
             Logger.OnMessageLogged += (string message, LogMessageType logMessageType) =>
             {
-                Dispatcher.Invoke(() =>
+                Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
                     MessageLog.AddMessage(message, logMessageType);
-                });
+                }));
             };
 
             _archipelagoSession = archipelagoSession;
             OnArchipelagoSessionChange();
 
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
-            _pollTickTimer = new Timer {
-                AutoReset = true,
-                Interval = 100,
-                Enabled = true,
-            };
-            _pollTickTimer.Elapsed += OnTimerTick;
+            _pollTickThread = new GameWatcherThread(OnTimerTick);
 
             // Setup the sound player that is used to play a notification sound when getting a hint
             _soundPlayer.settings.autoStart = false;
@@ -100,11 +97,11 @@ namespace HintMachine
         {
             _archipelagoSession.OnHintsUpdate += (List<HintDetails> knownHints) =>
             {
-                Dispatcher.Invoke(() =>
+                Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
                     if (TabControl.SelectedIndex == TAB_HINTS)
                         HintsView.UpdateItems(knownHints);
-                });
+                }));
             };
             
             LabelHost.Text = _archipelagoSession.Host;
@@ -125,8 +122,10 @@ namespace HintMachine
             lock (_gameLock)
             {
                 _game?.Disconnect();
-                _pollTickTimer.Enabled = false;
             }
+
+            _pollTickThread.IsRunning = false;
+            _pollTickThread = null;
 
             _archipelagoSession.Disconnect();
             _archipelagoSession = null;
@@ -134,7 +133,7 @@ namespace HintMachine
             Settings.SaveToFile();
         }
 
-        private void OnTimerTick(object sender, ElapsedEventArgs e)
+        private void OnTimerTick()
         {
             bool pollSuccessful = false;
 
@@ -158,6 +157,7 @@ namespace HintMachine
                     // Update hint quests
                     foreach (HintQuest quest in _game.Quests)
                     {
+                        Console.WriteLine($"Quest {quest.Name} completed");
                         if (quest.CheckCompletion())
                         {
                             if (Settings.PlaySoundOnHint)
@@ -167,7 +167,7 @@ namespace HintMachine
                             _archipelagoSession.PendingRandomHints += quest.AwardedHints;
                         }
 
-                        Dispatcher.Invoke(() => { quest.UpdateComponents(); });
+                        Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => { quest.UpdateComponents(); }));
                     }
                 }
             }
@@ -230,7 +230,7 @@ namespace HintMachine
                 _game.Disconnect();
                 _game = null;
 
-                Dispatcher.Invoke(() =>
+                Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
                     GridGameConnect.Visibility = Visibility.Visible;
                     GridQuests.Visibility = Visibility.Hidden;
@@ -241,7 +241,7 @@ namespace HintMachine
 
                     Title = Globals.ProgramName;
                     LabelGame.Text = "-";
-                });
+                }));
             }
         }
 
