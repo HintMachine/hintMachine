@@ -14,6 +14,11 @@ namespace HintMachine
         public long GoalValue { get; set; } = 1;
 
         /// <summary>
+        /// If value goes up or down too fast (cheats, memory values going nuts, etc.), quest doesn't advance
+        /// </summary>
+        public long ThresholdValue { get; set; } = 0;
+
+        /// <summary>
         /// The current value reflecting current quest progression
         /// </summary>
         public long CurrentValue
