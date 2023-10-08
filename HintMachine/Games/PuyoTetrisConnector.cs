@@ -85,8 +85,8 @@ namespace HintMachine.Games
 
         private void ReadTetrisData()
         {
-            int[] OFFSETS = new int[] { 0x378, 0x28, 0x20, 0x30, 0x28, 0xA8, 0x3E8 };
-            long tetrisDataBaseAddr = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x461B20, OFFSETS);
+            int[] OFFSETS = new int[] { 0x38, 0x78, 0xB0, 0x08, 0x38, 0x8, 0x3E8 };
+            long tetrisDataBaseAddr = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x598A20, OFFSETS);
             if (tetrisDataBaseAddr == 0)
                 return;
 
