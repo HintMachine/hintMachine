@@ -14,7 +14,7 @@ namespace HintMachine
         public long GoalValue { get; set; } = 1;
 
         /// <summary>
-        /// If value goes up or down too fast (cheats, memory values going nuts, etc.), quest doesn't advance
+        /// If value moves by more than this value in one tick (cheats, memory values going nuts...), it's ignored
         /// </summary>
         public long ThresholdValue { get; set; } = 0;
 
@@ -41,6 +41,9 @@ namespace HintMachine
 
                     _lastIncrementTime = now;
                 }
+
+                if (ThresholdValue != 0 && Math.Abs(_currentValue - value) > ThresholdValue)
+                    return;
 
                 _currentValue = value;
             }

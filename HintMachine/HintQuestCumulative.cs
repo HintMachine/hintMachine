@@ -24,9 +24,9 @@
 
         public void UpdateValue(long memoryReading)
         {
-            if (Direction == CumulativeDirection.ASCENDING && memoryReading > _lastMemoryReading && (ThresholdValue != 0 && memoryReading - _lastMemoryReading < ThresholdValue))
+            if (Direction == CumulativeDirection.ASCENDING && memoryReading > _lastMemoryReading)
                 CurrentValue += (memoryReading - _lastMemoryReading);
-            else if (Direction == CumulativeDirection.DESCENDING && memoryReading < _lastMemoryReading && (ThresholdValue != 0 && _lastMemoryReading - memoryReading < ThresholdValue))
+            else if (Direction == CumulativeDirection.DESCENDING && memoryReading < _lastMemoryReading)
                 CurrentValue += (_lastMemoryReading - memoryReading);
             _lastMemoryReading = memoryReading;
         }
