@@ -136,13 +136,14 @@ namespace HintMachine
 
         private void OnTimerTick(object sender, ElapsedEventArgs e)
         {
+            bool pollSuccessful = false;
+
             lock (_gameLock)
             {
                 if (_game == null)
                     return;
 
                 // Poll game connector, and cleanly close it if something wrong happens
-                bool pollSuccessful = false;
                 try
                 {
                     pollSuccessful = _game.Poll();
@@ -151,14 +152,8 @@ namespace HintMachine
                 {
                     Console.WriteLine(ex.StackTrace);
                 }
-                if (!pollSuccessful && _game != null)
-                {
-                    Logger.Error($"Connection with {_game.Name} was lost.");
-                    DisconnectFromGame();
-                    return;
-                }
 
-                if (_game != null)
+                if (pollSuccessful)
                 {
                     // Update hint quests
                     foreach (HintQuest quest in _game.Quests)
@@ -175,6 +170,13 @@ namespace HintMachine
                         Dispatcher.Invoke(() => { quest.UpdateComponents(); });
                     }
                 }
+            }
+            
+            if (!pollSuccessful)
+            {
+                Logger.Error($"Connection with {_game.Name} was lost.");
+                DisconnectFromGame();
+                return;
             }
         }
 
@@ -247,11 +249,6 @@ namespace HintMachine
         {
             DisconnectFromGame();
             Logger.Info("Disconnected from game.");
-        }
-
-        public void OnMessageLogged()
-        {
-
         }
 
         private void OnArchipelagoDisconnectButtonClick(object sender, RoutedEventArgs e)
