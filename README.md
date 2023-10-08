@@ -39,3 +39,11 @@ If you want to change the Archipelago game which will recieve hints, go to "File
 You can also get the source code and open it with Visual Studio 2017+ and .NET Framework 4.8.
 
 It has to be built in x64 configuration.
+
+### How to add a game
+
+The process to add a game is:
+- find RAM addresses that contain what you're looking for (using a program like CheatEngine)
+- add a new connector class
+- add quests that track those RAM addresses
+- profit
