@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Timers;
 using System;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,7 +20,8 @@ namespace HintMachine
       
         private IGameConnector _game = null;
         private readonly object _gameLock = new object();
-        private GameWatcherThread _pollTickThread = null;
+
+        private readonly Thread _gameWatchingThread = null;
 
         private readonly WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
 
@@ -46,7 +46,16 @@ namespace HintMachine
             OnArchipelagoSessionChange();
 
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
-            _pollTickThread = new GameWatcherThread(OnTimerTick);
+            _gameWatchingThread = new Thread(() => 
+            {
+                while (true)
+                {
+                    OnTimerTick();
+                    Thread.Sleep(Globals.TickInterval);
+                }
+            });
+            _gameWatchingThread.IsBackground = true;
+            _gameWatchingThread.Start();
 
             // Setup the sound player that is used to play a notification sound when getting a hint
             _soundPlayer.settings.autoStart = false;
@@ -119,13 +128,8 @@ namespace HintMachine
         {
             base.OnClosed(e);
 
-            lock (_gameLock)
-            {
-                _game?.Disconnect();
-            }
-
-            _pollTickThread.IsRunning = false;
-            _pollTickThread = null;
+            _gameWatchingThread.Abort();
+            _game?.Disconnect();
 
             _archipelagoSession.Disconnect();
             _archipelagoSession = null;

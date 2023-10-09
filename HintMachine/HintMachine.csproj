@@ -132,7 +132,6 @@
     <Compile Include="Games\BustAMove4Connector.cs" />
     <Compile Include="Games\Rollcage2Connector.cs" />
     <Compile Include="Games\StargunnerConnector.cs" />
-    <Compile Include="GameWatcherThread.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />

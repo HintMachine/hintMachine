@@ -9,7 +9,7 @@ using HintMachine.Games;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
+using System.Threading;
 
 namespace HintMachine
 {
@@ -64,9 +64,9 @@ namespace HintMachine
         public int PendingRandomHints { get; set; } = 0;
 
         /// <summary>
-        /// A timer that directs the pace at which random location hints are asked to the server
+        /// A thread responsible for requesting new random hints when PendingRandomHints > 0
         /// </summary>
-        private readonly Timer _randomHintTimer = null;
+        private readonly Thread _hintQueueThread = null;
 
         // ----------------------------------------------------------------------------------
 
@@ -83,13 +83,9 @@ namespace HintMachine
             {
                 ret = Client.TryConnectAndLogin("", slot, ItemsHandlingFlags.IncludeOwnItems, VERSION, TAGS, null, password, true);
 
-                _randomHintTimer = new Timer
-                {
-                    AutoReset = true,
-                    Interval = 500,
-                    Enabled = true,
-                };
-                _randomHintTimer.Elapsed += OnHintTimerTick;
+                _hintQueueThread = new Thread(HintQueueThreadLoop);
+                _hintQueueThread.IsBackground = true;
+                _hintQueueThread.Start();
             }
             catch (Exception ex)
             {
@@ -115,6 +111,8 @@ namespace HintMachine
 
             // Add a tracking event to detect further hints...
             Client.DataStorage.TrackHints(OnHintReceivedHandler, false);
+//            Client.Items.ItemReceived += OnItemReceivedHandler;
+
             // ...and call that event a first time with all already obtained hints
             Client.DataStorage[$"_read_hints_{Client.ConnectionInfo.Team}_{Client.ConnectionInfo.Slot}"].GetAsync<Hint[]>().ContinueWith(x => 
             {
@@ -147,32 +145,61 @@ namespace HintMachine
             return returned;
         }
 
-        public void OnHintTimerTick(object sender, ElapsedEventArgs e)
+        public void HintQueueThreadLoop()
         {
-            if (PendingRandomHints <= 0)
-                return;
-            PendingRandomHints -= 1;
-
-            List<long> missingLocations = Client.Locations.AllMissingLocations.ToList();
-            foreach (long locationId in GetAlreadyHintedLocations())
-                missingLocations.Remove(locationId);
-
-            if (missingLocations.Count == 0)
+            while (true)
             {
-                PendingRandomHints = 0;
-                return;
+                if (PendingRandomHints > 0)
+                {
+                    PendingRandomHints -= 1;
+
+                    List<long> missingLocations = Client.Locations.AllMissingLocations.ToList();
+                    foreach (long locationId in GetAlreadyHintedLocations())
+                        missingLocations.Remove(locationId);
+
+                    if (missingLocations.Count > 0)
+                    {
+                        Random rnd = new Random();
+                        int index = rnd.Next(missingLocations.Count);
+                        long pendingHintLocationID = Client.Locations.AllMissingLocations[index];
+
+                        Client.Socket.SendPacketAsync(new LocationScoutsPacket
+                        {
+                            Locations = new long[] { pendingHintLocationID },
+                            CreateAsHint = true
+                        });
+                        Thread.Sleep(Globals.HintQueueInterval);
+                    }
+                }
+
+                Thread.Sleep(Globals.TickInterval);
             }
-
-            Random rnd = new Random();
-            int index = rnd.Next(missingLocations.Count);
-            long pendingHintLocationID = Client.Locations.AllMissingLocations[index];
-
-            Client.Socket.SendPacket(new LocationScoutsPacket
-            {
-                Locations = new long[] { pendingHintLocationID },
-                CreateAsHint = true
-            });
         }
+        
+        /*
+        private void OnItemReceivedHandler(ReceivedItemsHelper helper)
+        {
+            try
+            {
+                while (true)
+                {
+                    NetworkItem nextItem = helper.DequeueItem();
+                    foreach (HintDetails hint in KnownHints)
+                    {
+                        if (hint.LocationId != nextItem.Location)
+                            continue;
+                        if (hint.FindingPlayer != nextItem.Player)
+                            continue;
+
+                        Console.WriteLine($"Removed hint with location #{hint.LocationId}");
+                        hint.Found = true;
+                        break;
+                    }
+                }
+            }
+            catch(InvalidOperationException) { }
+        }
+        */
 
         private void OnHintReceivedHandler(Hint[] hints)
         {
@@ -274,12 +301,13 @@ namespace HintMachine
 
         public void Disconnect()
         {
+            _hintQueueThread.Abort();
             Client.Socket.DisconnectAsync();
         }
 
         public void SendMessage(string message)
         {
-            Client.Socket.SendPacket(new SayPacket { Text = message });
+            Client.Socket.SendPacketAsync(new SayPacket { Text = message });
         }
 
         public List<string> GetPlayerNames()

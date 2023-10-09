@@ -12,6 +12,7 @@ namespace HintMachine
         public const string ProgramVersion = "1.0.1";
 
         public const int TickInterval = 100;
+        public const int HintQueueInterval = 2000;
 
         public static readonly string NotificationSoundPath = 
             $@"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\Assets\Notification.wav";
