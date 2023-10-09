@@ -31,6 +31,7 @@ namespace HintMachine
             new StargunnerConnector(),
             new BustAMove4Connector(),
             new Rollcage2Connector(),
+            new IslandersConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)

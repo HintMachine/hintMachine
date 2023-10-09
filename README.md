@@ -11,6 +11,7 @@ When you can't play your game anymore because you're waiting for your friend to 
 - Bust a Move 4 (PS1)
 - Geometry Wars Galaxies (Wii)
 - Geometry Wars : Retro Evolved
+- ISLANDERS
 - One Finger Death Punch
 - Puyo Puyo Tetris
 - Rollcage Stage 2 (PS1)
