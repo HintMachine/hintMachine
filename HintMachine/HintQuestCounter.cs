@@ -41,13 +41,15 @@ namespace HintMachine
 
                     _lastIncrementTime = now;
                 }
-
-                if (ThresholdValue != 0 && Math.Abs(_currentValue - value) > ThresholdValue)
+                
+                if (Math.Abs(_currentValue - value) != GoalValue && ThresholdValue != 0 && Math.Abs(_currentValue - value) > ThresholdValue)
                     return;
 
+                
                 _currentValue = value;
             }
         }
+        //private bool resetQuest = false;
         private long _currentValue = 0;
         private DateTime _lastIncrementTime = DateTime.MinValue;
 

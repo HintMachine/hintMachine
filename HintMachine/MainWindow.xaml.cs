@@ -157,9 +157,10 @@ namespace HintMachine
                     // Update hint quests
                     foreach (HintQuest quest in _game.Quests)
                     {
-                        Console.WriteLine($"Quest {quest.Name} completed");
+                        
                         if (quest.CheckCompletion())
                         {
+                            Console.WriteLine($"Quest {quest.Name} completed");
                             if (Settings.PlaySoundOnHint)
                                 _soundPlayer.controls.play();
                             _archipelagoSession.SendMessage($"I just got a hint using HintMachine while playing {_game.Name}!");
