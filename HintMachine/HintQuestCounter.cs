@@ -16,7 +16,7 @@ namespace HintMachine
         /// <summary>
         /// If value moves by more than this value in one tick (cheats, memory values going nuts...), it's ignored
         /// </summary>
-        public long ThresholdValue { get; set; } = 0;
+        public long MaxIncrease { get; set; } = 0;
 
         /// <summary>
         /// The current value reflecting current quest progression
@@ -41,10 +41,10 @@ namespace HintMachine
 
                     _lastIncrementTime = now;
                 }
-                
-                if (Math.Abs(_currentValue - value) != GoalValue && ThresholdValue != 0 && Math.Abs(_currentValue - value) > ThresholdValue)
-                    return;
 
+                long absDiff = Math.Abs(_currentValue - value);
+                if (MaxIncrease != 0 && absDiff > MaxIncrease && absDiff != GoalValue)
+                    return;
                 
                 _currentValue = value;
             }

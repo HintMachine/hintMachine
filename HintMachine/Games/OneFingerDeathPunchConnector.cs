@@ -9,7 +9,7 @@ namespace HintMachine.Games
             Name = "Kills",
             GoalValue = 450,
             Description = "Kill enemies in story mode or survival to progress",
-            ThresholdValue = 100,
+            MaxIncrease = 100,
             Direction = HintQuestCumulative.CumulativeDirection.ASCENDING
             
         };

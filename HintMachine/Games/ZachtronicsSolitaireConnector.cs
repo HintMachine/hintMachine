@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -7,21 +8,25 @@ namespace HintMachine.Games
 {
     public class ZachtronicsSolitaireConnector : IGameConnector
     {
-        private readonly HintQuestCumulative _winsQuest = new HintQuestCumulative {
+        private readonly HintQuestCounter _winsQuest = new HintQuestCounter {
             Name = "Wins",
             GoalValue = 1,
+            MaxIncrease = 2,
             Description = "Fortune's Foundation wins are worth double"
         };
 
-        private FileSystemWatcher _watcher = null;
-        private bool _readSaveFileOnNextTick = false;
+        private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
+        private string _fileToReadOnNextTick = "";
+        private Dictionary<string, int> _totalWinCounts = new Dictionary<string, int>();
+
+        // ----------------------------------------------------------------------------------
 
         public ZachtronicsSolitaireConnector()
         {
             Name = "Zachtronics Solitaire Collection";
             Description = "Play 8 different variants of Solitaire in this collection of games " +
                           "initially created as mini-games for Zachtronics main titles.";
-            SupportedVersions = "Tested on GOG version.";
+            SupportedVersions = "Works on any version.";
 
             Quests.Add(_winsQuest);
         }
@@ -30,16 +35,26 @@ namespace HintMachine.Games
         {
             try
             {
-                // Read the file a first time to have the initial win count
-                _winsQuest.UpdateValue(ReadTotalWinCount());
-
                 // Setup a watcher to be notified when the file is changed
-                _watcher = new FileSystemWatcher();
-                _watcher.Path = FindSavefileDirectory();
-                _watcher.NotifyFilter = NotifyFilters.LastWrite;
-                _watcher.Filter = "save.dat";
-                _watcher.Changed += new FileSystemEventHandler(OnFileChanged);
-                _watcher.EnableRaisingEvents = true;
+                foreach(string pathToDir in FindPotentialSavefileDirectories())
+                {
+                    FileSystemWatcher watcher = new FileSystemWatcher
+                    {
+                        Path = pathToDir,
+                        NotifyFilter = NotifyFilters.LastWrite,
+                        Filter = "save.dat",
+                        EnableRaisingEvents = true
+                    };
+
+                    string pathToFile = pathToDir + "/save.dat";
+                    _totalWinCounts[pathToFile] = ReadTotalWinCount(pathToFile);
+
+                    watcher.Changed += new FileSystemEventHandler((object source, FileSystemEventArgs e) => { 
+                        _fileToReadOnNextTick = pathToFile; 
+                    });
+
+                    _watchers.Add(watcher);
+                }
 
                 return true;
             }
@@ -51,39 +66,32 @@ namespace HintMachine.Games
 
         public override void Disconnect()
         {
-            _watcher.EnableRaisingEvents = false;
-            _watcher = null; 
+            foreach (FileSystemWatcher watcher in _watchers)
+                watcher.EnableRaisingEvents = false;
+            _watchers.Clear();
         }
 
         public override bool Poll()
         {
-            if (_readSaveFileOnNextTick)
+            if (_fileToReadOnNextTick != "")
             {
-                try
-                {
-                    _winsQuest.UpdateValue(ReadTotalWinCount());
-                }
-                catch 
-                {
-                    return false; 
-                }
+                int oldWins = _totalWinCounts[_fileToReadOnNextTick];
+                int newWins = ReadTotalWinCount(_fileToReadOnNextTick);
+                if (newWins > oldWins)
+                    _winsQuest.CurrentValue += (newWins - oldWins);
+                _totalWinCounts[_fileToReadOnNextTick] = newWins;
 
-                _readSaveFileOnNextTick = false;
+                _fileToReadOnNextTick = "";
             }
 
             return true;
         }
 
-        private void OnFileChanged(object source, FileSystemEventArgs e)
-        {
-            _readSaveFileOnNextTick = true;
-        }
-
-        private int ReadTotalWinCount()
+        private int ReadTotalWinCount(string pathToFile)
         {
             int totalWinCount = 0;
 
-            FileStream file = new FileStream(FindSavefileDirectory() + "save.dat", FileMode.Open, FileAccess.Read);
+            FileStream file = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
             using (var streamReader = new StreamReader(file, Encoding.UTF8))
             {
                 string text = streamReader.ReadToEnd();
@@ -108,11 +116,11 @@ namespace HintMachine.Games
             return totalWinCount;
         }
 
-        private string FindSavefileDirectory()
+        private string[] FindPotentialSavefileDirectories()
         {
             string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path += @"\My Games\The Zachtronics Solitaire Collection\NonSteamUser\";
-            return path;
+            path += @"\My Games\The Zachtronics Solitaire Collection\";
+            return Directory.GetDirectories(path);
         }
     }
 }
