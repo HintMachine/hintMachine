@@ -202,16 +202,23 @@ namespace HintMachine
 
         private long ResolvePointerPath(long baseAddress, int[] offsets, bool is64Bit)
         {
-            long addr = baseAddress;
-            foreach (int offset in offsets)
+            try
             {
-                addr = is64Bit ? ReadInt64(addr) : ReadInt32(addr);
-                if (addr == 0)
-                    return 0;
+                long addr = baseAddress;
+                foreach (int offset in offsets)
+                {
+                    addr = is64Bit ? ReadInt64(addr) : ReadInt32(addr);
+                    if (addr == 0)
+                        return 0;
 
-                addr += offset;
+                    addr += offset;
+                }
+                return addr;
+            } 
+            catch(Exception)
+            {
+                return 0;
             }
-            return addr;
         }
 
         public long ResolvePointerPath32(long baseAddress, int[] offsets) => ResolvePointerPath(baseAddress, offsets, false);
