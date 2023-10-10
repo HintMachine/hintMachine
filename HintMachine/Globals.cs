@@ -33,6 +33,7 @@ namespace HintMachine
             new Rollcage2Connector(),
             new FZeroGXConnector(),
             new IslandersConnector(),
+            new DorfromantikConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)

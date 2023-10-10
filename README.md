@@ -9,6 +9,7 @@ When you can't play your game anymore because you're waiting for your friend to 
 ## Supported games
 
 - Bust a Move 4 (PS1)
+- Dorfromantik
 - Geometry Wars Galaxies (Wii)
 - Geometry Wars : Retro Evolved
 - ISLANDERS
