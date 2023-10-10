@@ -16,6 +16,7 @@
             Description = "Stack tetrominos and fill lines to clear them in the most visually " +
                           "impressive implementation of Tetris ever made.";
             SupportedVersions = "Tested on up-to-date Steam version.";
+            Author = "Dinopony";
 
             Quests.Add(_scoreQuest);
         }

@@ -268,7 +268,7 @@ namespace HintMachine
             string selectedGameName = ComboboxGame.SelectedValue.ToString();
             IGameConnector game = Globals.FindGameFromName(selectedGameName);
 
-            TextblockGameDescription.Text = $"{game.Description}\n\n{game.SupportedVersions}";
+            TextblockGameDescription.Text = $"{game.Description}\n\n{game.SupportedVersions}\n\nImplemented by {game.Author}";
 
             if (TextblockGameDescription.Text.Length != 0)
                 TextblockGameDescription.Visibility = Visibility.Visible;

@@ -33,6 +33,7 @@ namespace HintMachine.Games
                           "The game continues the series' difficult, high-speed racing style, retaining the basic gameplay and control system from the Nintendo 64 title. " +
                           "A heavy emphasis is placed on track memorization and reflexes, which aids in completing the title.";
             SupportedVersions = "Tested on a US ISO on Dolphin 5 (64-bit).";
+            Author = "Dinopony";
 
             Quests.Add(_cupPointsQuest);
             Quests.Add(_knockoutsQuest);

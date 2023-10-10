@@ -20,6 +20,7 @@ namespace HintMachine.Games
             Name = "Nuclear Throne";
             Description = "Kill your way to the Nuclear Throne";
             SupportedVersions = "Requires NuclearThroneTogether mod.";
+            Author = "CalDrac";
 
             Quests.Add(_killThroneQuest);
         }

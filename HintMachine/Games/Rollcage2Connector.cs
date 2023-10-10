@@ -20,6 +20,7 @@
             Name = "Rollcage Stage 2 (PS1)";
             Description = "Race on the floor, on the ceilling, blast your opponents with items and finish first.";
             SupportedVersions = "Tested on BizHawk version 2.9.1.";
+            Author = "CalDrac";
 
             Quests.Add(_firstPlacesQuest);
         }

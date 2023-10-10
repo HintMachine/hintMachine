@@ -15,6 +15,7 @@ namespace HintMachine.Games
             Name = "Dorfromantik";
             Description = "Peaceful building strategy and puzzle game where you create a beautiful and ever-growing village landscape by placing tiles";
             SupportedVersions = "Steam";
+            Author = "Serpent.AI";
 
             Quests.Add(_scoreQuest);
         }

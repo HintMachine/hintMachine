@@ -23,6 +23,7 @@ namespace HintMachine.Games
             Description = "Destroy geometric enemies in this classic and stylish twin-stick shooter " +
                           "in order to earn geoms and unlock hints.";
             SupportedVersions = "Tested on European ROM on all recent versions of Dolphin 5 (64-bit).";
+            Author = "Dinopony";
 
             Quests.Add(_geomsQuest);
         }

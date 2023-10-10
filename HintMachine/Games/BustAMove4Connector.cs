@@ -16,6 +16,7 @@
             Name = "Bust a Move 4 (PS1)";
             Description = "Match 3 gems of the same color and flood your opponent with combos.";
             SupportedVersions = "Tested on European ROM on ePSXe 1.7.0.";
+            Author = "CalDrac";
 
             Quests.Add(_winQuest);
         }

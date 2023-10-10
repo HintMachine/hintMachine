@@ -27,6 +27,7 @@ namespace HintMachine.Games
             Description = "Play 8 different variants of Solitaire in this collection of games " +
                           "initially created as mini-games for Zachtronics main titles.";
             SupportedVersions = "Works on any version.";
+            Author = "Dinopony";
 
             Quests.Add(_winsQuest);
         }

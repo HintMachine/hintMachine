@@ -27,6 +27,7 @@
             Name = "Stargunner";
             Description = "Blast your enemies with a huge variety of wepons in this side-scrolling shooter.";
             SupportedVersions = "Tested on up-to-date GOG version.";
+            Author = "CalDrac";
 
             Quests.Add(_scoreQuest);
             Quests.Add(_creditsQuest);

@@ -15,6 +15,7 @@
             Name = "ISLANDERS";
             Description = "Minimalist strategy game about building cities on colorful islands";
             SupportedVersions = "Steam";
+            Author = "Serpent.AI";
 
             Quests.Add(_scoreQuest);
         }

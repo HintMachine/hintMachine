@@ -25,6 +25,7 @@
                           "Play an almost infinite stream of procedurally generated levels, collect all the Blue Spheres and get hints!";
             SupportedVersions = "Emulator: Bizhawk 2.9.1 (using default Genesis Plus GX core)\n" +
                                 "ROM: 'Sonic & Knuckles + Sonic the Hedgehog' or 'Blue Spheres Plus'";
+            Author = "Dinopony";
 
             Quests.Add(_levelsQuest);
             Quests.Add(_ringsQuest);
