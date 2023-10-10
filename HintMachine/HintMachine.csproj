@@ -152,6 +152,7 @@
     <Compile Include="IGameConnector.cs" />
     <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
     <Compile Include="Games\XenotiltConnector.cs" />
+    <Compile Include="Games\IslandersConnector.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
