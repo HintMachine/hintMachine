@@ -15,7 +15,7 @@ namespace HintMachine
 {
     public class ArchipelagoHintSession
     {
-        private static readonly string[] TAGS = { "AP", "TextOnly" };
+        private static readonly string[] TAGS = { "AP", "HintGenerator", "TextOnly" };
         private static readonly Version VERSION = new Version(0, 4, 1);
 
         public ArchipelagoSession Client { get; private set; }
