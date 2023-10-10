@@ -283,6 +283,8 @@ namespace HintMachine
         {
             int points = Client.RoomState.HintPoints;
             int cost = (int)(Client.Locations.AllLocations.Count * 0.01m * Client.RoomState.HintCostPercentage);
+            if (cost == 0)
+                return int.MaxValue;
             return points / cost;
         }
 
@@ -290,11 +292,15 @@ namespace HintMachine
         {
             int points = Client.RoomState.HintPoints;
             int cost = (int)(Client.Locations.AllLocations.Count * 0.01m * Client.RoomState.HintCostPercentage);
+            if (cost == 0)
+                return 0;
             while (points >= cost)
                 points -= cost;
 
             int pointsToNextHint = cost - points;
             int pointsPerCheck = Client.RoomState.LocationCheckPoints;
+            if (pointsPerCheck == 0)
+                return int.MaxValue;
 
             return (int)Math.Ceiling((float)pointsToNextHint / (float)pointsPerCheck);
         }

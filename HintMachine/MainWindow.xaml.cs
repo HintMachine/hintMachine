@@ -8,6 +8,7 @@ using HintMachine.Games;
 using System.Linq;
 using System.Threading;
 using System.Windows.Threading;
+using Archipelago.MultiClient.Net.Models;
 
 namespace HintMachine
 {
@@ -364,11 +365,25 @@ namespace HintMachine
         /// </summary>
         private void SetupHintsTab()
         {
+            string text;
+
             // Calculate the available hints using hint points
             int remainingHints = _archipelagoSession.GetAvailableHintsWithHintPoints();
+            if(remainingHints == int.MaxValue)
+                text = "You have infinite hints";
+            else
+                text = $"You have {remainingHints} remaining hints";
+
             int checksBeforeHint = _archipelagoSession.GetCheckCountBeforeNextHint();
+            if (checksBeforeHint == int.MaxValue)
+                text += ", and you cannot earn hint points.";
+            else if (checksBeforeHint == 0)
+                text += " because hints do not cost hint points.";
+            else
+                text += $", you will get a new hint in {checksBeforeHint} checks.";
+
             ButtonManualHint.IsEnabled = (remainingHints > 0);
-            LabelAvailableHints.Content = $"You have {remainingHints} remaining hints, you will get a new hint in {checksBeforeHint} checks.";
+            LabelAvailableHints.Content = text;
 
             // Update the hints list view
             HintsView.UpdateItems(_archipelagoSession.KnownHints);
