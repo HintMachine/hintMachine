@@ -9,7 +9,7 @@ namespace HintMachine
     internal static class Globals
     {
         public const string ProgramName = "HintMachine";
-        public const string ProgramVersion = "1.0.2";
+        public const string ProgramVersion = "1.0.3";
 
         public const int TickInterval = 100;
         public const int HintQueueInterval = 2000;
