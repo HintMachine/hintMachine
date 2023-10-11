@@ -2,10 +2,11 @@ namespace HintMachine.Games
 {
     public class LuckBeALandlordConnector : IGameConnector
     {
-        private readonly HintQuestCumulative _rentQuest = new HintQuestCumulative
+        private readonly HintQuestCumulative _coinQuest = new HintQuestCumulative
         {
-            Name = "Rent Payments Made",
-            GoalValue = 2,
+            Name = "Coins Spent",
+            GoalValue = 375,
+            Direction = HintQuestCumulative.CumulativeDirection.DESCENDING
         };
 
         private ProcessRamWatcher _ram = null;
@@ -17,7 +18,7 @@ namespace HintMachine.Games
             SupportedVersions = "Steam";
             Author = "Serpent.AI";
 
-            Quests.Add(_rentQuest);
+            Quests.Add(_coinQuest);
         }
 
         public override bool Connect()
@@ -33,8 +34,17 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            long rentAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x21F0580, new int[] { 0x8, 0x28, 0x70, 0x368, 0x10, 0xF8, 0x58, 0x20, 0x6F0 });
-            _rentQuest.UpdateValue(_ram.ReadUint32(rentAddress + 0x8));
+            long coinAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x21EFC90, new int[] { 0x218, 0x108, 0x10, 0x58, 0x20, 0x660 });
+            long coinValue = (long)_ram.ReadDouble(coinAddress + 0x8);
+
+            if (coinValue > 1)
+            {
+                _coinQuest.UpdateValue(coinValue);
+            }
+            else
+            {
+                _coinQuest.ForceLastMemoryReading(coinValue);
+            }
 
             return true;
         }
