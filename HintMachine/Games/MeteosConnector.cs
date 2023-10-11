@@ -45,7 +45,7 @@ namespace HintMachine.Games
             Name = "Meteos (DS)";
             Description = "Match 3+ blocks of the same color horizontally or vertically to ignite a propulsion and send them to your opponents.";
             SupportedVersions = "Tested on USA rom with BizHawk 2.9.1";
-            
+            Author = "CalDrac";
             Quests.Add(_sendBlocksQuest);
             //Quests.Add(_levelClearQuest); //Might be added back later
             Quests.Add(_starTripQuest);
@@ -95,8 +95,16 @@ namespace HintMachine.Games
             }
             else */
             //level = 16 is the ending
+            if(level == 1)
+            {
+                starTripStarted = true;
+                _starTripQuest.UpdateValue(0);
+            }
             if (level == 16) {
-                _starTripQuest.UpdateValue(_starTripQuest.CurrentValue +1);  
+                if (starTripStarted) { 
+                    _starTripQuest.UpdateValue(1);
+                    starTripStarted = false;
+                }
             }
             if(level > 16)
             {
