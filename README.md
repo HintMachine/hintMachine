@@ -20,6 +20,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - Geometry Wars Galaxies (Wii)
 - Geometry Wars : Retro Evolved
 - ISLANDERS
+- Meteos (DS)
 - One Finger Death Punch
 - Puyo Puyo Tetris
 - Rollcage Stage 2 (PS1)
