@@ -21,6 +21,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - Geometry Wars : Retro Evolved
 - ISLANDERS
 - One Finger Death Punch
+- PAC-MAN Championship Edition DX+
 - Puyo Puyo Tetris
 - Rollcage Stage 2 (PS1)
 - Sonic 3 Blue Spheres
