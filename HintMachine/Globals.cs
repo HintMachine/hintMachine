@@ -34,6 +34,7 @@ namespace HintMachine
             new FZeroGXConnector(),
             new IslandersConnector(),
             new DorfromantikConnector(),
+            new PacManChampionshipEditionDXConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)
