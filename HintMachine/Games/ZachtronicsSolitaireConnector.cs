@@ -18,6 +18,7 @@ namespace HintMachine.Games
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
         private string _fileToReadOnNextTick = "";
         private Dictionary<string, int> _totalWinCounts = new Dictionary<string, int>();
+        private ProcessRamWatcher _ram = null;
 
         // ----------------------------------------------------------------------------------
 
@@ -36,6 +37,10 @@ namespace HintMachine.Games
         {
             try
             {
+                _ram = new ProcessRamWatcher("The Zachtronics Solitaire Collection");
+                if (!_ram.TryConnect())
+                    return false;
+
                 // Setup a watcher to be notified when the file is changed
                 foreach(string pathToDir in FindPotentialSavefileDirectories())
                 {
@@ -70,10 +75,15 @@ namespace HintMachine.Games
             foreach (FileSystemWatcher watcher in _watchers)
                 watcher.EnableRaisingEvents = false;
             _watchers.Clear();
+
+            _ram = null;
         }
 
         public override bool Poll()
         {
+            if(!_ram.TestProcess())
+                return false;
+
             if (_fileToReadOnNextTick != "")
             {
                 int oldWins = _totalWinCounts[_fileToReadOnNextTick];
