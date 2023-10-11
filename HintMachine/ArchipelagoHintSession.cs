@@ -59,9 +59,18 @@ namespace HintMachine
         public event HintsUpdateHandler OnHintsUpdate;
 
         /// <summary>
-        /// The amount of remaining random hints the client has to ask the server
+        /// The amount of remaining random hints the client has yet to ask the server
         /// </summary>
-        public int PendingRandomHints { get; set; } = 0;
+        public int PendingRandomHints
+        {
+            get { return _pendingRandomHints; }
+            set { 
+                _pendingRandomHints = value;
+                if (_pendingRandomHints > Globals.PendingHintsQueueMaxSize)
+                    _pendingRandomHints = Globals.PendingHintsQueueMaxSize;
+            }
+        }
+        private int _pendingRandomHints = 0;
 
         /// <summary>
         /// A thread responsible for requesting new random hints when PendingRandomHints > 0

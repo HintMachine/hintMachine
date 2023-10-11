@@ -49,7 +49,6 @@ namespace HintMachine
                 _currentValue = value;
             }
         }
-        //private bool resetQuest = false;
         private long _currentValue = 0;
         private DateTime _lastIncrementTime = DateTime.MinValue;
 
