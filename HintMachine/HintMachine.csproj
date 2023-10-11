@@ -133,6 +133,7 @@
     <Compile Include="Games\MeteosConnector.cs" />
     <Compile Include="Games\BustAMove4Connector.cs" />
     <Compile Include="Games\PacManChampionshipEditionDXConnector.cs" />
+    <Compile Include="Games\LuckBeALandlordConnector.cs" />
     <Compile Include="Games\FZeroGXConnector.cs" />
     <Compile Include="Games\DorfromantikConnector.cs" />
     <Compile Include="Games\Rollcage2Connector.cs" />
