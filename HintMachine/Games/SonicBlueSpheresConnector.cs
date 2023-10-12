@@ -25,7 +25,6 @@
                           "Play an almost infinite stream of procedurally generated levels, collect all the Blue Spheres and get hints!";
             SupportedVersions.Add("Sonic & Knuckles + Sonic the Hedgehog (World)");
             SupportedVersions.Add("Blue Spheres Plus");
-            SupportedEmulators.Add("Bizhawk 2.9.1 (Genesis Plus GX core)");
             CoverFilename = "sonic_blue_spheres.png";
             Author = "Dinopony";
 

@@ -176,7 +176,7 @@ namespace HintMachine
         {
             GameSelectionWindow window = new GameSelectionWindow();
             window.OnGameConnected += OnGameConnected;
-            window.Show();
+            window.ShowDialog();
         }
 
         public void DisconnectFromGame()

@@ -270,6 +270,7 @@
     <Resource Include="Assets\Covers\rollcage_2.png" />
     <Resource Include="Assets\Covers\stargunner.png" />
     <Resource Include="Assets\Covers\xenotilt.png" />
+    <Resource Include="Assets\Covers\meteos.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

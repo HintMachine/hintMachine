@@ -12,6 +12,7 @@ namespace HintMachine.Games
         public IMegadriveConnector()
         {
             Platform = "Megadrive";
+            SupportedEmulators.Add("BizHawk 2.9.1 (Genesis Plus GX core)");
         }
 
         public override bool Connect()
