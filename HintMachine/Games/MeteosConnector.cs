@@ -2,7 +2,7 @@
 
 namespace HintMachine.Games
 {
-    class MeteosConnector : IGameConnector
+    class MeteosConnector : INintendoDSConnector
     {
         private readonly HintQuestCumulative _sendBlocksQuest = new HintQuestCumulative
         {
@@ -30,15 +30,9 @@ namespace HintMachine.Games
 
         };
 
-        private ProcessRamWatcher _ram = null;
-        private long _nbPlayersAddr = 0;
-        private long _onePlayerGameAddr = 0;
-        private long _twoPlayersGameAddr = 0;
-        private long _threePlayersGameAddr = 0;
-        private long _fourPlayersGameAddr = 0;
-        private long _levelAddr = 0;
-        private bool starTripStarted = false;
-        private long maxLevel = 0;
+        private bool _starTripStarted = false;
+
+        // ---------------------------------------------------------
 
         public MeteosConnector()
         {
@@ -53,17 +47,14 @@ namespace HintMachine.Games
 
         public override bool Connect()
         {
-            _ram = new ProcessRamWatcher("EmuHawk");
-            if (!_ram.TryConnect())
+            if (!base.Connect()) 
                 return false;
 
-            _nbPlayersAddr = 0x36F019B50A0;
-            _onePlayerGameAddr = 0x36F01B538EC;
-            _twoPlayersGameAddr = 0x36F01B53A0C;
-            _threePlayersGameAddr = 0x36F01B53B2C;
-            _fourPlayersGameAddr = 0x36F01B53C4C;
-            _levelAddr = 0x36F01D11F1C;
-            return true;
+            byte[] METEOS_SIG = new byte[] { 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0x47, 0x8B };
+            if (FindRamSignature(METEOS_SIG, 0))
+                return true;
+
+            return false;
         }
 
         public override void Disconnect()
@@ -73,9 +64,8 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            long _rightAddr = 0x0;
+            long level = _ram.ReadInt32(_dsRamBaseAddress + 0x3BFEFC);
 
-            long level = _ram.ReadInt32(_levelAddr);
             /* levelQuest might be added back later
             if (level < 16 && level > 0)
             {
@@ -97,39 +87,42 @@ namespace HintMachine.Games
             //level = 16 is the ending
             if(level == 1)
             {
-                starTripStarted = true;
+                _starTripStarted = true;
                 _starTripQuest.UpdateValue(0);
             }
-            if (level == 16) {
-                if (starTripStarted) { 
+            if (level == 16)
+            {
+                if (_starTripStarted)
+                { 
                     _starTripQuest.UpdateValue(1);
-                    starTripStarted = false;
+                    _starTripStarted = false;
                 }
             }
             if(level > 16)
             {
-                starTripStarted = false;
-                int nbPlayers = _ram.ReadInt32(_nbPlayersAddr);
+                _starTripStarted = false;
+                int nbPlayers = _ram.ReadInt32(_dsRamBaseAddress + 0x63080);
 
+                long rightAddr = 0x0;
                 switch (nbPlayers)
                 {
                     case 1:
-                        _rightAddr = _onePlayerGameAddr;
+                        rightAddr = _dsRamBaseAddress + 0x2018CC;
                         break;
 
                     case 2:
-                        _rightAddr = _twoPlayersGameAddr;
+                        rightAddr = _dsRamBaseAddress + 0x2019EC;
                         break;
 
                     case 3:
-                        _rightAddr = _threePlayersGameAddr;
+                        rightAddr = _dsRamBaseAddress + 0x201B0C;
                         break;
 
                     case 4:
-                        _rightAddr = _fourPlayersGameAddr;
+                        rightAddr = _dsRamBaseAddress + 0x201C2C;
                         break;
                 }
-                _sendBlocksQuest.UpdateValue(_ram.ReadInt32(_rightAddr));
+                _sendBlocksQuest.UpdateValue(_ram.ReadInt32(rightAddr));
                 return true;
             }
             return true;
