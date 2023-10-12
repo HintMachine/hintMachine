@@ -27,7 +27,11 @@ namespace HintMachine.Games
             Name = "Zachtronics Solitaire Collection";
             Description = "Play 8 different variants of Solitaire in this collection of games " +
                           "initially created as mini-games for Zachtronics main titles.";
-            SupportedVersions = "Works on any version.";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            SupportedVersions.Add("GOG");
+            SupportedVersions.Add("itch.io");
+            CoverFilename = "zachtronics_solitaire_collection.png";
             Author = "Dinopony";
 
             Quests.Add(_winsQuest);

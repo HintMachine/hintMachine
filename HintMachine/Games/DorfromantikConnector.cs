@@ -13,8 +13,10 @@ namespace HintMachine.Games
         public DorfromantikConnector()
         {
             Name = "Dorfromantik";
-            Description = "Peaceful building strategy and puzzle game where you create a beautiful and ever-growing village landscape by placing tiles";
-            SupportedVersions = "Steam";
+            Description = "Dorfromantik is a peaceful building strategy and puzzle game where you create a beautiful and ever-growing village landscape by placing tiles. Explore a variety of colorful biomes, discover and unlock new tiles and complete quests to fill your world with life!";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            CoverFilename = "dorfromantik.png";
             Author = "Serpent.AI";
 
             Quests.Add(_scoreQuest);

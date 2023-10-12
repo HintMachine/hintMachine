@@ -15,9 +15,19 @@ namespace HintMachine
         public string Description { get; protected set; } = "";
 
         /// <summary>
+        /// The hardware platform the game was originally available on (e.g. PC for a PC game, "Nintendo 64" for the N64, etc...)
+        /// </summary>
+        public string Platform { get; protected set; } = "";
+
+        /// <summary>
         /// String detailing which versions of the game have been tested to work with this connector
         /// </summary>
-        public string SupportedVersions { get; protected set; } = "";
+        public List<string> SupportedVersions { get; protected set; } = new List<string>{};
+
+        /// <summary>
+        /// String detailing which emulators have been tested to work with this connector (if relevant)
+        /// </summary>
+        public List<string> SupportedEmulators { get; protected set; } = new List<string> { };
 
         /// <summary>
         /// The author of the game connector
@@ -28,6 +38,12 @@ namespace HintMachine
         /// List of quests available for this game
         /// </summary>
         public List<HintQuest> Quests { get; protected set; } = new List<HintQuest>();
+
+        /// <summary>
+        /// The filename for the cover art of the game, which is looked for in the "Assets/covers/" directory
+        /// </summary>
+        public string CoverFilename { get; protected set; } = "unknown.png";
+
 
         /// <summary>
         /// Abstract function meant to handle the connection to the related game process / files

@@ -39,13 +39,15 @@
 
         public TetrisEffectConnector()
         {
-            Name = "Tetris Effect Connected";
+            Name = "Tetris Effect: Connected";
             Description = "Named after a real-world phenomenon where players' brains are so engrossed that images of the iconic falling " +
                           "Tetrimino blocks linger in their vision, thoughts, and even dreams, Tetris Effect amplifies this magical feeling " +
                           "of total immersion by surrounding you with fantastic, fully three-dimensional worlds that react and evolve based " +
                           "on how you play. Music, backgrounds, sounds, special effects - everything, down to the Tetris pieces themselves, " +
                           "pulse, dance, shimmer, and explode in perfect sync with how you're playing.";
-            SupportedVersions = "Tested on up-to-date Steam version.";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            CoverFilename = "tetris_effect_connected.png";
             Author = "Dinopony";
 
             Quests.Add(_linesQuest);

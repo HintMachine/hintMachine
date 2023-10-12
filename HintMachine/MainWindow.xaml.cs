@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Threading;
 using Archipelago.MultiClient.Net.Models;
+using Archipelago.MultiClient.Net;
 
 namespace HintMachine
 {
@@ -32,7 +33,6 @@ namespace HintMachine
         {
             InitializeComponent();
             SetupChatFilterMenus();
-            PopulateGamesCombobox();
 
             // Setup the message log by connecting it to the global Logger
             Logger.OnMessageLogged += (string message, LogMessageType logMessageType) =>
@@ -65,20 +65,6 @@ namespace HintMachine
 
             Logger.Info("Feeling stuck in your Archipelago world?\n" +
                         "Connect to a game and start playing to get random hints instead of eating good old Burger King.");
-        }
-
-        /// <summary>
-        /// Populate game selector combobox with all currently supported game names
-        /// </summary>
-        protected void PopulateGamesCombobox()
-        {
-            ComboboxGame.Items.Clear();
-            foreach (string gameName in Globals.Games.OrderBy(g => g.Name).Select(g => g.Name))
-                ComboboxGame.Items.Add(gameName);
-
-            ComboboxGame.SelectedValue = Settings.LastConnectedGame;
-            if (ComboboxGame.SelectedItem == null)
-                ComboboxGame.SelectedItem = ComboboxGame.Items[0];
         }
 
         protected void PopulateReconnectAsMenu()
@@ -188,42 +174,9 @@ namespace HintMachine
 
         private void OnConnectToGameButtonClick(object sender, RoutedEventArgs e)
         {
-            lock (_gameLock)
-            {
-                if (_game != null)
-                    return;
-
-                // Connect to selected game
-                string selectedGameName = ComboboxGame.SelectedValue.ToString();
-                IGameConnector game = Globals.FindGameFromName(selectedGameName);
-                if (game.Connect())
-                {
-                    _game = game;
-                    Title = Globals.ProgramName + " - " + _game.Name;
-                    LabelGame.Text = _game.Name;
-
-                    // Init game quests
-                    foreach (HintQuest quest in _game.Quests)
-                    {
-                        quest.InitComponents(GridQuests);
-                        quest.UpdateComponents();
-                    }
-
-                    GridGameConnect.Visibility = Visibility.Hidden;
-                    GridQuests.Visibility = Visibility.Visible;
-                    ButtonChangeGame.Visibility = Visibility.Visible;
-
-                    // Store last selected game in settings to automatically select it on next execution
-                    Settings.LastConnectedGame = selectedGameName;
-
-                    Logger.Info($"✔️ Successfully connected to {game.Name}. ");
-                }
-                else
-                {
-                    Logger.Error($"Could not connect to {game.Name}. " +
-                                 "Please ensure it is currently running and try again.");
-                }
-            }
+            GameSelectionWindow window = new GameSelectionWindow();
+            window.OnGameConnected += OnGameConnected;
+            window.Show();
         }
 
         public void DisconnectFromGame()
@@ -263,17 +216,27 @@ namespace HintMachine
             Close();
         }
 
-        private void OnSelectedGameConnectorChange(object sender, SelectionChangedEventArgs e)
+        private void OnGameConnected(IGameConnector game)
         {
-            string selectedGameName = ComboboxGame.SelectedValue.ToString();
-            IGameConnector game = Globals.FindGameFromName(selectedGameName);
+            _game = game;
+            Title = Globals.ProgramName + " - " + _game.Name;
+            LabelGame.Text = _game.Name;
 
-            TextblockGameDescription.Text = $"{game.Description}\n\n{game.SupportedVersions}\n\nImplemented by {game.Author}";
+            // Init game quests
+            foreach (HintQuest quest in _game.Quests)
+            {
+                quest.InitComponents(GridQuests);
+                quest.UpdateComponents();
+            }
 
-            if (TextblockGameDescription.Text.Length != 0)
-                TextblockGameDescription.Visibility = Visibility.Visible;
-            else
-                TextblockGameDescription.Visibility = Visibility.Collapsed;
+            GridGameConnect.Visibility = Visibility.Hidden;
+            GridQuests.Visibility = Visibility.Visible;
+            ButtonChangeGame.Visibility = Visibility.Visible;
+
+            // Store last selected game in settings to automatically select it on next execution
+            Settings.LastConnectedGame = game.Name;
+
+            Logger.Info($"✔️ Successfully connected to {game.Name}. ");
         }
 
         private void OnChatInputKeyDown(object sender, KeyEventArgs e)

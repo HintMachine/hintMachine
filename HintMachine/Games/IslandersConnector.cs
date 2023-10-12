@@ -13,8 +13,10 @@
         public IslandersConnector()
         {
             Name = "ISLANDERS";
-            Description = "Minimalist strategy game about building cities on colorful islands";
-            SupportedVersions = "Steam";
+            Description = "Islanders is a minimalist strategy game about building cities on colorful islands. Explore an infinite number of ever-changing new lands, expand your settlements from sprawling villages to vast cities and enjoy the relaxing atmosphere.";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            CoverFilename = "islanders.png";
             Author = "Serpent.AI";
 
             Quests.Add(_scoreQuest);

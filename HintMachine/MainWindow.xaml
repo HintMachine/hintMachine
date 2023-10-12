@@ -45,13 +45,6 @@
             </Grid>
 
             <StackPanel Name="GridGameConnect" Margin="8,8,8,8" Visibility="Visible">
-                <DockPanel LastChildFill="True" Margin="0,0,0,8">
-                    <Label Content="Game :" HorizontalAlignment="Left"/>
-                    <ComboBox x:Name="ComboboxGame" Margin="8,0,0,0" HorizontalAlignment="Stretch" SelectionChanged="OnSelectedGameConnectorChange"/>
-                </DockPanel>
-
-                <TextBlock Name="TextblockGameDescription" Padding="0,8,0,12" TextWrapping="Wrap" Visibility="Collapsed"></TextBlock>
-
                 <Button Content="🔗 Connect to game" Margin="0,8,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
             </StackPanel>
 

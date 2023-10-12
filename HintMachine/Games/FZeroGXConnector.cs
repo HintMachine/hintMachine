@@ -29,10 +29,11 @@ namespace HintMachine.Games
         public FZeroGXConnector()
         {
             Name = "F-Zero GX";
-            Description = "F-Zero GX is the fourth installment in the F-Zero series and the successor to F-Zero X. " +
-                          "The game continues the series' difficult, high-speed racing style, retaining the basic gameplay and control system from the Nintendo 64 title. " +
-                          "A heavy emphasis is placed on track memorization and reflexes, which aids in completing the title.";
-            SupportedVersions = "Tested on a US ISO on Dolphin 5 (64-bit).";
+            Description = "F-Zero GX is the fourth installment in the F-Zero series and the successor to F-Zero X. The game continues the series' difficult, high-speed racing style, retaining the basic gameplay and control system from the Nintendo 64 title. A heavy emphasis is placed on track memorization and reflexes, which aids in completing the title. GX introduces a \"Story Mode\" element, where the player walks in the footsteps of Captain Falcon through nine chapters, completing various missions.";
+            Platform = "GameCube";
+            SupportedVersions.Add("NTSC US");
+            SupportedEmulators.Add("Dolphin 5");
+            CoverFilename = "fzero_gx.png";
             Author = "Dinopony";
 
             Quests.Add(_cupPointsQuest);

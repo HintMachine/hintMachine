@@ -17,9 +17,12 @@
 
         public Rollcage2Connector()
         {
-            Name = "Rollcage Stage 2 (PS1)";
-            Description = "Race on the floor, on the ceilling, blast your opponents with items and finish first.";
-            SupportedVersions = "Tested on BizHawk version 2.9.1.";
+            Name = "Rollcage Stage II";
+            Description = "Rollcage Stage II is an arcade-style racing game for PlayStation and PC, developed by Attention To Detail, and published by Psygnosis. It is the sequel to Rollcage and was released in 2000. On top of the basic racing concept, the cars can be equipped with weapons, that are picked up on the track as bonuses, which can be used against competing cars. The automobiles themselves, once again, have wheels that are larger than the body of the car thus creating a car that has no 'right way up' and can be flipped and continue to drive.";
+            Platform = "PS1";
+            SupportedVersions.Add("Any ROM");
+            SupportedEmulators.Add("BizHawk 2.9.1");
+            CoverFilename = "rollcage_2.png";
             Author = "CalDrac";
 
             Quests.Add(_firstPlacesQuest);

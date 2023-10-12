@@ -10,7 +10,9 @@ namespace HintMachine.Games
         protected long _megadriveRamBaseAddr = 0;
 
         public IMegadriveConnector()
-        {}
+        {
+            Platform = "Megadrive";
+        }
 
         public override bool Connect()
         {
