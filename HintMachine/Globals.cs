@@ -11,8 +11,21 @@ namespace HintMachine
         public const string ProgramName = "HintMachine";
         public const string ProgramVersion = "1.0.3";
 
+        /// <summary>
+        /// The duration of a "tick" where the current game connector (if any) watches the game once, in milliseconds
+        /// </summary>
         public const int TickInterval = 100;
+
+        /// <summary>
+        /// The minimal duration between two hint queries obtained from quests
+        /// </summary>
         public const int HintQueueInterval = 2000;
+
+        /// <summary>
+        /// The maximal amount of pending hints obtained from quest that can be stored at any given time.
+        /// If more hints are obtained, they will be discarded (but it will most likely be because of a bug / exploit anyway)
+        /// </summary>
+        public const int PendingHintsQueueMaxSize = 5;
 
         public static readonly string NotificationSoundPath = 
             $@"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\Assets\Notification.wav";
@@ -34,7 +47,8 @@ namespace HintMachine
             new FZeroGXConnector(),
             new IslandersConnector(),
             new DorfromantikConnector(),
-            new MeteosConnector()
+            new MeteosConnector(),
+            new PacManChampionshipEditionDXConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)
@@ -46,6 +60,7 @@ namespace HintMachine
             return null;
         }
 
+        // Easter egg commands
         public static readonly List<string> HitMachineFacts = new List<string>() {
             "Le saviez vous ? Avant d'être présenté par Charly et Lulu, le Hit Machine était animé par Ophelie Winter et Yves Noel.",
             "Le saviez vous ? Le Hit Machine a été diffusé sur M6 entre 1994 et 2009",

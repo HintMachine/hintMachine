@@ -22,6 +22,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - ISLANDERS
 - Meteos (DS)
 - One Finger Death Punch
+- PAC-MAN Championship Edition DX+
 - Puyo Puyo Tetris
 - Rollcage Stage 2 (PS1)
 - Sonic 3 Blue Spheres

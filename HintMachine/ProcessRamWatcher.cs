@@ -90,7 +90,7 @@ namespace HintMachine
         private ProcessModule _module = null;
         private IntPtr _processHandle = IntPtr.Zero;
 
-        public long BaseAddress { get; set; } = 0;
+        public long BaseAddress { get; private set; } = 0;
 
         // ----------------------------------------------------------------------------------
 
@@ -262,6 +262,23 @@ namespace HintMachine
             return regions;
         }
         
+        /// <summary>
+        /// Test if the attached process memory is still accessible.
+        /// </summary>
+        /// <returns>true if memory can be read, false otherwise</returns>
+        public bool TestProcess()
+        {
+            try
+            {
+                ReadUint8(BaseAddress);
+                return true;
+            }
+            catch(Exception) 
+            {
+                return false;
+            }
+        }
+
         /*
         public long GetThreadstack0()
         {
