@@ -129,6 +129,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
+    <Compile Include="Games\INintendoDSConnector.cs" />
+    <Compile Include="Games\MeteosConnector.cs" />
     <Compile Include="Games\BustAMove4Connector.cs" />
     <Compile Include="Games\PacManChampionshipEditionDXConnector.cs" />
     <Compile Include="Games\FZeroGXConnector.cs" />

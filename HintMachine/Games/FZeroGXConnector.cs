@@ -23,6 +23,7 @@ namespace HintMachine.Games
 
         private ProcessRamWatcher _ram = null;
         private long _mem1Addr = 0;
+        private bool _wasRacingLastTick = false;
 
         // ----------------------------------------------------------
 
@@ -70,7 +71,9 @@ namespace HintMachine.Games
         public override bool Poll()
         {
             long isRacingAddr = _mem1Addr + 0x17D7A9;
-            if(_ram.ReadUint8(isRacingAddr) == 1)
+            bool isRacing = (_ram.ReadUint8(isRacingAddr) != 0);
+
+            if (_wasRacingLastTick)
             {
                 long knockoutsCountAddr = _mem1Addr + 0xC46A22;
                 int knockoutsCount = _ram.ReadUint8(knockoutsCountAddr);
@@ -79,6 +82,8 @@ namespace HintMachine.Games
                 long cupPointsAddr = _mem1Addr + 0x378668;
                 _cupPointsQuest.UpdateValue(_ram.ReadUint16(cupPointsAddr, true));
             }
+
+            _wasRacingLastTick = isRacing;
 
             return true;
         }
