@@ -139,7 +139,18 @@ namespace HintMachine
         public override void UpdateComponents()
         {
             _progressBar.Value = CurrentValue;
-            _progressBarOverlayText.Text = CurrentValue + " / " + GoalValue;   
+            _progressBarOverlayText.Text = CurrentValue + " / " + GoalValue;
+
+#if DEBUG
+            if (TimeoutBetweenIncrements > 0)
+            {
+                DateTime now = DateTime.UtcNow;
+                TimeSpan t = now - _lastIncrementTime;
+                double cooldown = TimeoutBetweenIncrements - t.TotalSeconds;
+                if(cooldown > 0)
+                    _progressBarOverlayText.Text += $" ({Math.Ceiling(cooldown)}s cooldown)";
+            }
+#endif
         }
     }
 }
