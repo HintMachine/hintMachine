@@ -5,7 +5,7 @@
         private readonly HintQuestCumulative _linesQuest = new HintQuestCumulative
         {
             Name = "Cleared Lines",
-            GoalValue = 250,
+            GoalValue = 200,
         };
         private readonly HintQuestCumulative _tetrisesQuest = new HintQuestCumulative
         {
@@ -22,16 +22,18 @@
             Name = "T-Spins",
             GoalValue = 40,
         };
-//        private readonly HintQuestCumulative _combosQuest = new HintQuestCumulative
-//        {
-//            Name = "Combos",
-//            GoalValue = 60,
-//        };
-//        private readonly HintQuestCumulative _perfectClearsQuest = new HintQuestCumulative
-//        {
-//            Name = "All Clears",
-//            GoalValue = 5,
-//        };
+        /*
+        private readonly HintQuestCumulative _combosQuest = new HintQuestCumulative
+        {
+            Name = "Combos",
+            GoalValue = 60,
+        };
+        private readonly HintQuestCumulative _perfectClearsQuest = new HintQuestCumulative
+        {
+            Name = "All Clears",
+            GoalValue = 5,
+        };
+        */
 
         private ProcessRamWatcher _ram = null;
 

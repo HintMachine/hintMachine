@@ -9,7 +9,7 @@ namespace HintMachine
     internal static class Globals
     {
         public const string ProgramName = "HintMachine";
-        public const string ProgramVersion = "1.0.3";
+        public const string ProgramVersion = "1.0.4";
 
         /// <summary>
         /// The duration of a "tick" where the current game connector (if any) watches the game once, in milliseconds
@@ -19,7 +19,7 @@ namespace HintMachine
         /// <summary>
         /// The minimal duration between two hint queries obtained from quests
         /// </summary>
-        public const int HintQueueInterval = 2000;
+        public const int HintQueueInterval = 1000;
 
         /// <summary>
         /// The maximal amount of pending hints obtained from quest that can be stored at any given time.

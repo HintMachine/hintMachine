@@ -10,6 +10,8 @@ using System.Threading;
 using System.Windows.Threading;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net;
+using System.Collections;
+
 
 namespace HintMachine
 {
@@ -26,6 +28,8 @@ namespace HintMachine
         private readonly Thread _gameWatchingThread = null;
 
         private readonly WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
+
+        private int _hintTokens = 0;
 
         // ----------------------------------------------------------------------------------
 
@@ -145,21 +149,28 @@ namespace HintMachine
 
                 if (pollSuccessful)
                 {
+                    int obtainedHintTokens = 0;
+
                     // Update hint quests
                     foreach (HintQuest quest in _game.Quests)
                     {
-                        
-                        if (quest.CheckCompletion())
-                        {
+                        obtainedHintTokens += quest.CheckAndCommitCompletion();
+                        if(obtainedHintTokens > 0)
                             Console.WriteLine($"Quest {quest.Name} completed");
-                            if (Settings.PlaySoundOnHint)
-                                _soundPlayer.controls.play();
-                            _archipelagoSession.SendMessage($"I just got a hint using HintMachine while playing {_game.Name}!");
+                        Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => { 
+                            quest.UpdateComponents(); 
+                        }));
+                    }
 
-                            _archipelagoSession.PendingRandomHints += quest.AwardedHints;
-                        }
+                    if (obtainedHintTokens > 0)
+                    {
+                        if (Settings.PlaySoundOnHint)
+                            _soundPlayer.controls.play();
+                        string hintSingularPlural = (obtainedHintTokens > 1) ? "hints" : "a hint";
+                        _archipelagoSession.SendMessage($"I just got {hintSingularPlural} using HintMachine while playing {_game.Name}!");
 
-                        Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => { quest.UpdateComponents(); }));
+                        _hintTokens += obtainedHintTokens;
+                        UpdateHintTokensCount();
                     }
                 }
             }
@@ -170,6 +181,15 @@ namespace HintMachine
                 DisconnectFromGame();
                 return;
             }
+        }
+
+        private void UpdateHintTokensCount()
+        {
+            Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
+            {
+                ButtonRedeemHintToken.IsEnabled = (_hintTokens > 0);
+                TextHintTokenCount.Text = $"You currently have {_hintTokens} hint tokens.";
+            }));
         }
 
         private void OnConnectToGameButtonClick(object sender, RoutedEventArgs e)
@@ -294,7 +314,8 @@ namespace HintMachine
 #if DEBUG   // Debug commands
             else if (v == "!gethint")
             {
-                _archipelagoSession.PendingRandomHints += 1;
+                _hintTokens += 1;
+                UpdateHintTokensCount();
                 return true;
             }
 #endif
@@ -424,6 +445,16 @@ namespace HintMachine
             Settings.Slot = slotName;
             Settings.SaveToFile();
             OnArchipelagoSessionChange();
+        }
+
+        private void OnRedeemHintTokenClick(object sender, RoutedEventArgs e)
+        {
+            if (_hintTokens <= 0)
+                return;
+
+            _archipelagoSession.PendingRandomHints += 1;
+            _hintTokens -= 1;
+            UpdateHintTokensCount();
         }
     }
 }

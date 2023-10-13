@@ -42,9 +42,18 @@ namespace HintMachine
                     _lastIncrementTime = now;
                 }
 
-                long absDiff = Math.Abs(_currentValue - value);
-                if (MaxIncrease != 0 && absDiff > MaxIncrease && absDiff != GoalValue)
-                    return;
+                // If value is increasing, check if it does not increase more than the defined MaxIncrease
+                // (this is mostly used to prevent blatant cheating / bugged value readings)
+                if(value > _currentValue)
+                {
+                    long diff = _currentValue - value;
+
+                    // If MaxIncrease is not defined for that quest, use a default value of (2 x GoalValue)
+                    long realMaxIncrease = (MaxIncrease > 0) ? MaxIncrease : GoalValue * 2;
+
+                    if (diff > realMaxIncrease)
+                        return;
+                }
                 
                 _currentValue = value;
             }
@@ -72,13 +81,20 @@ namespace HintMachine
             return (float)CurrentValue / GoalValue;
         }
 
-        public override bool CheckCompletion()
+        public override int CheckAndCommitCompletion()
         {
-            if (CurrentValue < GoalValue)
-                return false;
+            int obtainedHints = 0;
+            
+            if (GoalValue == 0)
+                return 0;
 
-            CurrentValue -= GoalValue;
-            return true;
+            while (CurrentValue >= GoalValue)
+            {
+                obtainedHints += AwardedHints;
+                CurrentValue -= GoalValue;
+            }
+
+            return obtainedHints;
         }
 
         public override void InitComponents(Grid questsGrid)

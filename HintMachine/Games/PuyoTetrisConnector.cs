@@ -24,11 +24,11 @@ namespace HintMachine.Games
             Name = "Combos",
             GoalValue = 60,
         };
-        private readonly HintQuestCumulative _perfectClearsQuest = new HintQuestCumulative
-        {
-            Name = "Perfect Clears",
-            GoalValue = 5,
-        };
+//        private readonly HintQuestCumulative _perfectClearsQuest = new HintQuestCumulative
+//        {
+//            Name = "Perfect Clears",
+//            GoalValue = 5,
+//        };
         private readonly HintQuestCumulative _backToBackQuest = new HintQuestCumulative
         {
             Name = "Back-to-Back",
@@ -44,11 +44,11 @@ namespace HintMachine.Games
             Name = "Chains",
             GoalValue = 100,
         };
-        private readonly HintQuestCumulative _allClearsQuest = new HintQuestCumulative
-        {
-            Name = "All Clears",
-            GoalValue = 3,
-        };
+//        private readonly HintQuestCumulative _allClearsQuest = new HintQuestCumulative
+//        {
+//            Name = "All Clears",
+//            GoalValue = 3,
+//        };
 
         private ProcessRamWatcher _ram = null;
 
@@ -62,8 +62,8 @@ namespace HintMachine.Games
             Author = "Dinopony";
 
             Quests = new List<HintQuest>() {
-                _linesQuest, _tetrisesQuest, _tspinsQuest, _combosQuest, _perfectClearsQuest,
-                _poppedPuyosQuest, _chainsQuest, _allClearsQuest
+                _linesQuest, _tetrisesQuest, _tspinsQuest, _combosQuest, /*_perfectClearsQuest,*/
+                _poppedPuyosQuest, _chainsQuest, /*_allClearsQuest*/
             };
         }
 
@@ -101,7 +101,7 @@ namespace HintMachine.Games
                 comboCount -= 1;
             _combosQuest.UpdateValue(comboCount);
 
-            _perfectClearsQuest.UpdateValue(_ram.ReadUint16(tetrisDataBaseAddr - 0x54));
+            // _perfectClearsQuest.UpdateValue(_ram.ReadUint16(tetrisDataBaseAddr - 0x54));
             _backToBackQuest.UpdateValue(_ram.ReadUint8(tetrisDataBaseAddr + 0xB));
         }
 
@@ -114,7 +114,7 @@ namespace HintMachine.Games
 
             _poppedPuyosQuest.UpdateValue(_ram.ReadUint16(puyoDataBaseAddr + 0x154));
             _chainsQuest.UpdateValue(_ram.ReadUint8(puyoDataBaseAddr - 0x4));
-            _allClearsQuest.UpdateValue(_ram.ReadUint8(puyoDataBaseAddr + 0x34));
+            // _allClearsQuest.UpdateValue(_ram.ReadUint8(puyoDataBaseAddr + 0x34));
         }
     }
 }
