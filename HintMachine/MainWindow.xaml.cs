@@ -5,12 +5,8 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using WMPLib;
 using HintMachine.Games;
-using System.Linq;
 using System.Threading;
 using System.Windows.Threading;
-using Archipelago.MultiClient.Net.Models;
-using Archipelago.MultiClient.Net;
-using System.Collections;
 
 
 namespace HintMachine

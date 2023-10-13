@@ -129,8 +129,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
-    <Compile Include="Games\IDolphinConnector.cs" />
-    <Compile Include="Games\INintendoDSConnector.cs" />
     <Compile Include="Games\MeteosConnector.cs" />
     <Compile Include="Games\BustAMove4Connector.cs" />
     <Compile Include="Games\PacManChampionshipEditionDXConnector.cs" />
@@ -141,7 +139,6 @@
     <Compile Include="Globals.cs" />
     <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />
-    <Compile Include="Games\IMegadriveConnector.cs" />
     <Compile Include="Games\GeometryWarsConnector.cs" />
     <Compile Include="Games\NuclearThroneConnector.cs" />
     <Compile Include="Games\PuyoTetrisConnector.cs" />
@@ -154,10 +151,13 @@
     <Compile Include="HintsView.xaml.cs">
       <DependentUpon>HintsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IGameConnector.cs" />
+    <Compile Include="GenericConnectors\IDolphinConnector.cs" />
+    <Compile Include="GenericConnectors\IGameConnector.cs" />
     <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
     <Compile Include="Games\XenotiltConnector.cs" />
     <Compile Include="Games\IslandersConnector.cs" />
+    <Compile Include="GenericConnectors\IMegadriveConnector.cs" />
+    <Compile Include="GenericConnectors\INintendoDSConnector.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -294,6 +294,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GenericConnectors\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
