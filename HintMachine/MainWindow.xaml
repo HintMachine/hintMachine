@@ -45,16 +45,11 @@
             </Grid>
 
             <StackPanel Name="GridGameConnect" Margin="8,8,8,8" Visibility="Visible">
-                <Button Content="🔗 Connect to game" Margin="0,8,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
+                <Button Content="🔗 Connect to a game" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
             </StackPanel>
 
             <StackPanel VerticalAlignment="Bottom">
-                <TextBlock TextWrapping="Wrap" Margin="0,12">
-                    Earn tokens by completing quests in one of the supported games, then redeem those tokens using the following button
-                    to earn a random location hint for your world.
-                </TextBlock>
-
-                <TextBlock Name="TextHintTokenCount" TextWrapping="Wrap" FontWeight="Bold">
+                <TextBlock Name="TextHintTokenCount" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Center">
                     You currently have 0 hint tokens.
                 </TextBlock>
 

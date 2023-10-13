@@ -64,7 +64,8 @@ namespace HintMachine
             _soundPlayer.settings.volume = 30;
 
             Logger.Info("Feeling stuck in your Archipelago world?\n" +
-                        "Connect to a game and start playing to get random hints instead of eating good old Burger King.");
+                        "Connect to a game and start playing to earn hint tokens by completing quests.\n" + 
+                        "You can then redeem those tokens using the dedicated button to earn a random location hint for your world.");
         }
 
         protected void PopulateReconnectAsMenu()
