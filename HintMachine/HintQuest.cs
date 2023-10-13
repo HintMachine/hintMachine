@@ -26,7 +26,12 @@ namespace HintMachine
         public HintQuest()
         {}
 
-        public abstract bool CheckCompletion();
+        /// <summary>
+        /// A method which checks if quest has been completed, decreases the CurrentValue until the quest reaches a
+        /// "non-completed" state and returns the number of awarded hints.
+        /// </summary>
+        /// <returns>the number of obtained hints</returns>
+        public abstract int CheckAndCommitCompletion();
 
         public abstract void InitComponents(Grid questsGrid);
 

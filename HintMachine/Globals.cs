@@ -19,7 +19,7 @@ namespace HintMachine
         /// <summary>
         /// The minimal duration between two hint queries obtained from quests
         /// </summary>
-        public const int HintQueueInterval = 2000;
+        public const int HintQueueInterval = 1000;
 
         /// <summary>
         /// The maximal amount of pending hints obtained from quest that can be stored at any given time.

@@ -55,41 +55,54 @@
                 <Button Content="🔗 Connect to game" Margin="0,8,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
             </StackPanel>
 
-            <Border BorderThickness="1" BorderBrush="#FFABADB3" Grid.Column="0" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
-                <Border.Background>
-                    <ImageBrush ImageSource="/Assets/logo_small.png" Stretch="Uniform" TileMode="None" Opacity="0.15"/>
-                </Border.Background>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+            <StackPanel VerticalAlignment="Bottom">
+                <TextBlock TextWrapping="Wrap" Margin="0,12">
+                    Earn tokens by completing quests in one of the supported games, then redeem those tokens using the following button
+                    to earn a random location hint for your world.
+                </TextBlock>
 
-                    <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
-                    <TextBlock Name="LabelHost" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">archipelago.gg:12345</TextBlock>
+                <TextBlock Name="TextHintTokenCount" TextWrapping="Wrap" FontWeight="Bold">
+                    You currently have 0 hint tokens.
+                </TextBlock>
 
-                    <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
-                    <TextBlock Name="LabelSlot" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">Player</TextBlock>
-
-                    <Label Content="Game: " FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>
-                    <TextBlock Name="LabelGame" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">-</TextBlock>
-
-                    <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
+                <Button Name="ButtonRedeemHintToken" Margin="0,12" Height="30" Background="#FFA8E0A9" IsEnabled="False" Click="OnRedeemHintTokenClick">❓ Get a random location hint</Button>
+                
+                <Border BorderThickness="1" BorderBrush="#FFABADB3" Grid.Column="0"  RenderTransformOrigin="0.5,0.5">
+                    <Border.Background>
+                        <ImageBrush ImageSource="/Assets/logo_small.png" Stretch="Uniform" TileMode="None" Opacity="0.15"/>
+                    </Border.Background>
+                    <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Button Name="ButtonChangeGame" Content="◀️ Pick another game" Click="OnDisconnectFromGameButtonClick" Grid.Column="0" Margin="0,0,2,0" Visibility="Hidden"/>
-                        <Button Content="❌ Disconnect" Grid.Column="1" Margin="2,0,0,0" Click="OnArchipelagoDisconnectButtonClick"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock Name="LabelHost" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">archipelago.gg:12345</TextBlock>
+
+                        <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Name="LabelSlot" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">Player</TextBlock>
+
+                        <Label Content="Game: " FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock Name="LabelGame" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">-</TextBlock>
+
+                        <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Name="ButtonChangeGame" Content="◀️ Pick another game" Click="OnDisconnectFromGameButtonClick" Grid.Column="0" Margin="0,0,2,0" Visibility="Hidden"/>
+                            <Button Content="❌ Disconnect" Grid.Column="1" Margin="2,0,0,0" Click="OnArchipelagoDisconnectButtonClick"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Border>
+                </Border>
+            </StackPanel>
 
             <TabControl Name="TabControl" Margin="12,0,0,0" Grid.Column="1" SelectionChanged="OnTabChange">
                 <TabItem Header="Message log" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
