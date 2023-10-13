@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using static HintMachine.ProcessRamWatcher;
-
-namespace HintMachine.Games
+﻿namespace HintMachine.Games
 {
-    public class FZeroGXConnector : IGameConnector
+    public class FZeroGXConnector : IDolphinConnector
     {
         private readonly HintQuestCumulative _cupPointsQuest = new HintQuestCumulative
         {
@@ -17,17 +13,15 @@ namespace HintMachine.Games
         private readonly HintQuestCumulative _knockoutsQuest = new HintQuestCumulative
         {
             Name = "Knock-outs",
-            GoalValue = 10,
-            MaxIncrease = 2,
+            GoalValue = 20,
+            MaxIncrease = 3,
         };
 
-        private ProcessRamWatcher _ram = null;
-        private long _mem1Addr = 0;
         private bool _wasRacingLastTick = false;
 
         // ----------------------------------------------------------
 
-        public FZeroGXConnector()
+        public FZeroGXConnector() : base(false, "GFZE01")
         {
             Name = "F-Zero GX";
             Description = "F-Zero GX is the fourth installment in the F-Zero series and the successor to F-Zero X. " +
@@ -38,33 +32,6 @@ namespace HintMachine.Games
 
             Quests.Add(_cupPointsQuest);
             Quests.Add(_knockoutsQuest);
-        }
-
-        public override bool Connect()
-        {
-            _ram = new ProcessRamWatcher("Dolphin");
-            if (!_ram.TryConnect())
-                return false;
-
-            List<MemoryRegion> regions = _ram.ListMemoryRegions(0x20000, MemoryRegionType.MEM_MAPPED);
-            foreach (MemoryRegion region in regions)
-            {
-                byte[] SIGNATURE = new byte[] { 0x47, 0x46, 0x5A, 0x45, 0x30, 0x31 }; // GFZE01
-                byte[] signatureBytes = _ram.ReadBytes(region.BaseAddress, SIGNATURE.Length);
-                if (Enumerable.SequenceEqual(signatureBytes, SIGNATURE))
-                {
-                    _mem1Addr = region.BaseAddress;
-                    break;
-                }
-            }
-
-            return (_mem1Addr != 0);
-        }
-
-        public override void Disconnect()
-        {
-            _ram = null;
-            _mem1Addr = 0;
         }
 
         public override bool Poll()
