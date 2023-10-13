@@ -34,7 +34,8 @@
 
         public override bool Connect()
         {
-            base.Connect();
+            if (!base.Connect())
+                return false;
 
             // Sonic & Knuckles + Sonic 1 signature
             byte[] SKS1_SIG = new byte[] { 0x4D, 0x53, 0x4B, 0x26 };
