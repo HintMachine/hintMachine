@@ -28,7 +28,7 @@
         {
             Name = "Metroid Prime Pinball (DS)";
             Description = "Metroid Prime, but abridged as a Pinball game.";
-            SupportedVersions = "Any region rom, using BizHawk 2.9.1's MelonDS core.";
+            SupportedVersions = "Any region ROM, using BizHawk 2.9.1's MelonDS core.";
             Author = "Knuxfan24";
             Quests.Add(_pointsQuest);
             Quests.Add(_artifactsQuest);
