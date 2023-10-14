@@ -4,8 +4,25 @@
     {
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
-            Name = "Cumulative Score",
-            GoalValue = 500,
+            Name = "Score",
+            GoalValue = 1000,
+            MaxIncrease = 500,
+        };
+
+        private readonly HintQuestCumulative _boosterQuest = new HintQuestCumulative
+        {
+            Name = "Booster Packs Earned",
+            GoalValue = 5,
+            MaxIncrease = 2,
+            TimeoutBetweenIncrements = 15,
+        };
+
+        private readonly HintQuestCumulative _islandQuest = new HintQuestCumulative
+        {
+            Name = "Islands Visited",
+            GoalValue = 3,
+            MaxIncrease = 1,
+            TimeoutBetweenIncrements = 60,
         };
 
         private ProcessRamWatcher _ram = null;
@@ -20,6 +37,8 @@
             Author = "Serpent.AI";
 
             Quests.Add(_scoreQuest);
+            Quests.Add(_boosterQuest);
+            Quests.Add(_islandQuest);
         }
 
         public override bool Connect()
@@ -35,8 +54,24 @@
 
         public override bool Poll()
         {
-            long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7325C8, new int[] { 0xD8, 0xB8, 0x110, 0x30, 0x4D4, 0x40, 0x0 });
-            _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress + 0x54));
+            if (_ram.TestProcess() == false) {  return false; }
+
+            long localGameManagerStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7521F0, new int[] { 0x210, 0x700, 0x20, 0x5A0 });
+
+            if (localGameManagerStructAddress > 0)
+            {
+                try
+                {
+                    long scoreValue = _ram.ReadUint32(localGameManagerStructAddress + 0xD8);
+                    long boosterValue = _ram.ReadUint32(localGameManagerStructAddress + 0xB8);
+                    long islandValue = _ram.ReadUint32(localGameManagerStructAddress + 0xE8);
+
+                    _scoreQuest.UpdateValue(scoreValue);
+                    _boosterQuest.UpdateValue(boosterValue);
+                    _islandQuest.UpdateValue(islandValue);
+                }
+                catch { }
+            }
 
             return true;
         }
