@@ -28,6 +28,7 @@ namespace HintMachine
         private readonly WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
 
         private int _hintTokens = 0;
+        private bool alreadyAwardedTokenForCurrentGame = false;
 
         // ----------------------------------------------------------------------------------
 
@@ -179,9 +180,11 @@ namespace HintMachine
                     {
                         if (Settings.PlaySoundOnHint)
                             _soundPlayer.controls.play();
-                        string hintSingularPlural = (obtainedHintTokens > 1) ? "hints" : "a hint";
-                        _archipelagoSession.SendMessage($"I just got {hintSingularPlural} using HintMachine while playing {_game.Name}!");
-
+                        if (!alreadyAwardedTokenForCurrentGame) { 
+                            string hintSingularPlural = (obtainedHintTokens > 1) ? "hints" : "a hint";
+                            _archipelagoSession.SendMessage($"I just got {hintSingularPlural} using HintMachine while playing {_game.Name}!");
+                            alreadyAwardedTokenForCurrentGame = true;
+                        }
                         _hintTokens += obtainedHintTokens;
                         UpdateHintTokensCount();
                     }
@@ -234,6 +237,7 @@ namespace HintMachine
 
                     // Store last selected game in settings to automatically select it on next execution
                     Settings.LastConnectedGame = selectedGameName;
+                    alreadyAwardedTokenForCurrentGame = false;
 
                     Logger.Info($"✔️ Successfully connected to {game.Name}. ");
                 }
