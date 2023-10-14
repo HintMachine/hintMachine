@@ -5,7 +5,7 @@ namespace HintMachine.Games
         private readonly HintQuestCumulative _passengersQuest = new HintQuestCumulative
         {
             Name = "Passengers Delivered",
-            GoalValue = 750,
+            GoalValue = 150,
             MaxIncrease = 10,
         };
 
