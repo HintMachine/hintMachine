@@ -16,10 +16,10 @@ namespace HintMachine.Games
 
         public GeometryWarsGalaxiesConnector() : base(true, "RGLP7D")
         {
-            Name = "Geometry Wars Galaxies (Wii)";
-            Description = "Destroy geometric enemies in this classic and stylish twin-stick shooter " +
-                          "in order to earn geoms and unlock hints.";
-            SupportedVersions = "Tested on European ROM on all recent versions of Dolphin 5 (64-bit).";
+            Name = "Geometry Wars: Galaxies";
+            Description = "Geometry Wars: Galaxies is set in a space-like environment where the player must shoot geometrical shapes in order to score points, gain lives, acquire bombs and survive as long as possible. The game is played to an upbeat electro soundtrack.";
+            SupportedVersions.Add("Europe");
+            CoverFilename = "geometry_wars_galaxies.png";
             Author = "Dinopony";
 
             Quests.Add(_geomsQuest);

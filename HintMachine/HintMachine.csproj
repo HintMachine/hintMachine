@@ -129,19 +129,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
-    <Compile Include="Games\IDolphinConnector.cs" />
-    <Compile Include="Games\INintendoDSConnector.cs" />
     <Compile Include="Games\MeteosConnector.cs" />
     <Compile Include="Games\BustAMove4Connector.cs" />
     <Compile Include="Games\PacManChampionshipEditionDXConnector.cs" />
     <Compile Include="Games\FZeroGXConnector.cs" />
     <Compile Include="Games\DorfromantikConnector.cs" />
     <Compile Include="Games\Rollcage2Connector.cs" />
+    <Compile Include="Games\ColumnsConnector.cs" />
     <Compile Include="Games\StargunnerConnector.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />
-    <Compile Include="Games\IMegadriveConnector.cs" />
     <Compile Include="Games\GeometryWarsConnector.cs" />
     <Compile Include="Games\NuclearThroneConnector.cs" />
     <Compile Include="Games\PuyoTetrisConnector.cs" />
@@ -154,13 +152,19 @@
     <Compile Include="HintsView.xaml.cs">
       <DependentUpon>HintsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IGameConnector.cs" />
+    <Compile Include="GenericConnectors\IDolphinConnector.cs" />
+    <Compile Include="GenericConnectors\IGameConnector.cs" />
     <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
     <Compile Include="Games\XenotiltConnector.cs" />
     <Compile Include="Games\IslandersConnector.cs" />
+    <Compile Include="GenericConnectors\IMegadriveConnector.cs" />
+    <Compile Include="GenericConnectors\INintendoDSConnector.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameSelectionWindow.xaml.cs">
+      <DependentUpon>GameSelectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ManualHintWindow.xaml.cs">
       <DependentUpon>ManualHintWindow.xaml</DependentUpon>
@@ -191,6 +195,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="GameSelectionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ManualHintWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -252,9 +260,27 @@
     <Resource Include="Assets\icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Covers\fzero_gx.png" />
+    <Resource Include="Assets\Covers\dorfromantik.png" />
+    <Resource Include="Assets\Covers\bust_a_move_4.png" />
+    <Resource Include="Assets\Covers\geometry_wars_re.png" />
+    <Resource Include="Assets\Covers\geometry_wars_galaxies.png" />
+    <Resource Include="Assets\Covers\islanders.png" />
+    <Resource Include="Assets\Covers\one_finger_death_punch.png" />
+    <Resource Include="Assets\Covers\pacman_cedx.png" />
+    <Resource Include="Assets\Covers\puyo_puyo_tetris.png" />
+    <Resource Include="Assets\Covers\rollcage_2.png" />
+    <Resource Include="Assets\Covers\stargunner.png" />
+    <Resource Include="Assets\Covers\xenotilt.png" />
+    <Resource Include="Assets\Covers\meteos.png" />
+    <Resource Include="Assets\Covers\columns.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Assets\Covers\tetris_effect_connected.png" />
+    <Resource Include="Assets\Covers\unknown.png" />
+    <Resource Include="Assets\Covers\zachtronics_solitaire_collection.png" />
+    <Resource Include="Assets\Covers\sonic_blue_spheres.png" />
     <Content Include="threadstack-finder.dll" />
     <Content Include="threadstack.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -271,5 +297,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

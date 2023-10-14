@@ -36,10 +36,12 @@ namespace HintMachine.Games
 
         public MeteosConnector()
         {
-            Name = "Meteos (DS)";
-            Description = "Match 3+ blocks of the same color horizontally or vertically to ignite a propulsion and send them to your opponents.";
-            SupportedVersions = "Tested on USA rom with BizHawk 2.9.1";
+            Name = "Meteos";
+            Description = "An evil planet named Meteo is sending storms of world-ending meteors across the galaxy, and only your puzzle skills can stop them. As blocks drop down on the lower screen, you must use the DS's stylus to match up blocks of the same color. Once you have enough blocks connected, they'll shoot back into the sky to form planets on the upper screen.\r\n\r\nMatch 3+ blocks of the same color horizontally or vertically to ignite a propulsion and send them to your opponents.";
+            SupportedVersions.Add("US ROM");
+            CoverFilename = "meteos.png";
             Author = "CalDrac";
+
             Quests.Add(_sendBlocksQuest);
             //Quests.Add(_levelClearQuest); //Might be added back later
             Quests.Add(_starTripQuest);

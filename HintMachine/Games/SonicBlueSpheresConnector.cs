@@ -23,8 +23,9 @@
                           "using the wondrous Lock-On Technology™, it brought you to a secret standalone version " +
                           "of the \"Get Blue Spheres\" minigame from Sonic The Hedgehog 3.\n\n" +
                           "Play an almost infinite stream of procedurally generated levels, collect all the Blue Spheres and get hints!";
-            SupportedVersions = "Emulator: Bizhawk 2.9.1 (using default Genesis Plus GX core)\n" +
-                                "ROM: 'Sonic & Knuckles + Sonic the Hedgehog' or 'Blue Spheres Plus'";
+            SupportedVersions.Add("Sonic & Knuckles + Sonic the Hedgehog (World)");
+            SupportedVersions.Add("Blue Spheres Plus");
+            CoverFilename = "sonic_blue_spheres.png";
             Author = "Dinopony";
 
             Quests.Add(_levelsQuest);
@@ -33,7 +34,8 @@
 
         public override bool Connect()
         {
-            base.Connect();
+            if (!base.Connect())
+                return false;
 
             // Sonic & Knuckles + Sonic 1 signature
             byte[] SKS1_SIG = new byte[] { 0x4D, 0x53, 0x4B, 0x26 };

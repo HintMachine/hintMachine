@@ -13,8 +13,10 @@
         public GeometryWarsConnector()
         {
             Name = "Geometry Wars: Retro Evolved";
-            Description = "Kill geometric ennemies in this box shaped area twin stick shooter.";
-            SupportedVersions = "Tested on up-to-date Steam version.";
+            Description = "Geometry Wars: Retro Evolved is a old school style shooter, but remixed for the 21st century with next generation graphics and deep, modern gameplay. Playing is simple: you are a geometric \"ship\" trapped in a grid world, facing off against waves of deadly wanderers, snakes, and repulsars. Your aim is to survive long enough to set a high score!";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            CoverFilename = "geometry_wars_re.png";
             Author = "CalDrac";
 
             Quests.Add(_scoreQuest);

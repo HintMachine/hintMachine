@@ -20,8 +20,10 @@ namespace HintMachine.Games
         public OneFingerDeathPunchConnector()
         {
             Name = "One Finger Death Punch";
-            Description = "Fight using only your left and right mouse button. Your cursor can be anywhere on the screen.";
-            SupportedVersions = "Tested on up-to-date Steam version";
+            Description = "Experience cinematic kung-fu battles in the fastest, most intense brawler the indie world has ever seen! With the unique 1:1 response system of One Finger Death Punch, players will feel the immediate feedback of every bone-crunching hit.\r\n\r\nPay tribute to the masters using five classic kung-fu styles mixed with additional weapons. Combine face-to-face combat with throwing weapons to recreate complex fight choreographies or just send bad guys flying through glass windows. Explore a world map with over 250 stages, 13 modes, and 3 difficulty levels. Unlock 21 different skills that can be combined in thousands of ways to assist you in your journey. Put your kung-fu to the ultimate test in the survival mode.";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            CoverFilename = "one_finger_death_punch.png";
             Author = "CalDrac";
 
             Quests.Add(_killsQuest);

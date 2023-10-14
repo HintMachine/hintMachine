@@ -14,7 +14,9 @@
         {
             Name = "Xenotilt";
             Description = "In this three parts pinball table, you will have to complete missions to earn a lot of points.";
-            SupportedVersions = "Tested on the .282 version";
+            Platform = "PC";
+            SupportedVersions.Add(".282");
+            CoverFilename = "xenotilt.png";
             Author = "CalDrac";
 
             Quests.Add(_scoreQuest);
