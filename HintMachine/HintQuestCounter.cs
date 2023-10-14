@@ -46,7 +46,7 @@ namespace HintMachine
                 // (this is mostly used to prevent blatant cheating / bugged value readings)
                 if(value > _currentValue)
                 {
-                    long diff = _currentValue - value;
+                    long diff = value - _currentValue;
 
                     // If MaxIncrease is not defined for that quest, use a default value of (2 x GoalValue)
                     long realMaxIncrease = (MaxIncrease > 0) ? MaxIncrease : GoalValue * 2;
