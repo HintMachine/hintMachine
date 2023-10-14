@@ -25,8 +25,10 @@
         public StargunnerConnector()
         {
             Name = "Stargunner";
-            Description = "Blast your enemies with a huge variety of wepons in this side-scrolling shooter.";
-            SupportedVersions = "Tested on up-to-date GOG version.";
+            Description = "In the far distant future, an epic war for survival takes place...\r\n\r\nDeep within the Andromeda galaxy, the people of Zile grow restless and greedy. The Zilions secretly prepare for a massive strike against the nearby planet Ytima. Fearing such an attack, the Ytimians train an elite squad of \"Stargunners.\" Their mission: To strike the planet Zile and cripple the Zilions’ three strongholds, where the Zilion war fleets await. If the Stargunners can surprise the Zilions on their own planet and wipe out their fleet, then good will triumph over evil once again.";
+            Platform = "PC";
+            SupportedVersions.Add("GOG");
+            CoverFilename = "stargunner.png";
             Author = "CalDrac";
 
             Quests.Add(_scoreQuest);

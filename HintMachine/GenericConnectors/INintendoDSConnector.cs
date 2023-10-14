@@ -10,7 +10,10 @@ namespace HintMachine.Games
         protected long _dsRamBaseAddress = 0;
 
         public INintendoDSConnector()
-        {}
+        {
+            Platform = "DS";
+            SupportedEmulators.Add("BizHawk 2.9.1 (MelonDS core)");
+        }
 
         public override bool Connect()
         {

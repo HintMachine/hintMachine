@@ -13,8 +13,10 @@ namespace HintMachine.Games
         public PacManChampionshipEditionDXConnector()
         {
             Name = "PAC-MAN Championship Edition DX+";
-            Description = "It's time to gear up! Get ready for more ghost chain gobbling and frantic action in PAC-MAN CE-DX+!";
-            SupportedVersions = "Steam";
+            Description = "The sequel to the original PAC-MAN and award-winning power pellet chomping game, PAC-MAN Championship Edition DX returns with even more content! Chomp through bright neon mazes at blistering speeds to unlock brand new achievements and medals for an increased challenge! With a refined user-interface, it's easier than ever to compare high scores with your friends! Get ready for more ghost chain gobbling and frantic action in PAC-MAN CE-DX+";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            CoverFilename = "pacman_cedx.png";
             Author = "Serpent.AI";
 
             Quests.Add(_scoreQuest);

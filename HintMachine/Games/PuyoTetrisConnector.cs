@@ -55,9 +55,10 @@ namespace HintMachine.Games
         public PuyoTetrisConnector()
         {
             Name = "Puyo Puyo Tetris";
-            Description = "Puyo Puyo Tetris combines two legendary stacking games in ones, as its name suggests. " +
-                          "Pop puyos and clear lines with style to earn as many hints as possible.";
-            SupportedVersions = "Tested on up-to-date Steam version";
+            Description = "Two puzzle game juggernauts collide as Tetris, one of the largest-selling and recognized brands in gaming history, and Puyo Puyo from SEGA have combined to create a fun-to-play, fast-paced, competitive party game like no other! The game has tons of different styles of gameplay – from the single-player Adventure and Challenge modes to the ferocious competition of the up-to-four player Arcade modes. There's plenty of Tetris/Puyo variety, even an in-game Shop where players can unlock new characters, new skins for Puyos and Tetriminos, new backgrounds and more.";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            CoverFilename = "puyo_puyo_tetris.png";
             Author = "Dinopony";
 
             Quests = new List<HintQuest>() {

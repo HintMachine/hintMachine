@@ -50,6 +50,7 @@ namespace HintMachine
             new MeteosConnector(),
             new PacManChampionshipEditionDXConnector(),
             new MetroidPrimePinballConnector(),
+            new ColumnsConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)

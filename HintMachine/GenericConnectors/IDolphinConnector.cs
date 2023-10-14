@@ -19,8 +19,8 @@ namespace HintMachine.Games
         {
             _isWii = isWii;
             _gameCode = gameCode;
-            // TODO: Platform
-            // TODO: SupportedEmulators
+            Platform = (isWii) ? "Wii" : "GameCube";
+            SupportedEmulators.Add("Dolphin 5");
         }
 
         public override bool Connect()
