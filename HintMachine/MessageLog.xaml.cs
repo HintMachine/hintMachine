@@ -159,7 +159,7 @@ namespace HintMachine
                     return Color.FromRgb(90, 30, 180);
 
                 case LogMessageType.WARNING:
-                    return Color.FromRgb(128, 100, 0);
+                    return Color.FromRgb(220, 200, 0);
 
                 case LogMessageType.ERROR:
                     return Color.FromRgb(180, 40, 40);

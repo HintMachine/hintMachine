@@ -91,10 +91,6 @@ namespace HintMachine
             try
             {
                 ret = Client.TryConnectAndLogin("", slot, ItemsHandlingFlags.IncludeOwnItems, VERSION, TAGS, null, password, true);
-
-                _hintQueueThread = new Thread(HintQueueThreadLoop);
-                _hintQueueThread.IsBackground = true;
-                _hintQueueThread.Start();
             }
             catch (Exception ex)
             {
@@ -115,6 +111,10 @@ namespace HintMachine
                 }
                 return;
             }
+
+            _hintQueueThread = new Thread(HintQueueThreadLoop);
+            _hintQueueThread.IsBackground = true;
+            _hintQueueThread.Start();
 
             Client.MessageLog.OnMessageReceived += OnArchipelagoMessageReceived;
 
@@ -154,11 +154,20 @@ namespace HintMachine
             return returned;
         }
 
-        public void HintQueueThreadLoop()
+        private void HintQueueThreadLoop()
         {
             while (true)
             {
-                if (PendingRandomHints > 0)
+                
+                if (!Client.Socket.Connected)
+                {
+                    Logger.Warn("Archipelago connection lost, attempting to reconnect...");
+                    Client.TryConnectAndLogin("", Slot, ItemsHandlingFlags.IncludeOwnItems, VERSION, TAGS, null, Password, true);
+                    if (Client.Socket.Connected)
+                        Logger.Info("Reconnected!");
+                }
+
+                if (PendingRandomHints > 0 && Client.Socket.Connected)
                 {
                     PendingRandomHints -= 1;
 
