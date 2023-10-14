@@ -4,7 +4,7 @@
     {
         private readonly HintQuestCumulative _jewelsQuest = new HintQuestCumulative
         {
-            Name = "Jewels",
+            Name = "Jewels (Arcade)",
             GoalValue = 100,
             MaxIncrease = 10,
         };
@@ -30,6 +30,10 @@
 
         public override bool Poll()
         {
+            // Check if we are in arcade mode
+            if (_ram.ReadUint8(_megadriveRamBaseAddr + 0x8464) != 0)
+                return true;
+            
             _jewelsQuest.UpdateValue(_ram.ReadUint16(_megadriveRamBaseAddr + 0xC826));
 
             return true;
