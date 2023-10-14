@@ -12,27 +12,6 @@ It connects to a wide variety of games (through RAM peeking, save file watching,
 
 Given its high dependency to system calls to do RAM peeking and stuff, only Windows is supported as of now.
 
-## Currently supported games
-
-- Bust a Move 4 (PS1)
-- Dorfromantik
-- F-Zero GX
-- Geometry Wars Galaxies (Wii)
-- Geometry Wars : Retro Evolved
-- ISLANDERS
-- Luck be a Landlord
-- Meteos (DS)
-- Metroid Prime Pinball (DS)
-- Mini Metro
-- One Finger Death Punch
-- PAC-MAN Championship Edition DX+
-- Puyo Puyo Tetris
-- Rollcage Stage 2 (PS1)
-- Sonic 3 Blue Spheres
-- Stargunner
-- Tetris Effect Connected
-- Xenotilt
-- Zachtronics Solitaire Collection
 
 ## Usage
 
@@ -49,6 +28,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - Open the solution with Visual Studio 2017+
 - It should generate & run right away
 
+
 ## Contributing
 
 You are free to contribute to HintMachine's development.
@@ -58,3 +38,30 @@ Adding a game is as "simple" as:
 - adding a new connector class inheriting from IGameConnector for your game
 - adding HintQuests inside your connector that track those RAM addresses
 - testing a lot to ensure your way of accessing RAM addresses is stable over several independant executions of the game
+
+
+## Currently supported games
+
+| Game name                        | Platform  |
+|----------------------------------|-----------|
+| BPM: Bullets Per Minute          | PC        |
+| Bust a Move 4                    | PS1       |
+| Columns                          | Megadrive |
+| Dorfromantik                     | PC        |
+| F-Zero GX                        | GameCube  |
+| Geometry Wars Galaxies           | Wii       |
+| Geometry Wars : Retro Evolved    | PC        |
+| ISLANDERS                        | PC        |
+| Luck be a Landlord               | PC        |
+| Meteos                           | DS        |
+| Metroid Prime Pinball            | DS        |
+| Mini Metro                       | PC        |
+| One Finger Death Punch           | PC        |
+| PAC-MAN Championship Edition DX+ | PC        |
+| Puyo Puyo Tetris                 | PC        |
+| Rollcage Stage 2                 | PS1       |
+| Sonic 3 Blue Spheres             | Megadrive |
+| Stargunner                       | PC        |
+| Tetris Effect Connected          | PC        |
+| Xenotilt                         | PC        |
+| Zachtronics Solitaire Collection | PC        |
