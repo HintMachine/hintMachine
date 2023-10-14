@@ -54,6 +54,7 @@ namespace HintMachine
             new BPMConnector(),
             new MiniMetroConnector(),
             new LuckBeALandlordConnector(),
+            new SuperHexagonConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)

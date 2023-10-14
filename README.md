@@ -30,6 +30,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - Rollcage Stage 2 (PS1)
 - Sonic 3 Blue Spheres
 - Stargunner
+- Super Hexagon
 - Tetris Effect Connected
 - Xenotilt
 - Zachtronics Solitaire Collection
