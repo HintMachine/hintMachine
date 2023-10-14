@@ -52,6 +52,7 @@ namespace HintMachine
             new MetroidPrimePinballConnector(),
             new ColumnsConnector(),
             new BPMConnector(),
+            new MiniMetroConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)

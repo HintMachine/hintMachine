@@ -22,6 +22,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - ISLANDERS
 - Meteos (DS)
 - Metroid Prime Pinball (DS)
+- Mini Metro
 - One Finger Death Punch
 - PAC-MAN Championship Edition DX+
 - Puyo Puyo Tetris
