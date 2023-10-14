@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace HintMachine
 {
+    public class ProcessRamWatcherException : Exception
+    {
+        public ProcessRamWatcherException(string message) : base(message) 
+        {}
+    }
+
     public class ProcessRamWatcher
     {
         #region EXTERNAL_DECLARATIONS
@@ -220,13 +224,13 @@ namespace HintMachine
         public byte[] ReadBytes(long address, int length, bool isBigEndian = false)
         {
             if (_processHandle == IntPtr.Zero)
-                throw new Exception("Could not read memory from a ProcessRamWatcher which failed to initialize");
+                throw new ProcessRamWatcherException("Could not read memory from a ProcessRamWatcher which failed to initialize");
             
             int bytesRead = 0;
             byte[] buffer = new byte[length];
             ReadProcessMemory((int)_processHandle, address, buffer, length, ref bytesRead);
             if (bytesRead < length)
-                throw new Exception("Could not read process memory");
+                throw new ProcessRamWatcherException("Could not read process memory at address 0x" + address.ToString("X"));
 
             // If data is meant to be read as big endian, reverse it for BitConverter methods to work as they should
             if (length > 1 && isBigEndian)
@@ -277,7 +281,7 @@ namespace HintMachine
                 }
                 return addr;
             } 
-            catch(Exception)
+            catch(ProcessRamWatcherException)
             {
                 return 0;
             }
@@ -335,7 +339,7 @@ namespace HintMachine
                 ReadUint8(BaseAddress);
                 return true;
             }
-            catch(Exception) 
+            catch(ProcessRamWatcherException) 
             {
                 return false;
             }
