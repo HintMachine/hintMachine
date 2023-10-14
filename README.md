@@ -32,6 +32,10 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - Xenotilt
 - Zachtronics Solitaire Collection
 
+### In Testing (This Fork)
+
+- Super Mega Baseball 2
+
 ## Usage
 
 ### Release versions 

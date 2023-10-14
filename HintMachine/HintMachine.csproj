@@ -138,6 +138,7 @@
     <Compile Include="Games\Rollcage2Connector.cs" />
     <Compile Include="Games\ColumnsConnector.cs" />
     <Compile Include="Games\StargunnerConnector.cs" />
+    <Compile Include="Games\SuperMegaBaseball2.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />
