@@ -140,6 +140,7 @@
     <Compile Include="Games\Rollcage2Connector.cs" />
     <Compile Include="Games\ColumnsConnector.cs" />
     <Compile Include="Games\StargunnerConnector.cs" />
+    <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />
@@ -289,7 +290,6 @@
     <Resource Include="Assets\Covers\zachtronics_solitaire_collection.png" />
     <Resource Include="Assets\Covers\sonic_blue_spheres.png" />
     <Resource Include="Assets\Covers\luck_be_a_landord.png" />
-    <Content Include="threadstack-finder.dll" />
     <Content Include="threadstack.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
