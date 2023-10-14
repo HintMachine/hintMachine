@@ -284,6 +284,7 @@
     <Resource Include="Assets\Covers\unknown.png" />
     <Resource Include="Assets\Covers\zachtronics_solitaire_collection.png" />
     <Resource Include="Assets\Covers\sonic_blue_spheres.png" />
+    <Resource Include="Assets\Covers\luck_be_a_landord.png" />
     <Content Include="threadstack-finder.dll" />
     <Content Include="threadstack.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
