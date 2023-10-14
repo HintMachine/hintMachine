@@ -51,6 +51,8 @@ namespace HintMachine
             new PacManChampionshipEditionDXConnector(),
             new MetroidPrimePinballConnector(),
             new ColumnsConnector(),
+            new BPMConnector(),
+            new MiniMetroConnector(),
             new LuckBeALandlordConnector(),
         };
 

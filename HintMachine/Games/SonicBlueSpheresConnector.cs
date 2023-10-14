@@ -6,7 +6,7 @@
         {
             Name = "Completed Levels",
             GoalValue = 2,
-            TimeoutBetweenIncrements = 60,
+            CooldownBetweenIncrements = 60,
         };
         private readonly HintQuestCumulative _ringsQuest = new HintQuestCumulative
         {
