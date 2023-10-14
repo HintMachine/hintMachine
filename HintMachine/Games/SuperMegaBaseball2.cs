@@ -24,7 +24,9 @@
         {
             Name = "Super Mega Baseball 2";
             Description = "The second iteration of the Arcade-Style Baseball Game. Hit some dingers!";
-            SupportedVersions = "Steam";
+            Platform = "PC";
+            SupportedVersions.Add("Steam");
+            CoverFilename = "super_mega_baseball_2.png";
             Author = "Kitsune Zeta";
 
             Quests.Add(_starpointsQuest);

@@ -277,6 +277,7 @@
     <Resource Include="Assets\Covers\meteos.png" />
     <Resource Include="Assets\Covers\columns.png" />
     <Resource Include="Assets\Covers\metroid_prime_pinball.png" />
+    <Resource Include="Assets\Covers\super_mega_baseball_2.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
