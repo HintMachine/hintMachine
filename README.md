@@ -20,6 +20,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - Geometry Wars Galaxies (Wii)
 - Geometry Wars : Retro Evolved
 - ISLANDERS
+- Luck be a Landlord
 - Meteos (DS)
 - Metroid Prime Pinball (DS)
 - Mini Metro
