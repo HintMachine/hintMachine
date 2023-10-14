@@ -38,6 +38,17 @@
 
             _lastMemoryReading = memoryReading;
         }
+
+        /// <summary>
+        /// Ignores the next value that will be read, meaning it will update the internal variables of the quest
+        /// without giving it the chance to increase the counter. This is especially useful when a break in the
+        /// game flow is detected (loaded a save file, loaded a save state), putting back the quest in a stable
+        /// state and removing potential abuses.
+        /// </summary>
+        public void IgnoreNextValue()
+        {
+            _lastMemoryReading = null;
+        }
     }
 }
 
