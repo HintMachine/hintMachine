@@ -21,6 +21,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 - Geometry Wars : Retro Evolved
 - ISLANDERS
 - Meteos (DS)
+- Metroid Prime Pinball (DS)
 - One Finger Death Punch
 - PAC-MAN Championship Edition DX+
 - Puyo Puyo Tetris
