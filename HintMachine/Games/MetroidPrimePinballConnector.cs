@@ -17,7 +17,8 @@
         enum Region
         {
             PAL,
-            NTSC_U
+            NTSC_U,
+            NTSC_J
         }
         private Region _region = Region.PAL;
 
@@ -27,7 +28,7 @@
         {
             Name = "Metroid Prime Pinball (DS)";
             Description = "Metroid Prime, but abridged as a Pinball game.";
-            SupportedVersions = "Tested on PAL and NTSC-U roms with BizHawk 2.9.1";
+            SupportedVersions = "Any region rom, using BizHawk 2.9.1's MelonDS core.";
             Author = "Knuxfan24";
             Quests.Add(_pointsQuest);
             Quests.Add(_artifactsQuest);
@@ -54,6 +55,15 @@
                 return true;
             }
 
+            // If we didn't find the NTSC-U ROM either, then look for the NTSC-J ROM.
+            MPP_SIG = new byte[] { 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0x4D, 0x3D };
+            if (FindRamSignature(MPP_SIG, 0))
+            {
+                _region = Region.NTSC_J;
+                return true;
+            }
+
+            // If we didn't find any of them, then return false.
             return false;
         }
 
@@ -73,6 +83,11 @@
                 case Region.NTSC_U:
                     _pointsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3AFC50));
                     _artifactsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3C7658));
+                    break;
+                case Region.NTSC_J:
+                    // TODO: Implement
+                    //_pointsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3AFC50));
+                    //_artifactsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3C7658));
                     break;
             }
             return true;
