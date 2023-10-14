@@ -49,6 +49,7 @@ namespace HintMachine
             new DorfromantikConnector(),
             new MeteosConnector(),
             new PacManChampionshipEditionDXConnector(),
+            new MetroidPrimePinballConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)
