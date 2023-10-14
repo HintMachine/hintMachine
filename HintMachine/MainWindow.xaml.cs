@@ -152,7 +152,7 @@ namespace HintMachine
                     {
                         obtainedHintTokens += quest.CheckAndCommitCompletion();
                         if(obtainedHintTokens > 0)
-                            Console.WriteLine($"Quest {quest.Name} completed");
+                            Logger.Debug($"Quest {quest.Name} completed");
                         Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => { 
                             quest.UpdateComponents(); 
                         }));

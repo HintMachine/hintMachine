@@ -31,13 +31,16 @@ namespace HintMachine
             {
                 // If the TimeoutBetweenIncrements property is defined with a nonzero value, check the elapsed time
                 // since last edit to cancel it if it seems to be cheating / malfunction
-                if (TimeoutBetweenIncrements > 0 && value > _currentValue)
+                if (CooldownBetweenIncrements > 0 && value > _currentValue)
                 {
                     DateTime now = DateTime.UtcNow;
                     TimeSpan t = now - _lastIncrementTime;
-                    
-                    if (t.TotalSeconds < TimeoutBetweenIncrements)
+
+                    if (t.TotalSeconds < CooldownBetweenIncrements)
+                    {
+                        Logger.Debug($"Quest '{Name}' tried to increase faster than CooldownBetweenIncrements, denied increase.");
                         return;
+                    }
 
                     _lastIncrementTime = now;
                 }
@@ -52,7 +55,10 @@ namespace HintMachine
                     long realMaxIncrease = (MaxIncrease > 0) ? MaxIncrease : GoalValue * 2;
 
                     if (diff > realMaxIncrease)
+                    {
+                        Logger.Debug($"Quest '{Name}' tried to increase more than MaxIncrease, denied increase.");
                         return;
+                    }
                 }
                 
                 _currentValue = value;
@@ -64,7 +70,7 @@ namespace HintMachine
         /// <summary>
         /// The time (in seconds) to wait before being able to increase the current value once more
         /// </summary>
-        public int TimeoutBetweenIncrements { get; set; } = 0;
+        public int CooldownBetweenIncrements { get; set; } = 0;
 
         private Label _label = null;
         private Label _labelDetail = null;
@@ -158,11 +164,11 @@ namespace HintMachine
             _progressBarOverlayText.Text = CurrentValue + " / " + GoalValue;
 
 #if DEBUG
-            if (TimeoutBetweenIncrements > 0)
+            if (CooldownBetweenIncrements > 0)
             {
                 DateTime now = DateTime.UtcNow;
                 TimeSpan t = now - _lastIncrementTime;
-                double cooldown = TimeoutBetweenIncrements - t.TotalSeconds;
+                double cooldown = CooldownBetweenIncrements - t.TotalSeconds;
                 if(cooldown > 0)
                     _progressBarOverlayText.Text += $" ({Math.Ceiling(cooldown)}s cooldown)";
             }
