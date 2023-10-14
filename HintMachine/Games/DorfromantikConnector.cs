@@ -55,6 +55,8 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
+            if (_ram.TestProcess() == false) { return false; }
+
             // long? tilesValuePrevious = null;
             long? scoreValuePrevious = null;
             long? questValuePrevious = null;
