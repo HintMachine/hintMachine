@@ -35,6 +35,8 @@ namespace HintMachine.Games
             if (!_ram.TryConnect())
                 return false;
 
+            syncThreadStackAdr();
+
             return true;
         }
 
@@ -45,7 +47,7 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            syncThreadStackAdr();
+
 
             //long killsAddress = _ram.ResolvePointerPath32(_threadstack0Address.ToInt32() - 0x8cc, new int[] { 0x644, 0x90 });
             long killsAddress = _ram.ResolvePointerPath32(_threadstack0Address.ToInt32() - 0x8A0, new int[] { 0x710, 0x3C });
