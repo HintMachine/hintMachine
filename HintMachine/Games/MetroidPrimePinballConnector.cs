@@ -26,10 +26,14 @@
 
         public MetroidPrimePinballConnector()
         {
-            Name = "Metroid Prime Pinball (DS)";
-            Description = "Metroid Prime, but abridged as a Pinball game.";
-            SupportedVersions = "Any region ROM, using BizHawk 2.9.1's MelonDS core.";
+            Name = "Metroid Prime Pinball";
+            Description = "Metroid Prime, but abridged as a Pinball game.\n\nSamus Aran's entry into the bumper-and-flipper world is a sleek, sci-fi classic gaming adventure that has her careening into gigantic boss monsters and bouncing through a variety of exciting pinball tables. Play tables across two screens at the same time using the touch screen to nudge the pinball table. Battle deadly enemies and experience a number of special modes such as Clone Machine Multiball and the Wall-Jump Challenge while you blast and bomb your high score into a state of pure pinball pandemonium.";
+            SupportedVersions.Add("PAL (🇪🇺)");
+            SupportedVersions.Add("NTSC-U (🇺🇸)");
+            SupportedVersions.Add("NTSC-J (🇯🇵)");
+            CoverFilename = "metroid_prime_pinball.png";
             Author = "Knuxfan24";
+
             Quests.Add(_pointsQuest);
             Quests.Add(_artifactsQuest);
         }
@@ -65,11 +69,6 @@
 
             // If we didn't find any of them, then return false.
             return false;
-        }
-
-        public override void Disconnect()
-        {
-            _ram = null;
         }
 
         public override bool Poll()
