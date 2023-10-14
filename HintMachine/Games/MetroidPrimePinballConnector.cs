@@ -2,12 +2,6 @@
 {
     class MetroidPrimePinballConnector : INintendoDSConnector
     {
-        enum Region
-        {
-            PAL,
-            NTSC_U
-        }
-
         private readonly HintQuestCumulative _pointsQuest = new HintQuestCumulative
         {
             Name = "Points",
@@ -19,6 +13,12 @@
             Description = "Only applicable in Multi-Mission mode.",
             GoalValue = 3
         };
+
+        enum Region
+        {
+            PAL,
+            NTSC_U
+        }
         private Region _region = Region.PAL;
 
         // ---------------------------------------------------------
@@ -27,7 +27,7 @@
         {
             Name = "Metroid Prime Pinball (DS)";
             Description = "Metroid Prime, but abridged as a Pinball game.";
-            SupportedVersions = "Tested on PAL rom with BizHawk 2.9.1";
+            SupportedVersions = "Tested on PAL and NTSC-U roms with BizHawk 2.9.1";
             Author = "Knuxfan24";
             Quests.Add(_pointsQuest);
             Quests.Add(_artifactsQuest);
