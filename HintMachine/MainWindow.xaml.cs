@@ -140,10 +140,8 @@ namespace HintMachine
                 {
                     pollSuccessful = _game.Poll();
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.StackTrace);
-                }
+                catch (ProcessRamWatcherException)
+                {}
 
                 if (pollSuccessful)
                 {
@@ -179,7 +177,6 @@ namespace HintMachine
             {
                 Logger.Error($"Connection with {_game.Name} was lost.");
                 DisconnectFromGame();
-                return;
             }
         }
 
