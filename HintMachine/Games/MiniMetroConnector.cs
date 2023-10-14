@@ -39,7 +39,7 @@ namespace HintMachine.Games
             if (_ram.TestProcess() == false) { return false; }
 
             try {
-                long address = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x3A2C90, new int[] { 0x5C, 0xE7C, 0x40, 0xB4, 0x10, 0x8, 0x88 });
+                long address = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x3A1574, new int[] { 0x690, 0x20, 0x8, 0x4C, 0x8, 0xC, 0x88 });
                 _passengersQuest.UpdateValue(_ram.ReadUint32(address));
             }
             catch
