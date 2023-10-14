@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace HintMachine
 {
@@ -56,28 +60,64 @@ namespace HintMachine
             public MemoryRegionType Type;
         }
 
+        public enum DwFilterFlag : uint
+        {
+            LIST_MODULES_DEFAULT = 0x0,
+            LIST_MODULES_32BIT = 0x01,
+            LIST_MODULES_64BIT = 0x02,
+            LIST_MODULES_ALL = (LIST_MODULES_32BIT | LIST_MODULES_64BIT)
+        }
+
+        // ---------------------------------------------------------------------------
+
         [DllImport("kernel32.dll")]
-        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        static extern IntPtr OpenProcess(
+            int dwDesiredAccess, 
+            bool bInheritHandle, 
+            int dwProcessId);
 
         [DllImport("kernel32.dll", SetLastError=true)]
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool CloseHandle(IntPtr hObject);
+        static extern bool CloseHandle(
+            IntPtr hObject);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern Microsoft.Win32.SafeHandles.SafeAccessTokenHandle OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
+        static extern Microsoft.Win32.SafeHandles.SafeAccessTokenHandle OpenThread(
+            ThreadAccess dwDesiredAccess, 
+            bool bInheritHandle, 
+            uint dwThreadId);
 
         [DllImport("kernel32.dll")]
-        public static extern bool ReadProcessMemory(int hProcess, Int64 lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
+        static extern bool ReadProcessMemory(
+            int hProcess, 
+            Int64 lpBaseAddress, 
+            byte[] lpBuffer,
+            int dwSize, 
+            ref int lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
+        static extern int VirtualQueryEx(
+            IntPtr hProcess, 
+            IntPtr lpAddress, 
+            out MEMORY_BASIC_INFORMATION lpBuffer, 
+            uint dwLength);
 
-        /*
-        [DllImport("threadstack-finder.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong getThreadstack0(ulong pid);
-        */
+        [DllImport("psapi.dll", SetLastError = true)]
+        static extern bool EnumProcessModulesEx(
+            IntPtr hProcess,
+            [Out] IntPtr lphModule,
+            uint cb,
+            [MarshalAs(UnmanagedType.U4)] out uint lpcbNeeded,
+            DwFilterFlag dwff);
+
+        [DllImport("psapi.dll")]
+        static extern uint GetModuleFileNameEx(
+             IntPtr hProcess,
+             IntPtr hModule,
+             [Out] StringBuilder lpBaseName,
+             [In][MarshalAs(UnmanagedType.U4)] int nSize);
 
         #endregion
 
@@ -87,7 +127,6 @@ namespace HintMachine
         private readonly string _moduleName;
 
         private Process _process = null;
-        private ProcessModule _module = null;
         private IntPtr _processHandle = IntPtr.Zero;
 
         public long BaseAddress { get; private set; } = 0;
@@ -119,29 +158,52 @@ namespace HintMachine
             if (_process == null)
                 return false;
 
+            // Open the process
+            _processHandle = OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, _process.Id);
+            if (_processHandle == IntPtr.Zero)
+                return false;
+
             // Find the module using its name if it was provided, or take the main module otherwise
             if (_moduleName == "")
-            {
-                _module = _process.MainModule;
-            }
+                BaseAddress = _process.MainModule.BaseAddress.ToInt64();
             else
+                BaseAddress = SearchForModule(_moduleName);
+
+            return (BaseAddress != 0);
+        }
+
+        private long SearchForModule(string targetName)
+        {
+            long result = 0;
+
+            // Setting up the variable for the second argument for EnumProcessModules
+            IntPtr[] hMods = new IntPtr[1024];
+            GCHandle gch = GCHandle.Alloc(hMods, GCHandleType.Pinned); // Don't forget to free this later
+            IntPtr pModules = gch.AddrOfPinnedObject();
+
+            // Setting up the rest of the parameters for EnumProcessModules
+            uint uiSize = (uint)(Marshal.SizeOf(typeof(IntPtr)) * (hMods.Length));
+            uint cbNeeded;
+            if (EnumProcessModulesEx(_processHandle, pModules, uiSize, out cbNeeded, DwFilterFlag.LIST_MODULES_ALL))
             {
-                foreach (ProcessModule m in _process.Modules)
+                int modulesCount = (int)(cbNeeded / (Marshal.SizeOf(typeof(IntPtr))));
+                for (int i = 0; i < modulesCount; i++)
                 {
-                    if (m.FileName.Contains(_moduleName))
+                    StringBuilder strbld = new StringBuilder(1024);
+                    GetModuleFileNameEx(_processHandle, hMods[i], strbld, (int)(strbld.Capacity));
+                    string moduleName = strbld.ToString();
+
+                    if (CultureInfo.CurrentCulture.CompareInfo.IndexOf(moduleName, targetName, CompareOptions.IgnoreCase) >= 0)
                     {
-                        _module = m;
+                        result = hMods[i].ToInt64();
                         break;
                     }
                 }
             }
-            if (_module == null)
-                return false;
 
-            BaseAddress = _module.BaseAddress.ToInt64();
-
-            _processHandle = OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, _process.Id);
-            return _processHandle != IntPtr.Zero;
+            int sheriff = Marshal.GetLastWin32Error();
+            gch.Free();
+            return result;
         }
 
         /// <summary>
@@ -278,13 +340,6 @@ namespace HintMachine
                 return false;
             }
         }
-
-        /*
-        public long GetThreadstack0()
-        {
-            return (long)getThreadstack0((ulong)process.Id);
-        }
-        */
 
         /// <summary>
         /// Fetch the infamous THREADSTACK0 address (as specified by the CheatEngine software) to use as a base address
