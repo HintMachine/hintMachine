@@ -15,7 +15,7 @@
         /// </summary>
         public CumulativeDirection Direction { get; set; } = CumulativeDirection.ASCENDING;
 
-        private long _lastMemoryReading = long.MaxValue;
+        private long? _lastMemoryReading = null;
 
         // ----------------------------------------------------------------------------------
 
@@ -24,10 +24,18 @@
 
         public void UpdateValue(long memoryReading)
         {
-            if (Direction == CumulativeDirection.ASCENDING && memoryReading > _lastMemoryReading)
-                CurrentValue += (memoryReading - _lastMemoryReading);
-            else if (Direction == CumulativeDirection.DESCENDING && memoryReading < _lastMemoryReading)
-                CurrentValue += (_lastMemoryReading - memoryReading);
+            if (_lastMemoryReading != null)
+            {
+                if (Direction == CumulativeDirection.ASCENDING && memoryReading > _lastMemoryReading)
+                {
+                    CurrentValue += (memoryReading - (long)_lastMemoryReading);
+                }
+                else if (Direction == CumulativeDirection.DESCENDING && memoryReading < _lastMemoryReading)
+                {
+                    CurrentValue += ((long)_lastMemoryReading - memoryReading);
+                }
+            }
+
             _lastMemoryReading = memoryReading;
         }
     }
