@@ -85,9 +85,8 @@
                     _artifactsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3C7658));
                     break;
                 case Region.NTSC_J:
-                    // TODO: Implement
-                    //_pointsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3AFC50));
-                    //_artifactsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3C7658));
+                    _pointsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3B5C50));
+                    _artifactsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3CDCD4));
                     break;
             }
             return true;
