@@ -129,6 +129,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
+    <Compile Include="Games\BPMConnector.cs" />
     <Compile Include="Games\MetroidPrimePinballConnector.cs" />
     <Compile Include="Games\MeteosConnector.cs" />
     <Compile Include="Games\BustAMove4Connector.cs" />
@@ -276,6 +277,7 @@
     <Resource Include="Assets\Covers\meteos.png" />
     <Resource Include="Assets\Covers\columns.png" />
     <Resource Include="Assets\Covers\metroid_prime_pinball.png" />
+    <Resource Include="Assets\Covers\bpm.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
