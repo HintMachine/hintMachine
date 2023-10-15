@@ -11,6 +11,16 @@ namespace HintMachine.Games
             GoalValue = 500,
             MaxIncrease = 100
         };
+
+        private readonly HintQuestCumulative _starTripQuest = new HintQuestCumulative
+        {
+            Name = "Finish Star Trip",
+            //Description = "Use Star Trip mode for this quest",
+            GoalValue = 1,
+            MaxIncrease = 2
+
+        };
+
         /* Might be added back later
         private readonly HintQuestCumulative _levelClearQuest = new HintQuestCumulative
         {
@@ -21,14 +31,6 @@ namespace HintMachine.Games
 
         };
         */
-        private readonly HintQuestCumulative _starTripQuest = new HintQuestCumulative
-        {
-            Name = "Finish Star Trip",
-            //Description = "Use Star Trip mode for this quest",
-            GoalValue = 1,
-            MaxIncrease = 2
-
-        };
 
         private bool _starTripStarted = false;
 
@@ -86,7 +88,7 @@ namespace HintMachine.Games
                 return true;
             }
             else */
-            //level = 16 is the ending
+
             if(level == 1)
             {
                 _starTripStarted = true;
@@ -94,6 +96,7 @@ namespace HintMachine.Games
             }
             if (level == 16)
             {
+                // level = 16 is the ending
                 if (_starTripStarted)
                 { 
                     _starTripQuest.UpdateValue(1);
@@ -103,30 +106,15 @@ namespace HintMachine.Games
             if(level > 16)
             {
                 _starTripStarted = false;
-                int nbPlayers = _ram.ReadInt32(_dsRamBaseAddress + 0x63080);
 
-                long rightAddr = 0x0;
-                switch (nbPlayers)
+                uint statsPointer = _ram.ReadUint32(_dsRamBaseAddress + 0x1091DC) - 0x2000000;
+                if (statsPointer < 0x1000000)
                 {
-                    case 1:
-                        rightAddr = _dsRamBaseAddress + 0x2018CC;
-                        break;
-
-                    case 2:
-                        rightAddr = _dsRamBaseAddress + 0x2019EC;
-                        break;
-
-                    case 3:
-                        rightAddr = _dsRamBaseAddress + 0x201B0C;
-                        break;
-
-                    case 4:
-                        rightAddr = _dsRamBaseAddress + 0x201C2C;
-                        break;
+                    uint sentBlocksAddr = statsPointer - 0x20;
+                    _sendBlocksQuest.UpdateValue(_ram.ReadUint32(_dsRamBaseAddress + sentBlocksAddr));
                 }
-                _sendBlocksQuest.UpdateValue(_ram.ReadInt32(rightAddr));
-                return true;
             }
+
             return true;
         }
     }
