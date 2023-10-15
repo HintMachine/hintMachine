@@ -68,6 +68,9 @@
 
         public override bool Poll()
         {
+            if (!_ram.TestProcess())
+                return false;
+
             long timeReading = 0;
 
             if(_version == GameVersion.Steam)
