@@ -156,6 +156,7 @@ namespace HintMachine
                         Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => { 
                             quest.UpdateComponents(); 
                         }));
+                        totalObtainedHintTokens += obtainedHintTokens;
                     }
 
                     if (totalObtainedHintTokens > 0)
