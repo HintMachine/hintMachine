@@ -44,12 +44,21 @@
                 return false;
 
             string hash = _ram.GetBinaryHash();
-            if(hash == "72B0C26053C37EDD3435DEF461E9027CD6FFAD12032DB2FD0B32C256FDBEE6B9")
+            if (hash == "72B0C26053C37EDD3435DEF461E9027CD6FFAD12032DB2FD0B32C256FDBEE6B9")
+            {
                 _version = GameVersion.Steam;
-            else
+                return true;
+            }
+            else if (hash == "A68BFFBDBC6C1C6C625D6E9F565C6DFDC1D517A98F781BDBD5D7C96636538625")
+            {
                 _version = GameVersion.Itch;
-
-            return true;
+                return true;
+            }
+            else
+            {
+                Logger.Error("Unrecognized version of the game, cannot connect.");
+                return false;
+            }
         }
 
         public override void Disconnect()
