@@ -25,7 +25,7 @@ namespace HintMachine.Games
         {
             Name = "Super Monkey Ball 2";
             Description = "Traverse through stages filled to the brim with obstacles and collect bananas " +
-                          "along the way as a monkey inside of a ball!. Quests work on story mode and all difficulties of challenge mode.";
+                          "along the way as a monkey inside of a ball! Quests work on story mode and all difficulties of challenge mode.";
             SupportedVersions.Add("NTSC US");
             CoverFilename = "smb2.png";
             Author = "Spicynun";
