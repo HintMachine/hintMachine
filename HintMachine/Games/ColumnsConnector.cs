@@ -30,12 +30,13 @@
 
         public override bool Poll()
         {
-            // Check if we are in arcade mode
-            if (_ram.ReadUint8(_megadriveRamBaseAddr + 0x8464) != 0)
+            // Check if we are in arcade mode (0x8464 but the way Bizhawk layouts memory as 16-bit integers requires us to
+            // look one byte further)
+            if (_ram.ReadUint8(_megadriveRamBaseAddr + 0x8465) != 0)
                 return true;
-            
-            _jewelsQuest.UpdateValue(_ram.ReadUint16(_megadriveRamBaseAddr + 0xC826));
 
+            _jewelsQuest.UpdateValue(_ram.ReadUint16(_megadriveRamBaseAddr + 0xC826));
+            
             return true;
         }
     }
