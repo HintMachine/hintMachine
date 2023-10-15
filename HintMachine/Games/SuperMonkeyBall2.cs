@@ -11,13 +11,13 @@ namespace HintMachine.Games
         {
             Name = "Bananas collected",
             GoalValue = 50,
-	        MaxIncrease = 10
+	    MaxIncrease = 10
         };
 
         private readonly HintQuestCumulative _stageQuest = new HintQuestCumulative
         {
             Name = "Stages cleared",
-            GoalValue = 5,
+            GoalValue = 3,
             MaxIncrease = 1
         };
 
@@ -43,7 +43,7 @@ namespace HintMachine.Games
 
             // Story mode world clears
             int world1 = _ram.ReadUint8(_mem1Addr + 0x5d4b0b);
-	        int world2 = _ram.ReadUint8(_mem1Addr + 0x5d4b43);
+	    int world2 = _ram.ReadUint8(_mem1Addr + 0x5d4b43);
             int world3 = _ram.ReadUint8(_mem1Addr + 0x5d4b7b);
             int world4 = _ram.ReadUint8(_mem1Addr + 0x5d4bb3);
             int world5 = _ram.ReadUint8(_mem1Addr + 0x5d4beb);
