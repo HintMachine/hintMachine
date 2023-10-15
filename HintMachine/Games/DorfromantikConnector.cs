@@ -7,15 +7,15 @@ namespace HintMachine.Games
             Name = "Score",
             GoalValue = 1000,
             MaxIncrease = 500,
-            TimeoutBetweenIncrements = 3,
+            CooldownBetweenIncrements = 3,
         };
 
         private readonly HintQuestCumulative _questQuest = new HintQuestCumulative
         {
             Name = "Quests Fulfilled",
-            GoalValue = 10,
+            GoalValue = 10, 
             MaxIncrease = 5,
-            TimeoutBetweenIncrements = 20,
+            CooldownBetweenIncrements = 20,
         };
 
         private readonly HintQuestCumulative _perfectQuest = new HintQuestCumulative
@@ -23,10 +23,12 @@ namespace HintMachine.Games
             Name = "Perfect Tile Placements",
             GoalValue = 10,
             MaxIncrease = 3,
-            TimeoutBetweenIncrements = 20,
+            CooldownBetweenIncrements = 20,
         };
 
         private ProcessRamWatcher _ram = null;
+
+        private long? _bufferedTileValue = null;
 
         public DorfromantikConnector()
         {
@@ -57,69 +59,33 @@ namespace HintMachine.Games
         {
             if (_ram.TestProcess() == false) { return false; }
 
-            // long? tilesValuePrevious = null;
-            long? scoreValuePrevious = null;
-            long? questValuePrevious = null;
-            long? perfectValuePrevious = null;
+            long rewardSystemStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x716018, new int[] { 0x8, 0x10, 0x48, 0x18, 0xB0, 0x30, 0x0 });
 
-            // long? tilesValue = null;
-            long? scoreValue =null;
-            long? questValue = null;
-            long? perfectValue = null;
-
-            // Backup pointer
-            // _ram.ResolvePointerPath64(_ram.BaseAddress + 0x98B9B8, new int[] { 0x28, 0x30, 0x88, 0x20, 0x90, 0x10, 0x20, 0x18, 0x0 });
-            long statsStructAddressPrevious = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x84B9A0, new int[] { 0x28, 0x30, 0x88, 0x20, 0x90, 0x10, 0x20, 0x18, 0x0 });
-
-            if (statsStructAddressPrevious > 0)
+            if (rewardSystemStructAddress != 0)
             {
                 try
                 {
-                    // tilesValuePrevious = _ram.ReadUint32(statsStructAddressPrevious + 0x2C);
-                    scoreValuePrevious = _ram.ReadUint32(statsStructAddressPrevious + 0x14);
-                    questValuePrevious = _ram.ReadUint32(statsStructAddressPrevious + 0x24);
-                    perfectValuePrevious = _ram.ReadUint32(statsStructAddressPrevious + 0x20);
-                }
-                catch
-                { }
-            }
+                    long tileValue = _ram.ReadUint32(rewardSystemStructAddress + 0x104);
+                    long scoreValue = _ram.ReadUint32(rewardSystemStructAddress + 0x100);
+                    long questValue = _ram.ReadUint32(rewardSystemStructAddress + 0x114);
+                    long perfectValue = _ram.ReadUint32(rewardSystemStructAddress + 0x110);
 
-            // Backup pointer
-            // _ram.ResolvePointerPath64(_ram.BaseAddress + 0x98B9B8, new int[] { 0x28, 0x30, 0x88, 0x20, 0x90, 0x10, 0x28, 0x18, 0x0 });
-            long statsStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x84B9A0, new int[] { 0x28, 0x30, 0x88, 0x20, 0x90, 0x10, 0x28, 0x18, 0x0 });
+                    if (_bufferedTileValue == null) { _bufferedTileValue = tileValue; }
 
-            if (statsStructAddress > 0)
-            {
-                try
-                {
-                    // tilesValue = _ram.ReadUint32(statsStructAddress + 0x2C);
-                    scoreValue = _ram.ReadUint32(statsStructAddress + 0x14);
-                    questValue = _ram.ReadUint32(statsStructAddress + 0x24);
-                    perfectValue = _ram.ReadUint32(statsStructAddress + 0x20);
+                    if (tileValue < (long)_bufferedTileValue)
+                    {
+                        _scoreQuest.IgnoreNextValue();
+                        _questQuest.IgnoreNextValue();
+                        _perfectQuest.IgnoreNextValue();
+                    }
 
-                    _scoreQuest.UpdateValue((long)scoreValue);
-                    _questQuest.UpdateValue((long)questValue);
-                    _perfectQuest.UpdateValue((long)perfectValue);
-                }
-                catch
-                {}
-            }
-            else
-            {
-                if (scoreValuePrevious != null)
-                {
-                    _scoreQuest.UpdateValue((long)scoreValuePrevious);
-                }
+                    _scoreQuest.UpdateValue(scoreValue);
+                    _questQuest.UpdateValue(questValue);
+                    _perfectQuest.UpdateValue(perfectValue);
 
-                if (questValuePrevious != null)
-                {
-                    _questQuest.UpdateValue((long)questValuePrevious);
+                    _bufferedTileValue = tileValue;
                 }
-
-                if (perfectValuePrevious != null)
-                {
-                    _perfectQuest.UpdateValue((long)perfectValuePrevious);
-                }
+                catch { }
             }
 
             return true;
