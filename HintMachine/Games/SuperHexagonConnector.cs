@@ -43,7 +43,7 @@ namespace HintMachine.Games
         public override bool Poll()
         {
             try {
-                long timeAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x29C0D4, new int[] { 0x20, 0x0, 0x18, 0x0, 0xB4, 0x18 });
+                long timeAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x29EB94, new int[] { 0xC, 0x10 });
                 long timeReading = _ram.ReadUint32(timeAddress + 0x5518);
                 if (_past10seconds) {
                     if (timeReading < 600) {
