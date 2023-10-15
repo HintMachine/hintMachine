@@ -4,7 +4,7 @@ namespace HintMachine.Games
     {
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
-            Name = "Cumulative Score",
+            Name = "Score",
             GoalValue = 400000,
         };
 

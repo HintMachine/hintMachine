@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -122,6 +124,13 @@ namespace HintMachine
              IntPtr hModule,
              [Out] StringBuilder lpBaseName,
              [In][MarshalAs(UnmanagedType.U4)] int nSize);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool QueryFullProcessImageName(
+            IntPtr hProcess,
+            uint dwFlags,
+            [Out] StringBuilder lpExeName,
+            ref uint lpdwSize);
 
         #endregion
 
@@ -343,6 +352,23 @@ namespace HintMachine
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Perform a hash of the binary file the watcher is currently connected to, allowing to check
+        /// the binary identity / version.
+        /// </summary>
+        /// <returns>A SHA-256 hash of the binary file</returns>
+        public string GetBinaryHash()
+        {
+            uint size = 5096;
+            StringBuilder stringBuilder = new StringBuilder((int)size);
+            QueryFullProcessImageName(_processHandle, 0, stringBuilder, ref size);
+            string binaryFilePath = stringBuilder.ToString();
+
+            using (var sha = SHA256.Create())
+                using (var stream = File.OpenRead(binaryFilePath))
+                    return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
         }
 
         /// <summary>

@@ -152,6 +152,7 @@
     <Compile Include="Games\ZachtronicsSolitaireConnector.cs" />
     <Compile Include="Games\TetrisEffectConnector.cs" />
     <Compile Include="Games\MiniMetroConnector.cs" />
+    <Compile Include="Games\SuperHexagonConnector.cs" />
     <Compile Include="HintQuestCounter.cs" />
     <Compile Include="HintQuestCumulative.cs" />
     <Compile Include="HintQuest.cs" />
@@ -283,6 +284,7 @@
     <Resource Include="Assets\Covers\metroid_prime_pinball.png" />
     <Resource Include="Assets\Covers\bpm.png" />
     <Resource Include="Assets\Covers\mini_metro.png" />
+    <Resource Include="Assets\Covers\super_hexagon.png" />
     <Resource Include="Assets\Covers\super_mega_baseball_2.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

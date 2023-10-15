@@ -1,4 +1,4 @@
-![version](https://img.shields.io/badge/Version-1.0.5-blue)
+![version](https://img.shields.io/badge/Version-1.1.0-blue)
 
 <p align="center">
   <img src="https://github.com/CalDrac/hintMachine/blob/master/HintMachine/Assets/logo_small.png?raw=true" alt="HintMachine logo"/>
@@ -37,11 +37,7 @@ Given its high dependency to system calls to do RAM peeking and stuff, only Wind
 
 You are free to contribute to HintMachine's development.
 
-Adding a game is as "simple" as:
-- finding RAM addresses that contain what you're looking for (using a program like CheatEngine)
-- adding a new connector class inheriting from IGameConnector for your game
-- adding HintQuests inside your connector that track those RAM addresses
-- testing a lot to ensure your way of accessing RAM addresses is stable over several independant executions of the game
+You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/adding_games.md) for more details on how to add new games.
 
 
 ## Currently supported games
@@ -66,6 +62,7 @@ Adding a game is as "simple" as:
 | Rollcage Stage 2                 | PS1       |
 | Sonic 3 Blue Spheres             | Megadrive |
 | Stargunner                       | PC        |
+| Super Hexagon                    | PC        |
 | Tetris Effect Connected          | PC        |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |
