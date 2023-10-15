@@ -9,7 +9,7 @@ namespace HintMachine
     internal static class Globals
     {
         public const string ProgramName = "HintMachine";
-        public const string ProgramVersion = "1.0.5";
+        public const string ProgramVersion = "1.1.0";
 
         /// <summary>
         /// The duration of a "tick" where the current game connector (if any) watches the game once, in milliseconds

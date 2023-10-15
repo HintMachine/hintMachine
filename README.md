@@ -1,4 +1,4 @@
-![version](https://img.shields.io/badge/Version-1.0.5-blue)
+![version](https://img.shields.io/badge/Version-1.1.0-blue)
 
 <p align="center">
   <img src="https://github.com/CalDrac/hintMachine/blob/master/HintMachine/Assets/logo_small.png?raw=true" alt="HintMachine logo"/>
