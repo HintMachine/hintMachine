@@ -7,7 +7,7 @@
             Name = "Cup points",
             GoalValue = 200,
             MaxIncrease = 100,
-            TimeoutBetweenIncrements = 60
+            CooldownBetweenIncrements = 60
         };
 
         private readonly HintQuestCumulative _knockoutsQuest = new HintQuestCumulative

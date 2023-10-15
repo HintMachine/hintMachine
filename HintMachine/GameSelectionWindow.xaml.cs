@@ -112,7 +112,6 @@ namespace HintMachine
                         TextGameProperties.Inlines.Add(new LineBreak());
                         TextGameProperties.Inlines.Add($"  • {emulator}");
                     }
-                    TextGameProperties.Inlines.Add(new LineBreak());
                 }
                 TextGameProperties.Inlines.Add(new LineBreak());
                 TextGameProperties.Inlines.Add(new LineBreak());
