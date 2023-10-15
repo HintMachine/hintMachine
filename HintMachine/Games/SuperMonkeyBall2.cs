@@ -17,7 +17,7 @@ namespace HintMachine.Games
         private readonly HintQuestCumulative _stageQuest = new HintQuestCumulative
         {
             Name = "Stages cleared",
-            GoalValue = 5,
+            GoalValue = 3,
             MaxIncrease = 1
         };
 
