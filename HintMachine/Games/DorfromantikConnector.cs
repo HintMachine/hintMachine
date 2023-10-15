@@ -4,11 +4,30 @@ namespace HintMachine.Games
     {
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
-            Name = "Cumulative Score",
+            Name = "Score",
             GoalValue = 1000,
+            MaxIncrease = 500,
+        };
+
+        private readonly HintQuestCumulative _questQuest = new HintQuestCumulative
+        {
+            Name = "Quests Fulfilled",
+            GoalValue = 10, 
+            MaxIncrease = 5,
+            CooldownBetweenIncrements = 20,
+        };
+
+        private readonly HintQuestCumulative _perfectQuest = new HintQuestCumulative
+        {
+            Name = "Perfect Tile Placements",
+            GoalValue = 10,
+            MaxIncrease = 3,
+            CooldownBetweenIncrements = 20,
         };
 
         private ProcessRamWatcher _ram = null;
+
+        private long? _bufferedTileValue = null;
 
         public DorfromantikConnector()
         {
@@ -20,11 +39,13 @@ namespace HintMachine.Games
             Author = "Serpent.AI";
 
             Quests.Add(_scoreQuest);
+            Quests.Add(_questQuest);
+            Quests.Add(_perfectQuest);
         }
 
         public override bool Connect()
         {
-            _ram = new ProcessRamWatcher("Dorfromantik", "UnityPlayer.dll");
+            _ram = new ProcessRamWatcher("Dorfromantik", "mono-2.0-bdwgc.dll");
             return _ram.TryConnect();
         }
 
@@ -35,8 +56,36 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x1AD1118, new int[] { 0x8, 0x8, 0xD0, 0x138, 0x40, 0x60, 0x180 });
-            _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress + 0x5C));
+            if (_ram.TestProcess() == false) { return false; }
+
+            long rewardSystemStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x716018, new int[] { 0x8, 0x10, 0x48, 0x18, 0xB0, 0x30, 0x0 });
+
+            if (rewardSystemStructAddress != 0)
+            {
+                try
+                {
+                    long tileValue = _ram.ReadUint32(rewardSystemStructAddress + 0x104);
+                    long scoreValue = _ram.ReadUint32(rewardSystemStructAddress + 0x100);
+                    long questValue = _ram.ReadUint32(rewardSystemStructAddress + 0x114);
+                    long perfectValue = _ram.ReadUint32(rewardSystemStructAddress + 0x110);
+
+                    if (_bufferedTileValue == null) { _bufferedTileValue = tileValue; }
+
+                    if (tileValue < (long)_bufferedTileValue)
+                    {
+                        _scoreQuest.IgnoreNextValue();
+                        _questQuest.IgnoreNextValue();
+                        _perfectQuest.IgnoreNextValue();
+                    }
+
+                    _scoreQuest.UpdateValue(scoreValue);
+                    _questQuest.UpdateValue(questValue);
+                    _perfectQuest.UpdateValue(perfectValue);
+
+                    _bufferedTileValue = tileValue;
+                }
+                catch { }
+            }
 
             return true;
         }
