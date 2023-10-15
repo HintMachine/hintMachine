@@ -145,29 +145,29 @@ namespace HintMachine
 
                 if (pollSuccessful)
                 {
-                    int obtainedHintTokens = 0;
+                    int totalObtainedHintTokens = 0;
 
                     // Update hint quests
                     foreach (HintQuest quest in _game.Quests)
                     {
-                        obtainedHintTokens += quest.CheckAndCommitCompletion();
+                        int obtainedHintTokens = quest.CheckAndCommitCompletion();
                         if(obtainedHintTokens > 0)
-                            Logger.Debug($"Quest {quest.Name} completed");
+                            Logger.Debug($"Quest '{quest.Name}' completed");
                         Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => { 
                             quest.UpdateComponents(); 
                         }));
                     }
 
-                    if (obtainedHintTokens > 0)
+                    if (totalObtainedHintTokens > 0)
                     {
                         if (Settings.PlaySoundOnHint)
                             _soundPlayer.controls.play();
                         if (!alreadyAwardedTokenForCurrentGame) { 
-                            string hintSingularPlural = (obtainedHintTokens > 1) ? "hints" : "a hint";
+                            string hintSingularPlural = (totalObtainedHintTokens > 1) ? "hints" : "a hint";
                             _archipelagoSession.SendMessage($"I just got {hintSingularPlural} using HintMachine while playing {_game.Name}!");
                             alreadyAwardedTokenForCurrentGame = true;
                         }
-                        _hintTokens += obtainedHintTokens;
+                        _hintTokens += totalObtainedHintTokens;
                         UpdateHintTokensCount();
                     }
                 }
