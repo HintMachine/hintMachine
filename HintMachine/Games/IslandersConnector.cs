@@ -14,7 +14,7 @@
             Name = "Booster Packs Earned",
             GoalValue = 5,
             MaxIncrease = 2,
-            TimeoutBetweenIncrements = 15,
+            CooldownBetweenIncrements = 15,
         };
 
         private readonly HintQuestCumulative _islandQuest = new HintQuestCumulative
@@ -22,7 +22,7 @@
             Name = "Islands Visited",
             GoalValue = 3,
             MaxIncrease = 1,
-            TimeoutBetweenIncrements = 60,
+            CooldownBetweenIncrements = 60,
         };
 
         private ProcessRamWatcher _ram = null;
@@ -58,7 +58,7 @@
 
             long localGameManagerStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7521F0, new int[] { 0x210, 0x700, 0x20, 0x5A0 });
 
-            if (localGameManagerStructAddress > 0)
+            if (localGameManagerStructAddress != 0)
             {
                 try
                 {
