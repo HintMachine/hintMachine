@@ -12,6 +12,7 @@ It connects to a wide variety of games (through RAM peeking, save file watching,
 
 Given its high dependency to system calls to do RAM peeking and stuff, only Windows is supported as of now.
 
+
 ## Usage
 
 ### Release versions 
