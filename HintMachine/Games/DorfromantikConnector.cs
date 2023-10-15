@@ -7,7 +7,6 @@ namespace HintMachine.Games
             Name = "Score",
             GoalValue = 1000,
             MaxIncrease = 500,
-            CooldownBetweenIncrements = 3,
         };
 
         private readonly HintQuestCumulative _questQuest = new HintQuestCumulative
