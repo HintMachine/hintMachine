@@ -80,6 +80,9 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
+            if (!_ram.TestProcess())
+                return false;
+
             ReadTetrisData();
             ReadPuyoData();
             return true;
