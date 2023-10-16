@@ -304,6 +304,7 @@
     <Resource Include="Assets\Covers\bpm.png" />
     <Resource Include="Assets\Covers\mini_metro.png" />
     <Resource Include="Assets\Covers\super_hexagon.png" />
+    <Resource Include="Assets\Covers\sanrio_world_smash_ball.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,13 +1,8 @@
 ﻿using HintMachine.GenericConnectors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HintMachine.Games
 {
-    public class SanrioConnector : ISNIConnector
+    public class SanrioWorldSmashBallConnector : ISNIConnector
     {
         private readonly HintQuestCounter _gamesQuest = new HintQuestCounter 
         {
@@ -38,10 +33,11 @@ namespace HintMachine.Games
         private byte _previousSuper = 255;
         private byte _pw1 = 255;
         private byte _pw2 = 255;
-        public SanrioConnector() {
+        public SanrioWorldSmashBallConnector() {
             Name = "Sanrio World Smash Ball!";
             Description = "Play as Keroppi, Tābō, Pokopon, and Hangyodon in a thrilling table tennis-like game of Smash Ball!!\n\n ";
             SupportedVersions.Add("Japanese");
+            CoverFilename = "sanrio_world_smash_ball.png";
             RomName = "SANRIO SMASH BALL!";
             Author = "Silvris";
             Quests.Add(_gamesQuest);

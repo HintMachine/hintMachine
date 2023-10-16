@@ -24,6 +24,9 @@ namespace HintMachine.GenericConnectors
         /// The currently connected SNES device connected to SNI. Use the Uri to send commands.
         /// </summary>
         private DevicesResponse.Types.Device Device { get; set; }
+        /// <summary>
+        /// Mapping information for the currently connected game.
+        /// </summary>
         private DetectMemoryMappingResponse Mapping { get; set; }
         /// <summary>
         /// The 21-byte name of the rom as present at 0x7FC0 in the rom. 
