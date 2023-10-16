@@ -38,8 +38,6 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            if (_ram.TestProcess() == false) { return false; }
-
             long coinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x21EFC90, new int[] { 0x218, 0x108, 0x10, 0x58, 0x20, 0x660 });
             long spinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x21EFC90, new int[] { 0x218, 0x108, 0x38, 0x108, 0x0, 0x58, 0x20, 0x2D0 });
 

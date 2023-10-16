@@ -58,9 +58,6 @@
 
         public override bool Poll()
         {
-            if (!_ram.TestProcess())
-                return false;
-
             long timeReading = 0;
 
             if(_ram.CurrentTarget == GAME_VERSION_STEAM)

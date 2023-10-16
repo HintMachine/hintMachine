@@ -383,6 +383,9 @@ namespace HintMachine
         /// <returns>The address pointed by the pointer path, or 0 if the path is broken in any way.</returns>
         private long ResolvePointerPath(long baseAddress, int[] offsets, bool is64Bit)
         {
+            if(!TestProcess())
+                throw new ProcessRamWatcherException("Process was shutdown while connected");
+
             try
             {
                 long addr = baseAddress;

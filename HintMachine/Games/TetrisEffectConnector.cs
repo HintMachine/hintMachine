@@ -79,9 +79,6 @@
 
         public override bool Poll()
         {
-            if (!_ram.TestProcess())
-                return false;
-
             int[] OFFSETS = new int[] { 0x8, 0x8, 0x220, 0x200, 0x64 };
             long linesAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x4ED9990, OFFSETS);
             if (linesAddress != 0)
