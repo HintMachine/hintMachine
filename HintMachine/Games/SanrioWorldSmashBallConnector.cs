@@ -8,7 +8,8 @@ namespace HintMachine.Games
         {
             Name = "Win Matches!",
             GoalValue = 5,
-            CooldownBetweenIncrements = 30 // believe it or not, sub-minute is possible
+            CooldownBetweenIncrements = 30, // believe it or not, sub-minute is possible
+            MaxIncrease = 1
         };
         private readonly HintQuestCumulative _goalQuest = new HintQuestCumulative
         {
@@ -31,7 +32,10 @@ namespace HintMachine.Games
         private byte _pw2 = 255;
         public SanrioWorldSmashBallConnector() {
             Name = "Sanrio World Smash Ball!";
-            Description = "Play as Keroppi, Tābō, Pokopon, and Hangyodon in a thrilling table tennis-like game of Smash Ball!!\n\n ";
+            Description = 
+                "Play as Keroppi, Tābō, Pokopon, and Hangyodon in a thrilling table tennis-like game of Smash Ball!!\n\n" +
+                "As the ball moves around the field, players can hit the ball, acquire powerups, and build up their super move!\n" +
+                "";
             SupportedVersions.Add("Japanese");
             CoverFilename = "sanrio_world_smash_ball.png";
             RomName = "SANRIO SMASH BALL!";
