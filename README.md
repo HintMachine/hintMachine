@@ -42,7 +42,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 |----------------------------------|-----------|
 | 911 Operator                     | PC        |
 | BPM: Bullets Per Minute          | PC        |
-| Bust a Move 4                    | PS1       |
+| Bust-a-Move 4                    | PS1       |
 | Columns                          | Megadrive |
 | Dorfromantik                     | PC        |
 | F-Zero GX                        | GameCube  |
