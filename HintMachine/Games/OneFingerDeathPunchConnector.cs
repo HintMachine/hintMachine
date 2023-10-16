@@ -47,8 +47,6 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-
-
             //long killsAddress = _ram.ResolvePointerPath32(_threadstack0Address.ToInt32() - 0x8cc, new int[] { 0x644, 0x90 });
             long killsAddress = _ram.ResolvePointerPath32(_threadstack0Address.ToInt32() - 0x8A0, new int[] { 0x710, 0x3C });
             _killsQuest.UpdateValue(_ram.ReadUint32(killsAddress));

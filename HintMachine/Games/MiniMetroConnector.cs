@@ -36,8 +36,6 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            if (_ram.TestProcess() == false) { return false; }
-
             try {
                 long address = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x3A1574, new int[] { 0x690, 0x20, 0x8, 0x4C, 0x8, 0xC, 0x88 });
                 _passengersQuest.UpdateValue(_ram.ReadUint32(address));

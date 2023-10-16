@@ -18,6 +18,30 @@ namespace HintMachine
         {}
     }
 
+    public class BinaryTarget
+    {
+        /// <summary>
+        /// A readable and concise name for the target (e.g. "Steam")
+        /// </summary>
+        public string DisplayName { get; set; } = "";
+
+        /// <summary>
+        /// The name of the process that is targeted
+        /// </summary>
+        public string ProcessName { get; set; } = "";
+
+        /// <summary>
+        /// A SHA-256 hash of the binary file the process is running
+        /// </summary>
+        public string Hash { get; set; } = "";
+
+        /// <summary>
+        /// The name of the module whose base address will be taken as the BaseAddress for this watcher
+        /// once connected. If left blank, the base address for the main module (the binary) will be taken.
+        /// </summary>
+        public string ModuleName { get; set; } = "";
+    }
+
     public class ProcessRamWatcher
     {
         #region EXTERNAL_DECLARATIONS
@@ -136,20 +160,31 @@ namespace HintMachine
 
         // ----------------------------------------------------------------------------------
 
-        private readonly string _processName;
-        private readonly string _moduleName;
-
         private Process _process = null;
         private IntPtr _processHandle = IntPtr.Zero;
+
+        public List<BinaryTarget> SupportedTargets { get; private set; } = new List<BinaryTarget>();
+
+        public BinaryTarget CurrentTarget { get; private set; } = null;
 
         public long BaseAddress { get; private set; } = 0;
 
         // ----------------------------------------------------------------------------------
 
+        public ProcessRamWatcher()
+        {}
+        public ProcessRamWatcher(BinaryTarget target)
+        {
+            SupportedTargets.Add(target);
+        }
+
         public ProcessRamWatcher(string processName, string moduleName = "")
         {
-            _processName = processName;
-            _moduleName = moduleName;
+            SupportedTargets.Add(new BinaryTarget
+            {
+                ProcessName = processName,
+                ModuleName = moduleName,
+            });
         }
 
         ~ProcessRamWatcher()
@@ -164,8 +199,49 @@ namespace HintMachine
         /// <returns>True if connection succeeded, false if something wrong happened</returns>
         public bool TryConnect()
         {
+            HashSet<string> alreadyProcessedNames = new HashSet<string>();
+
+            foreach (BinaryTarget target in SupportedTargets)
+            {
+                // Only try connecting once to each process name
+                if (alreadyProcessedNames.Contains(target.ProcessName))
+                    continue;
+
+                alreadyProcessedNames.Add(target.ProcessName);
+                if (!TryConnectToProcess(target.ProcessName))
+                    continue;
+
+                // We managed to find a process with a matching name, if there is a target for this process name with no hash, we're gold.
+                CurrentTarget = FindTargetWithNameAndHash(target.ProcessName, "");
+                if (CurrentTarget == null)
+                {
+                    // Otherwise, we need to hash the binary and test it against targets' hashes
+                    string hash = GetBinaryHash();
+                    CurrentTarget = FindTargetWithNameAndHash(target.ProcessName, hash);
+                    if (CurrentTarget == null)
+                    {
+                        Logger.Error($"Found a process with a valid name but an unsupported version ({hash})");
+                        return false;
+                    }
+                }
+
+                // A valid target was found, initialize BaseAddress with the module's base address
+                BaseAddress = FindModuleBaseAddress(CurrentTarget?.ModuleName);
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts opening the process with the given name with specific rights to allow for RAM peeking afterwards.
+        /// </summary>
+        /// <param name="processName">the name of the process to connect to</param>
+        /// <returns>true if it succeeded, false if something went wrong</returns>
+        private bool TryConnectToProcess(string processName)
+        {
             // Find the process using its name
-            Process[] processes = Process.GetProcessesByName(_processName);
+            Process[] processes = Process.GetProcessesByName(processName);
             if (processes.Length > 0)
                 _process = processes[0];
             if (_process == null)
@@ -176,17 +252,40 @@ namespace HintMachine
             if (_processHandle == IntPtr.Zero)
                 return false;
 
-            // Find the module using its name if it was provided, or take the main module otherwise
-            if (_moduleName == "")
-                BaseAddress = _process.MainModule.BaseAddress.ToInt64();
-            else
-                BaseAddress = SearchForModule(_moduleName);
-
-            return (BaseAddress != 0);
+            return true;
         }
 
-        private long SearchForModule(string targetName)
+        /// <summary>
+        /// Look for a BinaryTarget with the given process name and hash (case-insensitive) inside the list of supported
+        /// binary targets.
+        /// </summary>
+        /// <param name="processName">the process name to look for</param>
+        /// <param name="hash">the hash to look for</param>
+        /// <returns>A BinaryTarget with the given processName & hash if it could be found, null otherwise</returns>
+        private BinaryTarget FindTargetWithNameAndHash(string processName, string hash)
         {
+            foreach (BinaryTarget target in SupportedTargets)
+            {
+                if (target.ProcessName != processName)
+                    continue;
+                
+                if(target.Hash == "" || string.Equals(hash, target.Hash, StringComparison.OrdinalIgnoreCase))
+                    return target;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Find the module using its name if it was provided, or take the main module otherwise
+        /// </summary>
+        /// <param name="targetName">the name of the module (or an empty string)</param>
+        /// <returns>the base address for the given module (or the main module base address if empty)</returns>
+        private long FindModuleBaseAddress(string targetName)
+        {
+            if (targetName == "")
+                return _process.MainModule.BaseAddress.ToInt64();
+
             long result = 0;
 
             // Setting up the variable for the second argument for EnumProcessModules
@@ -214,7 +313,6 @@ namespace HintMachine
                 }
             }
 
-            int sheriff = Marshal.GetLastWin32Error();
             gch.Free();
             return result;
         }
@@ -275,8 +373,19 @@ namespace HintMachine
         public double ReadDouble(long address, bool isBigEndian = false)
             => BitConverter.ToDouble(ReadBytes(address, sizeof(long), isBigEndian), 0);
 
+        /// <summary>
+        /// Resolve a pointer path starting from a base address, and following pointers while also applying the given offsets
+        /// one by one. Such a path can be obtained with external programs like CheatEngine.
+        /// </summary>
+        /// <param name="baseAddress">the base address</param>
+        /// <param name="offsets">the offsets to apply while reading a pointer for each one of them</param>
+        /// <param name="is64Bit">a boolean telling if pointers are 64-bit long (true) or 32-bit long (false)</param>
+        /// <returns>The address pointed by the pointer path, or 0 if the path is broken in any way.</returns>
         private long ResolvePointerPath(long baseAddress, int[] offsets, bool is64Bit)
         {
+            if(!TestProcess())
+                throw new ProcessRamWatcherException("Process was shutdown while connected");
+
             try
             {
                 long addr = baseAddress;
@@ -366,7 +475,7 @@ namespace HintMachine
             QueryFullProcessImageName(_processHandle, 0, stringBuilder, ref size);
             string binaryFilePath = stringBuilder.ToString();
 
-            using (var sha = SHA256.Create())
+            using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))
                 using (var stream = File.OpenRead(binaryFilePath))
                     return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
         }

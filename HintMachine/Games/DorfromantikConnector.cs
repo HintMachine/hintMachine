@@ -56,8 +56,6 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            if (_ram.TestProcess() == false) { return false; }
-
             long rewardSystemStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x716018, new int[] { 0x8, 0x10, 0x48, 0x18, 0xB0, 0x30, 0x0 });
 
             if (rewardSystemStructAddress != 0)
