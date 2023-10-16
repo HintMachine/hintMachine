@@ -29,6 +29,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -102,13 +104,22 @@
   <ItemGroup>
     <Reference Include="Archipelago.MultiClient.Net, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Archipelago.MultiClient.Net.5.0.6\lib\net45\Archipelago.MultiClient.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.24.4.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.24.4\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="Grpc.Net.Client.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d754f35622e28bad, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grpc.Net.Client.Web.2.56.0\lib\netstandard2.0\Grpc.Net.Client.Web.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Archipelago.MultiClient.Net.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -129,6 +140,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
+    <Compile Include="ComboBoxPrompt.xaml.cs">
+      <DependentUpon>ComboBoxPrompt.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Games\BPMConnector.cs" />
     <Compile Include="Games\MetroidPrimePinballConnector.cs" />
     <Compile Include="Games\MeteosConnector.cs" />
@@ -139,8 +153,10 @@
     <Compile Include="Games\DorfromantikConnector.cs" />
     <Compile Include="Games\Rollcage2Connector.cs" />
     <Compile Include="Games\ColumnsConnector.cs" />
+    <Compile Include="Games\SanrioConnector.cs" />
     <Compile Include="Games\StargunnerConnector.cs" />
     <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
+    <Compile Include="GenericConnectors\ISNIConnector.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />
@@ -181,6 +197,10 @@
     <Compile Include="ProcessRamWatcher.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TokenManipulator.cs" />
+    <Page Include="ComboBoxPrompt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HintsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -307,6 +327,18 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HintMachine.SNIConnector\HintMachine.SNIConnector.csproj">
+      <Project>{4ed98a39-76aa-45c8-9bef-ee24bc4bfbd2}</Project>
+      <Name>HintMachine.SNIConnector</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets" Condition="Exists('..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets'))" />
+  </Target>
 </Project>
