@@ -1,8 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using static HintMachine.ProcessRamWatcher;
-
 namespace HintMachine.Games
 {
     public class SuperMonkeyBall2Connector : IDolphinConnector
