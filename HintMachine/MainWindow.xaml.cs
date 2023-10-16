@@ -206,7 +206,7 @@ namespace HintMachine
 
                 _game.Disconnect();
                 _game = null;
-
+                alreadyAwardedTokenForCurrentGame = false;
                 Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
                     GridGameConnect.Visibility = Visibility.Visible;
