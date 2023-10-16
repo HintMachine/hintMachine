@@ -288,6 +288,9 @@
     <Resource Include="Assets\Covers\super_hexagon.png" />
     <Resource Include="Assets\Covers\911_operator.png" />
     <Resource Include="Assets\Covers\dragonCrown.png" />
+    <Content Include="Assets\Covers\dragonCrown.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
