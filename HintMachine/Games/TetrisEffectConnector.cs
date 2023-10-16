@@ -62,7 +62,13 @@
 
         public override bool Connect()
         {
-            _ram = new ProcessRamWatcher("TetrisEffect-Win64-Shipping");
+            _ram = new ProcessRamWatcher(new BinaryTarget
+            {
+                DisplayName = "Steam",
+                ProcessName = "TetrisEffect-Win64-Shipping",
+                Hash = "1981E9829739E3C2E7549E9DEC3384A3E649632A514D9D5F0711A37CC945279D"
+            });
+
             return _ram.TryConnect();
         }
 
