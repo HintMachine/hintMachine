@@ -34,8 +34,8 @@ namespace HintMachine.Games
             Name = "Sanrio World Smash Ball!";
             Description = 
                 "Play as Keroppi, Tābō, Pokopon, and Hangyodon in a thrilling table tennis-like game of Smash Ball!!\n\n" +
-                "As the ball moves around the field, players can hit the ball, acquire powerups, and build up their super move!\n" +
-                "";
+                "As the ball moves around the field, players can hit the ball, acquire powerups, and build up their super move!\n\n" +
+                "Play through 30 stages within the game's singleplayer mode, or continue where you left off using a password!";
             SupportedVersions.Add("Japanese");
             CoverFilename = "sanrio_world_smash_ball.png";
             RomName = "SANRIO SMASH BALL!";
