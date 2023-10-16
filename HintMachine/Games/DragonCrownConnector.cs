@@ -8,7 +8,6 @@ namespace HintMachine.Games
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
             Name = "Get score",
-            //Description = "Use simple and deluge mode for this quest",
             GoalValue = 100000,
             MaxIncrease = 50000
         };
@@ -23,6 +22,7 @@ namespace HintMachine.Games
         private ProcessRamWatcher _ram = null;
         private long _scoreAddr = 0;
         private long _goldAddr = 0;
+
         // ---------------------------------------------------------
 
         public DragonCrownConnector()
