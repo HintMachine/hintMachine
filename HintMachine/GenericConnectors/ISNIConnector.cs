@@ -82,7 +82,9 @@ namespace HintMachine.GenericConnectors
             else return false;
         }
 
-
+        /// <summary>
+        /// Disconnects from SNI and cleans up connector internals. Make sure to call base if overriding.
+        /// </summary>
         public override void Disconnect()
         {
             //I don't actually have to do anything here, but we null device, mapping, and client in case
@@ -141,7 +143,7 @@ namespace HintMachine.GenericConnectors
         /// <summary>
         /// Used to confirm that the specified game is still currently being played. 
         /// </summary>
-        /// <returns>Whether the current game is still the one wanted by our connector.</returns>
+        /// <returns>Bool stating whether the current game is still the one wanted by our connector.</returns>
         public bool ConfirmRomName()
         {
             string rom_name = Encoding.UTF8.GetString(ReadBytes(0x7FC0, AddressSpace.FxPakPro, 21)).Trim();
