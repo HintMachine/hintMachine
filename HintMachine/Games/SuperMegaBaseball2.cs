@@ -2,6 +2,14 @@
 {
     public class SuperMegaBaseball2Connector : IGameConnector
     {
+        // AFAIK the only PC version out there is the Steam version. If there's some other (current!) obscure PC version out there, we'll need to get its hash and do some magic to support it.
+        private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
+        {
+            DisplayName = "Steam",
+            ProcessName = "supermegabaseball",
+            Hash = "3525F99F5811EC9ECB4041AC9752CBFC477F354EE63840B2A36D166AB8F584B9"
+        };
+
 
         /// Starpoints: The rate at which starpoints are gained is chiefly affected by the intersection of EGO (difficulty) set and player skill.
         /// While higher EGO means higher multiplier (up to 100x at EGO 99), that can result in LOWER Starpoints in the end if player skill can't keep up.
@@ -32,24 +40,10 @@
             Quests.Add(_starpointsQuest);
         }
 
-        //Due to all of the Super Mega Baseball games sharing the same executable name, we need to compare hashes.
-        //Verified SMB2 Hash: 3525F99F5811EC9ECB4041AC9752CBFC477F354EE63840B2A36D166AB8F584B9
-        //Known SMB3 Hash: 508EBF115E5344298779B3FC954C95962565FBB8F632CA06BC190335E294CF3B
         public override bool Connect()
         {
-            _ram = new ProcessRamWatcher("supermegabaseball");
-            if (_ram.TryConnect())
-            {
-                string gamehash = _ram.GetBinaryHash();
-                Logger.Debug($"Found matching process supermegabaseball with hash {gamehash}");
-                if(gamehash == "508EBF115E5344298779B3FC954C95962565FBB8F632CA06BC190335E294CF3B")
-                {
-                    Logger.Error("Tried to connect to Super Mega Baseball 2, but found Super Mega Baseball 3 instead.");
-                    return false;
-                }
-                return gamehash == "3525F99F5811EC9ECB4041AC9752CBFC477F354EE63840B2A36D166AB8F584B9";
-            }
-            return false;
+            _ram = new ProcessRamWatcher(GAME_VERSION_STEAM);
+            return _ram.TryConnect();
         }
 
         public override void Disconnect()
@@ -59,9 +53,6 @@
 
         public override bool Poll()
         {
-            if (!_ram.TestProcess())
-                return false;
-
             int[] OFFSETS = new int[] { 0x20, 0x98, 0x468, 0x10, 0x20, 0x278 };
             long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x02A88FB8, OFFSETS);
             if (scoreAddress != 0)
