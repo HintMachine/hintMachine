@@ -4,10 +4,10 @@ namespace HintMachine.Games
 {
     public class SanrioWorldSmashBallConnector : ISNIConnector
     {
-        private readonly HintQuestCounter _gamesQuest = new HintQuestCounter 
+        private readonly HintQuestCumulative _gamesQuest = new HintQuestCumulative
         {
             Name = "Win Matches!",
-            GoalValue = 2,
+            GoalValue = 5,
             CooldownBetweenIncrements = 30 // believe it or not, sub-minute is possible
         };
         private readonly HintQuestCumulative _goalQuest = new HintQuestCumulative
@@ -19,18 +19,14 @@ namespace HintMachine.Games
         private readonly HintQuestCumulative _superQuest = new HintQuestCumulative
         {
             Name = "Build Super Meter!",
-            GoalValue = 0xA0 * 5,
-            //we'll have to use our judgement for max increase
+            GoalValue = 0xA0 * 20,
         };
-        private readonly HintQuestCumulative _powerupQuest = new HintQuestCumulative
+        private readonly HintQuestCounter _powerupQuest = new HintQuestCounter
         {
             Name = "Pick Up Powerups!",
-            GoalValue = 30,
+            GoalValue = 10,
             MaxIncrease = 1,
         };
-        private byte _previousStage = 255;
-        private byte _previousScore = 255;
-        private byte _previousSuper = 255;
         private byte _pw1 = 255;
         private byte _pw2 = 255;
         public SanrioWorldSmashBallConnector() {
@@ -55,24 +51,11 @@ namespace HintMachine.Games
             byte currentStage = ReadByte(0xF50055, SNI.AddressSpace.FxPakPro);
             if (currentStage < 0x3e) // Multiplayer, ignore for this quest
             {
-                if (currentStage > _previousStage)
-                {
-                    _gamesQuest.CurrentValue++;
-                    
-                }
-                _previousStage = currentStage;
+                _gamesQuest.UpdateValue(currentStage);
                 byte currentScore = ReadByte(0xF5005D, SNI.AddressSpace.FxPakPro);
-                if (currentScore > _previousScore)
-                {
-                    _goalQuest.CurrentValue++;
-                }
-                _previousScore = currentScore;
+                _goalQuest.UpdateValue(currentScore);
                 byte currentSuper = ReadByte(0xF50070, SNI.AddressSpace.FxPakPro);
-                if (currentSuper > _previousSuper)
-                {
-                    _superQuest.CurrentValue = _superQuest.CurrentValue + (currentSuper - _previousSuper);
-                }
-                _previousSuper = currentSuper;
+                _superQuest.UpdateValue(currentSuper);
                 byte pw1 = ReadByte(0xF5018D, SNI.AddressSpace.FxPakPro);
                 if (pw1 > _pw1)
                 {
