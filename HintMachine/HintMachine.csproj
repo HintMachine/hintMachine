@@ -153,7 +153,7 @@
     <Compile Include="Games\DorfromantikConnector.cs" />
     <Compile Include="Games\Rollcage2Connector.cs" />
     <Compile Include="Games\ColumnsConnector.cs" />
-    <Compile Include="Games\SanrioConnector.cs" />
+    <Compile Include="Games\SanrioWorldSmashBallConnector.cs" />
     <Compile Include="Games\StargunnerConnector.cs" />
     <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
     <Compile Include="GenericConnectors\ISNIConnector.cs" />
