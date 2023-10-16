@@ -12,11 +12,6 @@ It connects to a wide variety of games (through RAM peeking, save file watching,
 
 Given its high dependency to system calls to do RAM peeking and stuff, only Windows is supported as of now.
 
-
-### In Testing (This Fork)
-
-- Super Mega Baseball 2
-
 ## Usage
 
 ### Release versions 
@@ -63,6 +58,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Sonic 3 Blue Spheres             | Megadrive |
 | Stargunner                       | PC        |
 | Super Hexagon                    | PC        |
+| Super Mega Baseball 2            | PC        |
 | Tetris Effect Connected          | PC        |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |
