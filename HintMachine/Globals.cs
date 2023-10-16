@@ -55,7 +55,6 @@ namespace HintMachine
             new MiniMetroConnector(),
             new LuckBeALandlordConnector(),
             new SuperHexagonConnector(),
-            //TESTING
             new SuperMegaBaseball2Connector(),
         };
 
