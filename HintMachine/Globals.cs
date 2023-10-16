@@ -51,6 +51,7 @@ namespace HintMachine
             new PacManChampionshipEditionDXConnector(),
             new MetroidPrimePinballConnector(),
             new ColumnsConnector(),
+            new DragonCrownConnector()
         };
 
         public static IGameConnector FindGameFromName(string name)
