@@ -1,14 +1,9 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Documents;
+﻿using System.Collections.Generic;
 using System;
 using SNI;
 using Grpc.Net.Client;
 using System.Net.Http;
 using Grpc.Net.Client.Web;
-using System.Windows;
-using Google.Protobuf;
 using System.Text;
 using System.Linq;
 
@@ -46,6 +41,11 @@ namespace HintMachine.GenericConnectors
 
         }
 
+        /// <summary>
+        /// Attempts to connect to SNI, find the console we wish to communicate with, and then confirm whether
+        /// they are playing the specified game. Do not override in subclasses without calling base.Connect() first.
+        /// </summary>
+        /// <returns>Bool indicating successful connection to SNI and emulator.</returns>
         public override bool Connect()
         {
             GrpcChannelOptions channelOptions = new GrpcChannelOptions() { 
@@ -82,6 +82,7 @@ namespace HintMachine.GenericConnectors
             else return false;
         }
 
+
         public override void Disconnect()
         {
             //I don't actually have to do anything here, but we null device, mapping, and client in case
@@ -91,30 +92,59 @@ namespace HintMachine.GenericConnectors
 
         }
 
+        /// <summary>
+        /// Reads a number of bytes from SNES memory from the given address with the given address space applied.
+        /// </summary>
+        /// <param name="address">The address of the bytes to read, as applied by the address space.</param>
+        /// <param name="addressSpace">The address space to interpret the address.</param>
+        /// <param name="size">Number of bytes to read.</param>
+        /// <returns></returns>
         public byte[] ReadBytes(uint address, AddressSpace addressSpace, uint size)
         {
             SingleReadMemoryResponse response = SNIClient.SingleRead(new SingleReadMemoryRequest { Uri = Device.Uri, Request = new ReadMemoryRequest { RequestAddress = address, RequestAddressSpace = addressSpace, RequestMemoryMapping = Mapping.MemoryMapping, Size = size } });
             return response.Response.Data.ToByteArray();
         }
 
+        /// <summary>
+        /// Reads a single byte from SNES memory from the given address with the given address space applied.
+        /// </summary>
+        /// <param name="address">The address of the byte to read, as applied by the address space.</param>
+        /// <param name="addressSpace">The address space to interpret the address.</param>
+        /// <returns></returns>
         public byte ReadByte(uint address, AddressSpace addressSpace)
         {
             return ReadBytes(address, addressSpace, 1)[0];
         }
 
+        /// <summary>
+        /// Reads a 16-bit integer from SNES memory from the given address with the given address space applied.
+        /// </summary>
+        /// <param name="address">The address of the byte to read, as applied by the address space.</param>
+        /// <param name="addressSpace">The address space to interpret the address.</param>
+        /// <returns></returns>
         public short ReadInt16(uint address, AddressSpace addressSpace)
         {
             return BitConverter.ToInt16(ReadBytes(address, addressSpace, 2), 0);
         }
 
+        /// <summary>
+        /// Reads a 16-bit unsigned integer from SNES memory from the given address with the given address space applied.
+        /// </summary>
+        /// <param name="address">The address of the byte to read, as applied by the address space.</param>
+        /// <param name="addressSpace">The address space to interpret the address.</param>
+        /// <returns></returns>
         public ushort ReadUInt16(uint address, AddressSpace addressSpace)
         {
             return BitConverter.ToUInt16(ReadBytes(address, addressSpace, 2), 0);
         }
 
+        /// <summary>
+        /// Used to confirm that the specified game is still currently being played. 
+        /// </summary>
+        /// <returns>Whether the current game is still the one wanted by our connector.</returns>
         public bool ConfirmRomName()
         {
-            string rom_name = Encoding.UTF8.GetString(ReadBytes(0x7FC0, SNI.AddressSpace.FxPakPro, 21)).Trim();
+            string rom_name = Encoding.UTF8.GetString(ReadBytes(0x7FC0, AddressSpace.FxPakPro, 21)).Trim();
             if (rom_name != RomName.Trim())
             {
                 return false;
