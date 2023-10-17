@@ -19,7 +19,6 @@
             Description = "Pokemon Pinball has all the features you'd demand of a pinball game, including bonus tables, lots of bumpers and ways to score massive points." +
                 "Instead of a ball, you make use of a Pokeball. Instead of standard bumpers, you're hitting the Pokeball against other Pokemon, and the ultimate goal is of course to \"catch 'em all\". The game features 200 Pokemon and two main tables.";
             SupportedVersions.Add("EU ROM");
-            CoverFilename = "";
             Author = "CalDrac";
             Platform = "Gameboy Advance";
             CoverFilename = "pkmnPinballRS.png";
