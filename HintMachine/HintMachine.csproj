@@ -144,8 +144,10 @@
     <Compile Include="Games\ColumnsConnector.cs" />
     <Compile Include="Games\StargunnerConnector.cs" />
     <Compile Include="Games\SuperMonkeyBall2Connector.cs" />
-    <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
     <Compile Include="Games\SuperMegaBaseball2.cs" />
+    <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
+    <Compile Include="GenericConnectors\IEmulatorConnector.cs" />
+    <Compile Include="GenericConnectors\MegadriveRamAdapter.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />

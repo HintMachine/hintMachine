@@ -20,22 +20,16 @@ namespace HintMachine.Games
             Author = "CalDrac";
 
             Quests.Add(_winQuest);
-        }
 
-        public override bool Connect()
-        {
-            if (!base.Connect())
-                return false;
-            
-            if (!FindRamSignature(new byte[] { 0x50, 0x6C, 0x65, 0x61, 0x73, 0x65, 0x20, 0x64 }, 0xADA0C))
-                return false;
-
-            return true;
+            ValidROMs.Add("SLUS_007.54");
         }
 
         public override bool Poll()
         {
-            _winQuest.UpdateValue(_ram.ReadUint8(_psxRamBaseAddress + 0x167A8A));
+            if (!base.Poll())
+                return false;
+
+            _winQuest.UpdateValue(_ram.ReadUint8(RamBaseAddress + 0x167A8A));
             return true;
         }
     }

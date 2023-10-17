@@ -23,22 +23,16 @@ namespace HintMachine.Games
             Author = "CalDrac";
 
             Quests.Add(_firstPlacesQuest);
-        }
 
-        public override bool Connect()
-        {
-            if (!base.Connect())
-                return false;
-
-            if (!FindRamSignature(new byte[] { 0x4D, 0x41, 0x54, 0x00, 0x53, 0x18 }, 0x19E04))
-                return false;
-
-            return true;
+            ValidROMs.Add("SLUS_008.67");
         }
 
         public override bool Poll()
         {
-            uint laps = _ram.ReadUint8(_psxRamBaseAddress + 0xD23F8);
+            if(!base.Poll()) 
+                return false;
+
+            uint laps = _ram.ReadUint8(RamBaseAddress + 0xD23F8);
            
             if (laps == 0)
             {
@@ -56,7 +50,7 @@ namespace HintMachine.Games
 
             if (_raceStarted)
             {
-                uint place = _ram.ReadUint8(_psxRamBaseAddress + 0xD23F9);
+                uint place = _ram.ReadUint8(RamBaseAddress + 0xD23F9);
                 _isFirst = (place == 1);
             }
 

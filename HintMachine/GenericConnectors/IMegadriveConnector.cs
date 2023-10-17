@@ -1,13 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using static HintMachine.ProcessRamWatcher;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace HintMachine.GenericConnectors
 {
-    public abstract class IMegadriveConnector : IGameConnector
+    public abstract class IMegadriveConnector : IEmulatorConnector
     {
-        protected ProcessRamWatcher _ram = null;
-        protected long _megadriveRamBaseAddr = 0;
+        protected MegadriveRamAdapter _ram = null;
+
+        public long RomBaseAddress { get; private set; } = 0;
+
+        public long RamBaseAddress { get; private set; } = 0;
+        
+        // -------------------------------------------------
 
         public IMegadriveConnector()
         {
@@ -17,31 +22,63 @@ namespace HintMachine.GenericConnectors
 
         public override bool Connect()
         {
-            _ram = new ProcessRamWatcher("EmuHawk");
-            return _ram.TryConnect();
+            _ram = new MegadriveRamAdapter(new BinaryTarget
+            {
+                DisplayName = "2.9.1",
+                ProcessName = "EmuHawk",
+                Hash = "6CE622D4ED4E8460CE362CF35EF67DC70096FEC2C9A174CBEF6A3E5B04F18BCC"
+            });
+
+            if (!_ram.TryConnect())
+                return false;
+
+            // Find ROM base address
+            List<MemoryRegion> regions = _ram.ListMemoryRegions(0x3158000, MemoryRegionType.MEM_MAPPED);
+            if (regions.Count == 0)
+            {
+                Logger.Debug("IMegadriveConnector: Could not find ROM start address");
+                return false;
+            }
+            RomBaseAddress = regions[0].BaseAddress + 0xE58000;
+
+            // Find RAM base address
+            regions = _ram.ListMemoryRegions(0x2C000, MemoryRegionType.MEM_MAPPED);
+            Logger.Debug($"Found {regions.Count} potential regions for RAM");
+            if (regions.Count == 0)
+            {
+                Logger.Debug("IMegadriveConnector: Could not find RAM start address");
+                return false;
+            }
+            RamBaseAddress = regions[0].BaseAddress + 0x5D90;
+
+            if (!TestRomIdentity())
+            {
+                Logger.Debug($"Invalid ROM with identity {CurrentROM}");
+                return false;
+            }
+
+            return true;
         }
 
         public override void Disconnect()
         {
             _ram = null;
-            _megadriveRamBaseAddr = 0;
+            RomBaseAddress = 0;
+            RamBaseAddress = 0;
         }
 
-        protected bool FindRamSignature(byte[] ramSignature, uint signatureLookupAddr)
+        public override long GetCurrentFrameCount()
         {
-            List<MemoryRegion> regions = _ram.ListMemoryRegions(0x2C000, MemoryRegionType.MEM_MAPPED);
-            foreach (MemoryRegion region in regions)
-            {
-                long ramBaseAddress = region.BaseAddress + 0x5D90;
-                byte[] signatureBytes = _ram.ReadBytes(ramBaseAddress + signatureLookupAddr, ramSignature.Length);
-                if (Enumerable.SequenceEqual(signatureBytes, ramSignature))
-                {
-                    _megadriveRamBaseAddr = ramBaseAddress;
-                    return true;
-                }
-            }
+            long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
+            return _ram.ReadUint32(framecountAddr);
+        }
 
-            return false;
+        public override string GetRomIdentity()
+        {
+            // Hash the relevant part of the ROM header
+            byte[] bytes = _ram.ReadBytes(RomBaseAddress + 0x100, 0xA0);
+            using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))
+                return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "");
         }
     }
 }

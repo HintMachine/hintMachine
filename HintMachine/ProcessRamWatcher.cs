@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HintMachine
 {
@@ -170,6 +169,8 @@ namespace HintMachine
         public long BaseAddress { get; private set; } = 0;
 
         public bool Is64Bit { get; set; } = true;
+
+        public bool IsBigEndian { get; set; } = false;
 
         public long Threadstack0
         { 
@@ -362,29 +363,29 @@ namespace HintMachine
         public byte ReadUint8(long address) 
             => ReadBytes(address, sizeof(byte))[0];
 
-        public ushort ReadUint16(long address, bool isBigEndian = false) 
-            => BitConverter.ToUInt16(ReadBytes(address, sizeof(ushort), isBigEndian), 0);
+        public ushort ReadUint16(long address) 
+            => BitConverter.ToUInt16(ReadBytes(address, sizeof(ushort), IsBigEndian), 0);
 
-        public uint ReadUint32(long address, bool isBigEndian = false)
-            => BitConverter.ToUInt32(ReadBytes(address, sizeof(uint), isBigEndian), 0);
+        public uint ReadUint32(long address)
+            => BitConverter.ToUInt32(ReadBytes(address, sizeof(uint), IsBigEndian), 0);
 
-        public ulong ReadUint64(long address, bool isBigEndian = false)
-            => BitConverter.ToUInt64(ReadBytes(address, sizeof(ulong), isBigEndian), 0);
+        public ulong ReadUint64(long address)
+            => BitConverter.ToUInt64(ReadBytes(address, sizeof(ulong), IsBigEndian), 0);
 
         public sbyte ReadInt8(long address)
             => (sbyte)ReadBytes(address, sizeof(sbyte))[0];
 
-        public short ReadInt16(long address, bool isBigEndian = false)
-            => BitConverter.ToInt16(ReadBytes(address, sizeof(short), isBigEndian), 0);
+        public short ReadInt16(long address)
+            => BitConverter.ToInt16(ReadBytes(address, sizeof(short), IsBigEndian), 0);
 
-        public int ReadInt32(long address, bool isBigEndian = false)
-            => BitConverter.ToInt32(ReadBytes(address, sizeof(int), isBigEndian), 0);
+        public int ReadInt32(long address)
+            => BitConverter.ToInt32(ReadBytes(address, sizeof(int), IsBigEndian), 0);
 
-        public long ReadInt64(long address, bool isBigEndian = false)
-            => BitConverter.ToInt64(ReadBytes(address, sizeof(long), isBigEndian), 0);
+        public long ReadInt64(long address)
+            => BitConverter.ToInt64(ReadBytes(address, sizeof(long), IsBigEndian), 0);
 
-        public double ReadDouble(long address, bool isBigEndian = false)
-            => BitConverter.ToDouble(ReadBytes(address, sizeof(long), isBigEndian), 0);
+        public double ReadDouble(long address)
+            => BitConverter.ToDouble(ReadBytes(address, sizeof(long), IsBigEndian), 0);
 
         /// <summary>
         /// Resolve a pointer path starting from a base address, and following pointers while also applying the given offsets

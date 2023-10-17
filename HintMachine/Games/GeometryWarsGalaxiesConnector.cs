@@ -7,12 +7,13 @@ namespace HintMachine.Games
         private readonly HintQuestCumulative _geomsQuest = new HintQuestCumulative
         {
             Name = "Geoms collected",
-            GoalValue = 10000
+            GoalValue = 10000,
+            MaxIncrease = 200,
         };
       
         // ------------------------------------------------------
 
-        public GeometryWarsGalaxiesConnector() : base(true, "RGLP7D")
+        public GeometryWarsGalaxiesConnector() : base(true)
         {
             Name = "Geometry Wars: Galaxies";
             Description = "Geometry Wars: Galaxies is set in a space-like environment where the player must shoot geometrical shapes in order to score points, gain lives, acquire bombs and survive as long as possible. The game is played to an upbeat electro soundtrack.";
@@ -21,12 +22,17 @@ namespace HintMachine.Games
             Author = "Dinopony";
 
             Quests.Add(_geomsQuest);
+
+            ValidROMs.Add("RGLP7D"); // PAL
         }
 
         public override bool Poll()
         {
-            long geomsAddr = _mem2Addr + 0x23A2AF4;
-            _geomsQuest.UpdateValue(_ram.ReadUint32(geomsAddr, true));
+            if (!base.Poll())
+                return false;
+
+            uint geoms = _ram.ReadUint32(MEM2 + 0x23A2AF4);
+            _geomsQuest.UpdateValue(geoms);
 
             return true;
         }
