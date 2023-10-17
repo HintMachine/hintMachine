@@ -301,9 +301,6 @@
     <Resource Include="Assets\Covers\sonic_blue_spheres.png" />
     <Resource Include="Assets\Covers\luck_be_a_landord.png" />
     <Resource Include="Assets\Covers\tony_hawks_pro_skater_1_2.png" />
-    <Content Include="threadstack.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="WMPLib">
