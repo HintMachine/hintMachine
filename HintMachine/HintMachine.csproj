@@ -130,6 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="Games\BPMConnector.cs" />
+    <Compile Include="Games\TonyHawksProSkater12Connector.cs" />
     <Compile Include="Games\MetroidPrimePinballConnector.cs" />
     <Compile Include="Games\MeteosConnector.cs" />
     <Compile Include="Games\BustAMove4Connector.cs" />
@@ -295,6 +296,7 @@
     <Resource Include="Assets\Covers\zachtronics_solitaire_collection.png" />
     <Resource Include="Assets\Covers\sonic_blue_spheres.png" />
     <Resource Include="Assets\Covers\luck_be_a_landord.png" />
+    <Resource Include="Assets\Covers\tony_hawks_pro_skater_1_2.png" />
     <Content Include="threadstack.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
