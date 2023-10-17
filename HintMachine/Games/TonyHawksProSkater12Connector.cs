@@ -4,6 +4,13 @@ namespace HintMachine.Games
 {
     public class TonyHawksProSkater12Connector : IGameConnector
     {
+        private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
+        {
+            DisplayName = "Steam",
+            ProcessName = "THPS12",
+            Hash = "7EE922549418733002992C54C02BA6ED23DA90564C173B4AFF27AF561F534B25"
+        };
+
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
             Name = "Score",
@@ -27,22 +34,10 @@ namespace HintMachine.Games
 
         public override bool Connect()
         {
-            _ram = new ProcessRamWatcher("THPS12");
-            if (!_ram.TryConnect())
-            {
-                return false;
-            }
-
-            string hash = _ram.GetBinaryHash();
-            if (hash == "7EE922549418733002992C54C02BA6ED23DA90564C173B4AFF27AF561F534B25")
-            {
-                return true;
-            }
-            else
-            {
-                Logger.Error("Unrecognized version of the game, cannot connect.");
-                return false;
-            }
+            _ram = new ProcessRamWatcher();
+            _ram.SupportedTargets.Add(GAME_VERSION_STEAM);
+            
+            return _ram.TryConnect();
         }
 
         public override void Disconnect()
@@ -52,8 +47,6 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            if (_ram.TestProcess() == false) { return false; }
-
             long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x3C40A20, new int[] { 0x0, 0x48, 0x0, 0x20, 0x478, 0x298, 0x2D8 });
 
             if (scoreAddress != 0)
