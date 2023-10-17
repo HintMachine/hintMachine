@@ -44,6 +44,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Bust-a-Move 4                    | PS1       |
 | Columns                          | Megadrive |
 | Dorfromantik                     | PC        |
+| Dragon's Crown                   | PS Vita   |
 | F-Zero GX                        | GameCube  |
 | Geometry Wars Galaxies           | Wii       |
 | Geometry Wars : Retro Evolved    | PC        |
