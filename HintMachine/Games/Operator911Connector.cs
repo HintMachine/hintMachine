@@ -44,8 +44,6 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-            if (_ram.TestProcess() == false) { return false; }
-
             try {
                 long incidentsAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x1037A40, new int[] { 0x4, 0x8, 0x50, 0x68, 0x38, 0x164, 0x14 });
                 _incidentsQuest.UpdateValue(_ram.ReadUint32(incidentsAddress));

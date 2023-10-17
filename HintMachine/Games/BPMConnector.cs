@@ -46,9 +46,6 @@
 
         public override bool Poll()
         {
-            if (!_ram.TestProcess())
-                return false;
-
             long lifetimeStatsAddr = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x4952D20, new int[] { 0x288, 0x158 });
             if (lifetimeStatsAddr != 0)
             {

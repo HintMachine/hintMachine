@@ -140,8 +140,10 @@ namespace HintMachine
                 {
                     pollSuccessful = _game.Poll();
                 }
-                catch (ProcessRamWatcherException)
-                {}
+                catch (ProcessRamWatcherException e)
+                {
+                    Logger.Debug(e.Message);
+                }
 
                 if (pollSuccessful)
                 {
@@ -206,7 +208,7 @@ namespace HintMachine
 
                 _game.Disconnect();
                 _game = null;
-
+                alreadyAwardedTokenForCurrentGame = false;
                 Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
                     GridGameConnect.Visibility = Visibility.Visible;

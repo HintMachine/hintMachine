@@ -15,7 +15,6 @@ namespace HintMachine.Games
         };
 
         private ProcessRamWatcher _ram = null;
-        private IntPtr _threadstack0Address;
 
         public OneFingerDeathPunchConnector()
         {
@@ -35,8 +34,6 @@ namespace HintMachine.Games
             if (!_ram.TryConnect())
                 return false;
 
-            syncThreadStackAdr();
-
             return true;
         }
 
@@ -47,19 +44,11 @@ namespace HintMachine.Games
 
         public override bool Poll()
         {
-
-
             //long killsAddress = _ram.ResolvePointerPath32(_threadstack0Address.ToInt32() - 0x8cc, new int[] { 0x644, 0x90 });
-            long killsAddress = _ram.ResolvePointerPath32(_threadstack0Address.ToInt32() - 0x8A0, new int[] { 0x710, 0x3C });
+            long killsAddress = _ram.ResolvePointerPath32(_ram.Threadstack0 - 0x8A0, new int[] { 0x710, 0x3C });
             _killsQuest.UpdateValue(_ram.ReadUint32(killsAddress));
 
             return true;
         }
-
-        private async void syncThreadStackAdr()
-        {
-            _threadstack0Address = (IntPtr)await _ram.GetThreadstack0Address();
-        }
-
     }
 }

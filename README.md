@@ -12,7 +12,6 @@ It connects to a wide variety of games (through RAM peeking, save file watching,
 
 Given its high dependency to system calls to do RAM peeking and stuff, only Windows is supported as of now.
 
-
 ## Usage
 
 ### Release versions 
@@ -42,7 +41,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 |----------------------------------|-----------|
 | 911 Operator                     | PC        |
 | BPM: Bullets Per Minute          | PC        |
-| Bust a Move 4                    | PS1       |
+| Bust-a-Move 4                    | PS1       |
 | Columns                          | Megadrive |
 | Dorfromantik                     | PC        |
 | F-Zero GX                        | GameCube  |
@@ -60,6 +59,8 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Sonic 3 Blue Spheres             | Megadrive |
 | Stargunner                       | PC        |
 | Super Hexagon                    | PC        |
+| Super Mega Baseball 2            | PC        |
+| Super Monkey Ball 2              | GameCube  |
 | Tetris Effect Connected          | PC        |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |

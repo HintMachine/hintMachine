@@ -54,8 +54,6 @@
 
         public override bool Poll()
         {
-            if (_ram.TestProcess() == false) {  return false; }
-
             long localGameManagerStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7521F0, new int[] { 0x210, 0x700, 0x20, 0x5A0 });
 
             if (localGameManagerStructAddress != 0)
