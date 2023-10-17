@@ -57,7 +57,7 @@ namespace HintMachine
             new SuperHexagonConnector(),
             new SuperMonkeyBall2Connector(),
             new Operator911Connector(),
-            new DragonCrownConnector()
+            new DragonCrownConnector(),
             new SuperMegaBaseball2Connector(),
             new TonyHawksProSkater12Connector(),
         };
