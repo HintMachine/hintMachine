@@ -130,6 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="Games\BPMConnector.cs" />
+    <Compile Include="Games\DragonCrownConnector.cs" />
     <Compile Include="Games\TonyHawksProSkater12Connector.cs" />
     <Compile Include="Games\MetroidPrimePinballConnector.cs" />
     <Compile Include="Games\MeteosConnector.cs" />
@@ -289,6 +290,7 @@
     <Resource Include="Assets\Covers\super_hexagon.png" />
     <Resource Include="Assets\Covers\smb2.png" />
     <Resource Include="Assets\Covers\911_operator.png" />
+    <Resource Include="Assets\Covers\dragonCrown.png" />
     <Resource Include="Assets\Covers\super_mega_baseball_2.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
