@@ -2,6 +2,14 @@
 {
     public class IslandersConnector : IGameConnector
     {
+        private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
+        {
+            DisplayName = "Steam",
+            ProcessName = "ISLANDERS",
+            ModuleName = "mono-2.0-bdwgc.dll",
+            Hash = "1D29EAED8E610CE4370DB1B396D4DD7C5FED0DB267D18BF97CA91E865100B71E"
+        };
+
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
             Name = "Score",
@@ -43,7 +51,9 @@
 
         public override bool Connect()
         {
-            _ram = new ProcessRamWatcher("ISLANDERS", "mono-2.0-bdwgc.dll");
+            _ram = new ProcessRamWatcher();
+            _ram.SupportedTargets.Add(GAME_VERSION_STEAM);
+
             return _ram.TryConnect();
         }
 
