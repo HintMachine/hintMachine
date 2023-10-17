@@ -143,6 +143,7 @@
     <Compile Include="Games\StargunnerConnector.cs" />
     <Compile Include="Games\SuperMonkeyBall2Connector.cs" />
     <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
+    <Compile Include="Games\SuperMegaBaseball2.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HintDetails.cs" />
     <Compile Include="Games\SonicBlueSpheresConnector.cs" />
@@ -288,6 +289,7 @@
     <Resource Include="Assets\Covers\super_hexagon.png" />
     <Resource Include="Assets\Covers\smb2.png" />
     <Resource Include="Assets\Covers\911_operator.png" />
+    <Resource Include="Assets\Covers\super_mega_baseball_2.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
