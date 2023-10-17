@@ -60,6 +60,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Sonic 3 Blue Spheres             | Megadrive |
 | Stargunner                       | PC        |
 | Super Hexagon                    | PC        |
+| Super Monkey Ball 2              | GameCube  |
 | Tetris Effect Connected          | PC        |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |
