@@ -169,6 +169,8 @@ namespace HintMachine
 
         public long BaseAddress { get; private set; } = 0;
 
+        public bool Is64Bit { get; set; } = true;
+
         public long Threadstack0
         { 
             get { 
@@ -497,12 +499,14 @@ namespace HintMachine
         /// </summary>
         private long GetThreadstack0Address()
         {
+            string binaryName = Is64Bit ? "ThreadstackFinder64.exe" : "ThreadstackFinder32.exe";
+
             var proc = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "threadstack.exe",
-                    Arguments = _process.Id + "",
+                    FileName = binaryName,
+                    Arguments = _process.Id.ToString(),
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true
@@ -510,16 +514,9 @@ namespace HintMachine
             };
 
             proc.Start();
-            while (!proc.StandardOutput.EndOfStream)
-            {
-                string line = proc.StandardOutput.ReadLine();
-                if (line.Contains("THREADSTACK 0 BASE ADDRESS: "))
-                {
-                    line = line.Substring(line.LastIndexOf(":") + 2);
-                    return int.Parse(line.Substring(2), NumberStyles.HexNumber);
-                }
-            }
 
+            while (!proc.StandardOutput.EndOfStream)
+                return long.Parse(proc.StandardOutput.ReadLine());
             return 0;
         }
     }

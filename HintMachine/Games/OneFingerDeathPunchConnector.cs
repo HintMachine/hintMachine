@@ -31,6 +31,8 @@ namespace HintMachine.Games
         public override bool Connect()
         {
             _ram = new ProcessRamWatcher("One Finger Death Punch");
+            _ram.Is64Bit = false;
+
             if (!_ram.TryConnect())
                 return false;
 

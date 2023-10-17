@@ -27,6 +27,8 @@ namespace HintMachine.Games
         public override bool Connect()
         {
             _ram = new ProcessRamWatcher("nuclearthronetogether");
+            _ram.Is64Bit = false;
+
             return _ram.TryConnect();
         }
 
