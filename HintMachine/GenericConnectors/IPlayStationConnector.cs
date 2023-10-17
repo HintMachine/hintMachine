@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace HintMachine.Games
+namespace HintMachine.GenericConnectors
 {
     public abstract class IPlayStationConnector : IGameConnector
     {

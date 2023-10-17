@@ -1,5 +1,6 @@
 ﻿
 using HintMachine.Games;
+using HintMachine.GenericConnectors;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;

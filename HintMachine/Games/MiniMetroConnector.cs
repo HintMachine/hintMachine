@@ -1,3 +1,5 @@
+using HintMachine.GenericConnectors;
+
 namespace HintMachine.Games
 {
     public class MiniMetroConnector : IGameConnector

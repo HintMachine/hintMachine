@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using static HintMachine.ProcessRamWatcher;
 
-namespace HintMachine.Games
+namespace HintMachine.GenericConnectors
 {
     public abstract class IDolphinConnector : IGameConnector
     {

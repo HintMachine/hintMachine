@@ -1,4 +1,4 @@
-﻿using System;
+﻿using HintMachine.GenericConnectors;
 
 namespace HintMachine.Games
 {

@@ -7,7 +7,7 @@ using WMPLib;
 using HintMachine.Games;
 using System.Threading;
 using System.Windows.Threading;
-
+using HintMachine.GenericConnectors;
 
 namespace HintMachine
 {

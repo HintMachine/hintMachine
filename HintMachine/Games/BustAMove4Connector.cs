@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using HintMachine.GenericConnectors;
+
+namespace HintMachine.Games
 {
     class BustAMove4Connector : IPlayStationConnector
     {

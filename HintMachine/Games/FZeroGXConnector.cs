@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using HintMachine.GenericConnectors;
+
+namespace HintMachine.Games
 {
     public class FZeroGXConnector : IDolphinConnector
     {

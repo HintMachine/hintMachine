@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using static HintMachine.ProcessRamWatcher;
+﻿using HintMachine.GenericConnectors;
 
 namespace HintMachine.Games
 {

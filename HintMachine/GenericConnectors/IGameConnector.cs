@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HintMachine
+namespace HintMachine.GenericConnectors
 {
     public abstract class IGameConnector
     {

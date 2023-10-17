@@ -2,7 +2,7 @@
 using System.Linq;
 using static HintMachine.ProcessRamWatcher;
 
-namespace HintMachine.Games
+namespace HintMachine.GenericConnectors
 {
     public abstract class IMegadriveConnector : IGameConnector
     {
