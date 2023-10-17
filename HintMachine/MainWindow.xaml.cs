@@ -140,8 +140,10 @@ namespace HintMachine
                 {
                     pollSuccessful = _game.Poll();
                 }
-                catch (ProcessRamWatcherException)
-                {}
+                catch (ProcessRamWatcherException e)
+                {
+                    Logger.Debug(e.Message);
+                }
 
                 if (pollSuccessful)
                 {

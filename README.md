@@ -60,6 +60,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Stargunner                       | PC        |
 | Super Hexagon                    | PC        |
 | Super Mega Baseball 2            | PC        |
+| Super Monkey Ball 2              | GameCube  |
 | Tetris Effect Connected          | PC        |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |

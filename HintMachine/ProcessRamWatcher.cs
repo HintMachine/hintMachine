@@ -18,6 +18,21 @@ namespace HintMachine
         {}
     }
 
+    public enum MemoryRegionType : uint
+    {
+        MEM_IMAGE = 0x1000000,
+        MEM_MAPPED = 0x40000,
+        MEM_PRIVATE = 0x20000,
+        MEM_UNDEFINED = 0x0
+    }
+
+    public struct MemoryRegion
+    {
+        public long BaseAddress;
+        public long Size;
+        public MemoryRegionType Type;
+    }
+
     public class BinaryTarget
     {
         /// <summary>
@@ -61,21 +76,6 @@ namespace HintMachine
             SET_THREAD_TOKEN = (0x0080),
             IMPERSONATE = (0x0100),
             DIRECT_IMPERSONATION = (0x0200)
-        }
-
-        public enum MemoryRegionType : uint
-        {
-            MEM_IMAGE = 0x1000000,
-            MEM_MAPPED = 0x40000,
-            MEM_PRIVATE = 0x20000,
-            MEM_UNDEFINED = 0x0
-        }
-
-        public struct MemoryRegion
-        {
-            public long BaseAddress;
-            public long Size;
-            public MemoryRegionType Type;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -168,6 +168,17 @@ namespace HintMachine
         public BinaryTarget CurrentTarget { get; private set; } = null;
 
         public long BaseAddress { get; private set; } = 0;
+
+        public long Threadstack0
+        { 
+            get { 
+                if(_threadstack0 == null)
+                    _threadstack0 = GetThreadstack0Address();
+
+                return _threadstack0 ?? 0;
+            }
+        }
+        private long? _threadstack0 = null;
 
         // ----------------------------------------------------------------------------------
 
@@ -484,7 +495,7 @@ namespace HintMachine
         /// Fetch the infamous THREADSTACK0 address (as specified by the CheatEngine software) to use as a base address
         /// for further data retrieval.
         /// </summary>
-        public Task<int> GetThreadstack0Address()
+        private long GetThreadstack0Address()
         {
             var proc = new Process
             {
@@ -497,6 +508,7 @@ namespace HintMachine
                     CreateNoWindow = true
                 }
             };
+
             proc.Start();
             while (!proc.StandardOutput.EndOfStream)
             {
@@ -504,10 +516,11 @@ namespace HintMachine
                 if (line.Contains("THREADSTACK 0 BASE ADDRESS: "))
                 {
                     line = line.Substring(line.LastIndexOf(":") + 2);
-                    return Task.FromResult(int.Parse(line.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                    return int.Parse(line.Substring(2), NumberStyles.HexNumber);
                 }
             }
-            return Task.FromResult(0);
+
+            return 0;
         }
     }
 }
