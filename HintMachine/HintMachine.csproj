@@ -181,7 +181,6 @@
     </Compile>
     <Compile Include="ProcessRamWatcher.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="TokenManipulator.cs" />
     <Page Include="HintsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
