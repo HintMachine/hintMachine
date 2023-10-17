@@ -14,7 +14,7 @@
         </DockPanel>
 
         <DockPanel LastChildFill="True" Margin="8, 8, 8, 8">
-            <ListView Name="ListGames" SelectionChanged="OnListSelectionChange" Width="320" Margin="0,0,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView Name="ListGames" SelectionChanged="OnListSelectionChange" Width="340" Margin="0,0,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.View>
                     <GridView x:Name="grid">
                         <GridView.ColumnHeaderContainerStyle>
