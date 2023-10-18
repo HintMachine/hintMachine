@@ -145,6 +145,7 @@
     <Compile Include="Games\StargunnerConnector.cs" />
     <Compile Include="Games\SuperMonkeyBall2Connector.cs" />
     <Compile Include="Games\SuperMegaBaseball2.cs" />
+    <Compile Include="GenericConnectors\IGameboyAdvanceConnector.cs" />
     <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
     <Compile Include="GenericConnectors\IEmulatorConnector.cs" />
     <Compile Include="GenericConnectors\MegadriveRamAdapter.cs" />
