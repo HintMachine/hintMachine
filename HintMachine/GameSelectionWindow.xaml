@@ -11,6 +11,9 @@
             <Separator DockPanel.Dock="Top" Margin="0, 0, 0, 8"/>
             <Button DockPanel.Dock="Right" Content="❌ Cancel" Padding="4" Margin="6,0,8,0" Click="OnCancelButtonClick"/>
             <Button DockPanel.Dock="Right" Content="✔️ Validate" Padding="4" Click="OnValidateButtonClick" />
+            <TextBox Name="searchGameTextBox" Height="30" TextWrapping="Wrap" Text="" Width="280" Margin="6, 0, 8, 0"/>
+            <Button Content="Search" Width="52" RenderTransformOrigin="0.838,0.5" Click="OnSearchButtonClick" IsDefault="True" Margin="0, 0, 8, 0"/>
+            <Button Content="Clear" Width="52" RenderTransformOrigin="0.838,0.5" Click="OnClearButtonClick"  Margin="0, 0, 8, 0"/>
         </DockPanel>
 
         <DockPanel LastChildFill="True" Margin="8, 8, 8, 8">

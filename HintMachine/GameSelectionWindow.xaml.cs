@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using HintMachine.GenericConnectors;
+using System.Globalization;
 
 namespace HintMachine
 {
@@ -57,82 +59,134 @@ namespace HintMachine
         private void OnListSelectionChange(object sender, SelectionChangedEventArgs e)
         {
             IGameConnector game = ListGames.SelectedItem as IGameConnector;
-            TextGameName.Text = game.Name;
-            TextGameDescription.Text = game.Description;
-
-            BitmapImage image;
-            try
+            if (game != null)
             {
-                image = new BitmapImage(new Uri($"./Assets/covers/{game.CoverFilename}", UriKind.Relative));
-            }
-            catch(FileNotFoundException)
-            {
-                image = new BitmapImage(new Uri($"./Assets/covers/unknown.png", UriKind.Relative));
-            }
-            ImageGameCover.Source = image;
+                ImageGameCover.Visibility = Visibility.Visible;
+                TextGameName.Text = game.Name;
+                TextGameDescription.Text = game.Description;
 
-            UpdateGameProperties(game);
+                BitmapImage image;
+                try
+                {
+                    image = new BitmapImage(new Uri($"./Assets/covers/{game.CoverFilename}", UriKind.Relative));
+                }
+                catch (FileNotFoundException)
+                {
+                    image = new BitmapImage(new Uri($"./Assets/covers/unknown.png", UriKind.Relative));
+                }
+                ImageGameCover.Source = image;
+
+                UpdateGameProperties(game);
+            }
+            else
+            {
+                TextGameName.Text = "";
+                TextGameDescription.Text = "";
+                ImageGameCover.Visibility = Visibility.Hidden;
+                UpdateGameProperties(null);
+            }
         }
 
         private void UpdateGameProperties(IGameConnector game)
         {
             TextGameProperties.Text = "";
-            if (game.SupportedVersions.Count > 0)
-            {
-                if (game.SupportedVersions.Count == 1)
-                {
-                    TextGameProperties.Inlines.Add(new Bold(new Run("Supported version: ")));
-                    TextGameProperties.Inlines.Add(game.SupportedVersions[0]);
-                }
-                else
-                {
-                    TextGameProperties.Inlines.Add(new Bold(new Run("Supported versions: ")));
-                    foreach (string version in game.SupportedVersions)
-                    {
-                        TextGameProperties.Inlines.Add(new LineBreak());
-                        TextGameProperties.Inlines.Add($"    • {version}");
-                    }
-                }
-
-                TextGameProperties.Inlines.Add(new LineBreak());
-                TextGameProperties.Inlines.Add(new LineBreak());
-            }
-
-            if (game.SupportedEmulators.Count > 0)
-            {
-                if (game.SupportedEmulators.Count == 1)
-                {
-                    TextGameProperties.Inlines.Add(new Bold(new Run("Supported emulator: ")));
-                    TextGameProperties.Inlines.Add(game.SupportedEmulators[0]);
-                }
-                else
-                {
-                    TextGameProperties.Inlines.Add(new Bold(new Run("Supported emulators: ")));
-                    foreach (string emulator in game.SupportedEmulators)
-                    {
-                        TextGameProperties.Inlines.Add(new LineBreak());
-                        TextGameProperties.Inlines.Add($"  • {emulator}");
-                    }
-                }
-                TextGameProperties.Inlines.Add(new LineBreak());
-                TextGameProperties.Inlines.Add(new LineBreak());
-            }
-
-            TextGameProperties.Inlines.Add(new Bold(new Run("Quests: ")));
             string questsString = "";
-            foreach (HintQuest quest in game.Quests)
+            if (game != null)
             {
-                if (questsString != "")
-                    questsString += ", ";
-                questsString += quest.Name;
+                if (game.SupportedVersions.Count > 0)
+                {
+                    if (game.SupportedVersions.Count == 1)
+                    {
+                        TextGameProperties.Inlines.Add(new Bold(new Run("Supported version: ")));
+                        TextGameProperties.Inlines.Add(game.SupportedVersions[0]);
+                    }
+                    else
+                    {
+                        TextGameProperties.Inlines.Add(new Bold(new Run("Supported versions: ")));
+                        foreach (string version in game.SupportedVersions)
+                        {
+                            TextGameProperties.Inlines.Add(new LineBreak());
+                            TextGameProperties.Inlines.Add($"    • {version}");
+                        }
+                    }
+
+                    TextGameProperties.Inlines.Add(new LineBreak());
+                    TextGameProperties.Inlines.Add(new LineBreak());
+                }
+
+                if (game.SupportedEmulators.Count > 0)
+                {
+                    if (game.SupportedEmulators.Count == 1)
+                    {
+                        TextGameProperties.Inlines.Add(new Bold(new Run("Supported emulator: ")));
+                        TextGameProperties.Inlines.Add(game.SupportedEmulators[0]);
+                    }
+                    else
+                    {
+                        TextGameProperties.Inlines.Add(new Bold(new Run("Supported emulators: ")));
+                        foreach (string emulator in game.SupportedEmulators)
+                        {
+                            TextGameProperties.Inlines.Add(new LineBreak());
+                            TextGameProperties.Inlines.Add($"  • {emulator}");
+                        }
+                    }
+                    TextGameProperties.Inlines.Add(new LineBreak());
+                    TextGameProperties.Inlines.Add(new LineBreak());
+                }
+
+                TextGameProperties.Inlines.Add(new Bold(new Run("Quests: ")));
+
+                foreach (HintQuest quest in game.Quests)
+                {
+                    if (questsString != "")
+                        questsString += ", ";
+                    questsString += quest.Name;
+                }
+                TextGameProperties.Inlines.Add(questsString);
+
+                TextGameProperties.Inlines.Add(new LineBreak());
+                TextGameProperties.Inlines.Add(new LineBreak());
+
+
+                TextGameProperties.Inlines.Add(new Bold(new Run("Author: ")));
+                TextGameProperties.Inlines.Add(game.Author);
             }
-            TextGameProperties.Inlines.Add(questsString);
+            else {
+                TextGameProperties.Text = "";
 
-            TextGameProperties.Inlines.Add(new LineBreak());
-            TextGameProperties.Inlines.Add(new LineBreak());
-
-            TextGameProperties.Inlines.Add(new Bold(new Run("Author: ")));
-            TextGameProperties.Inlines.Add(game.Author);
+            }
         }
+
+
+        private void OnSearchButtonClick(object sender, RoutedEventArgs e)
+        {
+            FilterGames(searchGameTextBox.Text);
+        }
+
+        private void OnClearButtonClick(object sender, RoutedEventArgs e) {
+            searchGameTextBox.Text = "";
+            FilterGames("");
+
+        }
+
+        public void FilterGames(string text) {
+
+            ListGames.ItemsSource = Globals.Games;
+            if (searchGameTextBox.Text.Trim().Length != 0)
+            
+            {
+                ListGames.ItemsSource = Globals.Games.Where(x => CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Name, searchGameTextBox.Text, CompareOptions.IgnoreCase) >= 0 || CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Platform, searchGameTextBox.Text, CompareOptions.IgnoreCase) >= 0);
+            }
+            if (ListGames.Items.Count != 0)
+            {
+                ListGames.SelectedItem = ListGames.Items[0];
+            }
+            else
+            {
+                ListGames.SelectedItem = null;
+            }
+
+        }
+
     }
 }
