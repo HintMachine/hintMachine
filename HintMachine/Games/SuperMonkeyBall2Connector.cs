@@ -24,7 +24,7 @@ namespace HintMachine.Games
             Description = "Traverse through stages filled to the brim with obstacles and collect bananas " +
                           "along the way as a monkey inside of a ball! Quests work on story mode and all difficulties of challenge mode.";
             SupportedVersions.Add("NTSC US");
-            CoverFilename = "smb2.png";
+            CoverFilename = "super_monkey_ball_2.png";
             Author = "Spicynun";
             
             Quests.Add(_bananaQuest);

@@ -23,7 +23,7 @@ namespace HintMachine.Games
             SupportedVersions.Add("EU ROM");
             Author = "CalDrac";
             Platform = "Gameboy Advance";
-            CoverFilename = "pkmnPinballRS.png";
+            CoverFilename = "pokemon_pinball_rs.png";
             Quests.Add(_pokemonQuest);
         }
 

@@ -291,11 +291,11 @@
     <Resource Include="Assets\Covers\bpm.png" />
     <Resource Include="Assets\Covers\mini_metro.png" />
     <Resource Include="Assets\Covers\super_hexagon.png" />
-    <Resource Include="Assets\Covers\smb2.png" />
     <Resource Include="Assets\Covers\911_operator.png" />
-    <Resource Include="Assets\Covers\dragonCrown.png" />
     <Resource Include="Assets\Covers\super_mega_baseball_2.png" />
-    <Resource Include="Assets\Covers\pkmnPinballRS.png" />
+    <Resource Include="Assets\Covers\dragons_crown.png" />
+    <Resource Include="Assets\Covers\pokemon_pinball_rs.png" />
+    <Resource Include="Assets\Covers\super_monkey_ball_2.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
