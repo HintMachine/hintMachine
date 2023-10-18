@@ -133,6 +133,7 @@
     <Compile Include="Games\PokemonPinballRSConnector.cs" />
     <Compile Include="Games\DragonCrownConnector.cs" />
     <Compile Include="Games\TonyHawksProSkater12Connector.cs" />
+    <Compile Include="Games\TMNTShreddersRevengeConnector.cs" />
     <Compile Include="Games\MetroidPrimePinballConnector.cs" />
     <Compile Include="Games\MeteosConnector.cs" />
     <Compile Include="Games\BustAMove4Connector.cs" />
@@ -305,6 +306,7 @@
     <Resource Include="Assets\Covers\sonic_blue_spheres.png" />
     <Resource Include="Assets\Covers\luck_be_a_landord.png" />
     <Resource Include="Assets\Covers\tony_hawks_pro_skater_1_2.png" />
+    <Resource Include="Assets\Covers\tmnt_shredders_revenge.png" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="WMPLib">
