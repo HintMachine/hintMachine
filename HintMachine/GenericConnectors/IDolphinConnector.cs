@@ -49,7 +49,7 @@ namespace HintMachine.GenericConnectors
 
         private bool InitMEM1()
         {
-            List<MemoryRegion> regions = _ram.ListMemoryRegions(0x2000000, MemoryRegionType.MEM_MAPPED);
+            var regions = _ram.ListMemoryRegions().Where(r => r.Size == 0x2000000 && r.Type == MemoryRegionType.MEM_MAPPED);
             foreach (MemoryRegion region in regions)
             {
                 byte[] headerBytes = _ram.ReadBytes(region.BaseAddress, 6);
@@ -71,7 +71,7 @@ namespace HintMachine.GenericConnectors
 
         private bool InitMEM2()
         {
-            List<MemoryRegion> regions = _ram.ListMemoryRegions(0x4000000, MemoryRegionType.MEM_MAPPED);
+            var regions = _ram.ListMemoryRegions().Where(r => r.Size == 0x4000000 && r.Type == MemoryRegionType.MEM_MAPPED);
             foreach (MemoryRegion region in regions)
             {
                 MEM2 = region.BaseAddress;
