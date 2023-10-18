@@ -24,11 +24,8 @@ namespace HintMachine.Games
             ValidROMs.Add("SLUS_007.54");
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (!base.Poll())
-                return false;
-
             _winQuest.UpdateValue(_ram.ReadUint8(RamBaseAddress + 0x167A8A));
             return true;
         }

@@ -40,11 +40,8 @@ namespace HintMachine.Games
             ValidROMs.Add("06DC460F28F77B31335FC55F0B74A21925983817BD9BBD97F8CCBFBDCAA69101");
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (!base.Poll())
-                return false;
-
             ushort blueSpheresWinAnimProgress = _ram.ReadUint16(RamBaseAddress + 0xE44A);
             if (blueSpheresWinAnimProgress > 0 && _previousBlueSpheresWinAnimProgress == 0)
                 _levelsQuest.CurrentValue += 1;

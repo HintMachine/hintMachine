@@ -32,7 +32,7 @@ namespace HintMachine.Games
             Quests.Add(_scoreQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher();
             _ram.SupportedTargets.Add(GAME_VERSION_STEAM);
@@ -45,7 +45,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x3C40A20, new int[] { 0x0, 0x48, 0x0, 0x20, 0x478, 0x298, 0x2D8 });
 

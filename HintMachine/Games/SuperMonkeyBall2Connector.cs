@@ -33,11 +33,8 @@ namespace HintMachine.Games
             ValidROMs.Add("GM2E8P");
         }
    
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (!base.Poll())
-                return false;
-
             // Banana counts for story and challenge
             int player1banana = _ram.ReadUint8(MEM1 + 0x5bca1b); 
             int bananaCount = player1banana;

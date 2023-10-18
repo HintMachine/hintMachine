@@ -45,7 +45,7 @@ namespace HintMachine.Games
             Quests.Add(_timeQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher();
             _ram.SupportedTargets.Add(GAME_VERSION_STEAM);
@@ -58,7 +58,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             long timeReading = 0;
 

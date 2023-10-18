@@ -23,7 +23,7 @@ namespace HintMachine.GenericConnectors
             SupportedEmulators.Add("Dolphin 5");
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("Dolphin");
             _ram.IsBigEndian = true;

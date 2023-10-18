@@ -19,7 +19,7 @@ namespace HintMachine.GenericConnectors
             SupportedEmulators.Add("BizHawk 2.9.1 (MelonDS core)");
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new MegadriveRamAdapter(new BinaryTarget
             {
@@ -33,12 +33,6 @@ namespace HintMachine.GenericConnectors
 
             RomBaseAddress = 0x36F01D51E20; // or 0x36F00B36680
             RamBaseAddress = 0x36F01952020;
-
-            if (!TestRomIdentity())
-            {
-                Logger.Debug($"Invalid ROM with identity {CurrentROM}");
-                return false;
-            }
 
             return true;
         }

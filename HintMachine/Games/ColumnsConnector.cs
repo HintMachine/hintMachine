@@ -29,11 +29,8 @@ namespace HintMachine.Games
             ValidROMs.Add("A04711E2F511C03D41928091877FE7813EC1049662740962BED76B96CEDD9E9C");
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if(!base.Poll())
-                return false;
-
             bool inArcadeMode = (_ram.ReadUint8(RamBaseAddress + 0x8464) == 0);
             if (inArcadeMode)
                 _jewelsQuest.UpdateValue(_ram.ReadUint16(RamBaseAddress + 0xC826));

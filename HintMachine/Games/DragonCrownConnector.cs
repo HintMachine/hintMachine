@@ -38,7 +38,7 @@ namespace HintMachine.Games
             Quests.Add(_goldQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("Vita3K");
             if (!_ram.TryConnect())
@@ -54,7 +54,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             uint score = _ram.ReadUint32(_scoreAddr);
             uint gold = _ram.ReadUint32(_goldAddr);
