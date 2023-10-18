@@ -25,7 +25,7 @@ namespace HintMachine.Games
             Quests.Add(_passengersQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("MiniMetro", "mono-2.0-bdwgc.dll");
             return _ram.TryConnect();
@@ -36,7 +36,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             try {
                 long address = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x3A1574, new int[] { 0x690, 0x20, 0x8, 0x4C, 0x8, 0xC, 0x88 });

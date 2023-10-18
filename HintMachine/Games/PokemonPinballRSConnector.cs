@@ -26,7 +26,7 @@ namespace HintMachine.Games
             Quests.Add(_pokemonQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("EmuHawk", "mgba.dll");
             return _ram.TryConnect();
@@ -37,7 +37,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             long pokemonAddr = _ram.ResolvePointerPath64( _ram.BaseAddress + 0x00103448, new int[] { 0x10, 0x28, 0x5F0 });
             _pokemonQuest.UpdateValue(_ram.ReadUint8(pokemonAddr));

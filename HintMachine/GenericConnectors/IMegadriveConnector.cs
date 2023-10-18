@@ -20,7 +20,7 @@ namespace HintMachine.GenericConnectors
             SupportedEmulators.Add("BizHawk 2.9.1 (Genesis Plus GX core)");
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new MegadriveRamAdapter(new BinaryTarget
             {
@@ -50,12 +50,6 @@ namespace HintMachine.GenericConnectors
                 return false;
             }
             RamBaseAddress = regions[0].BaseAddress + 0x5D90;
-
-            if (!TestRomIdentity())
-            {
-                Logger.Debug($"Invalid ROM with identity {CurrentROM}");
-                return false;
-            }
 
             return true;
         }

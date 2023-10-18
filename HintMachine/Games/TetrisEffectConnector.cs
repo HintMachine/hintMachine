@@ -62,7 +62,7 @@ namespace HintMachine.Games
             // Quests.Add(_combosQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher(new BinaryTarget
             {
@@ -79,7 +79,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             int[] OFFSETS = new int[] { 0x8, 0x8, 0x220, 0x200, 0x64 };
             long linesAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x4ED9990, OFFSETS);

@@ -45,7 +45,7 @@ namespace HintMachine.Games
             Quests.Add(_perfectQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("Dorfromantik", "mono-2.0-bdwgc.dll");
             return _ram.TryConnect();
@@ -56,7 +56,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             long rewardSystemStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x716018, new int[] { 0x8, 0x10, 0x48, 0x18, 0xB0, 0x30, 0x0 });
 

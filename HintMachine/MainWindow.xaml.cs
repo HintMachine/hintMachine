@@ -138,7 +138,7 @@ namespace HintMachine
                 // Poll game connector, and cleanly close it if something wrong happens
                 try
                 {
-                    pollSuccessful = _game.Poll();
+                    pollSuccessful = _game.DoPoll();
                 }
                 catch (ProcessRamWatcherException e)
                 {

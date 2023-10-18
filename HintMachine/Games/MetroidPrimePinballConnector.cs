@@ -40,11 +40,8 @@ namespace HintMachine.Games
             ValidROMs.Add(REGION_NTSC_J);
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if(!base.Poll())
-                return false;
-
             if (CurrentROM == REGION_PAL)
             {
                 _pointsQuest.UpdateValue(_ram.ReadInt32(RamBaseAddress + 0x3BB9B4));

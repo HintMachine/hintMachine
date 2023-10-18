@@ -37,7 +37,7 @@ namespace HintMachine.Games
             Quests.Add(_creditsQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("DOSBox");
             if (!_ram.TryConnect())
@@ -56,7 +56,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             uint livesNum = _ram.ReadUint32(_livesAddr);
             uint creditsShopNum = _ram.ReadUint32(_creditsShopAddr);

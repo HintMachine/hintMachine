@@ -39,11 +39,8 @@ namespace HintMachine.Games
             ValidROMs.Add("GFZP01"); // PAL
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if(!base.Poll()) 
-                return false;
-
             bool isPALVersion = (CurrentROM == "GFZP01");
 
             long isRacingAddr = isPALVersion ? 0x17BF7D : 0x17D7A9;
