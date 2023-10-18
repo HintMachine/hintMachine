@@ -132,6 +132,7 @@
     <Compile Include="Games\BPMConnector.cs" />
     <Compile Include="Games\PokemonPinballRSConnector.cs" />
     <Compile Include="Games\DragonCrownConnector.cs" />
+    <Compile Include="Games\SuperMonkeyBallConnector.cs" />
     <Compile Include="Games\TonyHawksProSkater12Connector.cs" />
     <Compile Include="Games\MetroidPrimePinballConnector.cs" />
     <Compile Include="Games\MeteosConnector.cs" />
