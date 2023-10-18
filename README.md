@@ -63,5 +63,6 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Super Mega Baseball 2            | PC        |
 | Super Monkey Ball 2              | GameCube  |
 | Tetris Effect Connected          | PC        |
+| Tony Hawk's Pro Skater 1 + 2     | PC        |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |
