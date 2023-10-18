@@ -61,6 +61,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Stargunner                       | PC        |
 | Super Hexagon                    | PC        |
 | Super Mega Baseball 2            | PC        |
+| Super Monkey Ball                | GameCube  |
 | Super Monkey Ball 2              | GameCube  |
 | Tetris Effect Connected          | PC        |
 | Tony Hawk's Pro Skater 1 + 2     | PC        |
