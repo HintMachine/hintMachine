@@ -39,6 +39,7 @@ namespace HintMachine.GenericConnectors
 
         public override void Disconnect()
         {
+            base.Disconnect();
             _ram = null;
             RomBaseAddress = 0;
             RamBaseAddress = 0;
