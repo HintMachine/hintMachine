@@ -16,6 +16,12 @@ namespace HintMachine.GenericConnectors
         public IEmulatorConnector()
         {}
 
+        public override void Disconnect()
+        {
+            _previousFrameCount = 0;
+            _tickId = 0;
+        }
+
         protected override bool AfterConnect()
         {
             if (!TestRomIdentity())

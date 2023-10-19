@@ -2,17 +2,15 @@
 
 namespace HintMachine.Games
 {
-    class PokemonPinballRSConnector : IGameConnector
+    class PokemonPinballRSConnector : IGameboyAdvanceConnector
     {
         private readonly HintQuestCumulative _pokemonQuest = new HintQuestCumulative
         {
             Name = "Pokémon count",
-            Description = "Catch, hatch and evolve Pokemon",
+            Description = "Catch, hatch and evolve Pokémon",
             GoalValue = 3,
             MaxIncrease = 1,
         };
-
-        protected ProcessRamWatcher _ram = null;
 
         public PokemonPinballRSConnector()
         {
@@ -23,24 +21,15 @@ namespace HintMachine.Games
             Author = "CalDrac";
             Platform = "Gameboy Advance";
             CoverFilename = "pokemon_pinball_rs.png";
+
             Quests.Add(_pokemonQuest);
-        }
 
-        protected override bool Connect()
-        {
-            _ram = new ProcessRamWatcher("EmuHawk", "mgba.dll");
-            return _ram.TryConnect();
-        }
-
-        public override void Disconnect()
-        {
-            _ram = null;
+            ValidROMs.Add("BPPP01");
         }
 
         protected override bool Poll()
         {
-            long pokemonAddr = _ram.ResolvePointerPath64( _ram.BaseAddress + 0x00103448, new int[] { 0x10, 0x28, 0x5F0 });
-            _pokemonQuest.UpdateValue(_ram.ReadUint8(pokemonAddr));
+            _pokemonQuest.UpdateValue(_ram.ReadUint8(ExternalRamBaseAddress + 0x5F0));
             return true;
         }
     }

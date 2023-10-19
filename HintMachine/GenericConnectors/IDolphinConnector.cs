@@ -42,6 +42,7 @@ namespace HintMachine.GenericConnectors
 
         public override void Disconnect()
         {
+            base.Disconnect();
             _ram = null;
             MEM1 = 0;
             MEM2 = 0;
