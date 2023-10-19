@@ -7,7 +7,7 @@ using WMPLib;
 using HintMachine.Games;
 using System.Threading;
 using System.Windows.Threading;
-
+using HintMachine.GenericConnectors;
 
 namespace HintMachine
 {
@@ -138,10 +138,12 @@ namespace HintMachine
                 // Poll game connector, and cleanly close it if something wrong happens
                 try
                 {
-                    pollSuccessful = _game.Poll();
+                    pollSuccessful = _game.DoPoll();
                 }
-                catch (ProcessRamWatcherException)
-                {}
+                catch (ProcessRamWatcherException e)
+                {
+                    Logger.Debug(e.Message);
+                }
 
                 if (pollSuccessful)
                 {
@@ -206,7 +208,7 @@ namespace HintMachine
 
                 _game.Disconnect();
                 _game = null;
-
+                alreadyAwardedTokenForCurrentGame = false;
                 Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
                     GridGameConnect.Visibility = Visibility.Visible;

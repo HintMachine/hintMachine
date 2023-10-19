@@ -1,3 +1,5 @@
+using HintMachine.GenericConnectors;
+
 namespace HintMachine.Games
 {
     public class PacManChampionshipEditionDXConnector : IGameConnector
@@ -22,7 +24,7 @@ namespace HintMachine.Games
             Quests.Add(_scoreQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("PAC-MAN");
             return _ram.TryConnect();
@@ -33,7 +35,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             _scoreQuest.UpdateValue(_ram.ReadUint32(_ram.BaseAddress + 0x33CA14));
             return true;

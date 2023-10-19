@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using HintMachine.GenericConnectors;
+
+namespace HintMachine.Games
 {
     public class IslandersConnector : IGameConnector
     {
@@ -41,7 +43,7 @@
             Quests.Add(_islandQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("ISLANDERS", "mono-2.0-bdwgc.dll");
             return _ram.TryConnect();
@@ -52,10 +54,8 @@
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (_ram.TestProcess() == false) {  return false; }
-
             long localGameManagerStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7521F0, new int[] { 0x210, 0x700, 0x20, 0x5A0 });
 
             if (localGameManagerStructAddress != 0)

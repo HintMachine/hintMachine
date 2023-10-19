@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using HintMachine.GenericConnectors;
+
+namespace HintMachine.Games
 {
     class Rollcage2Connector : IPlayStationConnector
     {
@@ -21,22 +23,13 @@
             Author = "CalDrac";
 
             Quests.Add(_firstPlacesQuest);
+
+            ValidROMs.Add("SLUS_008.67");
         }
 
-        public override bool Connect()
+        protected override bool Poll()
         {
-            if (!base.Connect())
-                return false;
-
-            if (!FindRamSignature(new byte[] { 0x4D, 0x41, 0x54, 0x00, 0x53, 0x18 }, 0x19E04))
-                return false;
-
-            return true;
-        }
-
-        public override bool Poll()
-        {
-            uint laps = _ram.ReadUint8(_psxRamBaseAddress + 0xD23F8);
+            uint laps = _ram.ReadUint8(RamBaseAddress + 0xD23F8);
            
             if (laps == 0)
             {
@@ -54,7 +47,7 @@
 
             if (_raceStarted)
             {
-                uint place = _ram.ReadUint8(_psxRamBaseAddress + 0xD23F9);
+                uint place = _ram.ReadUint8(RamBaseAddress + 0xD23F9);
                 _isFirst = (place == 1);
             }
 

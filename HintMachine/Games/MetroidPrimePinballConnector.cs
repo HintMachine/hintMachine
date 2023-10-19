@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using HintMachine.GenericConnectors;
+
+namespace HintMachine.Games
 {
     class MetroidPrimePinballConnector : INintendoDSConnector
     {
@@ -14,13 +16,9 @@
             GoalValue = 3
         };
 
-        enum Region
-        {
-            PAL,
-            NTSC_U,
-            NTSC_J
-        }
-        private Region _region = Region.PAL;
+        private const string REGION_PAL = "93B08A557E3B630FB25F9F331FF479974B21C017D16DA026DDA270504C62106C";
+        private const string REGION_NTSC_U = "C724C1CE61F8E34393337C626EF462CB5E5BD84F3EB5A70985946127FDB8EFA1";
+        private const string REGION_NTSC_J = "133184DE3C5AD82713347F41B83E8C354DACFE0C6F3FB4C20C57765D482CBF50";
 
         // ---------------------------------------------------------
 
@@ -36,58 +34,30 @@
 
             Quests.Add(_pointsQuest);
             Quests.Add(_artifactsQuest);
+
+            ValidROMs.Add(REGION_PAL);
+            ValidROMs.Add(REGION_NTSC_U);
+            ValidROMs.Add(REGION_NTSC_J);
         }
 
-        public override bool Connect()
+        protected override bool Poll()
         {
-            if (!base.Connect()) 
-                return false;
-
-            // Look for the PAL ROM first.
-            byte[] MPP_SIG = new byte[] { 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0x05, 0xE9 };
-            if (FindRamSignature(MPP_SIG, 0))
+            if (CurrentROM == REGION_PAL)
             {
-                _region = Region.PAL;
-                return true;
+                _pointsQuest.UpdateValue(_ram.ReadInt32(RamBaseAddress + 0x3BB9B4));
+                _artifactsQuest.UpdateValue(_ram.ReadInt32(RamBaseAddress + 0x3D428C));
+            }
+            else if (CurrentROM == REGION_NTSC_U)
+            {
+                _pointsQuest.UpdateValue(_ram.ReadInt32(RamBaseAddress + 0x3AFC50));
+                _artifactsQuest.UpdateValue(_ram.ReadInt32(RamBaseAddress + 0x3C7658));
+            }
+            else if (CurrentROM == REGION_NTSC_J)
+            {
+                _pointsQuest.UpdateValue(_ram.ReadInt32(RamBaseAddress + 0x3B5C50));
+                _artifactsQuest.UpdateValue(_ram.ReadInt32(RamBaseAddress + 0x3CDCD4));
             }
 
-            // If we didn't find the PAL ROM, then look for the NTSC-U ROM.
-            MPP_SIG = new byte[] { 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0x43, 0xF3 };
-            if (FindRamSignature(MPP_SIG, 0))
-            {
-                _region = Region.NTSC_U;
-                return true;
-            }
-
-            // If we didn't find the NTSC-U ROM either, then look for the NTSC-J ROM.
-            MPP_SIG = new byte[] { 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0xFF, 0xE7, 0xFF, 0xDE, 0x4D, 0x3D };
-            if (FindRamSignature(MPP_SIG, 0))
-            {
-                _region = Region.NTSC_J;
-                return true;
-            }
-
-            // If we didn't find any of them, then return false.
-            return false;
-        }
-
-        public override bool Poll()
-        {
-            switch (_region)
-            {
-                case Region.PAL:
-                    _pointsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3BB9B4));
-                    _artifactsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3D428C));
-                    break;
-                case Region.NTSC_U:
-                    _pointsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3AFC50));
-                    _artifactsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3C7658));
-                    break;
-                case Region.NTSC_J:
-                    _pointsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3B5C50));
-                    _artifactsQuest.UpdateValue(_ram.ReadInt32(_dsRamBaseAddress + 0x3CDCD4));
-                    break;
-            }
             return true;
         }
     }

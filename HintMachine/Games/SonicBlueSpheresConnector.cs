@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using HintMachine.GenericConnectors;
+
+namespace HintMachine.Games
 {
     public class SonicBlueSpheresConnector : IMegadriveConnector
     {
@@ -11,6 +13,7 @@
         private readonly HintQuestCumulative _ringsQuest = new HintQuestCumulative
         {
             Name = "Collected Rings",
+            MaxIncrease = 10,
             GoalValue = 200,
         };
 
@@ -30,36 +33,21 @@
 
             Quests.Add(_levelsQuest);
             Quests.Add(_ringsQuest);
+
+            // Sonic & Knuckles + Sonic 1
+            ValidROMs.Add("C9DEA194C3169AD1287C84C157E1257326B393A315B763C5CD04B48DAD4A9DEB");
+            // Blue Spheres Plus
+            ValidROMs.Add("06DC460F28F77B31335FC55F0B74A21925983817BD9BBD97F8CCBFBDCAA69101");
         }
 
-        public override bool Connect()
+        protected override bool Poll()
         {
-            if (!base.Connect())
-                return false;
-
-            // Sonic & Knuckles + Sonic 1 signature
-            byte[] SKS1_SIG = new byte[] { 0x4D, 0x53, 0x4B, 0x26 };
-            uint SKS1_ADDR = 0xFFFC;
-            if (FindRamSignature(SKS1_SIG, SKS1_ADDR))
-                return true;
-
-            // Blue Spheres Plus signature
-            byte[] BLUE_SPHERES_PLUS_SIG = new byte[] { 0x4C, 0x04, 0xF9, 0x4E };
-            uint BLUE_SPHERES_PLUS_ADDR = 0xFFF4;
-            if (FindRamSignature(BLUE_SPHERES_PLUS_SIG, BLUE_SPHERES_PLUS_ADDR))
-                return true;
-
-            return false;
-        }
-
-        public override bool Poll()
-        {
-            ushort blueSpheresWinAnimProgress = _ram.ReadUint16(_megadriveRamBaseAddr + 0xE44A);
+            ushort blueSpheresWinAnimProgress = _ram.ReadUint16(RamBaseAddress + 0xE44A);
             if (blueSpheresWinAnimProgress > 0 && _previousBlueSpheresWinAnimProgress == 0)
                 _levelsQuest.CurrentValue += 1;
             _previousBlueSpheresWinAnimProgress = blueSpheresWinAnimProgress;
 
-            ushort collectedRings = _ram.ReadUint16(_megadriveRamBaseAddr + 0xE43A);
+            ushort collectedRings = _ram.ReadUint16(RamBaseAddress + 0xE43A);
             _ringsQuest.UpdateValue(collectedRings);
 
             return true;

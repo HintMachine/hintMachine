@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HintMachine
 {
@@ -16,6 +15,45 @@ namespace HintMachine
     {
         public ProcessRamWatcherException(string message) : base(message) 
         {}
+    }
+
+    public enum MemoryRegionType : uint
+    {
+        MEM_IMAGE = 0x1000000,
+        MEM_MAPPED = 0x40000,
+        MEM_PRIVATE = 0x20000,
+        MEM_UNDEFINED = 0x0
+    }
+
+    public struct MemoryRegion
+    {
+        public long BaseAddress;
+        public long Size;
+        public MemoryRegionType Type;
+    }
+
+    public class BinaryTarget
+    {
+        /// <summary>
+        /// A readable and concise name for the target (e.g. "Steam")
+        /// </summary>
+        public string DisplayName { get; set; } = "";
+
+        /// <summary>
+        /// The name of the process that is targeted
+        /// </summary>
+        public string ProcessName { get; set; } = "";
+
+        /// <summary>
+        /// A SHA-256 hash of the binary file the process is running
+        /// </summary>
+        public string Hash { get; set; } = "";
+
+        /// <summary>
+        /// The name of the module whose base address will be taken as the BaseAddress for this watcher
+        /// once connected. If left blank, the base address for the main module (the binary) will be taken.
+        /// </summary>
+        public string ModuleName { get; set; } = "";
     }
 
     public class ProcessRamWatcher
@@ -37,21 +75,6 @@ namespace HintMachine
             SET_THREAD_TOKEN = (0x0080),
             IMPERSONATE = (0x0100),
             DIRECT_IMPERSONATION = (0x0200)
-        }
-
-        public enum MemoryRegionType : uint
-        {
-            MEM_IMAGE = 0x1000000,
-            MEM_MAPPED = 0x40000,
-            MEM_PRIVATE = 0x20000,
-            MEM_UNDEFINED = 0x0
-        }
-
-        public struct MemoryRegion
-        {
-            public long BaseAddress;
-            public long Size;
-            public MemoryRegionType Type;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -136,20 +159,46 @@ namespace HintMachine
 
         // ----------------------------------------------------------------------------------
 
-        private readonly string _processName;
-        private readonly string _moduleName;
-
         private Process _process = null;
         private IntPtr _processHandle = IntPtr.Zero;
 
+        public List<BinaryTarget> SupportedTargets { get; private set; } = new List<BinaryTarget>();
+
+        public BinaryTarget CurrentTarget { get; private set; } = null;
+
         public long BaseAddress { get; private set; } = 0;
+
+        public bool Is64Bit { get; set; } = true;
+
+        public bool IsBigEndian { get; set; } = false;
+
+        public long Threadstack0
+        { 
+            get { 
+                if(_threadstack0 == null)
+                    _threadstack0 = GetThreadstack0Address();
+
+                return _threadstack0 ?? 0;
+            }
+        }
+        private long? _threadstack0 = null;
 
         // ----------------------------------------------------------------------------------
 
+        public ProcessRamWatcher()
+        {}
+        public ProcessRamWatcher(BinaryTarget target)
+        {
+            SupportedTargets.Add(target);
+        }
+
         public ProcessRamWatcher(string processName, string moduleName = "")
         {
-            _processName = processName;
-            _moduleName = moduleName;
+            SupportedTargets.Add(new BinaryTarget
+            {
+                ProcessName = processName,
+                ModuleName = moduleName,
+            });
         }
 
         ~ProcessRamWatcher()
@@ -164,8 +213,49 @@ namespace HintMachine
         /// <returns>True if connection succeeded, false if something wrong happened</returns>
         public bool TryConnect()
         {
+            HashSet<string> alreadyProcessedNames = new HashSet<string>();
+
+            foreach (BinaryTarget target in SupportedTargets)
+            {
+                // Only try connecting once to each process name
+                if (alreadyProcessedNames.Contains(target.ProcessName))
+                    continue;
+
+                alreadyProcessedNames.Add(target.ProcessName);
+                if (!TryConnectToProcess(target.ProcessName))
+                    continue;
+
+                // We managed to find a process with a matching name, if there is a target for this process name with no hash, we're gold.
+                CurrentTarget = FindTargetWithNameAndHash(target.ProcessName, "");
+                if (CurrentTarget == null)
+                {
+                    // Otherwise, we need to hash the binary and test it against targets' hashes
+                    string hash = GetBinaryHash();
+                    CurrentTarget = FindTargetWithNameAndHash(target.ProcessName, hash);
+                    if (CurrentTarget == null)
+                    {
+                        Logger.Error($"Found a process with a valid name but an unsupported version ({hash})");
+                        return false;
+                    }
+                }
+
+                // A valid target was found, initialize BaseAddress with the module's base address
+                BaseAddress = FindModuleBaseAddress(CurrentTarget?.ModuleName);
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts opening the process with the given name with specific rights to allow for RAM peeking afterwards.
+        /// </summary>
+        /// <param name="processName">the name of the process to connect to</param>
+        /// <returns>true if it succeeded, false if something went wrong</returns>
+        private bool TryConnectToProcess(string processName)
+        {
             // Find the process using its name
-            Process[] processes = Process.GetProcessesByName(_processName);
+            Process[] processes = Process.GetProcessesByName(processName);
             if (processes.Length > 0)
                 _process = processes[0];
             if (_process == null)
@@ -176,17 +266,40 @@ namespace HintMachine
             if (_processHandle == IntPtr.Zero)
                 return false;
 
-            // Find the module using its name if it was provided, or take the main module otherwise
-            if (_moduleName == "")
-                BaseAddress = _process.MainModule.BaseAddress.ToInt64();
-            else
-                BaseAddress = SearchForModule(_moduleName);
-
-            return (BaseAddress != 0);
+            return true;
         }
 
-        private long SearchForModule(string targetName)
+        /// <summary>
+        /// Look for a BinaryTarget with the given process name and hash (case-insensitive) inside the list of supported
+        /// binary targets.
+        /// </summary>
+        /// <param name="processName">the process name to look for</param>
+        /// <param name="hash">the hash to look for</param>
+        /// <returns>A BinaryTarget with the given processName & hash if it could be found, null otherwise</returns>
+        private BinaryTarget FindTargetWithNameAndHash(string processName, string hash)
         {
+            foreach (BinaryTarget target in SupportedTargets)
+            {
+                if (target.ProcessName != processName)
+                    continue;
+                
+                if(target.Hash == "" || string.Equals(hash, target.Hash, StringComparison.OrdinalIgnoreCase))
+                    return target;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Find the module using its name if it was provided, or take the main module otherwise
+        /// </summary>
+        /// <param name="targetName">the name of the module (or an empty string)</param>
+        /// <returns>the base address for the given module (or the main module base address if empty)</returns>
+        private long FindModuleBaseAddress(string targetName)
+        {
+            if (targetName == "")
+                return _process.MainModule.BaseAddress.ToInt64();
+
             long result = 0;
 
             // Setting up the variable for the second argument for EnumProcessModules
@@ -214,7 +327,6 @@ namespace HintMachine
                 }
             }
 
-            int sheriff = Marshal.GetLastWin32Error();
             gch.Free();
             return result;
         }
@@ -251,32 +363,43 @@ namespace HintMachine
         public byte ReadUint8(long address) 
             => ReadBytes(address, sizeof(byte))[0];
 
-        public ushort ReadUint16(long address, bool isBigEndian = false) 
-            => BitConverter.ToUInt16(ReadBytes(address, sizeof(ushort), isBigEndian), 0);
+        public ushort ReadUint16(long address) 
+            => BitConverter.ToUInt16(ReadBytes(address, sizeof(ushort), IsBigEndian), 0);
 
-        public uint ReadUint32(long address, bool isBigEndian = false)
-            => BitConverter.ToUInt32(ReadBytes(address, sizeof(uint), isBigEndian), 0);
+        public uint ReadUint32(long address)
+            => BitConverter.ToUInt32(ReadBytes(address, sizeof(uint), IsBigEndian), 0);
 
-        public ulong ReadUint64(long address, bool isBigEndian = false)
-            => BitConverter.ToUInt64(ReadBytes(address, sizeof(ulong), isBigEndian), 0);
+        public ulong ReadUint64(long address)
+            => BitConverter.ToUInt64(ReadBytes(address, sizeof(ulong), IsBigEndian), 0);
 
         public sbyte ReadInt8(long address)
             => (sbyte)ReadBytes(address, sizeof(sbyte))[0];
 
-        public short ReadInt16(long address, bool isBigEndian = false)
-            => BitConverter.ToInt16(ReadBytes(address, sizeof(short), isBigEndian), 0);
+        public short ReadInt16(long address)
+            => BitConverter.ToInt16(ReadBytes(address, sizeof(short), IsBigEndian), 0);
 
-        public int ReadInt32(long address, bool isBigEndian = false)
-            => BitConverter.ToInt32(ReadBytes(address, sizeof(int), isBigEndian), 0);
+        public int ReadInt32(long address)
+            => BitConverter.ToInt32(ReadBytes(address, sizeof(int), IsBigEndian), 0);
 
-        public long ReadInt64(long address, bool isBigEndian = false)
-            => BitConverter.ToInt64(ReadBytes(address, sizeof(long), isBigEndian), 0);
+        public long ReadInt64(long address)
+            => BitConverter.ToInt64(ReadBytes(address, sizeof(long), IsBigEndian), 0);
 
-        public double ReadDouble(long address, bool isBigEndian = false)
-            => BitConverter.ToDouble(ReadBytes(address, sizeof(long), isBigEndian), 0);
+        public double ReadDouble(long address)
+            => BitConverter.ToDouble(ReadBytes(address, sizeof(long), IsBigEndian), 0);
 
+        /// <summary>
+        /// Resolve a pointer path starting from a base address, and following pointers while also applying the given offsets
+        /// one by one. Such a path can be obtained with external programs like CheatEngine.
+        /// </summary>
+        /// <param name="baseAddress">the base address</param>
+        /// <param name="offsets">the offsets to apply while reading a pointer for each one of them</param>
+        /// <param name="is64Bit">a boolean telling if pointers are 64-bit long (true) or 32-bit long (false)</param>
+        /// <returns>The address pointed by the pointer path, or 0 if the path is broken in any way.</returns>
         private long ResolvePointerPath(long baseAddress, int[] offsets, bool is64Bit)
         {
+            if(!TestProcess())
+                throw new ProcessRamWatcherException("Process was shutdown while connected");
+
             try
             {
                 long addr = baseAddress;
@@ -300,13 +423,10 @@ namespace HintMachine
         public long ResolvePointerPath64(long baseAddress, int[] offsets) => ResolvePointerPath(baseAddress, offsets, true);
 
         /// <summary>
-        /// List all memory regions following the given search criteria. Each parameter can be left with its default value
-        /// not to be used as a criterion during the search
+        /// List all memory regions used by this process.
         /// </summary>
-        /// <param name="size">the size of the region to look for.</param>
-        /// <param name="type">the type of the memory region to look for.</param>
         /// <returns>A list of all memory regions having the properties specified in the input parameters</returns>
-        public List<MemoryRegion> ListMemoryRegions(long size = 0, MemoryRegionType type = MemoryRegionType.MEM_UNDEFINED)
+        public List<MemoryRegion> ListMemoryRegions()
         {
             List<MemoryRegion> regions = new List<MemoryRegion>();
 
@@ -317,14 +437,6 @@ namespace HintMachine
             while (VirtualQueryEx(_processHandle, ptr, out info, (uint)mbiSize) == mbiSize)
             {
                 ptr = (IntPtr)(ptr.ToInt64() + (long)info.RegionSize);
-
-                // Check region type if it was specified
-                if (type != MemoryRegionType.MEM_UNDEFINED && type != info.Type)
-                    continue;
-
-                // Check region size if it was specified
-                if(size != 0 && size != (long)info.RegionSize)
-                    continue;
 
                 regions.Add(new MemoryRegion()
                 {
@@ -366,7 +478,7 @@ namespace HintMachine
             QueryFullProcessImageName(_processHandle, 0, stringBuilder, ref size);
             string binaryFilePath = stringBuilder.ToString();
 
-            using (var sha = SHA256.Create())
+            using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))
                 using (var stream = File.OpenRead(binaryFilePath))
                     return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
         }
@@ -375,30 +487,27 @@ namespace HintMachine
         /// Fetch the infamous THREADSTACK0 address (as specified by the CheatEngine software) to use as a base address
         /// for further data retrieval.
         /// </summary>
-        public Task<int> GetThreadstack0Address()
+        private long GetThreadstack0Address()
         {
+            string binaryName = Is64Bit ? "ThreadstackFinder64.exe" : "ThreadstackFinder32.exe";
+
             var proc = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "threadstack.exe",
-                    Arguments = _process.Id + "",
+                    FileName = binaryName,
+                    Arguments = _process.Id.ToString(),
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true
                 }
             };
+
             proc.Start();
+
             while (!proc.StandardOutput.EndOfStream)
-            {
-                string line = proc.StandardOutput.ReadLine();
-                if (line.Contains("THREADSTACK 0 BASE ADDRESS: "))
-                {
-                    line = line.Substring(line.LastIndexOf(":") + 2);
-                    return Task.FromResult(int.Parse(line.Substring(2), System.Globalization.NumberStyles.HexNumber));
-                }
-            }
-            return Task.FromResult(0);
+                return long.Parse(proc.StandardOutput.ReadLine());
+            return 0;
         }
     }
 }

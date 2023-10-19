@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
+using HintMachine.GenericConnectors;
 
 namespace HintMachine
 {
@@ -36,7 +37,7 @@ namespace HintMachine
         {
             // Connect to selected game
             IGameConnector game = ListGames.SelectedItem as IGameConnector;
-            if (!game.Connect())
+            if (!game.DoConnect())
             {
                 string message = $"Could not connect to {game.Name}.\n" +
                                   "Please ensure it is currently running and try again.";

@@ -1,3 +1,5 @@
+using HintMachine.GenericConnectors;
+
 namespace HintMachine.Games
 {
     public class LuckBeALandlordConnector : IGameConnector
@@ -25,7 +27,7 @@ namespace HintMachine.Games
             Quests.Add(_coinQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("Luck be a Landlord");
             return _ram.TryConnect();
@@ -36,10 +38,8 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (_ram.TestProcess() == false) { return false; }
-
             long coinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x21EFC90, new int[] { 0x218, 0x108, 0x10, 0x58, 0x20, 0x660 });
             long spinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x21EFC90, new int[] { 0x218, 0x108, 0x38, 0x108, 0x0, 0x58, 0x20, 0x2D0 });
 

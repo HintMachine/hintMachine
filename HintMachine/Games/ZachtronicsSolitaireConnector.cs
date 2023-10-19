@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using HintMachine.GenericConnectors;
 
 namespace HintMachine.Games
 {
@@ -37,7 +38,7 @@ namespace HintMachine.Games
             Quests.Add(_winsQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             try
             {
@@ -83,7 +84,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             if(!_ram.TestProcess())
                 return false;

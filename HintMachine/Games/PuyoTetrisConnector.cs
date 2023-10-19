@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HintMachine.GenericConnectors;
 
 namespace HintMachine.Games
 {
@@ -67,7 +68,7 @@ namespace HintMachine.Games
             };
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("PuyoPuyoTetris");
             return _ram.TryConnect();
@@ -78,11 +79,8 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (!_ram.TestProcess())
-                return false;
-
             ReadTetrisData();
             ReadPuyoData();
             return true;

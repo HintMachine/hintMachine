@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using HintMachine.GenericConnectors;
+
+namespace HintMachine.Games
 {
     public class TetrisEffectConnector : IGameConnector
     {
@@ -60,9 +62,15 @@
             // Quests.Add(_combosQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher("TetrisEffect-Win64-Shipping");
+            _ram = new ProcessRamWatcher(new BinaryTarget
+            {
+                DisplayName = "Steam",
+                ProcessName = "TetrisEffect-Win64-Shipping",
+                Hash = "1981E9829739E3C2E7549E9DEC3384A3E649632A514D9D5F0711A37CC945279D"
+            });
+
             return _ram.TryConnect();
         }
 
@@ -71,11 +79,8 @@
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (!_ram.TestProcess())
-                return false;
-
             int[] OFFSETS = new int[] { 0x8, 0x8, 0x220, 0x200, 0x64 };
             long linesAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x4ED9990, OFFSETS);
             if (linesAddress != 0)

@@ -20,6 +20,7 @@ namespace HintMachine
         // ----------------------------------------------------------------------------------
 
         private const int MAX_DISPLAYED_MESSAGES = 100;
+        private const int MAX_KEPT_MESSAGES = 200;
         private List<Message> _messages = new List<Message>();
 
         // ----------------------------------------------------------------------------------
@@ -125,6 +126,14 @@ namespace HintMachine
                 bool visible = CanDisplayMessage(message.TextBox.Text, message.MessageType);
                 message.Rectangle.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
                 message.TextBox.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+            // Truncate all message widgets above the safe-keeping limit
+            while(_messages.Count > MAX_KEPT_MESSAGES) 
+            {
+                GridMessages.Children.Remove(_messages[0].Rectangle);
+                GridMessages.Children.Remove(_messages[0].TextBox);
+                _messages.Remove(_messages[0]);
             }
 
             // Count all visible messages starting from the bottom, and hide all those above the display limit

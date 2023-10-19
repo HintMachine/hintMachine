@@ -1,5 +1,6 @@
 ﻿
 using HintMachine.Games;
+using HintMachine.GenericConnectors;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -55,9 +56,14 @@ namespace HintMachine
             new MiniMetroConnector(),
             new LuckBeALandlordConnector(),
             new SuperHexagonConnector(),
+            new SuperMonkeyBall2Connector(),
             new Operator911Connector(),
+            new DragonCrownConnector(),
+            new SuperMegaBaseball2Connector(),
+            new TonyHawksProSkater12Connector(),
+            new PokemonPinballRSConnector(),
+            new TMNTShreddersRevengeConnector(),
             new SanrioWorldSmashBallConnector(),
-            
         };
 
         public static IGameConnector FindGameFromName(string name)
@@ -75,7 +81,7 @@ namespace HintMachine
             "Le saviez vous ? Le Hit Machine a été diffusé sur M6 entre 1994 et 2009",
             "Le saviez vous ? Le developpement de la HintMachine a demarré en Septembre 2023.",
             "✨ Je m'appelle Charly - Et je m'appelle Lulu - On est sur M6 - pour le HitMachine ✨",
-
+            "♪ Tous les oiseaux volent dans le ciel ♫"
         };
         public static readonly List<string> CharlyMachineFacts = new List<string>() {
             "Le saviez vous ? Charly se nomme Charly Nestor.",

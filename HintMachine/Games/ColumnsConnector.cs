@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Games
+﻿using HintMachine.GenericConnectors;
+
+namespace HintMachine.Games
 {
     public class ColumnsConnector : IMegadriveConnector
     {
@@ -9,6 +11,8 @@
             MaxIncrease = 10,
         };
 
+        // ----------------------------------------------------------
+
         public ColumnsConnector() : base()
         {
             Name = "Columns";
@@ -18,24 +22,18 @@
             Author = "Dinopony";
 
             Quests.Add(_jewelsQuest);
+
+            // REV0
+            ValidROMs.Add("D84F3E1BBEE9CE8E7FE1401DE9964DB505E3EE41C81A48664983D7A9D39084C8");
+            // REV1
+            ValidROMs.Add("A04711E2F511C03D41928091877FE7813EC1049662740962BED76B96CEDD9E9C");
         }
 
-        public override bool Connect()
+        protected override bool Poll()
         {
-            if (!base.Connect())
-                return false;
-
-            return FindRamSignature(new byte[] { 0xCC, 0x01, 0xBA, 0xBB }, 0x102C);
-        }
-
-        public override bool Poll()
-        {
-            // Check if we are in arcade mode (0x8464 but the way Bizhawk layouts memory as 16-bit integers requires us to
-            // look one byte further)
-            if (_ram.ReadUint8(_megadriveRamBaseAddr + 0x8465) != 0)
-                return true;
-
-            _jewelsQuest.UpdateValue(_ram.ReadUint16(_megadriveRamBaseAddr + 0xC826));
+            bool inArcadeMode = (_ram.ReadUint8(RamBaseAddress + 0x8464) == 0);
+            if (inArcadeMode)
+                _jewelsQuest.UpdateValue(_ram.ReadUint16(RamBaseAddress + 0xC826));
             
             return true;
         }

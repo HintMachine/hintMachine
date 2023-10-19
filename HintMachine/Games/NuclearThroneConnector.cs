@@ -1,4 +1,4 @@
-﻿using System;
+﻿using HintMachine.GenericConnectors;
 
 namespace HintMachine.Games
 {
@@ -12,7 +12,6 @@ namespace HintMachine.Games
         };
 
         private ProcessRamWatcher _ram = null;
-        private IntPtr _threadstack0Addr;
         private uint _previousWinValue = 0;
 
         public NuclearThroneConnector()
@@ -25,9 +24,11 @@ namespace HintMachine.Games
 
             Quests.Add(_killThroneQuest);
         }
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("nuclearthronetogether");
+            _ram.Is64Bit = false;
+
             return _ram.TryConnect();
         }
 
@@ -36,14 +37,12 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            syncThreadStackAdr();
-
             int[] OFFSETS = new int[] { 0xA0, 0x60C, 0x104, 0x714, 0x0 };
             try
             {
-                long throneAliveAddress = _ram.ResolvePointerPath32(_threadstack0Addr.ToInt32() - 0x638, OFFSETS);
+                long throneAliveAddress = _ram.ResolvePointerPath32(_ram.Threadstack0 - 0x638, OFFSETS);
                 if (throneAliveAddress == 0)
                     return true;
                 
@@ -55,11 +54,6 @@ namespace HintMachine.Games
             catch {}
             return true;
             
-        }
-
-        private async void syncThreadStackAdr()
-        {
-            _threadstack0Addr = (IntPtr)await _ram.GetThreadstack0Address();
         }
     }
 }

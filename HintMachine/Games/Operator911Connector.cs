@@ -1,3 +1,5 @@
+using HintMachine.GenericConnectors;
+
 namespace HintMachine.Games
 {
     public class Operator911Connector : IGameConnector
@@ -31,7 +33,7 @@ namespace HintMachine.Games
             Quests.Add(_cashQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("911");
             return _ram.TryConnect();
@@ -42,10 +44,8 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (_ram.TestProcess() == false) { return false; }
-
             try {
                 long incidentsAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x1037A40, new int[] { 0x4, 0x8, 0x50, 0x68, 0x38, 0x164, 0x14 });
                 _incidentsQuest.UpdateValue(_ram.ReadUint32(incidentsAddress));
