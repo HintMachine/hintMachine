@@ -41,9 +41,7 @@ namespace HintMachine.Games
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher();
-            _ram.SupportedTargets.Add(GAME_VERSION_STEAM);
-
+            _ram = new ProcessRamWatcher(GAME_VERSION_STEAM);
             return _ram.TryConnect();
         }
 
