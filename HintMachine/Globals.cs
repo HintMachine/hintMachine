@@ -63,6 +63,7 @@ namespace HintMachine
             new TonyHawksProSkater12Connector(),
             new PokemonPinballRSConnector(),
             new TMNTShreddersRevengeConnector(),
+            new PokemonPuzzleChallengeConnector()
         };
 
         public static IGameConnector FindGameFromName(string name)
