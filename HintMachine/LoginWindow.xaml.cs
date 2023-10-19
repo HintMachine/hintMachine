@@ -24,8 +24,9 @@ namespace HintMachine
             Settings.LoadFromFile();
             InputHost.Text = Settings.Host;
             InputSlot.Text = Settings.Slot;
-
-            checkIfUpdateAvailableAsync();
+            if (Settings.ShowUpdatePopUp) {
+                checkIfUpdateAvailableAsync();
+            }
         }
 
         private void OnConnectButtonClick(object sender, RoutedEventArgs e)
@@ -55,9 +56,6 @@ namespace HintMachine
 
         private async Task checkIfUpdateAvailableAsync()
         {
-
-            // https://api.github.com/repos/CalDrac/hintMachine/releases
-
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
@@ -88,7 +86,7 @@ namespace HintMachine
 
                 if (prog.CompareTo(gitVersion) < 0)
                 {
-                    MessageBox.Show("A new version is available.", "Update available", MessageBoxButton.OK, MessageBoxImage.Information);
+                    new UpdateAvailablePopup().Show();
                 }
             }
             catch

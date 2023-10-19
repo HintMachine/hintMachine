@@ -333,6 +333,7 @@ namespace HintMachine
                 { MenuDisplayReceivedItems, Settings.DisplayItemReceivedMessages },
                 { MenuDisplaySentItems, Settings.DisplayItemSentMessages },
                 { MenuSoundNotification, Settings.PlaySoundOnHint },
+                { MenuShowUpdatePopup, Settings.ShowUpdatePopUp},
             };
 
             foreach (var kv in MENU_ITEMS)
@@ -381,6 +382,7 @@ namespace HintMachine
             Settings.DisplayItemReceivedMessages = MenuDisplayReceivedItems.IsChecked;
             Settings.DisplayItemSentMessages = MenuDisplaySentItems.IsChecked;
             Settings.PlaySoundOnHint = MenuSoundNotification.IsChecked;
+            Settings.ShowUpdatePopUp = MenuShowUpdatePopup.IsChecked;
             MessageLog.UpdateMessagesVisibility();
         }
 

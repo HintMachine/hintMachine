@@ -1,0 +1,20 @@
+﻿<Window x:Class="HintMachine.UpdateAvailablePopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HintMachine"
+        mc:Ignorable="d"
+        Title="HintMachine" Height="185.41" Width="302.5" Background="#FFEEEEEE" ResizeMode="CanMinimize" Icon="/assets/icon.png">
+    <Grid HorizontalAlignment="Center" Width="282" Height="147" VerticalAlignment="Top" Margin="0,0,0,0">
+
+
+        <Label Content="A new update is available" HorizontalAlignment="Center" Margin="0,8,0,0" VerticalAlignment="Top" Height="26" Width="144"/>
+        <Button Content="Go to the releases page" HorizontalAlignment="Center" Margin="47,48,47,0" VerticalAlignment="Top" 
+                Width="188" Click="OnGoToReleasePageButtonClick" Height="20" IsDefault="True"/>
+        <Button Content="Close"   VerticalAlignment="Top" 
+                Width="188" Click="OnCloseButtonClick" Height="20" HorizontalAlignment="Center" Margin="47,82,47,0"/>
+        <Button Content="Close and never show this again" HorizontalAlignment="Center"  VerticalAlignment="Top" 
+                Width="188" Click="OnCloseAndDontShowAgainButtonClick" Height="20" Margin="47,115,47,0"  />
+    </Grid>
+</Window>
