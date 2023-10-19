@@ -1,14 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using Newtonsoft.Json.Linq;
 
 namespace HintMachine
 {
@@ -25,7 +20,7 @@ namespace HintMachine
             InputHost.Text = Settings.Host;
             InputSlot.Text = Settings.Slot;
 
-            checkIfUpdateAvailableAsync();
+            _ = CheckIfUpdateAvailableAsync();
         }
 
         private void OnConnectButtonClick(object sender, RoutedEventArgs e)
@@ -48,52 +43,44 @@ namespace HintMachine
             }
             else
             {
-                MessageBox.Show($"Could not connect to Archipelago: {archipelagoSession.ErrorMessage}", "Connection error",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Could not connect to Archipelago: {archipelagoSession.ErrorMessage}", 
+                    "Connection error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private async Task checkIfUpdateAvailableAsync()
+        private async Task CheckIfUpdateAvailableAsync()
         {
-
-            // https://api.github.com/repos/CalDrac/hintMachine/releases
-
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
             client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-            Console.WriteLine("");
             try
             {
-                var json = await client.GetStringAsync("https://api.github.com/repos/CalDrac/hintMachine/releases");
-
-                JsonArray tagsNode = JsonNode.Parse(json).AsArray();
+                var response = await client.GetStringAsync("https://api.github.com/repos/CalDrac/hintMachine/releases");
+                var responseJson = JArray.Parse(response);
 
                 string lastVersion = "";
-                foreach (JsonObject child in tagsNode)
+                foreach (var release in responseJson)
                 {
-                    if (child.ContainsKey("tag_name"))
+                    if (release["prerelease"].ToString() == "False")
                     {
-                        JsonNode tagNameNode = child["tag_name"];
-                        if (!tagNameNode.ToString().Contains("rc"))
-                        {
-                            lastVersion = tagNameNode.ToString();
-                            break;
-                        }
+                        // The first non-prerelease is the latest release
+                        lastVersion = release["tag_name"].ToString();
+                        break;
                     }
                 }
-                Version prog = new Version(Globals.ProgramVersion);
-                Version gitVersion = new Version(lastVersion);
+                Version currentVersion = new Version(Globals.ProgramVersion);
+                Version latestVersion = new Version(lastVersion);
+                Console.WriteLine($"Latest version is {latestVersion}");
 
-                if (prog.CompareTo(gitVersion) < 0)
+                if (currentVersion.CompareTo(latestVersion) < 0)
                 {
                     MessageBox.Show("A new version is available.", "Update available", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch
             {
-                Console.WriteLine("Error connecting GitHub");
+                Console.WriteLine("Couldn't fetch latest version from GitHub API");
             }
         }
     }
