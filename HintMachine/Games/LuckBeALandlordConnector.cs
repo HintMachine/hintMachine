@@ -4,6 +4,13 @@ namespace HintMachine.Games
 {
     public class LuckBeALandlordConnector : IGameConnector
     {
+        private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
+        {
+            DisplayName = "Steam",
+            ProcessName = "Luck be a Landlord",
+            Hash = "8A6EB15E774ED5F85B2CC8F70CCA4FC3EEFE69898A6AE418982065CAB5665740"
+        };
+
         private readonly HintQuestCumulative _coinQuest = new HintQuestCumulative
         {
             Name = "Coins Spent",
@@ -29,7 +36,7 @@ namespace HintMachine.Games
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher("Luck be a Landlord");
+            _ram = new ProcessRamWatcher(GAME_VERSION_STEAM);
             return _ram.TryConnect();
         }
 
