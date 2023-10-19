@@ -37,13 +37,13 @@
                 <Border BorderThickness="1" BorderBrush="#FF444444" Grid.Column="0" Height="214"  VerticalAlignment="Top" Width="161" HorizontalAlignment="Left">
                     <Image Name="ImageGameCover" HorizontalAlignment="Left" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
                 </Border>
-                <TextBlock Name="TextGameName" HorizontalAlignment="Left" Margin="166,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="378" TextAlignment="Center">
+                <TextBlock Name="TextGameName" HorizontalAlignment="Left" Margin="166,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="358" TextAlignment="Center">
                     Game name
                 </TextBlock>
-                <TextBlock Name="TextGameDescription" Margin="0,224,0,0" TextWrapping="Wrap" Height="345" Width="534" FontStyle="Italic" FontSize="14" Foreground="#FF777777">
+                <TextBlock Name="TextGameDescription" Margin="0,227,10,3" TextWrapping="Wrap" Height="345" FontStyle="Italic" FontSize="14" Foreground="#FF777777">
                     Game description
                 </TextBlock>
-                <TextBlock Name="TextGameProperties" HorizontalAlignment="Left" Margin="169,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="177" Width="375">
+                <TextBlock Name="TextGameProperties" HorizontalAlignment="Left" Margin="169,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="177" Width="355">
                     Game properties
                 </TextBlock>
             </Grid>
