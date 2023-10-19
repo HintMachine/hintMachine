@@ -18,8 +18,8 @@ namespace HintMachine.GenericConnectors
 
         public IGameboyAdvanceConnector()
         {
-            Platform = "DS";
-            SupportedEmulators.Add("BizHawk 2.9.1 (MelonDS core)");
+            Platform = "GBA";
+            SupportedEmulators.Add("BizHawk 2.9.1 (mGBA core)");
         }
 
         protected override bool Connect()
@@ -46,7 +46,10 @@ namespace HintMachine.GenericConnectors
         {
             base.Disconnect();
             _ram = null;
+
             ExternalRamBaseAddress = 0;
+            InternalRamBaseAddress = 0;
+            RomBaseAddress = 0;
         }
 
         public override long GetCurrentFrameCount()
