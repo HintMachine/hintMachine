@@ -4,6 +4,13 @@ namespace HintMachine.Games
 {
     public class PacManChampionshipEditionDXConnector : IGameConnector
     {
+        private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
+        {
+            DisplayName = "Steam",
+            ProcessName = "PAC-MAN",
+            Hash = "B96AAB05C2A3E767FDE271A14A0052915D89418F000F5BDE75B74777608721F1"
+        };
+
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
             Name = "Score",
@@ -26,7 +33,7 @@ namespace HintMachine.Games
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher("PAC-MAN");
+            _ram = new ProcessRamWatcher(GAME_VERSION_STEAM);
             return _ram.TryConnect();
         }
 

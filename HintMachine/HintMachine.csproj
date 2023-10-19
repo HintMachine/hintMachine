@@ -132,6 +132,7 @@
     <Compile Include="Games\BPMConnector.cs" />
     <Compile Include="Games\PokemonPinballRSConnector.cs" />
     <Compile Include="Games\DragonCrownConnector.cs" />
+    <Compile Include="Games\PokemonPuzzleChallengeConnector.cs" />
     <Compile Include="Games\TonyHawksProSkater12Connector.cs" />
     <Compile Include="Games\TMNTShreddersRevengeConnector.cs" />
     <Compile Include="Games\MetroidPrimePinballConnector.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Games\StargunnerConnector.cs" />
     <Compile Include="Games\SuperMonkeyBall2Connector.cs" />
     <Compile Include="Games\SuperMegaBaseball2.cs" />
+    <Compile Include="GenericConnectors\IGameboyColorConnector.cs" />
     <Compile Include="GenericConnectors\IGameboyAdvanceConnector.cs" />
     <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
     <Compile Include="GenericConnectors\IEmulatorConnector.cs" />
@@ -299,6 +301,7 @@
     <Resource Include="Assets\Covers\dragons_crown.png" />
     <Resource Include="Assets\Covers\pokemon_pinball_rs.png" />
     <Resource Include="Assets\Covers\super_monkey_ball_2.png" />
+    <Resource Include="Assets\Covers\pokemon_puzzle_challenge.png" />
     <Resource Include="Assets\Covers\papers_please.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
