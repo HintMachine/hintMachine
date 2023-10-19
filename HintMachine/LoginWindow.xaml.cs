@@ -55,7 +55,7 @@ namespace HintMachine
 
         private async Task checkIfUpdateAvailableAsync()
         {
-            
+
             // https://api.github.com/repos/CalDrac/hintMachine/releases
 
             HttpClient client = new HttpClient();
@@ -64,29 +64,36 @@ namespace HintMachine
                 new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
             client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
             Console.WriteLine("");
-
-            var json = await client.GetStringAsync("https://api.github.com/repos/CalDrac/hintMachine/releases");
-
-            JsonArray tagsNode = JsonNode.Parse(json).AsArray();
-
-            string lastVersion = "";
-            foreach (JsonObject child in tagsNode)
+            try
             {
-                if (child.ContainsKey("tag_name"))
+                var json = await client.GetStringAsync("https://api.github.com/repos/CalDrac/hintMachine/releases");
+
+                JsonArray tagsNode = JsonNode.Parse(json).AsArray();
+
+                string lastVersion = "";
+                foreach (JsonObject child in tagsNode)
                 {
-                    JsonNode tagNameNode = child["tag_name"];
-                    if (!tagNameNode.ToString().Contains("rc"))
+                    if (child.ContainsKey("tag_name"))
                     {
-                        lastVersion = tagNameNode.ToString();
-                        break;
+                        JsonNode tagNameNode = child["tag_name"];
+                        if (!tagNameNode.ToString().Contains("rc"))
+                        {
+                            lastVersion = tagNameNode.ToString();
+                            break;
+                        }
                     }
                 }
-            }
-            Version prog = new Version(Globals.ProgramVersion);
-            Version gitVersion = new Version(lastVersion);
+                Version prog = new Version(Globals.ProgramVersion);
+                Version gitVersion = new Version(lastVersion);
 
-            if (prog.CompareTo(gitVersion) < 0) {
-                MessageBox.Show("A new version is available.", "Update available", MessageBoxButton.OK,MessageBoxImage.Information);
+                if (prog.CompareTo(gitVersion) < 0)
+                {
+                    MessageBox.Show("A new version is available.", "Update available", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error connecting GitHub");
             }
         }
     }
