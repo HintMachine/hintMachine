@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using HintMachine.GenericConnectors;
-using System.Globalization;
 
 namespace HintMachine
 {
@@ -19,6 +18,10 @@ namespace HintMachine
         public delegate void OnGameConnectedAction(IGameConnector game);
         public event OnGameConnectedAction OnGameConnected = null;
 
+        private const string EMPTY_SEARCH_BAR_TEXT = "🔎 Search for games...";
+        private bool _emptySearchBar = true;
+        private IGameConnector _selectedGame = null;
+
         // ----------------------------------------------------------------------------------
 
         public GameSelectionWindow()
@@ -28,26 +31,54 @@ namespace HintMachine
             ListGames.ItemsSource = Globals.Games;
             ListGames.Items.SortDescriptions.Clear();
             ListGames.Items.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            ListGames.Items.Filter = null;
 
-            if (Settings.LastConnectedGame != "")
-                ListGames.SelectedValue = Globals.FindGameFromName(Settings.LastConnectedGame);
-            else
-                ListGames.SelectedValue = ListGames.Items[0];
+            _selectedGame = Globals.FindGameFromName(Settings.LastConnectedGame);
+            if(_selectedGame == null)
+                _selectedGame = ListGames.Items[0] as IGameConnector;
+            ListGames.SelectedValue = _selectedGame;
+
+            UpdateSearchBarFocus(false);
+        }
+
+        private void OnListSelectionChange(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListGames.SelectedItem == null)
+                return;
+
+            IGameConnector game = ListGames.SelectedItem as IGameConnector;
+            
+            ImageGameCover.Visibility = Visibility.Visible;
+            TextGameName.Text = game.Name;
+            TextGameDescription.Text = game.Description;
+
+            BitmapImage image;
+            try
+            {
+                image = new BitmapImage(new Uri($"./Assets/covers/{game.CoverFilename}", UriKind.Relative));
+            }
+            catch (FileNotFoundException)
+            {
+                image = new BitmapImage(new Uri($"./Assets/covers/unknown.png", UriKind.Relative));
+            }
+            ImageGameCover.Source = image;
+
+            _selectedGame = game;
+            UpdateSelectedGameProperties();
         }
 
         private void OnValidateButtonClick(object sender, RoutedEventArgs e)
         {
             // Connect to selected game
-            IGameConnector game = ListGames.SelectedItem as IGameConnector;
-            if (!game.Connect())
+            if (!_selectedGame.Connect())
             {
-                string message = $"Could not connect to {game.Name}.\n" +
+                string message = $"Could not connect to {_selectedGame.Name}.\n" +
                                   "Please ensure it is currently running and try again.";
                 MessageBox.Show(message, "Connection error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            OnGameConnected?.Invoke(game);
+            OnGameConnected?.Invoke(_selectedGame);
             Close();
         }
 
@@ -56,137 +87,139 @@ namespace HintMachine
             Close();
         }
 
-        private void OnListSelectionChange(object sender, SelectionChangedEventArgs e)
+        private void OnSearchTextBoxUpdate(object sender, TextChangedEventArgs e)
         {
-            IGameConnector game = ListGames.SelectedItem as IGameConnector;
-            if (game != null)
+            if (ListGames == null)
+                return;
+
+            if (_emptySearchBar && TextBoxSearch.Text == EMPTY_SEARCH_BAR_TEXT)
+                return;
+
+            _emptySearchBar = (TextBoxSearch.Text == string.Empty);
+
+            IGameConnector selectedGame = ListGames.SelectedItem as IGameConnector;
+
+            string searchString = TextBoxSearch.Text.Trim().ToLower();
+            if (searchString != string.Empty)
             {
-                ImageGameCover.Visibility = Visibility.Visible;
-                TextGameName.Text = game.Name;
-                TextGameDescription.Text = game.Description;
-
-                BitmapImage image;
-                try
+                string[] searchWords = searchString.Split(' ');
+                ListGames.Items.Filter = obj =>
                 {
-                    image = new BitmapImage(new Uri($"./Assets/covers/{game.CoverFilename}", UriKind.Relative));
-                }
-                catch (FileNotFoundException)
-                {
-                    image = new BitmapImage(new Uri($"./Assets/covers/unknown.png", UriKind.Relative));
-                }
-                ImageGameCover.Source = image;
-
-                UpdateGameProperties(game);
+                    IGameConnector game = obj as IGameConnector;
+                    foreach (string word in searchWords)
+                    {
+                        if (game.Name.ToLower().Contains(word))
+                            continue;
+                        if (game.Platform.ToLower().Contains(word))
+                            continue;
+                        return false;
+                    }
+                    return true;
+                };
             }
             else
             {
-                TextGameName.Text = "";
-                TextGameDescription.Text = "";
-                ImageGameCover.Visibility = Visibility.Hidden;
-                UpdateGameProperties(null);
+                ListGames.Items.Filter = null;
+            }
+
+            ListGames.SelectedItem = selectedGame;
+        }
+
+        private void UpdateSearchBarFocus(bool focused)
+        {
+            if(_emptySearchBar)
+            {
+                if(focused)
+                {
+                    TextBoxSearch.Text = "";
+                    TextBoxSearch.Foreground = new SolidColorBrush(Colors.Black);
+                }
+                else
+                {
+                    TextBoxSearch.Text = EMPTY_SEARCH_BAR_TEXT;
+                    TextBoxSearch.Foreground = new SolidColorBrush(Colors.Gray);
+                }
             }
         }
 
-        private void UpdateGameProperties(IGameConnector game)
+        private void OnSearchTextboxFocus(object sender, RoutedEventArgs e) => UpdateSearchBarFocus(true);
+
+        private void OnSearchTextboxUnfocus(object sender, RoutedEventArgs e) => UpdateSearchBarFocus(false);
+
+        private void OnClearSearchButtonClick(object sender, RoutedEventArgs e)
         {
+            TextBoxSearch.Text = "";
+            UpdateSearchBarFocus(false);
+        }
+
+        private void UpdateSelectedGameProperties()
+        {
+            if (_selectedGame == null)
+                return;
+
             TextGameProperties.Text = "";
+
+            // Supported versions
+            if (_selectedGame.SupportedVersions.Count > 0)
+            {
+                if (_selectedGame.SupportedVersions.Count == 1)
+                {
+                    TextGameProperties.Inlines.Add(new Bold(new Run("Supported version: ")));
+                    TextGameProperties.Inlines.Add(_selectedGame.SupportedVersions[0]);
+                }
+                else
+                {
+                    TextGameProperties.Inlines.Add(new Bold(new Run("Supported versions: ")));
+                    foreach (string version in _selectedGame.SupportedVersions)
+                    {
+                        TextGameProperties.Inlines.Add(new LineBreak());
+                        TextGameProperties.Inlines.Add($"    • {version}");
+                    }
+                }
+
+                TextGameProperties.Inlines.Add(new LineBreak());
+                TextGameProperties.Inlines.Add(new LineBreak());
+            }
+
+            // Supported emulators
+            if (_selectedGame.SupportedEmulators.Count > 0)
+            {
+                if (_selectedGame.SupportedEmulators.Count == 1)
+                {
+                    TextGameProperties.Inlines.Add(new Bold(new Run("Supported emulator: ")));
+                    TextGameProperties.Inlines.Add(_selectedGame.SupportedEmulators[0]);
+                }
+                else
+                {
+                    TextGameProperties.Inlines.Add(new Bold(new Run("Supported emulators: ")));
+                    foreach (string emulator in _selectedGame.SupportedEmulators)
+                    {
+                        TextGameProperties.Inlines.Add(new LineBreak());
+                        TextGameProperties.Inlines.Add($"  • {emulator}");
+                    }
+                }
+                TextGameProperties.Inlines.Add(new LineBreak());
+                TextGameProperties.Inlines.Add(new LineBreak());
+            }
+
+            // Quests
+            TextGameProperties.Inlines.Add(new Bold(new Run("Quests: ")));
+
             string questsString = "";
-            if (game != null)
+            foreach (HintQuest quest in _selectedGame.Quests)
             {
-                if (game.SupportedVersions.Count > 0)
-                {
-                    if (game.SupportedVersions.Count == 1)
-                    {
-                        TextGameProperties.Inlines.Add(new Bold(new Run("Supported version: ")));
-                        TextGameProperties.Inlines.Add(game.SupportedVersions[0]);
-                    }
-                    else
-                    {
-                        TextGameProperties.Inlines.Add(new Bold(new Run("Supported versions: ")));
-                        foreach (string version in game.SupportedVersions)
-                        {
-                            TextGameProperties.Inlines.Add(new LineBreak());
-                            TextGameProperties.Inlines.Add($"    • {version}");
-                        }
-                    }
-
-                    TextGameProperties.Inlines.Add(new LineBreak());
-                    TextGameProperties.Inlines.Add(new LineBreak());
-                }
-
-                if (game.SupportedEmulators.Count > 0)
-                {
-                    if (game.SupportedEmulators.Count == 1)
-                    {
-                        TextGameProperties.Inlines.Add(new Bold(new Run("Supported emulator: ")));
-                        TextGameProperties.Inlines.Add(game.SupportedEmulators[0]);
-                    }
-                    else
-                    {
-                        TextGameProperties.Inlines.Add(new Bold(new Run("Supported emulators: ")));
-                        foreach (string emulator in game.SupportedEmulators)
-                        {
-                            TextGameProperties.Inlines.Add(new LineBreak());
-                            TextGameProperties.Inlines.Add($"  • {emulator}");
-                        }
-                    }
-                    TextGameProperties.Inlines.Add(new LineBreak());
-                    TextGameProperties.Inlines.Add(new LineBreak());
-                }
-
-                TextGameProperties.Inlines.Add(new Bold(new Run("Quests: ")));
-
-                foreach (HintQuest quest in game.Quests)
-                {
-                    if (questsString != "")
-                        questsString += ", ";
-                    questsString += quest.Name;
-                }
-                TextGameProperties.Inlines.Add(questsString);
-
-                TextGameProperties.Inlines.Add(new LineBreak());
-                TextGameProperties.Inlines.Add(new LineBreak());
-
-
-                TextGameProperties.Inlines.Add(new Bold(new Run("Author: ")));
-                TextGameProperties.Inlines.Add(game.Author);
+                if (questsString != "")
+                    questsString += ", ";
+                questsString += quest.Name;
             }
-            else {
-                TextGameProperties.Text = "";
+            TextGameProperties.Inlines.Add(questsString);
 
-            }
+            TextGameProperties.Inlines.Add(new LineBreak());
+            TextGameProperties.Inlines.Add(new LineBreak());
+
+            // Author
+            TextGameProperties.Inlines.Add(new Bold(new Run("Author: ")));
+            TextGameProperties.Inlines.Add(_selectedGame.Author);
         }
-
-
-        private void OnSearchButtonClick(object sender, RoutedEventArgs e)
-        {
-            FilterGames(searchGameTextBox.Text);
-        }
-
-        private void OnClearButtonClick(object sender, RoutedEventArgs e) {
-            searchGameTextBox.Text = "";
-            FilterGames("");
-
-        }
-
-        public void FilterGames(string text) {
-
-            ListGames.ItemsSource = Globals.Games;
-            if (searchGameTextBox.Text.Trim().Length != 0)
-            
-            {
-                ListGames.ItemsSource = Globals.Games.Where(x => CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Name, searchGameTextBox.Text, CompareOptions.IgnoreCase) >= 0 || CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Platform, searchGameTextBox.Text, CompareOptions.IgnoreCase) >= 0);
-            }
-            if (ListGames.Items.Count != 0)
-            {
-                ListGames.SelectedItem = ListGames.Items[0];
-            }
-            else
-            {
-                ListGames.SelectedItem = null;
-            }
-
-        }
-
     }
 }
