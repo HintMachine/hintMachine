@@ -9,12 +9,18 @@
     <DockPanel LastChildFill="True">
         <DockPanel LastChildFill="False" Margin="0, 0, 0, 8" DockPanel.Dock="Bottom">
             <Separator DockPanel.Dock="Top" Margin="0, 0, 0, 8"/>
-            <Button DockPanel.Dock="Right" Content="❌ Cancel" Padding="4" Margin="6,0,8,0" Click="OnCancelButtonClick"/>
-            <Button DockPanel.Dock="Right" Content="✔️ Validate" Padding="4" Click="OnValidateButtonClick" />
+            <Button DockPanel.Dock="Right" Content="❌ Cancel" Padding="4" Margin="6,0,8,0" Click="OnCancelButtonClick" KeyboardNavigation.TabIndex="3"/>
+            <Button DockPanel.Dock="Right" Content="✔️ Validate" Padding="4" Click="OnValidateButtonClick" KeyboardNavigation.TabIndex="3"/>
+            <TextBox Name="TextBoxSearch" Width="305" Height="26" Margin="8,0" VerticalContentAlignment="Center" 
+                     TextChanged="OnSearchTextBoxUpdate" GotFocus="OnSearchTextboxFocus" 
+                     LostFocus="OnSearchTextboxUnfocus" KeyboardNavigation.TabIndex="1"/>
+            <Button Width="25" FontSize="16" Padding="0,0,0,2" VerticalContentAlignment="Center" Click="OnClearSearchButtonClick" KeyboardNavigation.TabIndex="2">🗑️</Button>
         </DockPanel>
 
         <DockPanel LastChildFill="True" Margin="8, 8, 8, 8">
-            <ListView Name="ListGames" SelectionChanged="OnListSelectionChange" Width="340" Margin="0,0,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView Name="ListGames" SelectionChanged="OnListSelectionChange" Width="340" Margin="0,0,10,0" 
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      KeyboardNavigation.TabIndex="0">
                 <ListView.View>
                     <GridView x:Name="grid">
                         <GridView.ColumnHeaderContainerStyle>
