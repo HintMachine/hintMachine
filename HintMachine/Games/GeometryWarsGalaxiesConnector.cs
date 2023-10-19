@@ -26,11 +26,8 @@ namespace HintMachine.Games
             ValidROMs.Add("RGLP7D"); // PAL
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (!base.Poll())
-                return false;
-
             uint geoms = _ram.ReadUint32(MEM2 + 0x23A2AF4);
             _geomsQuest.UpdateValue(geoms);
 

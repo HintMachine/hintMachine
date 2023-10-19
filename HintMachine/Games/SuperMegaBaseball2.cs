@@ -42,7 +42,7 @@ namespace HintMachine.Games
             Quests.Add(_starpointsQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher(GAME_VERSION_STEAM);
             return _ram.TryConnect();
@@ -53,7 +53,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             int[] OFFSETS = new int[] { 0x20, 0x98, 0x468, 0x10, 0x20, 0x278 };
             long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x02A88FB8, OFFSETS);

@@ -70,7 +70,7 @@ namespace HintMachine
         private void OnValidateButtonClick(object sender, RoutedEventArgs e)
         {
             // Connect to selected game
-            if (!_selectedGame.Connect())
+            if (!_selectedGame.DoConnect())
             {
                 string message = $"Could not connect to {_selectedGame.Name}.\n" +
                                   "Please ensure it is currently running and try again.";

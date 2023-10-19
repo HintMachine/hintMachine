@@ -23,7 +23,7 @@ namespace HintMachine.GenericConnectors
             SupportedEmulators.Add("Dolphin 5");
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("Dolphin");
             _ram.IsBigEndian = true;
@@ -42,6 +42,7 @@ namespace HintMachine.GenericConnectors
 
         public override void Disconnect()
         {
+            base.Disconnect();
             _ram = null;
             MEM1 = 0;
             MEM2 = 0;
@@ -49,7 +50,7 @@ namespace HintMachine.GenericConnectors
 
         private bool InitMEM1()
         {
-            List<MemoryRegion> regions = _ram.ListMemoryRegions(0x2000000, MemoryRegionType.MEM_MAPPED);
+            var regions = _ram.ListMemoryRegions().Where(r => r.Size == 0x2000000 && r.Type == MemoryRegionType.MEM_MAPPED);
             foreach (MemoryRegion region in regions)
             {
                 byte[] headerBytes = _ram.ReadBytes(region.BaseAddress, 6);
@@ -71,7 +72,7 @@ namespace HintMachine.GenericConnectors
 
         private bool InitMEM2()
         {
-            List<MemoryRegion> regions = _ram.ListMemoryRegions(0x4000000, MemoryRegionType.MEM_MAPPED);
+            var regions = _ram.ListMemoryRegions().Where(r => r.Size == 0x4000000 && r.Type == MemoryRegionType.MEM_MAPPED);
             foreach (MemoryRegion region in regions)
             {
                 MEM2 = region.BaseAddress;

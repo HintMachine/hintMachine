@@ -35,7 +35,7 @@ namespace HintMachine.Games
             Quests.Add(_goldSpentQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("BPMGame-Win64-Shipping");
             return _ram.TryConnect();
@@ -46,7 +46,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             long lifetimeStatsAddr = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x4952D20, new int[] { 0x288, 0x158 });
             if (lifetimeStatsAddr != 0)

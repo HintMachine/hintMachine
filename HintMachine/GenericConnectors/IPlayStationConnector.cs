@@ -16,7 +16,7 @@ namespace HintMachine.GenericConnectors
             SupportedEmulators.Add("BizHawk 2.9.1 (Nymashock core)");
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher(new BinaryTarget
             {
@@ -30,17 +30,12 @@ namespace HintMachine.GenericConnectors
 
             RamBaseAddress = 0x36F002D12A8;
 
-            if (!TestRomIdentity())
-            {
-                Logger.Debug($"Invalid ROM with identity {CurrentROM}");
-                return false;
-            }
-
             return true;
         }
 
         public override void Disconnect()
         {
+            base.Disconnect();
             _ram = null;
             RamBaseAddress = 0;
         }

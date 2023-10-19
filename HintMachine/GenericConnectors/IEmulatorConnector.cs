@@ -16,7 +16,24 @@ namespace HintMachine.GenericConnectors
         public IEmulatorConnector()
         {}
 
-        public override bool Poll()
+        public override void Disconnect()
+        {
+            _previousFrameCount = 0;
+            _tickId = 0;
+        }
+
+        protected override bool AfterConnect()
+        {
+            if (!TestRomIdentity())
+            {
+                Logger.Debug($"Found a valid emu process with invalid ROM identity '{CurrentROM}'");
+                return false;
+            }
+
+            return true;
+        }
+
+        protected override bool BeforePoll()
         {
             // Every 10 ticks (~1s), check if the ROM identity has changed to ensure there was no ROM swapping.
             // If ROM was indeed changed, cut the connection.

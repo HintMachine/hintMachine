@@ -48,11 +48,8 @@ namespace HintMachine.Games
             ValidROMs.Add("85E4BF420FCC466F3CF9A5DA40471DF2789D0FE57461D0B0689C688F6A242D6C"); // NTSC-U
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (!base.Poll())
-                return false;
-
             long level = _ram.ReadInt32(RamBaseAddress + 0x3BFEFC);
             if (level == 1)
             {

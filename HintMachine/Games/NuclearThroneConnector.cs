@@ -24,7 +24,7 @@ namespace HintMachine.Games
 
             Quests.Add(_killThroneQuest);
         }
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("nuclearthronetogether");
             _ram.Is64Bit = false;
@@ -37,7 +37,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             int[] OFFSETS = new int[] { 0xA0, 0x60C, 0x104, 0x714, 0x0 };
             try

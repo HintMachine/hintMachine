@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace HintMachine.GenericConnectors
@@ -20,7 +21,7 @@ namespace HintMachine.GenericConnectors
             SupportedEmulators.Add("BizHawk 2.9.1 (Genesis Plus GX core)");
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new MegadriveRamAdapter(new BinaryTarget
             {
@@ -33,7 +34,7 @@ namespace HintMachine.GenericConnectors
                 return false;
 
             // Find ROM base address
-            List<MemoryRegion> regions = _ram.ListMemoryRegions(0x3158000, MemoryRegionType.MEM_MAPPED);
+            var regions = _ram.ListMemoryRegions().Where(r => r.Size == 0x3158000 && r.Type == MemoryRegionType.MEM_MAPPED).ToList();
             if (regions.Count == 0)
             {
                 Logger.Debug("IMegadriveConnector: Could not find ROM start address");
@@ -42,7 +43,7 @@ namespace HintMachine.GenericConnectors
             RomBaseAddress = regions[0].BaseAddress + 0xE58000;
 
             // Find RAM base address
-            regions = _ram.ListMemoryRegions(0x2C000, MemoryRegionType.MEM_MAPPED);
+            regions = _ram.ListMemoryRegions().Where(r => r.Size == 0x2C000 && r.Type == MemoryRegionType.MEM_MAPPED).ToList();
             Logger.Debug($"Found {regions.Count} potential regions for RAM");
             if (regions.Count == 0)
             {
@@ -51,17 +52,12 @@ namespace HintMachine.GenericConnectors
             }
             RamBaseAddress = regions[0].BaseAddress + 0x5D90;
 
-            if (!TestRomIdentity())
-            {
-                Logger.Debug($"Invalid ROM with identity {CurrentROM}");
-                return false;
-            }
-
             return true;
         }
 
         public override void Disconnect()
         {
+            base.Disconnect();
             _ram = null;
             RomBaseAddress = 0;
             RamBaseAddress = 0;

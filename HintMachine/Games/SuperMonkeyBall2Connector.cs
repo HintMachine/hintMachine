@@ -24,7 +24,7 @@ namespace HintMachine.Games
             Description = "Traverse through stages filled to the brim with obstacles and collect bananas " +
                           "along the way as a monkey inside of a ball! Quests work on story mode and all difficulties of challenge mode.";
             SupportedVersions.Add("NTSC US");
-            CoverFilename = "smb2.png";
+            CoverFilename = "super_monkey_ball_2.png";
             Author = "Spicynun";
             
             Quests.Add(_bananaQuest);
@@ -33,11 +33,8 @@ namespace HintMachine.Games
             ValidROMs.Add("GM2E8P");
         }
    
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if (!base.Poll())
-                return false;
-
             // Banana counts for story and challenge
             int player1banana = _ram.ReadUint8(MEM1 + 0x5bca1b); 
             int bananaCount = player1banana;

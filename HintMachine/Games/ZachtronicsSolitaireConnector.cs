@@ -38,7 +38,7 @@ namespace HintMachine.Games
             Quests.Add(_winsQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             try
             {
@@ -84,7 +84,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             if(!_ram.TestProcess())
                 return false;

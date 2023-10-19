@@ -27,11 +27,8 @@ namespace HintMachine.Games
             ValidROMs.Add("SLUS_008.67");
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
-            if(!base.Poll()) 
-                return false;
-
             uint laps = _ram.ReadUint8(RamBaseAddress + 0xD23F8);
            
             if (laps == 0)

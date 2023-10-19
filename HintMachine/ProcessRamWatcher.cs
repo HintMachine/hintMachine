@@ -423,13 +423,10 @@ namespace HintMachine
         public long ResolvePointerPath64(long baseAddress, int[] offsets) => ResolvePointerPath(baseAddress, offsets, true);
 
         /// <summary>
-        /// List all memory regions following the given search criteria. Each parameter can be left with its default value
-        /// not to be used as a criterion during the search
+        /// List all memory regions used by this process.
         /// </summary>
-        /// <param name="size">the size of the region to look for.</param>
-        /// <param name="type">the type of the memory region to look for.</param>
         /// <returns>A list of all memory regions having the properties specified in the input parameters</returns>
-        public List<MemoryRegion> ListMemoryRegions(long size = 0, MemoryRegionType type = MemoryRegionType.MEM_UNDEFINED)
+        public List<MemoryRegion> ListMemoryRegions()
         {
             List<MemoryRegion> regions = new List<MemoryRegion>();
 
@@ -440,14 +437,6 @@ namespace HintMachine
             while (VirtualQueryEx(_processHandle, ptr, out info, (uint)mbiSize) == mbiSize)
             {
                 ptr = (IntPtr)(ptr.ToInt64() + (long)info.RegionSize);
-
-                // Check region type if it was specified
-                if (type != MemoryRegionType.MEM_UNDEFINED && type != info.Type)
-                    continue;
-
-                // Check region size if it was specified
-                if(size != 0 && size != (long)info.RegionSize)
-                    continue;
 
                 regions.Add(new MemoryRegion()
                 {

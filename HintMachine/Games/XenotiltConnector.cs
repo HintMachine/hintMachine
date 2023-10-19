@@ -24,7 +24,7 @@ namespace HintMachine.Games
             Quests.Add(_scoreQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("Xenotilt", "mono-2.0-bdwgc.dll");
             return _ram.TryConnect();
@@ -35,7 +35,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7270B8, new int[] { 0x30, 0x7e0, 0x7C0 });
             _scoreQuest.UpdateValue(_ram.ReadInt64(scoreAddress));

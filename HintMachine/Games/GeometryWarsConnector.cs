@@ -24,7 +24,7 @@ namespace HintMachine.Games
             Quests.Add(_scoreQuest);
         }
 
-        public override bool Connect()
+        protected override bool Connect()
         {
             _ram = new ProcessRamWatcher("GeometryWars");
             return _ram.TryConnect();
@@ -35,7 +35,7 @@ namespace HintMachine.Games
             _ram = null;
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             long scoreAddress = 0x63C890;
             _scoreQuest.UpdateValue(_ram.ReadUint32(scoreAddress));
