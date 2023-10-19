@@ -1,10 +1,14 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Principal;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace HintMachine
 {
@@ -20,6 +24,8 @@ namespace HintMachine
             Settings.LoadFromFile();
             InputHost.Text = Settings.Host;
             InputSlot.Text = Settings.Slot;
+
+            checkIfUpdateAvailableAsync();
         }
 
         private void OnConnectButtonClick(object sender, RoutedEventArgs e)
@@ -44,6 +50,43 @@ namespace HintMachine
             {
                 MessageBox.Show($"Could not connect to Archipelago: {archipelagoSession.ErrorMessage}", "Connection error",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async Task checkIfUpdateAvailableAsync()
+        {
+            
+            // https://api.github.com/repos/CalDrac/hintMachine/releases
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+            client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+            Console.WriteLine("");
+
+            var json = await client.GetStringAsync("https://api.github.com/repos/CalDrac/hintMachine/releases");
+
+            JsonArray tagsNode = JsonNode.Parse(json).AsArray();
+
+            string lastVersion = "";
+            foreach (JsonObject child in tagsNode)
+            {
+                if (child.ContainsKey("tag_name"))
+                {
+                    JsonNode tagNameNode = child["tag_name"];
+                    if (!tagNameNode.ToString().Contains("rc"))
+                    {
+                        lastVersion = tagNameNode.ToString();
+                        break;
+                    }
+                }
+            }
+            Version prog = new Version(Globals.ProgramVersion);
+            Version gitVersion = new Version(lastVersion);
+
+            if (prog.CompareTo(gitVersion) < 0) {
+                MessageBox.Show("A new version is available.", "Update available", MessageBoxButton.OK,MessageBoxImage.Information);
             }
         }
     }
