@@ -38,8 +38,7 @@ namespace HintMachine.Games
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher();
-            _ram.SupportedTargets.Add(GAME_VERSION_STEAM);
+            _ram = new ProcessRamWatcher(GAME_VERSION_STEAM);
             return _ram.TryConnect();
         }
 
@@ -53,21 +52,18 @@ namespace HintMachine.Games
             if (!_ram.TestProcess())
                 return false;
 
-            if (_ram.CurrentTarget == GAME_VERSION_STEAM) {
-                try {
-                    long address = _ram.ResolvePointerPath64(_ram.BaseAddress + 0xC6B6A0, new int[] { 0xB8, 0x10, 0x50, 0x18, 0x28, 0xB8, 0x38 });
-                    long points = _ram.ReadUint32(address);
+            try {
+                long address = _ram.ResolvePointerPath64(_ram.BaseAddress + 0xC6B6A0, new int[] { 0xB8, 0x10, 0x50, 0x18, 0x28, 0xB8, 0x38 });
+                long points = _ram.ReadUint32(address);
 
-                    if (points > _previousPoints && points - _previousPoints <= 10) {
-                        _entrantsQuest.CurrentValue += 1;
-                    }
-
-                    _previousPoints = points;
+                if (points > _previousPoints && points - _previousPoints <= 10) {
+                    _entrantsQuest.CurrentValue += 1;
                 }
-                catch
-                { }
+
+                _previousPoints = points;
             }
-            
+            catch
+            { }
             
             return true;
         }
