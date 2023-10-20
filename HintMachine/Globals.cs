@@ -65,6 +65,8 @@ namespace HintMachine
             new TMNTShreddersRevengeConnector(),
             new NexMachinaConnector(),
             new PokemonPuzzleChallengeConnector()
+            new PapersPleaseConnector(),
+            new KatamariDamacyRerollConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)

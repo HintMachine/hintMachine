@@ -20,7 +20,7 @@
         <DockPanel LastChildFill="True" Margin="8, 8, 8, 8">
             <ListView Name="ListGames" SelectionChanged="OnListSelectionChange" Width="340" Margin="0,0,10,0" 
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      KeyboardNavigation.TabIndex="0">
+                      KeyboardNavigation.TabIndex="0" MouseDoubleClick="ListGames_MouseDoubleClick">
                 <ListView.View>
                     <GridView x:Name="grid">
                         <GridView.ColumnHeaderContainerStyle>
