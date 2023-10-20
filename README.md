@@ -53,6 +53,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Luck be a Landlord               | PC        |
 | Meteos                           | DS        |
 | Metroid Prime Pinball            | DS        |
+| Minesweeper Classy               | PC        |
 | Mini Metro                       | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
