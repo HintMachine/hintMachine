@@ -49,12 +49,15 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Geometry Wars Galaxies           | Wii       |
 | Geometry Wars : Retro Evolved    | PC        |
 | ISLANDERS                        | PC        |
+| Katamari Damacy REROLL           | PC        |
 | Luck be a Landlord               | PC        |
 | Meteos                           | DS        |
 | Metroid Prime Pinball            | DS        |
 | Mini Metro                       | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
+| Pokémon Pinball: Ruby & Sapphire | GBA       |
+| Pokémon Puzzle Challenge         | GBC       |
 | Puyo Puyo Tetris                 | PC        |
 | Rollcage Stage 2                 | PS1       |
 | Sonic 3 Blue Spheres             | Megadrive |
