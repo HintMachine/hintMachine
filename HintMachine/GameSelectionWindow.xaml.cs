@@ -69,6 +69,11 @@ namespace HintMachine
 
         private void OnValidateButtonClick(object sender, RoutedEventArgs e)
         {
+            ValidateGameSelection();
+        }
+
+        private void ValidateGameSelection() {
+
             // Connect to selected game
             if (!_selectedGame.DoConnect())
             {
@@ -220,6 +225,13 @@ namespace HintMachine
             // Author
             TextGameProperties.Inlines.Add(new Bold(new Run("Author: ")));
             TextGameProperties.Inlines.Add(_selectedGame.Author);
+        }
+
+        private void ListGames_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (ListGames.SelectedItem != null) {
+                ValidateGameSelection();
+            }
         }
     }
 }
