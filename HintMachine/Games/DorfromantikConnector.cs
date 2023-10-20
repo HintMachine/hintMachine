@@ -4,6 +4,14 @@ namespace HintMachine.Games
 {
     public class DorfromantikConnector : IGameConnector
     {
+        private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
+        {
+            DisplayName = "Steam",
+            ProcessName = "Dorfromantik",
+            ModuleName = "mono-2.0-bdwgc.dll",
+            Hash = "4C7312A39FA8401AF0D51D210931DAE8C8D85BBFE8E1C7F22E8A553E6D00B0EE"
+        };
+
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
             Name = "Score",
@@ -47,7 +55,7 @@ namespace HintMachine.Games
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher("Dorfromantik", "mono-2.0-bdwgc.dll");
+            _ram = new ProcessRamWatcher(GAME_VERSION_STEAM);
             return _ram.TryConnect();
         }
 
