@@ -53,6 +53,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Meteos                           | DS        |
 | Metroid Prime Pinball            | DS        |
 | Mini Metro                       | PC        |
+| Nex Machina                      | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
 | Puyo Puyo Tetris                 | PC        |

@@ -130,6 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="Games\BPMConnector.cs" />
+    <Compile Include="Games\NexMachinaConnector.cs" />
     <Compile Include="Games\PokemonPinballRSConnector.cs" />
     <Compile Include="Games\DragonCrownConnector.cs" />
     <Compile Include="Games\TonyHawksProSkater12Connector.cs" />
@@ -298,6 +299,7 @@
     <Resource Include="Assets\Covers\dragons_crown.png" />
     <Resource Include="Assets\Covers\pokemon_pinball_rs.png" />
     <Resource Include="Assets\Covers\super_monkey_ball_2.png" />
+    <Resource Include="Assets\Covers\nexmachina.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
