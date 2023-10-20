@@ -165,6 +165,7 @@
     <Compile Include="Games\MiniMetroConnector.cs" />
     <Compile Include="Games\SuperHexagonConnector.cs" />
     <Compile Include="Games\Operator911Connector.cs" />
+    <Compile Include="Games\PapersPleaseConnector.cs" />
     <Compile Include="HintQuestCounter.cs" />
     <Compile Include="HintQuestCumulative.cs" />
     <Compile Include="HintQuest.cs" />
@@ -302,6 +303,7 @@
     <Resource Include="Assets\Covers\pokemon_pinball_rs.png" />
     <Resource Include="Assets\Covers\super_monkey_ball_2.png" />
     <Resource Include="Assets\Covers\pokemon_puzzle_challenge.png" />
+    <Resource Include="Assets\Covers\papers_please.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

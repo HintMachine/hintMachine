@@ -56,6 +56,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Mini Metro                       | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
+| Papers, Please                   | PC        |
 | Pokémon Pinball: Ruby & Sapphire | GBA       |
 | Pokémon Puzzle Challenge         | GBC       |
 | Puyo Puyo Tetris                 | PC        |
