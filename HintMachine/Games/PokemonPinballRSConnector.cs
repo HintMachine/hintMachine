@@ -19,7 +19,6 @@ namespace HintMachine.Games
                 "Instead of a ball, you make use of a Pokéball. Instead of standard bumpers, you're hitting the Pokéball against other Pokémon, and the ultimate goal is of course to \"catch 'em all\". The game features 200 Pokémon and two main tables.";
             SupportedVersions.Add("EU ROM");
             Author = "CalDrac";
-            Platform = "Gameboy Advance";
             CoverFilename = "pokemon_pinball_rs.png";
 
             Quests.Add(_pokemonQuest);

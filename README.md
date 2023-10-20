@@ -56,6 +56,8 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Nex Machina                      | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
+| Pokémon Pinball: Ruby & Sapphire | GBA       |
+| Pokémon Puzzle Challenge         | GBC       |
 | Puyo Puyo Tetris                 | PC        |
 | Rollcage Stage 2                 | PS1       |
 | Sonic 3 Blue Spheres             | Megadrive |

@@ -4,22 +4,20 @@ using System.Text;
 
 namespace HintMachine.GenericConnectors
 {
-    public abstract class IGameboyAdvanceConnector : IEmulatorConnector
+    public abstract class IGameboyColorConnector : IEmulatorConnector
     {
         protected ProcessRamWatcher _ram = null;
 
         public long RomBaseAddress { get; private set; } = 0;
 
-        public long ExternalRamBaseAddress { get; private set; } = 0;
-
-        public long InternalRamBaseAddress { get; private set; } = 0;
+        public long RamBaseAddress { get; private set; } = 0;
 
         // ---------------------------------------------
 
-        public IGameboyAdvanceConnector()
+        public IGameboyColorConnector()
         {
-            Platform = "GBA";
-            SupportedEmulators.Add("BizHawk 2.9.1 (mGBA core)");
+            Platform = "GBC";
+            SupportedEmulators.Add("BizHawk 2.9.1 (Gambatte core)");
         }
 
         protected override bool Connect()
@@ -28,16 +26,15 @@ namespace HintMachine.GenericConnectors
             {
                 DisplayName = "2.9.1",
                 ProcessName = "EmuHawk",
-                ModuleName = "mgba.dll",
+                ModuleName = "libgambatte.DLL",
                 Hash = "6CE622D4ED4E8460CE362CF35EF67DC70096FEC2C9A174CBEF6A3E5B04F18BCC"
             });
 
             if (!_ram.TryConnect())
                 return false;
 
-            ExternalRamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x00103448, new int[] { 0x10, 0x28, 0x0 });
-            InternalRamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x00103448, new int[] { 0x10, 0x30, 0x0 });
-            RomBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x00103448, new int[] { 0x10, 0x38, 0x0 });
+            RamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x278, 0 });
+            RomBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x10 });
 
             return true;
         }
@@ -47,8 +44,7 @@ namespace HintMachine.GenericConnectors
             base.Disconnect();
             _ram = null;
 
-            ExternalRamBaseAddress = 0;
-            InternalRamBaseAddress = 0;
+            RamBaseAddress = 0;
             RomBaseAddress = 0;
         }
 
@@ -60,9 +56,10 @@ namespace HintMachine.GenericConnectors
 
         public override string GetRomIdentity()
         {
-            // Use the 6 characters long game code as identity
-            byte[] headerBytes = _ram.ReadBytes(RomBaseAddress + 0xAC, 0x06);
-            return Encoding.Default.GetString(headerBytes);
+            // Use the game code as identity
+            byte[] codeBytes = _ram.ReadBytes(RomBaseAddress + 0x13F, 4);
+            byte[] versionBytes = _ram.ReadBytes(RomBaseAddress + 0x144, 2);
+            return Encoding.Default.GetString(codeBytes) + Encoding.Default.GetString(versionBytes);
         }
     }
 }
