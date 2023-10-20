@@ -130,6 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="Games\BPMConnector.cs" />
+    <Compile Include="Games\MinesweeperClassyConnector.cs" />
     <Compile Include="Games\PokemonPinballRSConnector.cs" />
     <Compile Include="Games\DragonCrownConnector.cs" />
     <Compile Include="Games\SuperMonkeyBallConnector.cs" />
@@ -306,6 +307,7 @@
     <Resource Include="Assets\Covers\super_monkey_ball.png" />
     <Resource Include="Assets\Covers\pokemon_puzzle_challenge.png" />
     <Resource Include="Assets\Covers\papers_please.png" />
+    <Resource Include="Assets\Covers\minesweeper_classy.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
