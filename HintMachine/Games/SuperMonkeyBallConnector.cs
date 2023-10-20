@@ -8,13 +8,13 @@ namespace HintMachine.Games
         {
             Name = "Bananas collected",
             GoalValue = 50,
-	        MaxIncrease = 10
+	    MaxIncrease = 10
         };
 
         private readonly HintQuestCumulative _stageQuest = new HintQuestCumulative
         {
             Name = "Stages cleared",
-            GoalValue = 3,
+            GoalValue = 5,
             MaxIncrease = 1
         };
 
