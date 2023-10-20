@@ -67,6 +67,7 @@ namespace HintMachine
             new PapersPleaseConnector(),
             new KatamariDamacyRerollConnector(),
             new MinesweeperClassyConnector(),
+            new TetrisNESConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)
