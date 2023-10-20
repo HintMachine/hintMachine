@@ -39,16 +39,11 @@ namespace HintMachine.Games
 
         protected override bool Poll()
         {
-            //Address goes blank when not in game
-            //try
-            //{
-                long savesAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x00F5AEC8, new int[] { 0x20, 0xC8, 0x30, 0x20 });
-                if (savesAddress != 0)
-                {
-                    _humansQuest.UpdateValue(_ram.ReadUint32(savesAddress));
-                }
-            //}
-           // catch { }
+            long savesAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x00F5AEC8, new int[] { 0x20, 0xC8, 0x30, 0x20 });
+            if (savesAddress != 0)
+            {
+                _humansQuest.UpdateValue(_ram.ReadUint32(savesAddress));
+            }
             return true;
         }
     }
