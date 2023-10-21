@@ -55,6 +55,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Metroid Prime Pinball            | DS        |
 | Minesweeper Classy               | PC        |
 | Mini Metro                       | PC        |
+| Nex Machina                      | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
 | Papers, Please                   | PC        |
