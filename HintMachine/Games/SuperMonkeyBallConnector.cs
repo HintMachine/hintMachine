@@ -11,11 +11,10 @@ namespace HintMachine.Games
 	    MaxIncrease = 10
         };
 
-        private readonly HintQuestCumulative _stageQuest = new HintQuestCumulative
+        private readonly HintQuestCumulative _playPointsQuest = new HintQuestCumulative
         {
-            Name = "Stages cleared",
-            GoalValue = 5,
-            MaxIncrease = 1
+            Name = "Play Points",
+            GoalValue = 250
         };
 
         public SuperMonkeyBallConnector() : base(false)
@@ -33,7 +32,7 @@ namespace HintMachine.Games
             Author = "Spicynun";
 
             Quests.Add(_bananaQuest);
-            Quests.Add(_stageQuest);
+            Quests.Add(_playPointsQuest);
 
             ValidROMs.Add("GMBE8P");
         }
@@ -45,10 +44,9 @@ namespace HintMachine.Games
             _bananaQuest.UpdateValue(bananaCount);
 
 
-            // Stage clears
-            int stageClears = _ram.ReadUint8(MEM1 + 0x2F1FC0);
-            _stageQuest.UpdateValue(stageClears);
-
+            // Play Points
+            uint playPoints = _ram.ReadUint32(MEM1 + 0x2f1fc4);
+            _playPointsQuest.UpdateValue(playPoints);
 
             return true;
         }
