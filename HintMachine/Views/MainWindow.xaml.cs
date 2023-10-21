@@ -162,17 +162,7 @@ namespace HintMachine.Views
                     }
 
                     if (totalObtainedHintTokens > 0)
-                    {
-                        if (Settings.PlaySoundOnHint)
-                            _soundPlayer.controls.play();
-                        if (!alreadyAwardedTokenForCurrentGame) { 
-                            string hintSingularPlural = (totalObtainedHintTokens > 1) ? "hints" : "a hint";
-                            _archipelagoSession.SendMessage($"I just got {hintSingularPlural} using HintMachine while playing {_game.Name}!");
-                            alreadyAwardedTokenForCurrentGame = true;
-                        }
-                        _hintTokens += totalObtainedHintTokens;
-                        UpdateHintTokensCount();
-                    }
+                        AwardHintTokens(totalObtainedHintTokens);
                 }
             }
             
@@ -181,6 +171,21 @@ namespace HintMachine.Views
                 Logger.Error($"Connection with {_game.Name} was lost.");
                 DisconnectFromGame();
             }
+        }
+
+        private void AwardHintTokens(int quantity)
+        {
+            if (Settings.PlaySoundOnHint)
+                _soundPlayer.controls.play();
+
+            if (!alreadyAwardedTokenForCurrentGame && _game != null)
+            {
+                _archipelagoSession.SendMessage($"I just got a hint using HintMachine while playing {_game.Name}!");
+                alreadyAwardedTokenForCurrentGame = true;
+            }
+
+            _hintTokens += quantity;
+            UpdateHintTokensCount();
         }
 
         private void UpdateHintTokensCount()
@@ -314,8 +319,7 @@ namespace HintMachine.Views
 #if DEBUG   // Debug commands
             else if (v == "!gethint")
             {
-                _hintTokens += 1;
-                UpdateHintTokensCount();
+                AwardHintTokens(1);
                 return true;
             }
 #endif
