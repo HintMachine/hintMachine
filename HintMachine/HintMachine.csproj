@@ -130,6 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\ArchipelagoHintSession.cs" />
     <Compile Include="Models\Games\BPMConnector.cs" />
+    <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
     <Compile Include="Models\Games\NexMachinaConnector.cs" />
     <Compile Include="Models\Games\PuyoPuyo2MDConnector.cs" />
     <Compile Include="Models\Games\TetrisNESConnector.cs" />
@@ -320,6 +321,7 @@
     <Resource Include="Assets\Covers\papers_please.png" />
     <Resource Include="Assets\Covers\minesweeper_classy.png" />
     <Resource Include="Assets\Covers\puyo_puyo_2.png" />
+    <Resource Include="Assets\Covers\paint_the_town_red.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
