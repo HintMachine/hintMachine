@@ -1,14 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+﻿using System.Windows;
 using System.Diagnostics;
 
 namespace HintMachine
