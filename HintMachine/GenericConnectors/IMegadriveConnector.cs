@@ -43,13 +43,13 @@ namespace HintMachine.GenericConnectors
 
             // Find RAM base address
             regions = _ram.ListMemoryRegions().Where(r => r.Size == 0x2C000 && r.Type == MemoryRegionType.MEM_MAPPED).ToList();
-            Logger.Debug($"Found {regions.Count} potential regions for RAM");
             if (regions.Count == 0)
             {
                 Logger.Debug("IMegadriveConnector: Could not find RAM start address");
                 return false;
             }
             RamBaseAddress = regions[0].BaseAddress + 0x5D90;
+            Logger.Debug($"RamBaseAddress = {RamBaseAddress:X}");
 
             return true;
         }
@@ -64,6 +64,8 @@ namespace HintMachine.GenericConnectors
 
         public override long GetCurrentFrameCount()
         {
+            return 0;
+            /*
             try
             {
                 long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
@@ -79,6 +81,7 @@ namespace HintMachine.GenericConnectors
                 Logger.Debug("RAM couldn't be read following framecount pointer path, skipping checks...");
                 return 0;
             }
+            */
         }
 
         public override string GetRomIdentity()
