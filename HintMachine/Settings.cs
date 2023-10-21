@@ -15,6 +15,7 @@ namespace HintMachine
         public static bool DisplayItemReceivedMessages = true;
         public static bool DisplayItemSentMessages = false;
         public static bool PlaySoundOnHint = true;
+        public static bool ShowUpdatePopUp = true;
 
         // ----------------------------------------------------------------------------------
 
@@ -33,6 +34,7 @@ namespace HintMachine
                 { "displayItemReceivedMessages",    DisplayItemReceivedMessages.ToString() },
                 { "displayItemSentMessages",        DisplayItemSentMessages.ToString() },
                 { "playSoundOnHint",                PlaySoundOnHint.ToString() },
+                { "showUpdatePopUp",                ShowUpdatePopUp.ToString() },
             };
             File.WriteAllLines("settings.cfg", dict.Select(x => x.Key + "=" + x.Value).ToArray());
         }
@@ -70,6 +72,8 @@ namespace HintMachine
                         DisplayItemSentMessages = bool.Parse(value);
                     else if (line.StartsWith("playSoundOnHint"))
                         PlaySoundOnHint = bool.Parse(value);
+                    else if (line.StartsWith("showUpdatePopUp"))
+                        ShowUpdatePopUp = bool.Parse(value);
                 }
             }
             catch { }

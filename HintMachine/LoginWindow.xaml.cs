@@ -20,7 +20,9 @@ namespace HintMachine
             InputHost.Text = Settings.Host;
             InputSlot.Text = Settings.Slot;
 
-            _ = CheckIfUpdateAvailableAsync();
+            if (Settings.ShowUpdatePopUp) {
+                _ = CheckIfUpdateAvailableAsync();
+            }
         }
 
         private void OnConnectButtonClick(object sender, RoutedEventArgs e)
@@ -75,7 +77,7 @@ namespace HintMachine
 
                 if (currentVersion.CompareTo(latestVersion) < 0)
                 {
-                    MessageBox.Show("A new version is available.", "Update available", MessageBoxButton.OK, MessageBoxImage.Information);
+                    new UpdateAvailablePopup().Show();
                 }
             }
             catch
