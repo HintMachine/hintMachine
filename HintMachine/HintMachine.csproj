@@ -131,6 +131,8 @@
     <Compile Include="ArchipelagoHintSession.cs" />
     <Compile Include="Games\BPMConnector.cs" />
     <Compile Include="Games\NexMachinaConnector.cs" />
+    <Compile Include="Games\TetrisNESConnector.cs" />
+    <Compile Include="Games\MinesweeperClassyConnector.cs" />
     <Compile Include="Games\PokemonPinballRSConnector.cs" />
     <Compile Include="Games\DragonCrownConnector.cs" />
     <Compile Include="Games\PokemonPuzzleChallengeConnector.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Games\StargunnerConnector.cs" />
     <Compile Include="Games\SuperMonkeyBall2Connector.cs" />
     <Compile Include="Games\SuperMegaBaseball2.cs" />
+    <Compile Include="GenericConnectors\INESConnector.cs" />
     <Compile Include="GenericConnectors\IGameboyColorConnector.cs" />
     <Compile Include="GenericConnectors\IGameboyAdvanceConnector.cs" />
     <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
@@ -256,6 +259,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Covers\tetris_nes.png" />
     <Resource Include="Assets\icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -306,6 +310,7 @@
     <Resource Include="Assets\Covers\nexmachina.png" />
     <Resource Include="Assets\Covers\pokemon_puzzle_challenge.png" />
     <Resource Include="Assets\Covers\papers_please.png" />
+    <Resource Include="Assets\Covers\minesweeper_classy.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
