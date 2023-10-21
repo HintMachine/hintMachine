@@ -64,7 +64,7 @@ namespace HintMachine
             new PokemonPinballRSConnector(),
             new TMNTShreddersRevengeConnector(),
             new NexMachinaConnector(),
-            new PokemonPuzzleChallengeConnector()
+            new PokemonPuzzleChallengeConnector(),
             new PapersPleaseConnector(),
             new KatamariDamacyRerollConnector(),
             new MinesweeperClassyConnector(),
