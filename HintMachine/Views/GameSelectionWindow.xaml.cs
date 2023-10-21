@@ -56,11 +56,11 @@ namespace HintMachine.Views
             BitmapImage image;
             try
             {
-                image = new BitmapImage(new Uri($"./Assets/covers/{game.CoverFilename}", UriKind.Relative));
+                image = new BitmapImage(new Uri($"../Assets/covers/{game.CoverFilename}", UriKind.Relative));
             }
             catch (FileNotFoundException)
             {
-                image = new BitmapImage(new Uri($"./Assets/covers/unknown.png", UriKind.Relative));
+                image = new BitmapImage(new Uri($"../Assets/covers/unknown.png", UriKind.Relative));
             }
             ImageGameCover.Source = image;
 
