@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 
@@ -65,8 +64,21 @@ namespace HintMachine.GenericConnectors
 
         public override long GetCurrentFrameCount()
         {
-            long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
-            return _ram.ReadUint32(framecountAddr);
+            try
+            {
+                long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
+                if (framecountAddr == 0)
+                {
+                    Logger.Debug("Framecount addr is null, skipping checks...");
+                    return 0;
+                }
+                return _ram.ReadUint32(framecountAddr);
+            } 
+            catch(ProcessRamWatcherException)
+            {
+                Logger.Debug("RAM couldn't be read following framecount pointer path, skipping checks...");
+                return 0;
+            }
         }
 
         public override string GetRomIdentity()

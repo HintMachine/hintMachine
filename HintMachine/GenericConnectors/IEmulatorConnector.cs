@@ -38,13 +38,19 @@ namespace HintMachine.GenericConnectors
             // Every 10 ticks (~1s), check if the ROM identity has changed to ensure there was no ROM swapping.
             // If ROM was indeed changed, cut the connection.
             if (++_tickId % 10 == 0 && !TestRomIdentity())
+            {
+                Logger.Debug("ROM identity has become wrong, disconnecting...");
                 return false;
+            }
 
             // Every tick, check if frame count went backwards to detect save state usage. If any save state
             // was used, cut the connection.
             long currentFrameCount = GetCurrentFrameCount();
-            if (currentFrameCount < _previousFrameCount)
+            if (currentFrameCount != 0 && currentFrameCount < _previousFrameCount)
+            {
+                Logger.Debug($"Frame count rollback detected ({_previousFrameCount} -> {currentFrameCount}), disconnecting...");
                 return false;
+            }
             _previousFrameCount = currentFrameCount;
 
             return true;
