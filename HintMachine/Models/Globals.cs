@@ -69,6 +69,7 @@ namespace HintMachine.Models
             new MinesweeperClassyConnector(),
             new TetrisNESConnector(),
             new PuyoPuyo2MDConnector(),
+            new PaintTheTownRedConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)
