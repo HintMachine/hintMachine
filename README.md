@@ -60,6 +60,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | PAC-MAN Championship Edition DX+ | PC        |
 | Paint the Town Red               | PC        |
 | Papers, Please                   | PC        |
+| Pinball FX3                      | PC        |
 | Pokémon Pinball: Ruby & Sapphire | GBA       |
 | Pokémon Puzzle Challenge         | GBC       |
 | Puyo Puyo 2                      | Megadrive |

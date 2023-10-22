@@ -139,6 +139,7 @@
     <Compile Include="Models\Games\DragonCrownConnector.cs" />
     <Compile Include="Models\Games\PokemonPuzzleChallengeConnector.cs" />
     <Compile Include="Models\Games\KatamariDamacyRerollConnector.cs" />
+    <Compile Include="Models\Games\PinballFX3Connector.cs" />
     <Compile Include="Models\Games\TonyHawksProSkater12Connector.cs" />
     <Compile Include="Models\Games\TMNTShreddersRevengeConnector.cs" />
     <Compile Include="Models\Games\MetroidPrimePinballConnector.cs" />
@@ -322,6 +323,7 @@
     <Resource Include="Assets\Covers\minesweeper_classy.png" />
     <Resource Include="Assets\Covers\puyo_puyo_2.png" />
     <Resource Include="Assets\Covers\paint_the_town_red.png" />
+    <Resource Include="Assets\Covers\pinball_fx3.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
