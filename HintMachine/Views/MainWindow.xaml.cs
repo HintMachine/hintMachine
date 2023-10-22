@@ -1,5 +1,6 @@
 ﻿using HintMachine.Models;
 using HintMachine.Models.GenericConnectors;
+using HintMachine.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -200,7 +201,7 @@ namespace HintMachine.Views
         private void OnConnectToGameButtonClick(object sender, RoutedEventArgs e)
         {
             GameSelectionWindow window = new GameSelectionWindow();
-            window.OnGameConnected += OnGameConnected;
+            (window.DataContext as GameSelectionViewModel).OnGameConnected += OnGameConnected;
             window.ShowDialog();
         }
 
