@@ -1,6 +1,6 @@
-using HintMachine.GenericConnectors;
+using HintMachine.Models.GenericConnectors;
 
-namespace HintMachine.Games
+namespace HintMachine.Models.Games
 {
     public class SuperMonkeyBallConnector : IDolphinConnector
     {
