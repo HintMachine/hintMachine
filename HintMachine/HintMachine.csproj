@@ -132,6 +132,7 @@
     <Compile Include="Models\Games\BPMConnector.cs" />
     <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
     <Compile Include="Models\Games\NexMachinaConnector.cs" />
+    <Compile Include="Models\Games\PeggleNightsConnector.cs" />
     <Compile Include="Models\Games\PuyoPuyo2MDConnector.cs" />
     <Compile Include="Models\Games\TetrisNESConnector.cs" />
     <Compile Include="Models\Games\MinesweeperClassyConnector.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Models\Games\DragonCrownConnector.cs" />
     <Compile Include="Models\Games\PokemonPuzzleChallengeConnector.cs" />
     <Compile Include="Models\Games\KatamariDamacyRerollConnector.cs" />
+    <Compile Include="Models\Games\PeggleDeluxeConnector.cs" />
     <Compile Include="Models\Games\TonyHawksProSkater12Connector.cs" />
     <Compile Include="Models\Games\TMNTShreddersRevengeConnector.cs" />
     <Compile Include="Models\Games\MetroidPrimePinballConnector.cs" />
@@ -322,6 +324,8 @@
     <Resource Include="Assets\Covers\minesweeper_classy.png" />
     <Resource Include="Assets\Covers\puyo_puyo_2.png" />
     <Resource Include="Assets\Covers\paint_the_town_red.png" />
+    <Resource Include="Assets\Covers\peggle_deluxe.png" />
+    <Resource Include="Assets\Covers\peggle_nights.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
