@@ -13,7 +13,7 @@
         public INESConnector()
         {
             Platform = "NES";
-            SupportedEmulators.Add("BizHawk 2.9.1 (QuickNES core)");
+            SupportedEmulators.Add("BizHawk 2.9.1 (NesHawk core)");
         }
 
         protected override bool Connect()
@@ -28,7 +28,7 @@
             if (!_ram.TryConnect())
                 return false;
 
-            RamBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x208, 0x90, 0xEC }) + 2;
+            RamBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x1F0, 0x20, 0x10 });
             // RomBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x240, 0x68, 0x10, 0x250, 0x10 });
             return true;
         }
@@ -44,8 +44,9 @@
 
         public override long GetCurrentFrameCount()
         {
-            long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
-            return _ram.ReadUint32(framecountAddr);
+            return 0;
+            // long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
+            // return _ram.ReadUint32(framecountAddr);
         }
 
         public override string GetRomIdentity()
