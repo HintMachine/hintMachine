@@ -151,6 +151,7 @@
     <Compile Include="Models\Games\Rollcage2Connector.cs" />
     <Compile Include="Models\Games\ColumnsConnector.cs" />
     <Compile Include="Models\Games\StargunnerConnector.cs" />
+    <Compile Include="Models\Games\SuperMonkeyBallConnector.cs" />
     <Compile Include="Models\Games\SuperMonkeyBall2Connector.cs" />
     <Compile Include="Models\Games\SuperMegaBaseball2.cs" />
     <Compile Include="Models\GenericConnectors\INESConnector.cs" />
@@ -316,6 +317,7 @@
     <Resource Include="Assets\Covers\dragons_crown.png" />
     <Resource Include="Assets\Covers\pokemon_pinball_rs.png" />
     <Resource Include="Assets\Covers\super_monkey_ball_2.png" />
+    <Resource Include="Assets\Covers\super_monkey_ball.png" />
     <Resource Include="Assets\Covers\nexmachina.png" />
     <Resource Include="Assets\Covers\pokemon_puzzle_challenge.png" />
     <Resource Include="Assets\Covers\papers_please.png" />

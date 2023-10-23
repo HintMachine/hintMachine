@@ -62,6 +62,7 @@ namespace HintMachine.Models
             new TonyHawksProSkater12Connector(),
             new PokemonPinballRSConnector(),
             new TMNTShreddersRevengeConnector(),
+            new SuperMonkeyBallConnector(),
             new NexMachinaConnector(),
             new PokemonPuzzleChallengeConnector(),
             new PapersPleaseConnector(),
