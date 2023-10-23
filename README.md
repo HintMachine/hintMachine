@@ -1,4 +1,7 @@
 ![version](https://img.shields.io/badge/Version-1.1.0-blue)
+<a href="https://discord.gg/Jcknj9w7Rm">
+  <img src="https://img.shields.io/badge/-Discord-lightgrey?logo=discord" alt="Join Discord">
+</a>
 
 <p align="center">
   <img src="https://github.com/CalDrac/hintMachine/blob/master/HintMachine/Assets/logo_small.png?raw=true" alt="HintMachine logo"/>
