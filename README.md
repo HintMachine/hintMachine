@@ -53,12 +53,16 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Luck be a Landlord               | PC        |
 | Meteos                           | DS        |
 | Metroid Prime Pinball            | DS        |
+| Minesweeper Classy               | PC        |
 | Mini Metro                       | PC        |
+| Nex Machina                      | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
+| Paint the Town Red               | PC        |
 | Papers, Please                   | PC        |
 | Pokémon Pinball: Ruby & Sapphire | GBA       |
 | Pokémon Puzzle Challenge         | GBC       |
+| Puyo Puyo 2                      | Megadrive |
 | Puyo Puyo Tetris                 | PC        |
 | Rollcage Stage 2                 | PS1       |
 | Sonic 3 Blue Spheres             | Megadrive |
@@ -68,6 +72,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Super Monkey Ball                | GameCube  |
 | Super Monkey Ball 2              | GameCube  |
 | TMNT: Shredder's Revenge         | PC        |
+| Tetris                           | NES       |
 | Tetris Effect Connected          | PC        |
 | Tony Hawk's Pro Skater 1 + 2     | PC        |
 | Xenotilt                         | PC        |

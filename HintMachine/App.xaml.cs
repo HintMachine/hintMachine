@@ -1,8 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Windows;
-using System.Diagnostics;
-using System.Text;
+﻿using System.Windows;
 
 namespace HintMachine
 {

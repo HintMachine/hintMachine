@@ -1,0 +1,24 @@
+﻿<Window x:Class="HintMachine.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="HintMachine" Height="345" Width="466" Background="#FFEEEEEE" ResizeMode="CanMinimize" Icon="/assets/icon.png">
+    <Grid HorizontalAlignment="Center" Width="400" Height="160" VerticalAlignment="Top" Margin="0,138,0,0">
+        <Image HorizontalAlignment="Left" Height="110" Margin="122,-132,0,0" VerticalAlignment="Top" Width="180" 
+                Source="/Assets/logo_small.png"/>
+        
+        <Label Content="Archipelago host:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="InputHost" Height="23" Margin="122,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="archipelago.gg:12345"/>
+
+        <Label Content="Slot name:" HorizontalAlignment="Left" Margin="0,31,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="InputSlot" Height="23" Margin="122,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+
+        <Label Content="Password (optional):" HorizontalAlignment="Left" Margin="0,62,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="InputPassword" Height="23" Margin="122,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+
+        <Button Content="🔗 Connect to Archipelago" HorizontalAlignment="Center" Margin="0,113,0,0" VerticalAlignment="Top" 
+                Width="232" Click="OnConnectButtonClick" Height="37" IsDefault="True"/>
+    </Grid>
+</Window>
