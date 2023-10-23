@@ -4,6 +4,21 @@ namespace HintMachine.Models.Games
 {
     public class TetrisEffectConnector : IGameConnector
     {
+        private BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
+        {
+            DisplayName = "Steam",
+            ProcessName = "TetrisEffect-Win64-Shipping",
+            Hash = "1981E9829739E3C2E7549E9DEC3384A3E649632A514D9D5F0711A37CC945279D"
+        };
+
+        private BinaryTarget GAME_VERSION_EPIC = new BinaryTarget
+        {
+            DisplayName = "Epic",
+            ProcessName = "TetrisEffect-Win64-Shipping",
+            Hash = "45CF1A171161725BC6DFB3C3E3735580202BF5B5BE3A34769B378C503F94F83E"
+        };
+
+
         private readonly HintQuestCumulative _linesQuest = new HintQuestCumulative
         {
             Name = "Cleared Lines",
@@ -51,6 +66,7 @@ namespace HintMachine.Models.Games
                           "pulse, dance, shimmer, and explode in perfect sync with how you're playing.";
             Platform = "PC";
             SupportedVersions.Add("Steam");
+            SupportedVersions.Add("Epic");
             CoverFilename = "tetris_effect_connected.png";
             Author = "Dinopony";
 
@@ -64,12 +80,9 @@ namespace HintMachine.Models.Games
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher(new BinaryTarget
-            {
-                DisplayName = "Steam",
-                ProcessName = "TetrisEffect-Win64-Shipping",
-                Hash = "1981E9829739E3C2E7549E9DEC3384A3E649632A514D9D5F0711A37CC945279D"
-            });
+            _ram = new ProcessRamWatcher();
+            _ram.SupportedTargets.Add(GAME_VERSION_STEAM);
+            _ram.SupportedTargets.Add(GAME_VERSION_EPIC);
 
             return _ram.TryConnect();
         }
@@ -81,8 +94,10 @@ namespace HintMachine.Models.Games
 
         protected override bool Poll()
         {
+            long baseOffset = (_ram.CurrentTarget == GAME_VERSION_STEAM) ? 0x4ED9990 : 0x4ECE880;
             int[] OFFSETS = new int[] { 0x8, 0x8, 0x220, 0x200, 0x64 };
-            long linesAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x4ED9990, OFFSETS);
+
+            long linesAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + baseOffset, OFFSETS);
             if (linesAddress != 0)
             {
                 _linesQuest.UpdateValue(_ram.ReadUint32(linesAddress));
