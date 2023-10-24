@@ -323,7 +323,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup
+  <ItemGroup>
     <Resource Include="Assets\icon.ico" />
     <Content Include="Assets\Covers\fzero_gx.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
