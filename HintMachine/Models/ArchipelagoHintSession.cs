@@ -178,7 +178,7 @@ namespace HintMachine.Models
                     {
                         Random rnd = new Random();
                         int index = rnd.Next(missingLocations.Count);
-                        long pendingHintLocationID = Client.Locations.AllMissingLocations[index];
+                        long pendingHintLocationID = missingLocations[index];
 
                         Client.Socket.SendPacketAsync(new LocationScoutsPacket
                         {

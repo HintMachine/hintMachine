@@ -62,6 +62,7 @@ namespace HintMachine.Models
             new TonyHawksProSkater12Connector(),
             new PokemonPinballRSConnector(),
             new TMNTShreddersRevengeConnector(),
+            new SuperMonkeyBallConnector(),
             new NexMachinaConnector(),
             new PokemonPuzzleChallengeConnector(),
             new PapersPleaseConnector(),
@@ -69,6 +70,7 @@ namespace HintMachine.Models
             new MinesweeperClassyConnector(),
             new TetrisNESConnector(),
             new PuyoPuyo2MDConnector(),
+            new PaintTheTownRedConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)
