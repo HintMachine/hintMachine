@@ -14,6 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -74,7 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -83,7 +83,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -128,68 +128,98 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ArchipelagoHintSession.cs" />
-    <Compile Include="Games\BPMConnector.cs" />
-    <Compile Include="Games\MetroidPrimePinballConnector.cs" />
-    <Compile Include="Games\MeteosConnector.cs" />
-    <Compile Include="Games\BustAMove4Connector.cs" />
-    <Compile Include="Games\PacManChampionshipEditionDXConnector.cs" />
-    <Compile Include="Games\LuckBeALandlordConnector.cs" />
-    <Compile Include="Games\FZeroGXConnector.cs" />
-    <Compile Include="Games\DorfromantikConnector.cs" />
-    <Compile Include="Games\Rollcage2Connector.cs" />
-    <Compile Include="Games\ColumnsConnector.cs" />
-    <Compile Include="Games\StargunnerConnector.cs" />
-    <Compile Include="GenericConnectors\IPlayStationConnector.cs" />
-    <Compile Include="Globals.cs" />
-    <Compile Include="HintDetails.cs" />
-    <Compile Include="Games\SonicBlueSpheresConnector.cs" />
-    <Compile Include="Games\GeometryWarsConnector.cs" />
-    <Compile Include="Games\NuclearThroneConnector.cs" />
-    <Compile Include="Games\PuyoTetrisConnector.cs" />
-    <Compile Include="Games\GeometryWarsGalaxiesConnector.cs" />
-    <Compile Include="Games\ZachtronicsSolitaireConnector.cs" />
-    <Compile Include="Games\TetrisEffectConnector.cs" />
-    <Compile Include="Games\MiniMetroConnector.cs" />
-    <Compile Include="Games\SuperHexagonConnector.cs" />
-    <Compile Include="HintQuestCounter.cs" />
-    <Compile Include="HintQuestCumulative.cs" />
-    <Compile Include="HintQuest.cs" />
-    <Compile Include="HintsView.xaml.cs">
+    <Compile Include="Models\ArchipelagoHintSession.cs" />
+    <Compile Include="Models\Games\BPMConnector.cs" />
+    <Compile Include="Models\Games\AdvanceWarsDualStrikeConnector.cs" />
+    <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
+    <Compile Include="Models\Games\NexMachinaConnector.cs" />
+    <Compile Include="Models\Games\PeggleNightsConnector.cs" />
+    <Compile Include="Models\Games\PuyoPuyo2MDConnector.cs" />
+    <Compile Include="Models\Games\TetrisNESConnector.cs" />
+    <Compile Include="Models\Games\MinesweeperClassyConnector.cs" />
+    <Compile Include="Models\Games\PokemonPinballRSConnector.cs" />
+    <Compile Include="Models\Games\DragonCrownConnector.cs" />
+    <Compile Include="Models\Games\PokemonPuzzleChallengeConnector.cs" />
+    <Compile Include="Models\Games\KatamariDamacyRerollConnector.cs" />
+    <Compile Include="Models\Games\PeggleDeluxeConnector.cs" />
+    <Compile Include="Models\Games\TonyHawksProSkater12Connector.cs" />
+    <Compile Include="Models\Games\TMNTShreddersRevengeConnector.cs" />
+    <Compile Include="Models\Games\MetroidPrimePinballConnector.cs" />
+    <Compile Include="Models\Games\MeteosConnector.cs" />
+    <Compile Include="Models\Games\BustAMove4Connector.cs" />
+    <Compile Include="Models\Games\PacManChampionshipEditionDXConnector.cs" />
+    <Compile Include="Models\Games\LuckBeALandlordConnector.cs" />
+    <Compile Include="Models\Games\FZeroGXConnector.cs" />
+    <Compile Include="Models\Games\DorfromantikConnector.cs" />
+    <Compile Include="Models\Games\Rollcage2Connector.cs" />
+    <Compile Include="Models\Games\ColumnsConnector.cs" />
+    <Compile Include="Models\Games\StargunnerConnector.cs" />
+    <Compile Include="Models\Games\SuperMonkeyBallConnector.cs" />
+    <Compile Include="Models\Games\SuperMonkeyBall2Connector.cs" />
+    <Compile Include="Models\Games\SuperMegaBaseball2Connector.cs" />
+    <Compile Include="Models\GenericConnectors\INESConnector.cs" />
+    <Compile Include="Models\GenericConnectors\IGameboyColorConnector.cs" />
+    <Compile Include="Models\GenericConnectors\IGameboyAdvanceConnector.cs" />
+    <Compile Include="Models\GenericConnectors\IPlayStationConnector.cs" />
+    <Compile Include="Models\GenericConnectors\IEmulatorConnector.cs" />
+    <Compile Include="Models\GenericConnectors\MegadriveRamAdapter.cs" />
+    <Compile Include="Models\Globals.cs" />
+    <Compile Include="Models\HintDetails.cs" />
+    <Compile Include="Models\Games\SonicBlueSpheresConnector.cs" />
+    <Compile Include="Models\Games\GeometryWarsConnector.cs" />
+    <Compile Include="Models\Games\NuclearThroneConnector.cs" />
+    <Compile Include="Models\Games\PuyoTetrisConnector.cs" />
+    <Compile Include="Models\Games\GeometryWarsGalaxiesConnector.cs" />
+    <Compile Include="Models\Games\ZachtronicsSolitaireConnector.cs" />
+    <Compile Include="Models\Games\TetrisEffectConnector.cs" />
+    <Compile Include="Models\Games\MiniMetroConnector.cs" />
+    <Compile Include="Models\Games\SuperHexagonConnector.cs" />
+    <Compile Include="Models\Games\Operator911Connector.cs" />
+    <Compile Include="Models\Games\PapersPleaseConnector.cs" />
+    <Compile Include="Models\HintQuestCounter.cs" />
+    <Compile Include="Models\HintQuestCumulative.cs" />
+    <Compile Include="Models\HintQuest.cs" />
+    <Compile Include="Views\HintsView.xaml.cs">
       <DependentUpon>HintsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GenericConnectors\IDolphinConnector.cs" />
-    <Compile Include="GenericConnectors\IGameConnector.cs" />
-    <Compile Include="Games\OneFingerDeathPunchConnector.cs" />
-    <Compile Include="Games\XenotiltConnector.cs" />
-    <Compile Include="Games\IslandersConnector.cs" />
-    <Compile Include="GenericConnectors\IMegadriveConnector.cs" />
-    <Compile Include="GenericConnectors\INintendoDSConnector.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="LoginWindow.xaml.cs">
+    <Compile Include="Models\GenericConnectors\IDolphinConnector.cs" />
+    <Compile Include="Models\GenericConnectors\IGameConnector.cs" />
+    <Compile Include="Models\Games\OneFingerDeathPunchConnector.cs" />
+    <Compile Include="Models\Games\XenotiltConnector.cs" />
+    <Compile Include="Models\Games\IslandersConnector.cs" />
+    <Compile Include="Models\GenericConnectors\IMegadriveConnector.cs" />
+    <Compile Include="Models\GenericConnectors\INintendoDSConnector.cs" />
+    <Compile Include="Models\Logger.cs" />
+    <Compile Include="Views\UpdateAvailablePopUp.xaml.cs">
+      <DependentUpon>UpdateAvailablePopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameSelectionWindow.xaml.cs">
+    <Compile Include="Views\GameSelectionWindow.xaml.cs">
       <DependentUpon>GameSelectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ManualHintWindow.xaml.cs">
+    <Compile Include="Views\ManualHintWindow.xaml.cs">
       <DependentUpon>ManualHintWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MessageLog.xaml.cs">
+    <Compile Include="Views\MessageLog.xaml.cs">
       <DependentUpon>MessageLog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProcessRamWatcher.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="TokenManipulator.cs" />
-    <Page Include="HintsView.xaml">
+    <Compile Include="Models\ProcessRamWatcher.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Page Include="Views\HintsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoginWindow.xaml">
+    <Page Include="Views\UpdateAvailablePopUp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -197,19 +227,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="GameSelectionWindow.xaml">
+    <Page Include="Views\GameSelectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ManualHintWindow.xaml">
+    <Page Include="Views\ManualHintWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MessageLog.xaml">
+    <Page Include="Views\MessageLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -242,6 +272,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Covers\tetris_nes.png" />
     <Resource Include="Assets\icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -284,6 +315,21 @@
     <Resource Include="Assets\Covers\bpm.png" />
     <Resource Include="Assets\Covers\mini_metro.png" />
     <Resource Include="Assets\Covers\super_hexagon.png" />
+    <Resource Include="Assets\Covers\911_operator.png" />
+    <Resource Include="Assets\Covers\super_mega_baseball_2.png" />
+    <Resource Include="Assets\Covers\dragons_crown.png" />
+    <Resource Include="Assets\Covers\pokemon_pinball_rs.png" />
+    <Resource Include="Assets\Covers\super_monkey_ball_2.png" />
+    <Resource Include="Assets\Covers\super_monkey_ball.png" />
+    <Resource Include="Assets\Covers\nexmachina.png" />
+    <Resource Include="Assets\Covers\pokemon_puzzle_challenge.png" />
+    <Resource Include="Assets\Covers\papers_please.png" />
+    <Resource Include="Assets\Covers\minesweeper_classy.png" />
+    <Resource Include="Assets\Covers\puyo_puyo_2.png" />
+    <Resource Include="Assets\Covers\paint_the_town_red.png" />
+    <Resource Include="Assets\Covers\peggle_deluxe.png" />
+    <Resource Include="Assets\Covers\peggle_nights.png" />
+    <Resource Include="Assets\Covers\advance_wars_dual_strike.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -292,9 +338,9 @@
     <Resource Include="Assets\Covers\zachtronics_solitaire_collection.png" />
     <Resource Include="Assets\Covers\sonic_blue_spheres.png" />
     <Resource Include="Assets\Covers\luck_be_a_landord.png" />
-    <Content Include="threadstack.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Assets\Covers\tony_hawks_pro_skater_1_2.png" />
+    <Resource Include="Assets\Covers\tmnt_shredders_revenge.png" />
+    <Resource Include="Assets\Covers\katamari_damacy_reroll.png" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="WMPLib">
