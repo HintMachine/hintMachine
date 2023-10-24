@@ -73,6 +73,7 @@ namespace HintMachine.Models
             new PaintTheTownRedConnector(),
             new PeggleDeluxeConnector(),
             new PeggleNightsConnector(),
+            new AdvanceWarsDualStrikeConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)

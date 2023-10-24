@@ -130,6 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\ArchipelagoHintSession.cs" />
     <Compile Include="Models\Games\BPMConnector.cs" />
+    <Compile Include="Models\Games\AdvanceWarsDualStrikeConnector.cs" />
     <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
     <Compile Include="Models\Games\NexMachinaConnector.cs" />
     <Compile Include="Models\Games\PeggleNightsConnector.cs" />
@@ -328,6 +329,7 @@
     <Resource Include="Assets\Covers\paint_the_town_red.png" />
     <Resource Include="Assets\Covers\peggle_deluxe.png" />
     <Resource Include="Assets\Covers\peggle_nights.png" />
+    <Resource Include="Assets\Covers\advance_wars_dual_strike.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
