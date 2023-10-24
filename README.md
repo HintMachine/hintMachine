@@ -43,6 +43,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Game name                        | Platform  |
 |----------------------------------|-----------|
 | 911 Operator                     | PC        |
+| Advance Wars: Dual Strike        | DS        |
 | BPM: Bullets Per Minute          | PC        |
 | Bust-a-Move 4                    | PS1       |
 | Columns                          | Megadrive |

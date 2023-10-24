@@ -158,6 +158,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\ArchipelagoHintSession.cs" />
     <Compile Include="Models\Games\BPMConnector.cs" />
+    <Compile Include="Models\Games\AdvanceWarsDualStrikeConnector.cs" />
     <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
     <Compile Include="Models\Games\NexMachinaConnector.cs" />
     <Compile Include="Models\Games\PeggleNightsConnector.cs" />
@@ -418,6 +419,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Covers\peggle_nights.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\advance_wars_dual_strike.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Notification.wav">
