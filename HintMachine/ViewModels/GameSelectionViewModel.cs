@@ -11,12 +11,9 @@ using System.Windows.Data;
 
 namespace HintMachine.ViewModels
 {
-    internal class GameSelectionViewModel : ICloseableViewModel
-    {
+    internal class GameSelectionViewModel : ICloseableViewModel {
         public delegate void OnGameConnectedAction(IGameConnector game);
         public event OnGameConnectedAction OnGameConnected = null;
-
-        public event EventHandler UpdatePropertiesRequest;
 
         public List<IGameConnector> GameList { get; set; }
 
@@ -28,8 +25,7 @@ namespace HintMachine.ViewModels
             get => selectedGame;
             set
             {
-                if (SetProperty(ref selectedGame, value))
-                    UpdatePropertiesRequest?.Invoke(this, EventArgs.Empty);
+                SetProperty(ref selectedGame, value);
             }
         }
 

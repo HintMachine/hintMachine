@@ -8,6 +8,7 @@
         Title="Pick a game to connect to" Height="650" Width="900" ResizeMode="NoResize" Background="#FFEEEEEE" Icon="/assets/icon.png">
     <Window.Resources>
         <converters:CoverFullPathConverter x:Key="CoverFullPathConverter"/>
+        <converters:GamePropertiesListConverter x:Key="GamePropertiesListConverter"/>
         <Style x:Key="WatermarkedTextbox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -65,12 +66,56 @@
                 </ListView.View>
             </ListView>
             <Grid>
-                <Border BorderThickness="1" BorderBrush="#FF444444" Grid.Column="0" Height="214"  VerticalAlignment="Top" Width="161" HorizontalAlignment="Left">
-                    <Image Source="{Binding SelectedGame.CoverFilename, Converter={StaticResource CoverFullPathConverter}}" HorizontalAlignment="Left" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition MinHeight="220" Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border BorderThickness="1" BorderBrush="#FF444444" Width="161" Height="214" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Image Source="{Binding SelectedGame.CoverFilename, Converter={StaticResource CoverFullPathConverter}}" 
+                           HorizontalAlignment="Left" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
                 </Border>
-                <TextBlock Text="{Binding SelectedGame.Name}" HorizontalAlignment="Left" Margin="166,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="358" TextAlignment="Center"/>
-                <TextBlock Text="{Binding SelectedGame.Description}" Margin="0,227,10,3" TextWrapping="Wrap" Height="345" FontStyle="Italic" FontSize="14" Foreground="#FF777777"/>
-                <TextBlock Name="TextGameProperties" HorizontalAlignment="Left" Margin="169,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="177" Width="355"/>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="{Binding SelectedGame.Name}" FontSize="18" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,12" VerticalAlignment="Top"/>
+
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,8">
+                        <Run Text="Supported versions: " FontWeight="Bold"/>
+                        <Run Text="{Binding SelectedGame.SupportedVersions, Mode=OneWay, Converter={StaticResource GamePropertiesListConverter}}"/>
+                    </TextBlock>
+
+                    <TextBlock Name="TextSupportedEmulators" Margin="0,0,0,8">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedGame.SupportedEmulators.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                        
+                        <Run Text="Supported emulators: " FontWeight="Bold" />
+                        <Run Text="{Binding SelectedGame.SupportedEmulators, Mode=OneWay, Converter={StaticResource GamePropertiesListConverter}}"/>
+                    </TextBlock>
+
+                    <TextBlock Margin="0,0,0,8">
+                        <Run Text="Quests: " FontWeight="Bold"/>
+                        <Run Text="{Binding SelectedGame.Quests[0].Name}"/>
+                    </TextBlock>
+
+                    <TextBlock Margin="0,0,0,8">
+                        <Run Text="Author: " FontWeight="Bold"/>
+                        <Run Text="{Binding SelectedGame.Author, Mode=OneWay}"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <TextBlock Text="{Binding SelectedGame.Description}" Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" 
+                           FontStyle="Italic" FontSize="14" Foreground="#FF777777" VerticalAlignment="Top" Margin="6"/>
             </Grid>
         </DockPanel>
     </DockPanel>

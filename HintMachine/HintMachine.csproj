@@ -209,6 +209,7 @@
     <Compile Include="Models\HintQuest.cs" />
     <Compile Include="ViewModels\GameSelectionViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICloseableViewModel.cs" />
+    <Compile Include="Views\Converters\GamePropertiesListConverter.cs" />
     <Compile Include="Views\Converters\CoverFullPathConverter.cs" />
     <Compile Include="Views\HintsView.xaml.cs">
       <DependentUpon>HintsView.xaml</DependentUpon>
@@ -303,6 +304,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Covers\paint_the_town_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Covers\tetris_nes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
