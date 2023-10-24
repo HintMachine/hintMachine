@@ -472,7 +472,7 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>; Move all assemblies and related files to Libs folder
-ROBOCOPY "$(TargetDir) " "$(TargetDir)Libs\ " /XF *.exe *.config *.manifest /XD Libs Assets /E /IS /MOVE
+ROBOCOPY "$(TargetDir) " "$(TargetDir)Libs\ " /XF *.exe *.config *.manifest *.cfg HintMachine.pdb /XD Libs Assets /E /IS /MOV
 if %25errorlevel%25 leq 4 exit 0 else exit %25errorlevel%25</PostBuildEvent>
   </PropertyGroup>
 </Project>
