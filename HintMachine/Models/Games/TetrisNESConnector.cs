@@ -4,10 +4,10 @@ namespace HintMachine.Models.Games
 {
     public class TetrisNESConnector : INESConnector
     {
-        private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
+        private readonly HintQuestCumulative _linesQuest = new HintQuestCumulative
         {
-            Name = "Score",
-            GoalValue = 10000,
+            Name = "Cleared Lines",
+            GoalValue = 40,
         };
         
         public TetrisNESConnector()
@@ -19,7 +19,7 @@ namespace HintMachine.Models.Games
             CoverFilename = "tetris_nes.png";
             Author = "Dinopony";
 
-            Quests.Add(_scoreQuest);
+            Quests.Add(_linesQuest);
 
             ValidROMs.Add("8DA063C3A4D9DB281B0F7E32DC9EFAC3CA505BB97845B6ECA2AF525960EB51A0");
             ValidROMs.Add("42CD2FF75AD808D7444FEEB64009DBAC817561BE807418B1E26355BB21254280");
@@ -27,26 +27,23 @@ namespace HintMachine.Models.Games
         
         protected override bool Poll()
         {
-            int lowestTwoDigits = _ram.ReadUint8(RamBaseAddress + 0x53);
-            int middleTwoDigits = _ram.ReadUint8(RamBaseAddress + 0x54);
-            int highestTwoDigits = _ram.ReadUint8(RamBaseAddress + 0x55);
+            int lowestTwoDigits = _ram.ReadUint8(RamBaseAddress + 0x50);
+            int highestTwoDigits = _ram.ReadUint8(RamBaseAddress + 0x51);
 
-            int[] scoreDigits = new int[6];
-            scoreDigits[5] = (highestTwoDigits >> 4);
-            scoreDigits[4] = (highestTwoDigits & 0x0F);
-            scoreDigits[3] = (middleTwoDigits >> 4);
-            scoreDigits[2] = (middleTwoDigits & 0x0F);
-            scoreDigits[1] = (lowestTwoDigits >> 4);
-            scoreDigits[0] = (lowestTwoDigits & 0x0F);
+            int[] digits = new int[4];
+            digits[3] = (highestTwoDigits >> 4);
+            digits[2] = (highestTwoDigits & 0x0F);
+            digits[1] = (lowestTwoDigits >> 4);
+            digits[0] = (lowestTwoDigits & 0x0F);
 
-            int score = 0;
+            int lines = 0;
             int currentPowerOf10 = 1;
-            for (var i = 0; i < scoreDigits.Length; ++i)
+            for (var i = 0; i < digits.Length; ++i)
             {
-                score += scoreDigits[i] * currentPowerOf10;
+                lines += digits[i] * currentPowerOf10;
                 currentPowerOf10 *= 10;
             }
-            _scoreQuest.UpdateValue(score);
+            _linesQuest.UpdateValue(lines);
 
             return true;
         }

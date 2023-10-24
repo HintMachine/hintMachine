@@ -62,6 +62,7 @@ namespace HintMachine.Models
             new TonyHawksProSkater12Connector(),
             new PokemonPinballRSConnector(),
             new TMNTShreddersRevengeConnector(),
+            new SuperMonkeyBallConnector(),
             new NexMachinaConnector(),
             new PokemonPuzzleChallengeConnector(),
             new PapersPleaseConnector(),
@@ -70,6 +71,9 @@ namespace HintMachine.Models
             new TetrisNESConnector(),
             new PuyoPuyo2MDConnector(),
             new PaintTheTownRedConnector(),
+            new PeggleDeluxeConnector(),
+            new PeggleNightsConnector(),
+            new AdvanceWarsDualStrikeConnector(),
             new PinballFX3Connector(),
         };
 

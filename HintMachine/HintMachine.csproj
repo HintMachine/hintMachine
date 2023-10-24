@@ -130,8 +130,10 @@
     </ApplicationDefinition>
     <Compile Include="Models\ArchipelagoHintSession.cs" />
     <Compile Include="Models\Games\BPMConnector.cs" />
+    <Compile Include="Models\Games\AdvanceWarsDualStrikeConnector.cs" />
     <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
     <Compile Include="Models\Games\NexMachinaConnector.cs" />
+    <Compile Include="Models\Games\PeggleNightsConnector.cs" />
     <Compile Include="Models\Games\PuyoPuyo2MDConnector.cs" />
     <Compile Include="Models\Games\TetrisNESConnector.cs" />
     <Compile Include="Models\Games\MinesweeperClassyConnector.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="Models\Games\PokemonPuzzleChallengeConnector.cs" />
     <Compile Include="Models\Games\KatamariDamacyRerollConnector.cs" />
     <Compile Include="Models\Games\PinballFX3Connector.cs" />
+    <Compile Include="Models\Games\PeggleDeluxeConnector.cs" />
     <Compile Include="Models\Games\TonyHawksProSkater12Connector.cs" />
     <Compile Include="Models\Games\TMNTShreddersRevengeConnector.cs" />
     <Compile Include="Models\Games\MetroidPrimePinballConnector.cs" />
@@ -152,6 +155,7 @@
     <Compile Include="Models\Games\Rollcage2Connector.cs" />
     <Compile Include="Models\Games\ColumnsConnector.cs" />
     <Compile Include="Models\Games\StargunnerConnector.cs" />
+    <Compile Include="Models\Games\SuperMonkeyBallConnector.cs" />
     <Compile Include="Models\Games\SuperMonkeyBall2Connector.cs" />
     <Compile Include="Models\Games\SuperMegaBaseball2.cs" />
     <Compile Include="Models\GenericConnectors\INESConnector.cs" />
@@ -317,12 +321,16 @@
     <Resource Include="Assets\Covers\dragons_crown.png" />
     <Resource Include="Assets\Covers\pokemon_pinball_rs.png" />
     <Resource Include="Assets\Covers\super_monkey_ball_2.png" />
+    <Resource Include="Assets\Covers\super_monkey_ball.png" />
     <Resource Include="Assets\Covers\nexmachina.png" />
     <Resource Include="Assets\Covers\pokemon_puzzle_challenge.png" />
     <Resource Include="Assets\Covers\papers_please.png" />
     <Resource Include="Assets\Covers\minesweeper_classy.png" />
     <Resource Include="Assets\Covers\puyo_puyo_2.png" />
     <Resource Include="Assets\Covers\paint_the_town_red.png" />
+    <Resource Include="Assets\Covers\peggle_deluxe.png" />
+    <Resource Include="Assets\Covers\peggle_nights.png" />
+    <Resource Include="Assets\Covers\advance_wars_dual_strike.png" />
     <Resource Include="Assets\Covers\pinball_fx3.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
