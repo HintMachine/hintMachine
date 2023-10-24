@@ -71,6 +71,8 @@ namespace HintMachine.Models
             new TetrisNESConnector(),
             new PuyoPuyo2MDConnector(),
             new PaintTheTownRedConnector(),
+            new PeggleDeluxeConnector(),
+            new PeggleNightsConnector(),
         };
 
         public static IGameConnector FindGameFromName(string name)
