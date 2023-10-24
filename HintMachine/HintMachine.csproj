@@ -184,7 +184,7 @@
     <Compile Include="Models\Games\StargunnerConnector.cs" />
     <Compile Include="Models\Games\SuperMonkeyBallConnector.cs" />
     <Compile Include="Models\Games\SuperMonkeyBall2Connector.cs" />
-    <Compile Include="Models\Games\SuperMegaBaseball2.cs" />
+    <Compile Include="Models\Games\SuperMegaBaseball2Connector.cs" />
     <Compile Include="Models\GenericConnectors\INESConnector.cs" />
     <Compile Include="Models\GenericConnectors\IGameboyColorConnector.cs" />
     <Compile Include="Models\GenericConnectors\IGameboyAdvanceConnector.cs" />
