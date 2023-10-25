@@ -3,7 +3,7 @@ using System;
 
 namespace HintMachine.Models.Games
 {
-    internal class SMB3Connector : INESConnector
+    internal class SuperMarioBros3Connector : INESConnector
     {
         private bool inLevel = false;
         private bool notPipe = true;
@@ -42,12 +42,12 @@ namespace HintMachine.Models.Games
             CooldownBetweenIncrements = 2,
         };
 
-        public SMB3Connector()
+        public SuperMarioBros3Connector()
         {
             Name = "Super Mario Bros. 3";
             Description = "Mario and friends put on a play to tell a story of Bowser attacking kingdoms around the world. Travel across 8 lands and save them from the Koopalings who have transformed the leaders of these lands into assorted creatures!";
             SupportedVersions.Add("(USA)");
-            CoverFilename = "smb3.png";
+            CoverFilename = "super_mario_bros_3.png";
             Author = "RadzPrower";
 
             Quests.Add(_scoreQuest);

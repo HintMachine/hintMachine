@@ -133,7 +133,7 @@
     <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
     <Compile Include="Models\Games\NexMachinaConnector.cs" />
     <Compile Include="Models\Games\PuyoPuyo2MDConnector.cs" />
-    <Compile Include="Models\Games\SMB3Connector.cs" />
+    <Compile Include="Models\Games\SuperMarioBros3Connector.cs" />
     <Compile Include="Models\Games\TetrisNESConnector.cs" />
     <Compile Include="Models\Games\MinesweeperClassyConnector.cs" />
     <Compile Include="Models\Games\PokemonPinballRSConnector.cs" />
@@ -325,7 +325,7 @@
     <Resource Include="Assets\Covers\minesweeper_classy.png" />
     <Resource Include="Assets\Covers\puyo_puyo_2.png" />
     <Resource Include="Assets\Covers\paint_the_town_red.png" />
-    <Resource Include="Assets\Covers\smb3.png" />
+    <Resource Include="Assets\Covers\super_mario_bros_3.png" />
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
