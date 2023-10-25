@@ -46,15 +46,13 @@ namespace HintMachine.Models.Games
 
         protected override bool Poll()
         {
-            try {
-                long incidentsAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x1037A40, new int[] { 0x4, 0x8, 0x50, 0x68, 0x38, 0x164, 0x14 });
+            long incidentsAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x1037A40, new int[] { 0x4, 0x8, 0x50, 0x68, 0x38, 0x164, 0x14 });
+            if(incidentsAddress != 0)
                 _incidentsQuest.UpdateValue(_ram.ReadUint32(incidentsAddress));
 
-                long cashAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0xFD3730, new int[] { 0x4, 0x4, 0x8, 0x18, 0x3C, 0x14, 0x18C });
+            long cashAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0xFD3730, new int[] { 0x4, 0x4, 0x8, 0x18, 0x3C, 0x14, 0x18C });
+            if(cashAddress != 0)
                 _cashQuest.UpdateValue(_ram.ReadUint32(cashAddress));
-            }
-            catch
-            { }
             
             return true;
         }
