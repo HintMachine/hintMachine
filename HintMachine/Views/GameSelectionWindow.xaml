@@ -83,12 +83,12 @@
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="{Binding SelectedGame.Name}" FontSize="18" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,12" VerticalAlignment="Top"/>
 
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,8">
+                    <TextBlock Margin="0,0,0,8" TextWrapping="Wrap">
                         <Run Text="Supported versions: " FontWeight="Bold"/>
                         <Run Text="{Binding SelectedGame.SupportedVersions, Mode=OneWay, Converter={StaticResource GamePropertiesListConverter}}"/>
                     </TextBlock>
 
-                    <TextBlock Name="TextSupportedEmulators" Margin="0,0,0,8">
+                    <TextBlock Name="TextSupportedEmulators" Margin="0,0,0,8" TextWrapping="Wrap">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
@@ -103,12 +103,12 @@
                         <Run Text="{Binding SelectedGame.SupportedEmulators, Mode=OneWay, Converter={StaticResource GamePropertiesListConverter}}"/>
                     </TextBlock>
 
-                    <TextBlock Margin="0,0,0,8">
+                    <TextBlock Margin="0,0,0,8" TextWrapping="Wrap">
                         <Run Text="Quests: " FontWeight="Bold"/>
-                        <Run Text="{Binding SelectedGame.Quests[0].Name}"/>
+                        <Run Text="{Binding SelectedGame.QuestsString, Mode=OneWay}"/>
                     </TextBlock>
 
-                    <TextBlock Margin="0,0,0,8">
+                    <TextBlock Margin="0,0,0,8" TextWrapping="Wrap">
                         <Run Text="Author: " FontWeight="Bold"/>
                         <Run Text="{Binding SelectedGame.Author, Mode=OneWay}"/>
                     </TextBlock>
