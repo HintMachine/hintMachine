@@ -72,6 +72,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Puyo Puyo 2                      | Megadrive |
 | Puyo Puyo Tetris                 | PC        |
 | Rollcage Stage 2                 | PS1       |
+| Skyrim Special Edition           | PC        |
 | Sonic 3 Blue Spheres             | Megadrive |
 | Stargunner                       | PC        |
 | Super Hexagon                    | PC        |
