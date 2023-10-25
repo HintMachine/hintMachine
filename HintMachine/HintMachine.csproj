@@ -130,6 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\ArchipelagoHintSession.cs" />
     <Compile Include="Models\Games\BPMConnector.cs" />
+    <Compile Include="Models\Games\SuperMarioBros2Connector.cs" />
     <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
     <Compile Include="Models\Games\NexMachinaConnector.cs" />
     <Compile Include="Models\Games\PuyoPuyo2MDConnector.cs" />
