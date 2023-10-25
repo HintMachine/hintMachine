@@ -15,7 +15,7 @@ namespace HintMachine.Models.Games
         {
             Name = "Score",
             Description = "Single Player (Skate Tours): THPS Parks, THPS2 Parks, Ranked Skate - Single Session",
-            GoalValue = 250000,
+            GoalValue = 500000,
         };
 
         private ProcessRamWatcher _ram = null;
