@@ -66,6 +66,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Papers, Please                   | PC        |
 | Peggle Deluxe                    | PC        |
 | Peggle Nights                    | PC        |
+| Pinball FX3                      | PC        |
 | Pokémon Pinball: Ruby & Sapphire | GBA       |
 | Pokémon Puzzle Challenge         | GBC       |
 | Puyo Puyo 2                      | Megadrive |

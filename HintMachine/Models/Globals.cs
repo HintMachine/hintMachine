@@ -75,6 +75,7 @@ namespace HintMachine.Models
             new PeggleNightsConnector(),
             new AdvanceWarsDualStrikeConnector(),
             new SuperMarioBros3Connector(),
+            new PinballFX3Connector(),
         };
 
         public static IGameConnector FindGameFromName(string name)

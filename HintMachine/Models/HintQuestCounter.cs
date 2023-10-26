@@ -159,6 +159,8 @@ namespace HintMachine.Models
 
         public override void UpdateComponents()
         {
+            _label.Content = Name;
+
             _progressBar.Value = CurrentValue;
             _progressBarOverlayText.Text = CurrentValue + " / " + GoalValue;
 
