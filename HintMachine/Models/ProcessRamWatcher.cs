@@ -384,6 +384,9 @@ namespace HintMachine.Models
         public long ReadInt64(long address)
             => BitConverter.ToInt64(ReadBytes(address, sizeof(long), IsBigEndian), 0);
 
+        public float ReadFloat(long address)
+            => BitConverter.ToSingle(ReadBytes(address, sizeof(float), IsBigEndian), 0);
+
         public double ReadDouble(long address)
             => BitConverter.ToDouble(ReadBytes(address, sizeof(long), IsBigEndian), 0);
 

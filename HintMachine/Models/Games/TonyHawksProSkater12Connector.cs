@@ -1,3 +1,5 @@
+using System;
+
 using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
@@ -8,13 +10,41 @@ namespace HintMachine.Models.Games
         {
             DisplayName = "Steam",
             ProcessName = "THPS12",
-            Hash = "7EE922549418733002992C54C02BA6ED23DA90564C173B4AFF27AF561F534B25"
+            Hash = "1334052BB57D766AE1B4659F9C12ABC7AFDE5FC6DD80E0457FB1885B909233E9"
         };
 
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
             Name = "Score",
-            Description = "Single Player (Skate Tours): THPS Parks, THPS2 Parks, Ranked Skate - Single Session",
+            Description = "Single Player (Skate Tours): THPS Parks, THPS2 Parks",
+            GoalValue = 500000,
+        };
+
+        private readonly HintQuestCumulative _grindQuest = new HintQuestCumulative
+        {
+            Name = "Longest Grind Time (Run)",
+            Description = "Single Player (Skate Tours): THPS Parks, THPS2 Parks",
+            GoalValue = 15,
+        };
+
+        private readonly HintQuestCumulative _manualQuest = new HintQuestCumulative
+        {
+            Name = "Longest Manual Time (Run)",
+            Description = "Single Player (Skate Tours): THPS Parks, THPS2 Parks",
+            GoalValue = 30,
+        };
+
+        private readonly HintQuestCumulative _lipQuest = new HintQuestCumulative
+        {
+            Name = "Longest Lip Time (Run)",
+            Description = "Single Player (Skate Tours): THPS Parks, THPS2 Parks",
+            GoalValue = 20,
+        };
+
+        private readonly HintQuestCumulative _comboQuest = new HintQuestCumulative
+        {
+            Name = "Best Combo (Run)",
+            Description = "Single Player (Skate Tours): THPS Parks, THPS2 Parks",
             GoalValue = 250000,
         };
 
@@ -30,13 +60,15 @@ namespace HintMachine.Models.Games
             Author = "Serpent.AI";
 
             Quests.Add(_scoreQuest);
+            Quests.Add(_grindQuest);
+            Quests.Add(_manualQuest);
+            Quests.Add(_lipQuest);
+            Quests.Add(_comboQuest);
         }
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher();
-            _ram.SupportedTargets.Add(GAME_VERSION_STEAM);
-            
+            _ram = new ProcessRamWatcher(GAME_VERSION_STEAM);            
             return _ram.TryConnect();
         }
 
@@ -47,18 +79,23 @@ namespace HintMachine.Models.Games
 
         protected override bool Poll()
         {
-            long scoreAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x3C40A20, new int[] { 0x0, 0x48, 0x0, 0x20, 0x478, 0x298, 0x2D8 });
+            long statsStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x3934090, new int[] { 0xD20, 0xB0, 0x20, 0xA8, 0x50, 0x0 });
 
-            if (scoreAddress != 0)
+            if (statsStructAddress != 0)
             {
                 try
                 {
-                    long scoreValue = _ram.ReadUint32(scoreAddress);
+                    long scoreValue = _ram.ReadUint32(statsStructAddress + 0x300);
+                    float grindValue = _ram.ReadFloat(statsStructAddress + 0x390);
+                    float manualValue = _ram.ReadFloat(statsStructAddress + 0x394);
+                    float lipValue = _ram.ReadFloat(statsStructAddress + 0x398);
+                    long comboValue = _ram.ReadUint32(statsStructAddress + 0x350);
 
-                    if (scoreValue <= 25000000)
-                    {
-                        _scoreQuest.UpdateValue(scoreValue);
-                    }
+                    _scoreQuest.UpdateValue(scoreValue);
+                    _grindQuest.UpdateValue((long)Math.Round(grindValue));
+                    _manualQuest.UpdateValue((long)Math.Round(manualValue));
+                    _lipQuest.UpdateValue((long)Math.Round(lipValue));
+                    _comboQuest.UpdateValue(comboValue);
                 }
                 catch { }
             }
