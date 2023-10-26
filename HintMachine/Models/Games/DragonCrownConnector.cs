@@ -29,7 +29,9 @@ namespace HintMachine.Models.Games
         {
             Name = "Dragon's Crown";
             Description = "Dragon's Crown is a multiplayer hack-and-slash beat'em up game with breathtaking visual style, a design built around cooperative play, epic boss fights, and the ability to discover a new adventure in every play session.";
-            SupportedVersions.Add("US ROM");
+            SupportedVersions.Add("1.09 US ROM");
+            SupportedEmulators.Add("Vita3K v0.1.9 3443");
+            
             CoverFilename = "dragons_crown.png";
             Platform = "PS Vita";
             Author = "CalDrac";
@@ -40,7 +42,7 @@ namespace HintMachine.Models.Games
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher("Vita3K");
+            _ram = new ProcessRamWatcher(GAME_VERSION);
             if (!_ram.TryConnect())
                 return false;
 
@@ -63,5 +65,12 @@ namespace HintMachine.Models.Games
             _goldQuest.UpdateValue(gold);
             return true;
         }
+
+        private readonly BinaryTarget GAME_VERSION = new BinaryTarget
+        {
+            DisplayName = "Vita3K (v0.1.9 3443)",
+            ProcessName = "Vita3K",
+            Hash = "361D6493E7CA9CEDE67EB1CC59177F55C34B72C58FC8ECBC76A5D704594E7670"
+        };
     }
 }
