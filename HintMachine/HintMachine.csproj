@@ -163,6 +163,7 @@
     <Compile Include="Models\Games\NexMachinaConnector.cs" />
     <Compile Include="Models\Games\PeggleNightsConnector.cs" />
     <Compile Include="Models\Games\PuyoPuyo2MDConnector.cs" />
+    <Compile Include="Models\Games\SuperMarioBros3Connector.cs" />
     <Compile Include="Models\Games\TetrisNESConnector.cs" />
     <Compile Include="Models\Games\MinesweeperClassyConnector.cs" />
     <Compile Include="Models\Games\PokemonPinballRSConnector.cs" />
@@ -426,6 +427,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Covers\advance_wars_dual_strike.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\super_mario_bros_3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Notification.wav">
