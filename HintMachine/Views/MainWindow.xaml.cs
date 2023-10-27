@@ -1,12 +1,10 @@
-﻿using Archipelago.MultiClient.Net;
-using HintMachine.Models;
+﻿using HintMachine.Models;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using System.Xml.Linq;
 
 namespace HintMachine.Views
 {
@@ -94,12 +92,6 @@ namespace HintMachine.Views
         {
             // TODO: Replace all of those by bindings
             Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => {
-                ButtonRedeemHintToken.IsEnabled = (HintMachineService.HintTokens > 0);
-                TextHintTokenCount.Text = $"You currently have {HintMachineService.HintTokens} hint tokens.";
-
-                LabelHost.Text = HintMachineService.Host;
-                LabelSlot.Text = HintMachineService.Slot;
-
                 GridQuests.Children.Clear();
                 GridQuests.RowDefinitions.Clear();
 
@@ -107,9 +99,7 @@ namespace HintMachine.Views
                 if (game != null)
                 {
                     Title = $"{Globals.ProgramName} - {game.Name}";
-                    LabelGame.Text = game.Name;
 
-                    GridGameConnect.Visibility = Visibility.Hidden;
                     GridQuests.Visibility = Visibility.Visible;
                     ButtonChangeGame.Visibility = Visibility.Visible;
 
@@ -123,9 +113,7 @@ namespace HintMachine.Views
                 else
                 {
                     Title = Globals.ProgramName;
-                    LabelGame.Text = "-";
 
-                    GridGameConnect.Visibility = Visibility.Visible;
                     GridQuests.Visibility = Visibility.Hidden;
                     ButtonChangeGame.Visibility = Visibility.Hidden;
                 }

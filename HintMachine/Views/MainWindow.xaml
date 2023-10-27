@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine.Views"
+        xmlns:models="clr-namespace:HintMachine.Models"
         mc:Ignorable="d"
         Title="HintMachine" Height="700" Width="1100" MinHeight="700" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
 
@@ -51,11 +52,24 @@
 
             <StackPanel VerticalAlignment="Bottom">
                 <TextBlock Name="TextHintTokenCount" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Center">
-                    You currently have 0 hint tokens.
+                    <Run>You currently have </Run>
+                    <Run Text="{Binding Path=(models:HintMachineService.HintTokens), Mode=OneWay}"/>
+                    <Run> Hint Tokens</Run>
                 </TextBlock>
 
-                <Button Name="ButtonRedeemHintToken" Margin="0,12" Height="30" Background="#FFA8E0A9" IsEnabled="False" Click="OnRedeemHintTokenClick">❓ Get a random location hint</Button>
-                
+                <Button Name="ButtonRedeemHintToken" Margin="0,12" Height="30" Background="#FFA8E0A9" Click="OnRedeemHintTokenClick">
+                    ❓ Get a random location hint
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=(models:HintMachineService.HintTokens), Mode=OneWay}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
                 <Border BorderThickness="1" BorderBrush="#FFABADB3" Grid.Column="0"  RenderTransformOrigin="0.5,0.5">
                     <Border.Background>
                         <ImageBrush ImageSource="/Assets/logo_small.png" Stretch="Uniform" TileMode="None" Opacity="0.15"/>
@@ -73,13 +87,13 @@
                         </Grid.RowDefinitions>
 
                         <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
-                        <TextBlock Name="LabelHost" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">archipelago.gg:12345</TextBlock>
+                        <TextBlock Text="{Binding Path=(models:HintMachineService.Host), Mode=OneWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
 
                         <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
-                        <TextBlock Name="LabelSlot" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">Player</TextBlock>
+                        <TextBlock Text="{Binding Path=(models:HintMachineService.Slot), Mode=OneWay}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
 
                         <Label Content="Game: " FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>
-                        <TextBlock Name="LabelGame" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">-</TextBlock>
+                        <TextBlock Text="{Binding Path=(models:HintMachineService.GameName), Mode=OneWay}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
 
                         <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
                             <Grid.ColumnDefinitions>

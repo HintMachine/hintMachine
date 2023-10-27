@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Windows.Media;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Threading;
 using HintMachine.Models.GenericConnectors;
 
@@ -7,7 +9,11 @@ namespace HintMachine.Models
 {
     public static class HintMachineService
     {
+        // Tools to handle WPF data bindings update
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
         private static void OnStaticPropertyChanged(string propertyName)
+            => StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
+
         // -----------------------------------------------------
 
         public static bool DebugBuild { get; private set; } = false;
@@ -22,12 +28,39 @@ namespace HintMachine.Models
 
         // -------------------------------------------------------
 
-        public static ArchipelagoHintSession ArchipelagoSession { get; private set; } = null;
+        public static ArchipelagoHintSession ArchipelagoSession 
+        {
+            get { return _archipelagoSession; }
+            private set
+            {
+                _archipelagoSession = value;
+                OnStaticPropertyChanged(nameof(ArchipelagoSession));
+                OnStaticPropertyChanged(nameof(Host));
+                OnStaticPropertyChanged(nameof(Slot));
+            }
+        }
+        private static ArchipelagoHintSession _archipelagoSession = null;
+
         public static string Host => ArchipelagoSession?.Host ?? string.Empty;
         public static string Slot => ArchipelagoSession?.Slot ?? string.Empty;
         public static string Password => ArchipelagoSession?.Password ?? string.Empty;
 
-        public static GameConnectionHandler CurrentGameConnection { get; private set; } = null;
+        // -------------------------------------------------------
+
+        public static GameConnectionHandler CurrentGameConnection
+        {
+            get { return _currentGameConnection; }
+            private set
+            {
+                _currentGameConnection = value;
+                OnStaticPropertyChanged(nameof(CurrentGameConnection));
+                OnStaticPropertyChanged(nameof(GameName));
+            }
+        }
+        private static GameConnectionHandler _currentGameConnection = null;
+        public static string GameName => CurrentGameConnection?.Game?.Name ?? string.Empty;
+
+        // -------------------------------------------------------
 
         public static int HintTokens
         {
@@ -35,7 +68,7 @@ namespace HintMachine.Models
             set 
             {
                 _hintTokens = value;
-                ModelChanged?.Invoke();
+                OnStaticPropertyChanged(nameof(HintTokens));
             }
         }
         private static int _hintTokens = 0;
