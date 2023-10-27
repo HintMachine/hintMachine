@@ -379,7 +379,7 @@ namespace HintMachine.Models
             NativeMethods.QueryFullProcessImageName(_processHandle, 0, stringBuilder, ref size);
             string binaryFilePath = stringBuilder.ToString();
 
-            using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))
+            using (var sha = SHA256.Create())
                 using (var stream = File.OpenRead(binaryFilePath))
                     return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
         }
