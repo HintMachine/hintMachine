@@ -25,6 +25,7 @@
                     <MenuItem Name="MenuDisplayReceivedItems" Header="Received items notifications" IsCheckable="True" />
                 </MenuItem>
                 <MenuItem Name="MenuShowUpdatePopup" Header="Notify on launch if an update is available" IsCheckable="True" />
+                <MenuItem Name="MenuStreamerMode" Header="Streamer mode" IsCheckable="True" />
             </MenuItem>
             <MenuItem Header="?">
                 <MenuItem Header="_About HintMachine" Click="OnAboutClick" />
@@ -72,7 +73,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+                        <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0" />
                         <TextBlock Name="LabelHost" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">archipelago.gg:12345</TextBlock>
 
                         <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>

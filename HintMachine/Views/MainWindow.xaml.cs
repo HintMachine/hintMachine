@@ -35,6 +35,7 @@ namespace HintMachine.Views
             HintMachineService.ModelChanged += OnModelChange;
             OnArchipelagoSessionChange(); 
 
+
             Logger.Info("Feeling stuck in your Archipelago world?\n" +
                         "Connect to a game and start playing to earn hint tokens by completing quests.\n" + 
                         "You can then redeem those tokens using the dedicated button to earn a random location hint for your world.");
