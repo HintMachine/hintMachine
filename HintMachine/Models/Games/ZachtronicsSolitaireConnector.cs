@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class ZachtronicsSolitaireConnector : IGameConnector
     {
         private readonly HintQuestCounter _winsQuest = new HintQuestCounter {

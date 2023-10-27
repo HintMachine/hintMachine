@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class MinesweeperClassyConnector : IGameConnector
     {
         private readonly HintQuestCumulative _beginnerWinsQuest = new HintQuestCumulative

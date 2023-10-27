@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class PeggleNightsConnector : IGameConnector
     {
         private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget

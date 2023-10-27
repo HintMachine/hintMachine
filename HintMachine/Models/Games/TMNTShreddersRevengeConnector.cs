@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class TMNTShreddersRevengeConnector : IGameConnector
     {
         private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget

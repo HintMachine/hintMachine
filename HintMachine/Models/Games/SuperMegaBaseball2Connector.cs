@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class SuperMegaBaseball2Connector : IGameConnector
     {
         // AFAIK the only PC version out there is the Steam version. If there's some other (current!) obscure PC version out there, we'll need to get its hash and do some magic to support it.

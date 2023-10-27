@@ -2,6 +2,7 @@ using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class PapersPleaseConnector : IGameConnector
     {
         private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget

@@ -5,6 +5,7 @@ using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class PinballFX3Connector : IGameConnector
     {
         private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget

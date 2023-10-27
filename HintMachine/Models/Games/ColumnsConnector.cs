@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class ColumnsConnector : IMegadriveConnector
     {
         private readonly HintQuestCumulative _jewelsQuest = new HintQuestCumulative

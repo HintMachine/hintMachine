@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class SonicBlueSpheresConnector : IMegadriveConnector
     {
         private readonly HintQuestCounter _levelsQuest = new HintQuestCounter

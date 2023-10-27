@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class GeometryWarsConnector : IGameConnector
     {
         private ProcessRamWatcher _ram = null;

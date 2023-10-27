@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     class DragonCrownConnector : IGameConnector
     {
         

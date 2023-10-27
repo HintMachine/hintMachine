@@ -7,17 +7,20 @@ namespace HintMachine.Models
 {
     public static class HintMachineService
     {
-        // Only in WPF 4.5
-        /*
-        public static event PropertyChangedEventHandler StaticPropertyChanged;
-
         private static void OnStaticPropertyChanged(string propertyName)
-        {
-            StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
-        }
-        */
+        // -----------------------------------------------------
 
         public static bool DebugBuild { get; private set; } = false;
+
+        public static Type[] GameConnectorTypes
+        {
+            get {
+                var attr = typeof(AvailableGameConnectorAttribute);
+                return Assembly.GetExecutingAssembly().GetTypes().Where(t => Attribute.GetCustomAttribute(t, attr) != null).ToArray();
+            }
+        }
+
+        // -------------------------------------------------------
 
         public static ArchipelagoHintSession ArchipelagoSession { get; private set; } = null;
         public static string Host => ArchipelagoSession?.Host ?? string.Empty;

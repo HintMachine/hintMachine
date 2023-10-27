@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class XenotiltConnector : IGameConnector
     {
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative

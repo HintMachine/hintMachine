@@ -50,9 +50,17 @@ namespace HintMachine.ViewModels
 
         public GameSelectionViewModel()
         {
-            GameList = Globals.Games.OrderBy(g => g.Name).ToList();
-
-            SelectedGame = Globals.FindGameFromName(Settings.LastConnectedGame);
+            GameList = HintMachineService.GameConnectorTypes.Select(type => Activator.CreateInstance(type) as IGameConnector)
+                                                            .OrderBy(game => game.Name)
+                                                            .ToList();
+            foreach (IGameConnector game in GameList)
+            {
+                if (game.Name == Settings.LastConnectedGame)
+                {
+                    SelectedGame = game;
+                    break;
+                }
+            }
             if (SelectedGame == null)
                 SelectedGame = GameList.FirstOrDefault();
 
