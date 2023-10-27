@@ -52,104 +52,6 @@ namespace HintMachine.Models
 
     public class ProcessRamWatcher
     {
-        #region EXTERNAL_DECLARATIONS
-
-        const int PROCESS_WM_READ = 0x0010;
-        const int PROCESS_QUERY_INFORMATION = 0x0400;
-
-        [Flags]
-        public enum ThreadAccess : int
-        {
-            TERMINATE = (0x0001),
-            SUSPEND_RESUME = (0x0002),
-            GET_CONTEXT = (0x0008),
-            SET_CONTEXT = (0x0010),
-            SET_INFORMATION = (0x0020),
-            QUERY_INFORMATION = (0x0040),
-            SET_THREAD_TOKEN = (0x0080),
-            IMPERSONATE = (0x0100),
-            DIRECT_IMPERSONATION = (0x0200)
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        protected struct MEMORY_BASIC_INFORMATION
-        {
-            public IntPtr BaseAddress;
-            public IntPtr AllocationBase;
-            public uint AllocationProtect;
-            public IntPtr RegionSize;
-            public uint State;
-            public uint Protect;
-            public MemoryRegionType Type;
-        }
-
-        public enum DwFilterFlag : uint
-        {
-            LIST_MODULES_DEFAULT = 0x0,
-            LIST_MODULES_32BIT = 0x01,
-            LIST_MODULES_64BIT = 0x02,
-            LIST_MODULES_ALL = (LIST_MODULES_32BIT | LIST_MODULES_64BIT)
-        }
-
-        // ---------------------------------------------------------------------------
-
-        [DllImport("kernel32.dll")]
-        static extern IntPtr OpenProcess(
-            int dwDesiredAccess, 
-            bool bInheritHandle, 
-            int dwProcessId);
-
-        [DllImport("kernel32.dll", SetLastError=true)]
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-        [SuppressUnmanagedCodeSecurity]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool CloseHandle(
-            IntPtr hObject);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern Microsoft.Win32.SafeHandles.SafeAccessTokenHandle OpenThread(
-            ThreadAccess dwDesiredAccess, 
-            bool bInheritHandle, 
-            uint dwThreadId);
-
-        [DllImport("kernel32.dll")]
-        static extern bool ReadProcessMemory(
-            int hProcess, 
-            Int64 lpBaseAddress, 
-            byte[] lpBuffer,
-            int dwSize, 
-            ref int lpNumberOfBytesRead);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern int VirtualQueryEx(
-            IntPtr hProcess, 
-            IntPtr lpAddress, 
-            out MEMORY_BASIC_INFORMATION lpBuffer, 
-            uint dwLength);
-
-        [DllImport("psapi.dll", SetLastError = true)]
-        static extern bool EnumProcessModulesEx(
-            IntPtr hProcess,
-            [Out] IntPtr lphModule,
-            uint cb,
-            [MarshalAs(UnmanagedType.U4)] out uint lpcbNeeded,
-            DwFilterFlag dwff);
-
-        [DllImport("psapi.dll")]
-        static extern uint GetModuleFileNameEx(
-             IntPtr hProcess,
-             IntPtr hModule,
-             [Out] StringBuilder lpBaseName,
-             [In][MarshalAs(UnmanagedType.U4)] int nSize);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool QueryFullProcessImageName(
-            IntPtr hProcess,
-            uint dwFlags,
-            [Out] StringBuilder lpExeName,
-            ref uint lpdwSize);
-
-        #endregion
 
         // ----------------------------------------------------------------------------------
 
@@ -198,7 +100,7 @@ namespace HintMachine.Models
         ~ProcessRamWatcher()
         {
             if(_processHandle != IntPtr.Zero)
-                CloseHandle(_processHandle);
+                NativeMethods.CloseHandle(_processHandle);
         }
 
         /// <summary>
@@ -256,7 +158,9 @@ namespace HintMachine.Models
                 return false;
 
             // Open the process
-            _processHandle = OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, _process.Id);
+            const int PROCESS_WM_READ = 0x0010;
+            const int PROCESS_QUERY_INFORMATION = 0x0400;
+            _processHandle = NativeMethods.OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, _process.Id);
             if (_processHandle == IntPtr.Zero)
                 return false;
 
@@ -304,13 +208,13 @@ namespace HintMachine.Models
             // Setting up the rest of the parameters for EnumProcessModules
             uint uiSize = (uint)(Marshal.SizeOf(typeof(IntPtr)) * (hMods.Length));
             uint cbNeeded;
-            if (EnumProcessModulesEx(_processHandle, pModules, uiSize, out cbNeeded, DwFilterFlag.LIST_MODULES_ALL))
+            if (NativeMethods.EnumProcessModulesEx(_processHandle, pModules, uiSize, out cbNeeded, DwFilterFlag.LIST_MODULES_ALL))
             {
                 int modulesCount = (int)(cbNeeded / (Marshal.SizeOf(typeof(IntPtr))));
                 for (int i = 0; i < modulesCount; i++)
                 {
                     StringBuilder strbld = new StringBuilder(1024);
-                    GetModuleFileNameEx(_processHandle, hMods[i], strbld, (int)(strbld.Capacity));
+                    NativeMethods.GetModuleFileNameEx(_processHandle, hMods[i], strbld, (int)(strbld.Capacity));
                     string moduleName = strbld.ToString();
 
                     if (CultureInfo.CurrentCulture.CompareInfo.IndexOf(moduleName, targetName, CompareOptions.IgnoreCase) >= 0)
@@ -343,7 +247,7 @@ namespace HintMachine.Models
             
             int bytesRead = 0;
             byte[] buffer = new byte[length];
-            ReadProcessMemory((int)_processHandle, address, buffer, length, ref bytesRead);
+            NativeMethods.ReadProcessMemory((int)_processHandle, address, buffer, length, ref bytesRead);
             if (bytesRead < length)
                 throw new ProcessRamWatcherException("Could not read process memory at address 0x" + address.ToString("X"));
 
@@ -431,7 +335,7 @@ namespace HintMachine.Models
             int mbiSize = Marshal.SizeOf(info);
 
             IntPtr ptr = IntPtr.Zero;
-            while (VirtualQueryEx(_processHandle, ptr, out info, (uint)mbiSize) == mbiSize)
+            while (NativeMethods.VirtualQueryEx(_processHandle, ptr, out info, (uint)mbiSize) == mbiSize)
             {
                 ptr = (IntPtr)(ptr.ToInt64() + (long)info.RegionSize);
 
@@ -472,7 +376,7 @@ namespace HintMachine.Models
         {
             uint size = 5096;
             StringBuilder stringBuilder = new StringBuilder((int)size);
-            QueryFullProcessImageName(_processHandle, 0, stringBuilder, ref size);
+            NativeMethods.QueryFullProcessImageName(_processHandle, 0, stringBuilder, ref size);
             string binaryFilePath = stringBuilder.ToString();
 
             using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))

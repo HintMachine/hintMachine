@@ -74,6 +74,7 @@ namespace HintMachine.Models
         /// A thread responsible for requesting new random hints when PendingRandomHints > 0
         /// </summary>
         private readonly Thread _hintQueueThread = null;
+        private bool _terminateThread = false;
 
         // ----------------------------------------------------------------------------------
 
@@ -127,6 +128,13 @@ namespace HintMachine.Models
             });
         }
 
+        public void Disconnect()
+        {
+            _terminateThread = true;
+            _hintQueueThread.Join();
+            Client.Socket.DisconnectAsync();
+        }
+
         public List<string> GetMissingLocationNames()
         {
             List<long> alreadyHintedLocations = GetAlreadyHintedLocations();
@@ -154,9 +162,8 @@ namespace HintMachine.Models
 
         private void HintQueueThreadLoop()
         {
-            while (true)
+            while (!_terminateThread)
             {
-                
                 if (!Client.Socket.Connected)
                 {
                     Logger.Warn("Archipelago connection lost, attempting to reconnect...");
@@ -319,12 +326,6 @@ namespace HintMachine.Models
                 return int.MaxValue;
 
             return (int)Math.Ceiling((float)pointsToNextHint / (float)pointsPerCheck);
-        }
-
-        public void Disconnect()
-        {
-            _hintQueueThread.Abort();
-            Client.Socket.DisconnectAsync();
         }
 
         public void SendMessage(string message)

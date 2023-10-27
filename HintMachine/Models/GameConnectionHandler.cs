@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading;
+using System.Windows.Media;
 using System.Windows.Threading;
+using Archipelago.MultiClient.Net;
 using HintMachine.Models.GenericConnectors;
+using Newtonsoft.Json.Linq;
 
 namespace HintMachine.Models
 {
@@ -14,8 +17,11 @@ namespace HintMachine.Models
         public event Action<int> HintTokensEarned;
 
         private readonly Thread _gameWatchingThread = null;
+        private bool _terminateThread = false;
         private readonly object _gameLock = new object();
         private readonly Dispatcher _dispatcher = null;
+        private MediaPlayer _soundPlayer = null;
+        private static bool _alreadyAwardedTokenForCurrentGame = false;
 
         // ------------------------------------
 
@@ -26,7 +32,7 @@ namespace HintMachine.Models
 
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
             _gameWatchingThread = new Thread(() => {
-                while (true)
+                while (!_terminateThread)
                 {
                     OnTimerTick();
                     Thread.Sleep(Globals.TickInterval);
@@ -41,7 +47,8 @@ namespace HintMachine.Models
 
         ~GameConnectionHandler()
         {
-            _gameWatchingThread.Abort();
+            _terminateThread = true;
+            _gameWatchingThread.Join();
         }
 
         private void OnTimerTick()
@@ -81,7 +88,29 @@ namespace HintMachine.Models
                     }
 
                     if (totalObtainedHintTokens > 0)
+                    {
+                        if (Settings.PlaySoundOnHint)
+                        {
+                            if (_soundPlayer == null)
+                            {
+                                _soundPlayer = new MediaPlayer();
+                                _soundPlayer.Open(new Uri(Globals.NotificationSoundPath));
+                                _soundPlayer.Volume = 0.3;
+                            }
+                            else
+                            {
+                                _soundPlayer.Stop();
+                            }
+
+                            _soundPlayer.Play();
+                        }
+
+                        if (!_alreadyAwardedTokenForCurrentGame)
+                            HintMachineService.ArchipelagoSession?.SendMessage($"I just got a hint using HintMachine while playing {Game.Name}!");
+                        _alreadyAwardedTokenForCurrentGame = true;
+
                         HintTokensEarned?.Invoke(totalObtainedHintTokens);
+                    }
                 }
             }
 

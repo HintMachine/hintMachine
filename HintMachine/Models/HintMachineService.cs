@@ -1,8 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Windows.Media;
 using System.Windows.Threading;
 using HintMachine.Models.GenericConnectors;
-using WMPLib;
 
 namespace HintMachine.Models
 {
@@ -32,28 +31,11 @@ namespace HintMachine.Models
             get { return _hintTokens; }
             set 
             {
-                if (value > _hintTokens)
-                {
-                    // If we earned new hint tokens
-                    if (Settings.PlaySoundOnHint)
-                        _soundPlayer.controls.play();
-
-                    if (!_alreadyAwardedTokenForCurrentGame && CurrentGameConnection != null)
-                    {
-                        string gameName = CurrentGameConnection.Game.Name;
-                        ArchipelagoSession?.SendMessage($"I just got a hint using HintMachine while playing {gameName}!");
-                        _alreadyAwardedTokenForCurrentGame = true;
-                    }
-                }
-
                 _hintTokens = value;
                 ModelChanged?.Invoke();
             }
         }
         private static int _hintTokens = 0;
-
-        private static readonly WindowsMediaPlayer _soundPlayer = new WindowsMediaPlayer();
-        private static bool _alreadyAwardedTokenForCurrentGame = false;
 
         public static event Action ModelChanged = null;
 
@@ -61,11 +43,6 @@ namespace HintMachine.Models
 
         static HintMachineService()
         {
-            // Setup the sound player that is used to play a notification sound when getting a hint
-            _soundPlayer.settings.autoStart = false;
-            _soundPlayer.URL = Globals.NotificationSoundPath;
-            _soundPlayer.settings.volume = 30;
-
             #if DEBUG
                 DebugBuild = true;
             #endif
@@ -123,7 +100,6 @@ namespace HintMachine.Models
             CurrentGameConnection = new GameConnectionHandler(game, Dispatcher.CurrentDispatcher);
             
             CurrentGameConnection.GameDisconnected += () => {
-                _alreadyAwardedTokenForCurrentGame = false;
                 CurrentGameConnection = null;
                 ModelChanged?.Invoke();
             };

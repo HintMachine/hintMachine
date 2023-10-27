@@ -1,5 +1,6 @@
 ﻿using HintMachine.Models.Games;
 using HintMachine.Models.GenericConnectors;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -9,7 +10,14 @@ namespace HintMachine.Models
     internal static class Globals
     {
         public const string ProgramName = "HintMachine";
-        public const string ProgramVersion = "1.2.0-rc1";
+
+        public static string ProgramVersion
+        {
+            get {
+                Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                return $"{version.Major}.{version.Minor}.{version.Build}";
+            }
+        }
 
         /// <summary>
         /// The duration of a "tick" where the current game connector (if any) watches the game once, in milliseconds

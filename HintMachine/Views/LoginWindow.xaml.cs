@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows;
-using Archipelago.MultiClient.Net;
 using HintMachine.Models;
 using Newtonsoft.Json.Linq;
 
