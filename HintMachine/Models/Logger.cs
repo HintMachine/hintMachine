@@ -15,6 +15,7 @@ namespace HintMachine.Models
         GOAL = 8,
         SERVER_RESPONSE = 9,
         JOIN_LEAVE = 10,
+        CONNEXION = 11,
     }
 
     public static class Logger

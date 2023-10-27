@@ -36,6 +36,7 @@ namespace HintMachine.Views
             try
             {
                 HintMachineService.ConnectToArchipelago(host, slot, password);
+                Settings.StreamerMode = CheckboxStreamerMode.IsChecked.Value;
                 new MainWindow().Show();
                 Close();
             }

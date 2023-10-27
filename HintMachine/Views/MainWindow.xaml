@@ -73,10 +73,12 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0" />
+                        <Label x:Name="StreamerModeLabel" Content="Stremer mode activated" FontWeight="Bold" Visibility="Hidden" Grid.Row="0"/>
+
+                        <Label x:Name="Host" Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0" />
                         <TextBlock Name="LabelHost" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">archipelago.gg:12345</TextBlock>
 
-                        <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
+                        <Label x:Name="Slot" Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
                         <TextBlock Name="LabelSlot" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">Player</TextBlock>
 
                         <Label Content="Game: " FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>

@@ -21,7 +21,7 @@ namespace HintMachine.Views
         {
             InitializeComponent();
             SetupChatFilterMenus();
-
+            DisplayStreamerMode();
             // Setup the message log by connecting it to the global Logger
             Logger.OnMessageLogged += (string message, LogMessageType logMessageType) =>
             {
@@ -33,11 +33,11 @@ namespace HintMachine.Views
 
             // TODO: Remove when data bindings will be in place
             HintMachineService.ModelChanged += OnModelChange;
-            OnArchipelagoSessionChange(); 
+            OnArchipelagoSessionChange();
 
 
             Logger.Info("Feeling stuck in your Archipelago world?\n" +
-                        "Connect to a game and start playing to earn hint tokens by completing quests.\n" + 
+                        "Connect to a game and start playing to earn hint tokens by completing quests.\n" +
                         "You can then redeem those tokens using the dedicated button to earn a random location hint for your world.");
         }
 
@@ -87,14 +87,20 @@ namespace HintMachine.Views
                 SetupHintsTab();
 
             OnModelChange();
-
-            Logger.Info($"Connected to Archipelago session at {HintMachineService.Host} as {HintMachineService.Slot}.");
+            if (!Settings.StreamerMode)
+            {
+                Logger.Log($"Connected to Archipelago session at {HintMachineService.Host} as {HintMachineService.Slot}.", LogMessageType.CONNEXION);
+            }
+            else {
+                Logger.Info($"Connected to Archipelago session.");
+            }
         }
 
         private void OnModelChange()
         {
             // TODO: Replace all of those by bindings
-            Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => {
+            Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
+            {
                 ButtonRedeemHintToken.IsEnabled = (HintMachineService.HintTokens > 0);
                 TextHintTokenCount.Text = $"You currently have {HintMachineService.HintTokens} hint tokens.";
 
@@ -175,6 +181,7 @@ namespace HintMachine.Views
                 { MenuDisplaySentItems, Settings.DisplayItemSentMessages },
                 { MenuSoundNotification, Settings.PlaySoundOnHint },
                 { MenuShowUpdatePopup, Settings.ShowUpdatePopUp},
+                { MenuStreamerMode, Settings.StreamerMode},
             };
 
             foreach (var kv in MENU_ITEMS)
@@ -195,7 +202,7 @@ namespace HintMachine.Views
 
             // Calculate the available hints using hint points
             int remainingHints = HintMachineService.ArchipelagoSession.GetAvailableHintsWithHintPoints();
-            if(remainingHints == int.MaxValue)
+            if (remainingHints == int.MaxValue)
                 text = "You have infinite hints";
             else
                 text = $"You have {remainingHints} remaining hints";
@@ -224,6 +231,8 @@ namespace HintMachine.Views
             Settings.DisplayItemSentMessages = MenuDisplaySentItems.IsChecked;
             Settings.PlaySoundOnHint = MenuSoundNotification.IsChecked;
             Settings.ShowUpdatePopUp = MenuShowUpdatePopup.IsChecked;
+            Settings.StreamerMode = MenuStreamerMode.IsChecked;
+            DisplayStreamerMode();
             MessageLog.UpdateMessagesVisibility();
         }
 
@@ -267,7 +276,7 @@ namespace HintMachine.Views
                 HintMachineService.ConnectToArchipelago(host, slotName, password);
                 OnArchipelagoSessionChange(); // TODO: Data binding!
             }
-            catch(ArchipelagoConnectionException)
+            catch (ArchipelagoConnectionException)
             {
                 MessageBox.Show("Could not reconnect to Archipelago server.", "Connection error",
                      MessageBoxButton.OK, MessageBoxImage.Error);
@@ -281,5 +290,24 @@ namespace HintMachine.Views
         private void OnAboutClick(object sender, RoutedEventArgs e) => HintMachineService.ShowAboutMessage();
 
         private void OnRedeemHintTokenClick(object sender, RoutedEventArgs e) => HintMachineService.RedeemHintToken();
+
+        private void DisplayStreamerMode() {
+            if (Settings.StreamerMode)
+            {
+                StreamerModeLabel.Visibility = Visibility.Visible;
+                Host.Visibility = Visibility.Hidden;
+                LabelHost.Visibility = Visibility.Hidden;
+                Slot.Visibility = Visibility.Hidden;
+                LabelSlot.Visibility = Visibility.Hidden;
+            }
+            else 
+            {
+                StreamerModeLabel.Visibility = Visibility.Hidden;
+                Host.Visibility = Visibility.Visible;
+                LabelHost.Visibility = Visibility.Visible;
+                LabelSlot.Visibility = Visibility.Visible;
+            }
+            MessageLog.UpdateMessagesVisibility();
+        }
     }
 }
