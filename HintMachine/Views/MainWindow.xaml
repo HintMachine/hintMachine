@@ -110,7 +110,7 @@
                             <Button Name="ButtonManualHint" DockPanel.Dock="Right" HorizontalAlignment="Left" Margin="0,0,0,8" Padding="5" Background="#FFA8E0A9" Click="OnManualHintButtonClick">❓ Request a hint</Button>
                             <Label Name="LabelAvailableHints" DockPanel.Dock="Left">You have 0 remaining hints, you will get a new hint in 0 checks.</Label>
                         </DockPanel>
-                        
+
                         <local:HintsView x:Name="HintsView" DockPanel.Dock="Bottom"/>
                     </DockPanel>
                 </TabItem>
