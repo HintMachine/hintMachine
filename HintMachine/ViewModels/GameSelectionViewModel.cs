@@ -11,10 +11,8 @@ using System.Windows.Data;
 
 namespace HintMachine.ViewModels
 {
-    internal class GameSelectionViewModel : ICloseableViewModel {
-        public delegate void OnGameConnectedAction(IGameConnector game);
-        public event OnGameConnectedAction OnGameConnected = null;
-
+    public class GameSelectionViewModel : ICloseableViewModel
+    {
         public List<IGameConnector> GameList { get; set; }
 
         public ICollectionView GameListView => CollectionViewSource.GetDefaultView(GameList);
@@ -93,18 +91,17 @@ namespace HintMachine.ViewModels
 
         private void ValidateHandler()
         {
-            // Connect to selected game
-            if (!SelectedGame.DoConnect())
+            if (HintMachineService.ConnectToGame(SelectedGame))
             {
-                string message = $"Could not connect to {SelectedGame.Name}.{Environment.NewLine}" +
-                                  "Please ensure it is currently running and try again.";
-                MessageBox.Show(message, "Connection error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                // Connection was a success, just close this window
+                CloseWindow();
             }
-
-            OnGameConnected?.Invoke(SelectedGame);
-
-            CloseWindow();
+            else
+            {
+                // Connection failed for some reason, display an error message inside a MessageBox
+                MessageBox.Show($"Could not connect to {SelectedGame.Name}.\nPlease ensure it is currently running and try again.", 
+                    "Connection error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void CancelHandler()

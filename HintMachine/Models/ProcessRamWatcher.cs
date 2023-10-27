@@ -11,12 +11,6 @@ using System.Text;
 
 namespace HintMachine.Models
 {
-    public class ProcessRamWatcherException : Exception
-    {
-        public ProcessRamWatcherException(string message) : base(message) 
-        {}
-    }
-
     public enum MemoryRegionType : uint
     {
         MEM_IMAGE = 0x1000000,

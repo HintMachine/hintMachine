@@ -157,6 +157,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\ArchipelagoHintSession.cs" />
+    <Compile Include="Models\Exceptions.cs" />
+    <Compile Include="Models\GameConnectionHandler.cs" />
     <Compile Include="Models\Games\BPMConnector.cs" />
     <Compile Include="Models\Games\AdvanceWarsDualStrikeConnector.cs" />
     <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
@@ -206,6 +208,7 @@
     <Compile Include="Models\Games\SuperHexagonConnector.cs" />
     <Compile Include="Models\Games\Operator911Connector.cs" />
     <Compile Include="Models\Games\PapersPleaseConnector.cs" />
+    <Compile Include="Models\HintMachineService.cs" />
     <Compile Include="Models\HintQuestCounter.cs" />
     <Compile Include="Models\HintQuestCumulative.cs" />
     <Compile Include="Models\HintQuest.cs" />

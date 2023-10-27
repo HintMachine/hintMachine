@@ -1,6 +1,5 @@
 ﻿using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.MessageLog.Parts;
 using Archipelago.MultiClient.Net.Models;
@@ -333,12 +332,8 @@ namespace HintMachine.Models
             Client.Socket.SendPacketAsync(new SayPacket { Text = message });
         }
 
-        public List<string> GetPlayerNames()
-        {
-            List<string> names = new List<string>();
-            foreach (PlayerInfo info in Client.Players.AllPlayers)
-                names.Add(info.Name);
-            return names;
-        }
+        public List<string> GetPlayerNames() => Client.Players.AllPlayers.Where(p => p.Name != "Server")
+                                                                         .Select(p => p.Name)
+                                                                         .ToList();
     }
 }
