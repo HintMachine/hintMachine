@@ -20,6 +20,8 @@ namespace HintMachine.Views
             InitializeComponent();
             SetupChatFilterMenus();
 
+            Title = $"{Globals.ProgramName} {Globals.ProgramVersion}";
+
             // Setup the message log by connecting it to the global Logger
             Logger.OnMessageLogged += (string message, LogMessageType logMessageType) =>
             {
@@ -29,8 +31,7 @@ namespace HintMachine.Views
                 }));
             };
 
-            // TODO: Remove when data bindings will be in place
-            HintMachineService.ModelChanged += OnModelChange;
+            HintMachineService.GameChanged += OnGameChanged;
             OnArchipelagoSessionChange(); 
 
             Logger.Info("Feeling stuck in your Archipelago world?\n" +
@@ -41,9 +42,6 @@ namespace HintMachine.Views
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-
-            // TODO: Remove when data bindings will be in place
-            HintMachineService.ModelChanged -= OnModelChange;
         }
 
         protected void PopulateReconnectAsMenu()
@@ -83,33 +81,24 @@ namespace HintMachine.Views
             if (TabControl.SelectedIndex == TAB_HINTS)
                 SetupHintsTab();
 
-            OnModelChange();
-
             Logger.Info($"Connected to Archipelago session at {HintMachineService.Host} as {HintMachineService.Slot}.");
         }
 
-        private void OnModelChange()
+        private void OnGameChanged()
         {
-            // TODO: Replace all of those by bindings
-            Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => {
+            Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => 
+            {
                 var game = HintMachineService.CurrentGameConnection?.Game;
                 if (game != null)
                 {
-                    Title = $"{Globals.ProgramName} - {game.Name}";
-
-                    // Init game quests
+                    // Init game quest widgets
                     foreach (HintQuest quest in game.Quests)
-                    {
-                        quest.InitComponents(GridQuests);
-                        quest.UpdateComponents();
-                    }
+                        quest.InitComponents(StackPanelQuests);
                 }
                 else
                 {
-                    Title = Globals.ProgramName;
-
-                    GridQuests.Children.Clear();
-                    GridQuests.RowDefinitions.Clear();
+                    // Clear game quest widgets
+                    StackPanelQuests.Children.Clear();
                 }
             }));
         }

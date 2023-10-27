@@ -38,15 +38,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Name="GridQuests" Margin="8,8,8,8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid.Style>
-                    <Style TargetType="Grid">
+                    <Style TargetType="StackPanel">
                         <Setter Property="Visibility" Value="Visible"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=(models:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
@@ -54,7 +46,6 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </Grid.Style>
             </Grid>
 
             <StackPanel Name="GridGameConnect" Margin="8,8,8,8" Visibility="Visible">
