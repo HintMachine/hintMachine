@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     class StargunnerConnector : IGameConnector
     {
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative

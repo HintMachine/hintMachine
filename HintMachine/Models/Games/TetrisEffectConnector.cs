@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class TetrisEffectConnector : IGameConnector
     {
         private BinaryTarget GAME_VERSION_STEAM = new BinaryTarget

@@ -1,7 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace HintMachine.Models.GenericConnectors
 {
+    [System.AttributeUsage(System.AttributeTargets.Class)]
+    public class AvailableGameConnectorAttribute : System.Attribute
+    {
+        public AvailableGameConnectorAttribute()
+        { }
+    }
+
     public abstract class IGameConnector
     {
         /// <summary>
@@ -38,6 +46,11 @@ namespace HintMachine.Models.GenericConnectors
         /// List of quests available for this game
         /// </summary>
         public List<HintQuest> Quests { get; protected set; } = new List<HintQuest>();
+
+        /// <summary>
+        /// A string representation of the list of quests for this game
+        /// </summary>
+        public string QuestsString => string.Join(", ", Quests.Select(x => x.Name));
 
         /// <summary>
         /// The filename for the cover art of the game, which is looked for in the "Assets/covers/" directory

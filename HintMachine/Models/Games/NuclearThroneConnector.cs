@@ -2,6 +2,8 @@
 
 namespace HintMachine.Models.Games
 {
+    // Unstable for now, removed from list
+    // [AvailableGameConnector]
     public class NuclearThroneConnector : IGameConnector
     {
         private readonly HintQuestCounter _killThroneQuest = new HintQuestCounter

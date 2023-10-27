@@ -10,18 +10,18 @@ namespace HintMachine.Views
     /// </summary>
     public partial class ManualHintWindow : Window
     {
-        public Action<String> HintLocationCallback { get; set; }
-        public Action<String> HintItemCallback { get; set; }
+        public Action<string> HintLocationCallback { get; set; }
+        public Action<string> HintItemCallback { get; set; }
 
         // ----------------------------------------------------------------------------------
 
-        public ManualHintWindow(ArchipelagoHintSession archipelago)
+        public ManualHintWindow()
         {
             InitializeComponent();
 
-            foreach (string itemName in archipelago.GetItemNames())
+            foreach (string itemName in HintMachineService.ArchipelagoSession?.GetItemNames())
                 ComboboxHintedItem.Items.Add(itemName);
-            foreach (string locName in archipelago.GetMissingLocationNames())
+            foreach (string locName in HintMachineService.ArchipelagoSession?.GetMissingLocationNames())
                 ComboboxHintedLocation.Items.Add(locName);
 
             RadioHintItem.IsChecked = true;

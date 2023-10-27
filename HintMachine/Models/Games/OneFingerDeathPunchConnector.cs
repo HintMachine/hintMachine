@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class OneFingerDeathPunchConnector : IGameConnector
     {
         private readonly HintQuestCumulative _killsQuest = new HintQuestCumulative

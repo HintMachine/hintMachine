@@ -33,21 +33,16 @@ namespace HintMachine.Views
             string slot = InputSlot.Text;
             string password = InputPassword.Text;
 
-            ArchipelagoHintSession archipelagoSession = new ArchipelagoHintSession(host, slot, password);
-            if (archipelagoSession.IsConnected)
+            try
             {
-                // If connectionn succeeded, store the fields contents for next execution and move on to MainWindow
-                Settings.Host = host;
-                Settings.Slot = slot;
-                Settings.SaveToFile();
-
-                new MainWindow(archipelagoSession).Show();
+                HintMachineService.ConnectToArchipelago(host, slot, password);
+                new MainWindow().Show();
                 Close();
             }
-            else
+            catch(ArchipelagoConnectionException ex)
             {
-                MessageBox.Show($"Could not connect to Archipelago: {archipelagoSession.ErrorMessage}", 
-                    "Connection error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Could not connect to Archipelago: {ex.Message}",
+                                "Connection error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

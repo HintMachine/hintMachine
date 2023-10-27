@@ -2,13 +2,14 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class TMNTShreddersRevengeConnector : IGameConnector
     {
         private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
         {
             DisplayName = "Steam",
             ProcessName = "TMNT",
-            Hash = "84DF2BBE0C0E45A83A1991C46635E11F32E7AADD4086E1F810EC1B61CB7B4952"
+            Hash = "8AAA6D910754E1B84D62702BF66BE4C22D46EA23D6DC0B80AD9761909EE22389"
         };
 
         private readonly HintQuestCumulative _enemyQuest = new HintQuestCumulative

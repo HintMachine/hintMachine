@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class PuyoTetrisConnector : IGameConnector
     {
         private readonly HintQuestCumulative _linesQuest = new HintQuestCumulative

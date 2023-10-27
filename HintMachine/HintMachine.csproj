@@ -1,19 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F07DABDF-B962-4696-B9DA-5E18E6E83D56}</ProjectGuid>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>HintMachine</RootNamespace>
-    <AssemblyName>HintMachine</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -29,249 +17,48 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <UseWindowsForms>False</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>HintMachine.App</StartupObject>
   </PropertyGroup>
-  <PropertyGroup />
   <PropertyGroup>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Archipelago.MultiClient.Net, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Archipelago.MultiClient.Net.5.0.6\lib\net45\Archipelago.MultiClient.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Archipelago.MultiClient.Net.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <None Remove="ThreadstackFinder32.exe" />
+    <None Remove="ThreadstackFinder64.exe" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="Models\ArchipelagoHintSession.cs" />
-    <Compile Include="Models\Games\BPMConnector.cs" />
-    <Compile Include="Models\HintQuestSingle.cs" />
-    <Compile Include="Models\Games\SuperMarioBros2Connector.cs" />
-    <Compile Include="Models\Games\PaintTheTownRedConnector.cs" />
-    <Compile Include="Models\Games\NexMachinaConnector.cs" />
-    <Compile Include="Models\Games\PuyoPuyo2MDConnector.cs" />
-    <Compile Include="Models\Games\TetrisNESConnector.cs" />
-    <Compile Include="Models\Games\MinesweeperClassyConnector.cs" />
-    <Compile Include="Models\Games\PokemonPinballRSConnector.cs" />
-    <Compile Include="Models\Games\DragonCrownConnector.cs" />
-    <Compile Include="Models\Games\PokemonPuzzleChallengeConnector.cs" />
-    <Compile Include="Models\Games\KatamariDamacyRerollConnector.cs" />
-    <Compile Include="Models\Games\TonyHawksProSkater12Connector.cs" />
-    <Compile Include="Models\Games\TMNTShreddersRevengeConnector.cs" />
-    <Compile Include="Models\Games\MetroidPrimePinballConnector.cs" />
-    <Compile Include="Models\Games\MeteosConnector.cs" />
-    <Compile Include="Models\Games\BustAMove4Connector.cs" />
-    <Compile Include="Models\Games\PacManChampionshipEditionDXConnector.cs" />
-    <Compile Include="Models\Games\LuckBeALandlordConnector.cs" />
-    <Compile Include="Models\Games\FZeroGXConnector.cs" />
-    <Compile Include="Models\Games\DorfromantikConnector.cs" />
-    <Compile Include="Models\Games\Rollcage2Connector.cs" />
-    <Compile Include="Models\Games\ColumnsConnector.cs" />
-    <Compile Include="Models\Games\StargunnerConnector.cs" />
-    <Compile Include="Models\Games\SuperMonkeyBallConnector.cs" />
-    <Compile Include="Models\Games\SuperMonkeyBall2Connector.cs" />
-    <Compile Include="Models\Games\SuperMegaBaseball2.cs" />
-    <Compile Include="Models\GenericConnectors\INESConnector.cs" />
-    <Compile Include="Models\GenericConnectors\IGameboyColorConnector.cs" />
-    <Compile Include="Models\GenericConnectors\IGameboyAdvanceConnector.cs" />
-    <Compile Include="Models\GenericConnectors\IPlayStationConnector.cs" />
-    <Compile Include="Models\GenericConnectors\IEmulatorConnector.cs" />
-    <Compile Include="Models\GenericConnectors\MegadriveRamAdapter.cs" />
-    <Compile Include="Models\Globals.cs" />
-    <Compile Include="Models\HintDetails.cs" />
-    <Compile Include="Models\Games\SonicBlueSpheresConnector.cs" />
-    <Compile Include="Models\Games\GeometryWarsConnector.cs" />
-    <Compile Include="Models\Games\NuclearThroneConnector.cs" />
-    <Compile Include="Models\Games\PuyoTetrisConnector.cs" />
-    <Compile Include="Models\Games\GeometryWarsGalaxiesConnector.cs" />
-    <Compile Include="Models\Games\ZachtronicsSolitaireConnector.cs" />
-    <Compile Include="Models\Games\TetrisEffectConnector.cs" />
-    <Compile Include="Models\Games\MiniMetroConnector.cs" />
-    <Compile Include="Models\Games\SuperHexagonConnector.cs" />
-    <Compile Include="Models\Games\Operator911Connector.cs" />
-    <Compile Include="Models\Games\PapersPleaseConnector.cs" />
-    <Compile Include="Models\HintQuestCounter.cs" />
-    <Compile Include="Models\HintQuestCumulative.cs" />
-    <Compile Include="Models\HintQuest.cs" />
-    <Compile Include="Views\HintsView.xaml.cs">
-      <DependentUpon>HintsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GenericConnectors\IDolphinConnector.cs" />
-    <Compile Include="Models\GenericConnectors\IGameConnector.cs" />
-    <Compile Include="Models\Games\OneFingerDeathPunchConnector.cs" />
-    <Compile Include="Models\Games\XenotiltConnector.cs" />
-    <Compile Include="Models\Games\IslandersConnector.cs" />
-    <Compile Include="Models\GenericConnectors\IMegadriveConnector.cs" />
-    <Compile Include="Models\GenericConnectors\INintendoDSConnector.cs" />
-    <Compile Include="Models\Logger.cs" />
-    <Compile Include="Views\UpdateAvailablePopUp.xaml.cs">
-      <DependentUpon>UpdateAvailablePopUp.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\GameSelectionWindow.xaml.cs">
-      <DependentUpon>GameSelectionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ManualHintWindow.xaml.cs">
-      <DependentUpon>ManualHintWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MessageLog.xaml.cs">
-      <DependentUpon>MessageLog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProcessRamWatcher.cs" />
-    <Compile Include="Models\Settings.cs" />
-    <Page Include="Views\HintsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UpdateAvailablePopUp.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\LoginWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Views\GameSelectionWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ManualHintWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MessageLog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Covers\tetris_nes.png" />
+    <Content Include="Assets\Covers\paint_the_town_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\tetris_nes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ThreadstackFinder32.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ThreadstackFinder64.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Assets\icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -293,63 +80,146 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\icon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Covers\fzero_gx.png" />
-    <Resource Include="Assets\Covers\dorfromantik.png" />
-    <Resource Include="Assets\Covers\bust_a_move_4.png" />
-    <Resource Include="Assets\Covers\geometry_wars_re.png" />
-    <Resource Include="Assets\Covers\geometry_wars_galaxies.png" />
-    <Resource Include="Assets\Covers\islanders.png" />
-    <Resource Include="Assets\Covers\one_finger_death_punch.png" />
-    <Resource Include="Assets\Covers\pacman_cedx.png" />
-    <Resource Include="Assets\Covers\puyo_puyo_tetris.png" />
-    <Resource Include="Assets\Covers\rollcage_2.png" />
-    <Resource Include="Assets\Covers\stargunner.png" />
-    <Resource Include="Assets\Covers\xenotilt.png" />
-    <Resource Include="Assets\Covers\meteos.png" />
-    <Resource Include="Assets\Covers\columns.png" />
-    <Resource Include="Assets\Covers\metroid_prime_pinball.png" />
-    <Resource Include="Assets\Covers\bpm.png" />
-    <Resource Include="Assets\Covers\mini_metro.png" />
-    <Resource Include="Assets\Covers\super_hexagon.png" />
-    <Resource Include="Assets\Covers\911_operator.png" />
-    <Resource Include="Assets\Covers\super_mega_baseball_2.png" />
-    <Resource Include="Assets\Covers\dragons_crown.png" />
-    <Resource Include="Assets\Covers\pokemon_pinball_rs.png" />
-    <Resource Include="Assets\Covers\super_monkey_ball_2.png" />
-    <Resource Include="Assets\Covers\super_monkey_ball.png" />
-    <Resource Include="Assets\Covers\nexmachina.png" />
-    <Resource Include="Assets\Covers\pokemon_puzzle_challenge.png" />
-    <Resource Include="Assets\Covers\papers_please.png" />
-    <Resource Include="Assets\Covers\minesweeper_classy.png" />
-    <Resource Include="Assets\Covers\puyo_puyo_2.png" />
-    <Resource Include="Assets\Covers\paint_the_town_red.png" />
-    <Resource Include="Assets\Covers\super_mario_bros_2.png" />
+    <Resource Include="Assets\icon.ico" />
+    <Content Include="Assets\Covers\fzero_gx.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\dorfromantik.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\bust_a_move_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\geometry_wars_re.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\geometry_wars_galaxies.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\islanders.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\one_finger_death_punch.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\pacman_cedx.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\puyo_puyo_tetris.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\rollcage_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\stargunner.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\xenotilt.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\meteos.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\columns.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\metroid_prime_pinball.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\bpm.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\mini_metro.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\super_hexagon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\911_operator.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\super_mega_baseball_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\dragons_crown.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\pokemon_pinball_rs.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\super_monkey_ball.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\super_monkey_ball_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\nexmachina.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\pokemon_puzzle_challenge.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\papers_please.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\minesweeper_classy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\puyo_puyo_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\peggle_deluxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\peggle_nights.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\advance_wars_dual_strike.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\super_mario_bros_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\pinball_fx3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Notification.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Assets\Covers\tetris_effect_connected.png" />
+    <Content Include="Assets\Covers\tetris_effect_connected.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Assets\Covers\unknown.png" />
-    <Resource Include="Assets\Covers\zachtronics_solitaire_collection.png" />
-    <Resource Include="Assets\Covers\sonic_blue_spheres.png" />
-    <Resource Include="Assets\Covers\luck_be_a_landord.png" />
-    <Resource Include="Assets\Covers\tony_hawks_pro_skater_1_2.png" />
-    <Resource Include="Assets\Covers\tmnt_shredders_revenge.png" />
-    <Resource Include="Assets\Covers\katamari_damacy_reroll.png" />
+    <Content Include="Assets\Covers\zachtronics_solitaire_collection.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\sonic_blue_spheres.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\luck_be_a_landord.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\tony_hawks_pro_skater_1_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\tmnt_shredders_revenge.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\katamari_damacy_reroll.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="WMPLib">
-      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Archipelago.MultiClient.Net" Version="5.0.6" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+  </ItemGroup>
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="ROBOCOPY &quot;$(TargetDir) &quot; &quot;$(TargetDir)Libs\ &quot; /XF HintMachine.dll *.exe *.config *.manifest *.cfg HintMachine.pdb /XD Libs Assets /E /IS /MOV
+                    if %errorlevel% leq 1 exit 0 else exit %errorlevel%" />
+  </Target>-->
 </Project>

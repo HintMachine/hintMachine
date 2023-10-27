@@ -2,6 +2,7 @@ using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class MiniMetroConnector : IGameConnector
     {
         private readonly HintQuestCumulative _passengersQuest = new HintQuestCumulative

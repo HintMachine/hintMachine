@@ -1,6 +1,5 @@
 ﻿using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.MessageLog.Parts;
 using Archipelago.MultiClient.Net.Models;
@@ -75,6 +74,7 @@ namespace HintMachine.Models
         /// A thread responsible for requesting new random hints when PendingRandomHints > 0
         /// </summary>
         private readonly Thread _hintQueueThread = null;
+        private bool _terminateThread = false;
 
         // ----------------------------------------------------------------------------------
 
@@ -128,6 +128,13 @@ namespace HintMachine.Models
             });
         }
 
+        public void Disconnect()
+        {
+            _terminateThread = true;
+            _hintQueueThread.Join();
+            Client.Socket.DisconnectAsync();
+        }
+
         public List<string> GetMissingLocationNames()
         {
             List<long> alreadyHintedLocations = GetAlreadyHintedLocations();
@@ -155,9 +162,8 @@ namespace HintMachine.Models
 
         private void HintQueueThreadLoop()
         {
-            while (true)
+            while (!_terminateThread)
             {
-                
                 if (!Client.Socket.Connected)
                 {
                     Logger.Warn("Archipelago connection lost, attempting to reconnect...");
@@ -322,23 +328,13 @@ namespace HintMachine.Models
             return (int)Math.Ceiling((float)pointsToNextHint / (float)pointsPerCheck);
         }
 
-        public void Disconnect()
-        {
-            _hintQueueThread.Abort();
-            Client.Socket.DisconnectAsync();
-        }
-
         public void SendMessage(string message)
         {
             Client.Socket.SendPacketAsync(new SayPacket { Text = message });
         }
 
-        public List<string> GetPlayerNames()
-        {
-            List<string> names = new List<string>();
-            foreach (PlayerInfo info in Client.Players.AllPlayers)
-                names.Add(info.Name);
-            return names;
-        }
+        public List<string> GetPlayerNames() => Client.Players.AllPlayers.Where(p => p.Name != "Server")
+                                                                         .Select(p => p.Name)
+                                                                         .ToList();
     }
 }

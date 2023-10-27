@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class MinesweeperClassyConnector : IGameConnector
     {
         private readonly HintQuestCumulative _beginnerWinsQuest = new HintQuestCumulative
@@ -14,7 +15,7 @@ namespace HintMachine.Models.Games
         private readonly HintQuestCumulative _intermediateWinsQuest = new HintQuestCumulative
         {
             Name = "Intermediate Wins",
-            GoalValue = 3,
+            GoalValue = 2,
             MaxIncrease = 1,
         };
 

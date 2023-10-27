@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class GeometryWarsGalaxiesConnector : IDolphinConnector
     {
         private readonly HintQuestCumulative _geomsQuest = new HintQuestCumulative
