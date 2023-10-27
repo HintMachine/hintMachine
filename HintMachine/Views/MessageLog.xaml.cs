@@ -1,4 +1,5 @@
-﻿using HintMachine.Models;
+﻿using HintMachine.Helpers;
+using HintMachine.Models;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;

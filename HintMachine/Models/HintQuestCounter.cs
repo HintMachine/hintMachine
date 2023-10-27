@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Windows;
+using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Media;
+using HintMachine.Helpers;
+using HintMachine.Views;
 
 namespace HintMachine.Models
 {

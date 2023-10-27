@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine.Views"
-        xmlns:models="clr-namespace:HintMachine.Models"
+        xmlns:srv="clr-namespace:HintMachine.Services"
         mc:Ignorable="d"
-        Title="HintMachine" Height="700" Width="1100" MinHeight="700" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
+        Height="700" Width="1100" MinHeight="700" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
 
     <DockPanel>
         <Menu DockPanel.Dock="Top" Background="#FFFFFFFF">
@@ -38,15 +38,18 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <StackPanel Name="StackPanelQuests" Margin="0,0,0,0">
+                <StackPanel.Style>
                     <Style TargetType="StackPanel">
                         <Setter Property="Visibility" Value="Visible"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=(models:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                            <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-            </Grid>
+                </StackPanel.Style>
+            </StackPanel>
 
             <StackPanel Name="GridGameConnect" Margin="8,8,8,8" Visibility="Visible">
                 <Button Width="304" Content="🔌 Connect to a game" FontSize="14" Click="OnConnectToGameButtonClick" Height="37">
@@ -54,7 +57,7 @@
                         <Style TargetType="Button">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=(models:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -66,7 +69,7 @@
             <StackPanel VerticalAlignment="Bottom">
                 <TextBlock Name="TextHintTokenCount" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Center">
                     <Run>You currently have </Run>
-                    <Run Text="{Binding Path=(models:HintMachineService.HintTokens), Mode=OneWay}"/>
+                    <Run Text="{Binding Path=(srv:HintMachineService.HintTokens), Mode=OneWay}"/>
                     <Run> hint tokens</Run>
                 </TextBlock>
 
@@ -75,7 +78,7 @@
                     <Button.Style>
                         <Style TargetType="Button">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=(models:HintMachineService.HintTokens), Mode=OneWay}" Value="0">
+                                <DataTrigger Binding="{Binding Path=(srv:HintMachineService.HintTokens), Mode=OneWay}" Value="0">
                                     <Setter Property="IsEnabled" Value="False"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -100,13 +103,13 @@
                         </Grid.RowDefinitions>
 
                         <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Path=(models:HintMachineService.Host), Mode=OneWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Path=(srv:HintMachineService.Host), Mode=OneWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
 
                         <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Path=(models:HintMachineService.Slot), Mode=OneWay}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Path=(srv:HintMachineService.Slot), Mode=OneWay}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
 
                         <Label Content="Game: " FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Path=(models:HintMachineService.GameName), Mode=OneWay}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Path=(srv:HintMachineService.GameName), Mode=OneWay}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
 
                         <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
                             <Grid.ColumnDefinitions>
@@ -118,7 +121,7 @@
                                     <Style TargetType="Button">
                                         <Setter Property="Visibility" Value="Visible"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=(models:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Hidden"/>
                                             </DataTrigger>
                                         </Style.Triggers>

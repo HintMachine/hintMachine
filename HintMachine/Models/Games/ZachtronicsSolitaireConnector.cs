@@ -1,4 +1,5 @@
-﻿using HintMachine.Models.GenericConnectors;
+﻿using HintMachine.Helpers;
+using HintMachine.Models.GenericConnectors;
 using System;
 using System.Collections.Generic;
 using System.IO;

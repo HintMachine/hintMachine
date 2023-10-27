@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using HintMachine.Helpers;
 
 namespace HintMachine.Models.GenericConnectors
 {
