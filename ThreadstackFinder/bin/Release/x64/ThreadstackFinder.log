@@ -1,8 +1,0 @@
-﻿  main.cpp
-  Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 70 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Finished generating code
-  ThreadstackFinder.vcxproj -> C:\Users\Anthony\source\repos\hintMachine_SMB3\ThreadstackFinder\bin\Release\ThreadstackFinder64.exe
-          1 file(s) copied.
-          1 file(s) copied.
