@@ -92,9 +92,6 @@ namespace HintMachine.Views
         {
             // TODO: Replace all of those by bindings
             Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => {
-                GridQuests.Children.Clear();
-                GridQuests.RowDefinitions.Clear();
-
                 var game = HintMachineService.CurrentGameConnection?.Game;
                 if (game != null)
                 {
@@ -113,6 +110,9 @@ namespace HintMachine.Views
                 else
                 {
                     Title = Globals.ProgramName;
+
+                    GridQuests.Children.Clear();
+                    GridQuests.RowDefinitions.Clear();
 
                     GridQuests.Visibility = Visibility.Hidden;
                     ButtonChangeGame.Visibility = Visibility.Hidden;

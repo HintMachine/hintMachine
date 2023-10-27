@@ -159,13 +159,15 @@ namespace HintMachine.Models
 
         public override void UpdateComponents()
         {
+            if (_label == null)
+                return;
+
             _label.Content = Name;
 
             _progressBar.Value = CurrentValue;
             _progressBarOverlayText.Text = CurrentValue + " / " + GoalValue;
 
-#if DEBUG
-            if (CooldownBetweenIncrements > 0)
+            if (HintMachineService.DebugBuild && CooldownBetweenIncrements > 0)
             {
                 DateTime now = DateTime.UtcNow;
                 TimeSpan t = now - _lastIncrementTime;
@@ -173,7 +175,6 @@ namespace HintMachine.Models
                 if(cooldown > 0)
                     _progressBarOverlayText.Text += $" ({Math.Ceiling(cooldown)}s cooldown)";
             }
-#endif
         }
     }
 }

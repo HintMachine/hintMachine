@@ -47,7 +47,20 @@
             </Grid>
 
             <StackPanel Name="GridGameConnect" Margin="8,8,8,8" Visibility="Visible">
-                <Button Content="🔗 Connect to a game" Width="304" Click="OnConnectToGameButtonClick" Height="37"/>
+                <Button Width="304" Click="OnConnectToGameButtonClick" Height="37">
+                    🔗 Connect to a game
+
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=(models:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
 
             <StackPanel VerticalAlignment="Bottom">
