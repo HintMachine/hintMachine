@@ -42,28 +42,28 @@ namespace HintMachine.Models.Games
             MaxIncrease = 1,
         };
 
-        private readonly HintQuestCounter _marioQuest = new HintQuestCounter
+        private readonly HintQuestSingle _marioQuest = new HintQuestSingle
         {
             Name = "Mario",
             GoalValue = 5,
             MaxIncrease = 1,
         };
 
-        private readonly HintQuestCounter _luigiQuest = new HintQuestCounter
+        private readonly HintQuestSingle _luigiQuest = new HintQuestSingle
         {
             Name = "Luigi",
             GoalValue = 5,
             MaxIncrease = 1,
         };
 
-        private readonly HintQuestCounter _toadQuest = new HintQuestCounter
+        private readonly HintQuestSingle _toadQuest = new HintQuestSingle
         {
             Name = "Toad",
             GoalValue = 5,
             MaxIncrease = 1,
         };
 
-        private readonly HintQuestCounter _peachQuest = new HintQuestCounter
+        private readonly HintQuestSingle _peachQuest = new HintQuestSingle
         {
             Name = "Peach",
             GoalValue = 5,
@@ -135,7 +135,7 @@ namespace HintMachine.Models.Games
             _peachQuest.CurrentValue = CheckCharacterLevels(_peachQuest, ref peachClears, _ram.ReadUint8(RamBaseAddress + 0x62e));
         }
 
-        private long CheckCharacterLevels(HintQuestCounter _quest, ref int clears, byte levelCount)
+        private long CheckCharacterLevels(HintQuestSingle _quest, ref int clears, byte levelCount)
         {
             long current = _quest.CurrentValue;
 
