@@ -97,9 +97,6 @@ namespace HintMachine.Views
                 {
                     Title = $"{Globals.ProgramName} - {game.Name}";
 
-                    GridQuests.Visibility = Visibility.Visible;
-                    ButtonChangeGame.Visibility = Visibility.Visible;
-
                     // Init game quests
                     foreach (HintQuest quest in game.Quests)
                     {
@@ -113,9 +110,6 @@ namespace HintMachine.Views
 
                     GridQuests.Children.Clear();
                     GridQuests.RowDefinitions.Clear();
-
-                    GridQuests.Visibility = Visibility.Hidden;
-                    ButtonChangeGame.Visibility = Visibility.Hidden;
                 }
             }));
         }

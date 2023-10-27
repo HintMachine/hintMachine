@@ -38,18 +38,27 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Name="GridQuests" Margin="8,8,8,8" Visibility="Hidden">
+            <Grid Name="GridQuests" Margin="8,8,8,8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=(models:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
             </Grid>
 
             <StackPanel Name="GridGameConnect" Margin="8,8,8,8" Visibility="Visible">
-                <Button Width="304" Click="OnConnectToGameButtonClick" Height="37">
-                    🔗 Connect to a game
-
+                <Button Width="304" Content="🔌 Connect to a game" FontSize="14" Click="OnConnectToGameButtonClick" Height="37">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -67,7 +76,7 @@
                 <TextBlock Name="TextHintTokenCount" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Center">
                     <Run>You currently have </Run>
                     <Run Text="{Binding Path=(models:HintMachineService.HintTokens), Mode=OneWay}"/>
-                    <Run> Hint Tokens</Run>
+                    <Run> hint tokens</Run>
                 </TextBlock>
 
                 <Button Name="ButtonRedeemHintToken" Margin="0,12" Height="30" Background="#FFA8E0A9" Click="OnRedeemHintTokenClick">
@@ -113,7 +122,18 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Button Name="ButtonChangeGame" Content="◀️ Pick another game" Click="OnDisconnectFromGameButtonClick" Grid.Column="0" Margin="0,0,2,0" Visibility="Hidden"/>
+                            <Button Content="◀️ Pick another game" Click="OnDisconnectFromGameButtonClick" Grid.Column="0" Margin="0,0,2,0">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=(models:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                             <Button Content="❌ Disconnect" Grid.Column="1" Margin="2,0,0,0" Click="OnArchipelagoDisconnectButtonClick"/>
                         </Grid>
                     </Grid>
