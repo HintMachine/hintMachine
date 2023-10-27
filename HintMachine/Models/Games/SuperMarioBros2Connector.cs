@@ -17,7 +17,7 @@ namespace HintMachine.Models.Games
         private readonly HintQuestCounter _streakQuest = new HintQuestCounter
         {
             Name = "Streak",
-            GoalValue = 5,
+            GoalValue = 3,
             MaxIncrease = 1,
         };
 
@@ -31,14 +31,14 @@ namespace HintMachine.Models.Games
         private readonly HintQuestCounter _cherryQuest = new HintQuestCounter
         {
             Name = "Cherries",
-            GoalValue = 20,
+            GoalValue = 15,
             MaxIncrease = 1,
         };
 
         private readonly HintQuestCounter _coinQuest = new HintQuestCounter
         {
             Name = "Coins",
-            GoalValue = 15,
+            GoalValue = 10,
             MaxIncrease = 1,
         };
 
