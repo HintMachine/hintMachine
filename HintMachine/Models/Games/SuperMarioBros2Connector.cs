@@ -1,8 +1,8 @@
 ﻿using HintMachine.Models.GenericConnectors;
-using System;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     internal class SuperMarioBros2Connector : INESConnector
     {
         private int currentLives = 0;
