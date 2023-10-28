@@ -19,6 +19,7 @@ namespace HintMachine.Models.Games
             Name = "Streak",
             GoalValue = 3,
             MaxIncrease = 1,
+            Description = "Clear 3 levels in a row without dying".
         };
 
         private readonly HintQuestCounter _worldQuest = new HintQuestCounter
@@ -26,6 +27,7 @@ namespace HintMachine.Models.Games
             Name = "Worlds",
             GoalValue = 1,
             MaxIncrease = 1,
+            Description = "Clear a world",
         };
 
         private readonly HintQuestCounter _cherryQuest = new HintQuestCounter
@@ -33,6 +35,7 @@ namespace HintMachine.Models.Games
             Name = "Cherries",
             GoalValue = 15,
             MaxIncrease = 1,
+            Description = "Collect 15 cherries".
         };
 
         private readonly HintQuestCounter _coinQuest = new HintQuestCounter
@@ -40,6 +43,7 @@ namespace HintMachine.Models.Games
             Name = "Coins",
             GoalValue = 10,
             MaxIncrease = 1,
+            Description = "Collect 10 coins from Subspace".
         };
 
         private readonly HintQuestSingle _marioQuest = new HintQuestSingle
@@ -47,6 +51,7 @@ namespace HintMachine.Models.Games
             Name = "Mario",
             GoalValue = 5,
             MaxIncrease = 1,
+            Description = "Complete 5 levels as Mario. This quest can only be completed once per session.",
         };
 
         private readonly HintQuestSingle _luigiQuest = new HintQuestSingle
@@ -54,6 +59,7 @@ namespace HintMachine.Models.Games
             Name = "Luigi",
             GoalValue = 5,
             MaxIncrease = 1,
+            Description = "Complete 5 levels as Luigi. This quest can only be completed once per session.",
         };
 
         private readonly HintQuestSingle _toadQuest = new HintQuestSingle
@@ -61,6 +67,7 @@ namespace HintMachine.Models.Games
             Name = "Toad",
             GoalValue = 5,
             MaxIncrease = 1,
+            Description = "Complete 5 levels as Toad. This quest can only be completed once per session.",
         };
 
         private readonly HintQuestSingle _peachQuest = new HintQuestSingle
@@ -68,6 +75,7 @@ namespace HintMachine.Models.Games
             Name = "Peach",
             GoalValue = 5,
             MaxIncrease = 1,
+            Description = "Complete 5 levels as Peach. This quest can only be completed once per session.",
         };
 
         public SuperMarioBros2Connector()
