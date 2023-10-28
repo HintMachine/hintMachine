@@ -167,7 +167,7 @@ namespace HintMachine.Models.Games
 
         protected override bool Poll()
         {
-            long competitionHandlerStructAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x260E18, new int[] { 0x48, 0x8C, 0x8, 0x18, 0x28, 0x0 });
+            long competitionHandlerStructAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x260E18, new int[] { 0x50, 0x0 });
 
             if (competitionHandlerStructAddress != 0)
             {
