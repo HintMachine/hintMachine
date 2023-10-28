@@ -1,9 +1,10 @@
+using HintMachine.Helpers;
 using HintMachine.Models.GenericConnectors;
-using System.Collections;
-using System.Security.Cryptography;
+
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class SonicManiaConnector : IGameConnector
     {
         private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
