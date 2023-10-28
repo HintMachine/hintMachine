@@ -120,7 +120,7 @@ namespace HintMachine.GenericConnectors
             catch
             {
                 Disconnect();
-                return null;
+                return new byte[2] { 0, 0};
             }
         }
 
@@ -160,7 +160,7 @@ namespace HintMachine.GenericConnectors
         /// <summary>
         /// Used to confirm that the specified game is still currently being played. 
         /// </summary>
-        /// <returns>Bool stating whether the current game is still the one wanted by our connector.</returns>
+        /// <returns>Bool stating whether the current game is still the one wanted by the connector.</returns>
         public bool ConfirmRomName()
         {
             string rom_name = Encoding.UTF8.GetString(ReadBytes(0x7FC0, AddressSpace.FxPakPro, 21)).Trim();
