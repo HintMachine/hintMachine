@@ -19,7 +19,7 @@ namespace HintMachine.Models.Games
             Name = "Streak",
             GoalValue = 3,
             MaxIncrease = 1,
-            Description = "Clear 3 levels in a row without dying".
+            Description = "Clear 3 levels in a row without dying",
         };
 
         private readonly HintQuestCounter _worldQuest = new HintQuestCounter
@@ -35,7 +35,7 @@ namespace HintMachine.Models.Games
             Name = "Cherries",
             GoalValue = 15,
             MaxIncrease = 1,
-            Description = "Collect 15 cherries".
+            Description = "Collect 15 cherries",
         };
 
         private readonly HintQuestCounter _coinQuest = new HintQuestCounter
@@ -43,7 +43,7 @@ namespace HintMachine.Models.Games
             Name = "Coins",
             GoalValue = 10,
             MaxIncrease = 1,
-            Description = "Collect 10 coins from Subspace".
+            Description = "Collect 10 coins from Subspace",
         };
 
         private readonly HintQuestSingle _marioQuest = new HintQuestSingle
