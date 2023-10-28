@@ -25,6 +25,9 @@ namespace HintMachine.Models
             return obtainedHints;
         }
 
+        // This code might become relevant again as I research the new configuration
+        // and determine if I can recreate the functionality in the new system
+        /*
         private Label _label = null;
         private Label _labelDetail = null;
         private ProgressBar _progressBar = null;
@@ -103,5 +106,6 @@ namespace HintMachine.Models
             }
 #endif
         }
+        */
     }
 }
