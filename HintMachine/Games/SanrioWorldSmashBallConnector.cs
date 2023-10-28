@@ -46,7 +46,7 @@ namespace HintMachine.Games
             Quests.Add(_powerupQuest);
         }
 
-        public override bool Poll()
+        protected override bool Poll()
         {
             if (!ConfirmRomName())
             {

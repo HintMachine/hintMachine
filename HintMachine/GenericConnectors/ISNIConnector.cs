@@ -46,7 +46,7 @@ namespace HintMachine.GenericConnectors
         /// they are playing the specified game. Do not override in subclasses without calling base.Connect() first.
         /// </summary>
         /// <returns>Bool indicating successful connection to SNI and emulator.</returns>
-        public override bool Connect()
+        protected override bool Connect()
         {
             GrpcChannelOptions channelOptions = new GrpcChannelOptions() { 
                 HttpHandler = new GrpcWebHandler(new HttpClientHandler()), 
@@ -87,11 +87,11 @@ namespace HintMachine.GenericConnectors
         /// </summary>
         public override void Disconnect()
         {
+            //Since only SNI has to deal with connecting to emulators, and we just call on it when it exists,
             //I don't actually have to do anything here, but we null device, mapping, and client in case
             SNIClient = null;
             Device = null;
             Mapping = null;
-
         }
 
         /// <summary>
@@ -103,8 +103,16 @@ namespace HintMachine.GenericConnectors
         /// <returns></returns>
         public byte[] ReadBytes(uint address, AddressSpace addressSpace, uint size)
         {
-            SingleReadMemoryResponse response = SNIClient.SingleRead(new SingleReadMemoryRequest { Uri = Device.Uri, Request = new ReadMemoryRequest { RequestAddress = address, RequestAddressSpace = addressSpace, RequestMemoryMapping = Mapping.MemoryMapping, Size = size } });
-            return response.Response.Data.ToByteArray();
+            try
+            {
+                SingleReadMemoryResponse response = SNIClient.SingleRead(new SingleReadMemoryRequest { Uri = Device.Uri, Request = new ReadMemoryRequest { RequestAddress = address, RequestAddressSpace = addressSpace, RequestMemoryMapping = Mapping.MemoryMapping, Size = size } });
+                return response.Response.Data.ToByteArray();
+            }
+            catch
+            {
+                Disconnect();
+                return null;
+            }
         }
 
         /// <summary>
