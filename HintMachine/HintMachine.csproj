@@ -43,6 +43,7 @@
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\hint_token_small.png" />
     <None Remove="ThreadstackFinder32.exe" />
     <None Remove="ThreadstackFinder64.exe" />
   </ItemGroup>
@@ -53,6 +54,9 @@
     <Content Include="Assets\Covers\tetris_nes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Assets\hint_token_small.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Content Include="ThreadstackFinder32.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

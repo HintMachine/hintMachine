@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using HintMachine.Helpers;
 using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games

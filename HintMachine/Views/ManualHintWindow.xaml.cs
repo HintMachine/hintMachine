@@ -1,4 +1,4 @@
-﻿using HintMachine.Models;
+﻿using HintMachine.Services;
 using System;
 using System.Windows;
 using System.Windows.Controls;

@@ -32,9 +32,7 @@ namespace HintMachine.Models
         /// <returns>the number of obtained hints</returns>
         public abstract int CheckAndCommitCompletion();
 
-        public abstract void InitComponents(Grid questsGrid);
-
-        public abstract void UpdateComponents();
+        public abstract void InitComponents(StackPanel questsPanel);
     }
 }
 

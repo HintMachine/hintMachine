@@ -1,4 +1,5 @@
 ﻿using System;
+using HintMachine.Helpers;
 
 namespace HintMachine.Models.GenericConnectors
 {
