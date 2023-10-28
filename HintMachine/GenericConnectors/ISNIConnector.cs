@@ -33,8 +33,9 @@ namespace HintMachine.GenericConnectors
         public ISNIConnector()
         {
             Platform = "SNES";
+            SupportedEmulators.Add("bsnes-plus-nwa (Recommended)");
+            SupportedEmulators.Add("snes9x-nwa (Recommended)");
             SupportedEmulators.Add("Snes9x-rr 1.60");
-            SupportedEmulators.Add("bsnes-plus-nwa");
             SupportedEmulators.Add("Bizhawk (bsnes core)");
             SupportedEmulators.Add("Retroarch (bsnes-mercury core, certain games only)");
             SupportedEmulators.Add("FX PAK Pro");
@@ -53,7 +54,15 @@ namespace HintMachine.GenericConnectors
             };
             var channel = GrpcChannel.ForAddress("http://localhost:8190", channelOptions);
             Devices.DevicesClient client = new Devices.DevicesClient(channel);
-            DevicesResponse deviceList = client.ListDevices(new DevicesRequest());
+            DevicesResponse deviceList;
+            try
+            {
+                deviceList = client.ListDevices(new DevicesRequest());
+            }
+            catch
+            {
+                return false;
+            }
             int size = deviceList.CalculateSize();
             if (size > 0) 
             {
