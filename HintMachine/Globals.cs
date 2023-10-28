@@ -63,6 +63,11 @@ namespace HintMachine
             new TonyHawksProSkater12Connector(),
             new PokemonPinballRSConnector(),
             new TMNTShreddersRevengeConnector(),
+            new PokemonPuzzleChallengeConnector(),
+            new PapersPleaseConnector(),
+            new KatamariDamacyRerollConnector(),
+            new MinesweeperClassyConnector(),
+            new TetrisNESConnector(),
             new SanrioWorldSmashBallConnector(),
         };
 

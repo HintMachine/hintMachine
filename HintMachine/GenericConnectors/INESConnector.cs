@@ -1,25 +1,22 @@
 ﻿using System.Security.Cryptography;
 using System;
-using System.Text;
 
 namespace HintMachine.GenericConnectors
 {
-    public abstract class IGameboyAdvanceConnector : IEmulatorConnector
+    public abstract class INESConnector : IEmulatorConnector
     {
         protected ProcessRamWatcher _ram = null;
 
         public long RomBaseAddress { get; private set; } = 0;
 
-        public long ExternalRamBaseAddress { get; private set; } = 0;
-
-        public long InternalRamBaseAddress { get; private set; } = 0;
+        public long RamBaseAddress { get; private set; } = 0;
 
         // ---------------------------------------------
 
-        public IGameboyAdvanceConnector()
+        public INESConnector()
         {
-            Platform = "GBA";
-            SupportedEmulators.Add("BizHawk 2.9.1 (mGBA core)");
+            Platform = "NES";
+            SupportedEmulators.Add("BizHawk 2.9.1 (QuickNES core)");
         }
 
         protected override bool Connect()
@@ -28,17 +25,14 @@ namespace HintMachine.GenericConnectors
             {
                 DisplayName = "2.9.1",
                 ProcessName = "EmuHawk",
-                ModuleName = "mgba.dll",
                 Hash = "6CE622D4ED4E8460CE362CF35EF67DC70096FEC2C9A174CBEF6A3E5B04F18BCC"
             });
 
             if (!_ram.TryConnect())
                 return false;
 
-            ExternalRamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x00103448, new int[] { 0x10, 0x28, 0x0 });
-            InternalRamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x00103448, new int[] { 0x10, 0x30, 0x0 });
-            RomBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x00103448, new int[] { 0x10, 0x38, 0x0 });
-
+            RamBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x208, 0x90, 0xEC }) + 2;
+            // RomBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x240, 0x68, 0x10, 0x250, 0x10 });
             return true;
         }
 
@@ -47,8 +41,7 @@ namespace HintMachine.GenericConnectors
             base.Disconnect();
             _ram = null;
 
-            ExternalRamBaseAddress = 0;
-            InternalRamBaseAddress = 0;
+            RamBaseAddress = 0;
             RomBaseAddress = 0;
         }
 
@@ -60,9 +53,11 @@ namespace HintMachine.GenericConnectors
 
         public override string GetRomIdentity()
         {
-            // Use the 6 characters long game code as identity
-            byte[] headerBytes = _ram.ReadBytes(RomBaseAddress + 0xAC, 0x06);
-            return Encoding.Default.GetString(headerBytes);
+            return "";
+            // Hash the 0x800 first ROM bytes as identity
+            // byte[] romStart = _ram.ReadBytes(RomBaseAddress, 0x800);
+            // using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))
+            //     return BitConverter.ToString(sha.ComputeHash(romStart)).Replace("-", "");
         }
     }
 }

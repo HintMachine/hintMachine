@@ -49,12 +49,17 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Geometry Wars Galaxies           | Wii       |
 | Geometry Wars : Retro Evolved    | PC        |
 | ISLANDERS                        | PC        |
+| Katamari Damacy REROLL           | PC        |
 | Luck be a Landlord               | PC        |
 | Meteos                           | DS        |
 | Metroid Prime Pinball            | DS        |
+| Minesweeper Classy               | PC        |
 | Mini Metro                       | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
+| Papers, Please                   | PC        |
+| Pokémon Pinball: Ruby & Sapphire | GBA       |
+| Pokémon Puzzle Challenge         | GBC       |
 | Puyo Puyo Tetris                 | PC        |
 | Rollcage Stage 2                 | PS1       |
 | Sanrio World Smash Ball!         | SNES      |
@@ -64,6 +69,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Super Mega Baseball 2            | PC        |
 | Super Monkey Ball 2              | GameCube  |
 | TMNT: Shredder's Revenge         | PC        |
+| Tetris                           | NES       |
 | Tetris Effect Connected          | PC        |
 | Tony Hawk's Pro Skater 1 + 2     | PC        |
 | Xenotilt                         | PC        |
