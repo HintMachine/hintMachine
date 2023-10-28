@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Models.GenericConnectors
+﻿using HintMachine.Helpers;
+
+namespace HintMachine.Models.GenericConnectors
 {
     public abstract class INESConnector : IEmulatorConnector
     {

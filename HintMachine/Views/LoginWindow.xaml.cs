@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows;
 using HintMachine.Models;
+using HintMachine.Services;
 using Newtonsoft.Json.Linq;
 
 namespace HintMachine.Views

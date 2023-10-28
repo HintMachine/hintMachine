@@ -3,9 +3,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Threading;
+using HintMachine.Helpers;
+using HintMachine.Models;
 using HintMachine.Models.GenericConnectors;
 
-namespace HintMachine.Models
+namespace HintMachine.Services
 {
     public static class HintMachineService
     {
@@ -20,7 +22,8 @@ namespace HintMachine.Models
 
         public static Type[] GameConnectorTypes
         {
-            get {
+            get
+            {
                 var attr = typeof(AvailableGameConnectorAttribute);
                 return Assembly.GetExecutingAssembly().GetTypes().Where(t => Attribute.GetCustomAttribute(t, attr) != null).ToArray();
             }
@@ -28,7 +31,7 @@ namespace HintMachine.Models
 
         // -------------------------------------------------------
 
-        public static ArchipelagoHintSession ArchipelagoSession 
+        public static ArchipelagoHintSession ArchipelagoSession
         {
             get { return _archipelagoSession; }
             private set
@@ -55,17 +58,20 @@ namespace HintMachine.Models
                 _currentGameConnection = value;
                 OnStaticPropertyChanged(nameof(CurrentGameConnection));
                 OnStaticPropertyChanged(nameof(GameName));
+                GameChanged?.Invoke();
             }
         }
         private static GameConnectionHandler _currentGameConnection = null;
         public static string GameName => CurrentGameConnection?.Game?.Name ?? string.Empty;
+
+        public static event Action GameChanged = null;
 
         // -------------------------------------------------------
 
         public static int HintTokens
         {
             get { return _hintTokens; }
-            set 
+            set
             {
                 _hintTokens = value;
                 OnStaticPropertyChanged(nameof(HintTokens));
@@ -79,9 +85,9 @@ namespace HintMachine.Models
 
         static HintMachineService()
         {
-            #if DEBUG
-                DebugBuild = true;
-            #endif
+#if DEBUG
+            DebugBuild = true;
+#endif
         }
 
         public static void OnAppExit()
@@ -128,19 +134,20 @@ namespace HintMachine.Models
                 return false;
             }
 
-            if(!game.DoConnect())
+            if (!game.DoConnect())
             {
                 return false;
             }
 
             CurrentGameConnection = new GameConnectionHandler(game, Dispatcher.CurrentDispatcher);
-            
-            CurrentGameConnection.GameDisconnected += () => {
+
+            CurrentGameConnection.GameDisconnected += () =>
+            {
                 CurrentGameConnection = null;
                 ModelChanged?.Invoke();
             };
 
-            CurrentGameConnection.HintTokensEarned += (int amount) => { HintTokens += amount; };
+            CurrentGameConnection.HintTokensEarned += (amount) => { HintTokens += amount; };
             ModelChanged?.Invoke();
             Logger.Info($"✔️ Successfully connected to {game.Name}. ");
             return true;

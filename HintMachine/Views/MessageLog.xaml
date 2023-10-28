@@ -10,5 +10,8 @@
             <StackPanel Name="StackPanelMessages">
             </StackPanel>
         </ScrollViewer>
+        <Border.Background>
+            <ImageBrush ImageSource="/Assets/logo_small.png" Opacity="0.10" AlignmentX="Right" AlignmentY="Bottom" Stretch="None"/>
+        </Border.Background>
     </Border>
 </UserControl>
