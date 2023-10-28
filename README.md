@@ -1,4 +1,7 @@
-![version](https://img.shields.io/badge/Version-1.1.0-blue)
+![version](https://img.shields.io/badge/Version-1.2.0-blue)
+<a href="https://discord.gg/Jcknj9w7Rm">
+  <img src="https://img.shields.io/badge/-Discord-lightgrey?logo=discord" alt="Join Discord">
+</a>
 
 <p align="center">
   <img src="https://github.com/CalDrac/hintMachine/blob/master/HintMachine/Assets/logo_small.png?raw=true" alt="HintMachine logo"/>
@@ -40,6 +43,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Game name                        | Platform  |
 |----------------------------------|-----------|
 | 911 Operator                     | PC        |
+| Advance Wars: Dual Strike        | DS        |
 | BPM: Bullets Per Minute          | PC        |
 | Bust-a-Move 4                    | PS1       |
 | Columns                          | Megadrive |
@@ -55,18 +59,26 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Metroid Prime Pinball            | DS        |
 | Minesweeper Classy               | PC        |
 | Mini Metro                       | PC        |
+| Nex Machina                      | PC        |
 | One Finger Death Punch           | PC        |
 | PAC-MAN Championship Edition DX+ | PC        |
+| Paint the Town Red               | PC        |
 | Papers, Please                   | PC        |
+| Peggle Deluxe                    | PC        |
+| Peggle Nights                    | PC        |
+| Pinball FX3                      | PC        |
 | Pokémon Pinball: Ruby & Sapphire | GBA       |
 | Pokémon Puzzle Challenge         | GBC       |
+| Puyo Puyo 2                      | Megadrive |
 | Puyo Puyo Tetris                 | PC        |
 | Rollcage Stage 2                 | PS1       |
 | Sanrio World Smash Ball!         | SNES      |
 | Sonic 3 Blue Spheres             | Megadrive |
 | Stargunner                       | PC        |
 | Super Hexagon                    | PC        |
+| Super Mario Bros. 3              | NES       |
 | Super Mega Baseball 2            | PC        |
+| Super Monkey Ball                | GameCube  |
 | Super Monkey Ball 2              | GameCube  |
 | TMNT: Shredder's Revenge         | PC        |
 | Tetris                           | NES       |
