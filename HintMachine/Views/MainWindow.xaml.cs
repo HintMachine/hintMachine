@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HintMachine.Views
 {
@@ -96,11 +98,17 @@ namespace HintMachine.Views
                     // Init game quest widgets
                     foreach (HintQuest quest in game.Quests)
                         quest.InitComponents(StackPanelQuests);
+
+                    TextCurrentGame.Visibility = Visibility.Visible;
+                    ButtonDisconnectFromGame.Visibility = Visibility.Visible;
                 }
                 else
                 {
                     // Clear game quest widgets
                     StackPanelQuests.Children.Clear();
+
+                    TextCurrentGame.Visibility = Visibility.Hidden;
+                    ButtonDisconnectFromGame.Visibility = Visibility.Hidden;
                 }
             }));
         }
@@ -247,7 +255,6 @@ namespace HintMachine.Views
                 Close();
                 return;
             }
-
         }
 
         private void OnAboutClick(object sender, RoutedEventArgs e) => HintMachineService.ShowAboutMessage();
