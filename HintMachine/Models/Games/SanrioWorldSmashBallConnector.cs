@@ -1,4 +1,5 @@
-﻿using HintMachine.Models.GenericConnectors;
+﻿using SNI;
+using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
@@ -53,21 +54,21 @@ namespace HintMachine.Models.Games
             {
                 return false;
             }
-            byte currentStage = ReadByte(0xF50055, SNI.AddressSpace.FxPakPro);
+            byte currentStage = ReadByte(0xF50055, AddressSpace.FxPakPro);
             if (currentStage < 0x3e) // Multiplayer, ignore for this quest
             {
                 _gamesQuest.UpdateValue(currentStage);
-                byte currentScore = ReadByte(0xF5005D, SNI.AddressSpace.FxPakPro);
+                byte currentScore = ReadByte(0xF5005D, AddressSpace.FxPakPro);
                 _goalQuest.UpdateValue(currentScore);
-                byte currentSuper = ReadByte(0xF50070, SNI.AddressSpace.FxPakPro);
+                byte currentSuper = ReadByte(0xF50070, AddressSpace.FxPakPro);
                 _superQuest.UpdateValue(currentSuper);
-                byte pw1 = ReadByte(0xF5018D, SNI.AddressSpace.FxPakPro);
+                byte pw1 = ReadByte(0xF5018D, AddressSpace.FxPakPro);
                 if (pw1 > _pw1)
                 {
                     _powerupQuest.CurrentValue++;
                 }
                 _pw1 = pw1;
-                byte pw2 = ReadByte(0xF5018E, SNI.AddressSpace.FxPakPro);
+                byte pw2 = ReadByte(0xF5018E, AddressSpace.FxPakPro);
                 if (pw2 > _pw2)
                 {
                     _powerupQuest.CurrentValue++;

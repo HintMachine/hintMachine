@@ -7,7 +7,7 @@ using Grpc.Net.Client.Web;
 using System.Text;
 using System.Linq;
 
-namespace HintMachine.GenericConnectors
+namespace HintMachine.Models.GenericConnectors
 {
     public abstract class ISNIConnector: IGameConnector
     {
@@ -49,17 +49,14 @@ namespace HintMachine.GenericConnectors
         /// <returns>Bool indicating successful connection to SNI and emulator.</returns>
         protected override bool Connect()
         {
-            GrpcChannelOptions channelOptions = new GrpcChannelOptions() { 
-                HttpHandler = new GrpcWebHandler(new HttpClientHandler()), 
-            };
-            var channel = GrpcChannel.ForAddress("http://localhost:8190", channelOptions);
+            var channel = GrpcChannel.ForAddress("http://localhost:8191");
             Devices.DevicesClient client = new Devices.DevicesClient(channel);
             DevicesResponse deviceList;
             try
             {
                 deviceList = client.ListDevices(new DevicesRequest());
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }
