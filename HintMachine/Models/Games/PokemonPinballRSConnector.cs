@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     class PokemonPinballRSConnector : IGameboyAdvanceConnector
     {
         private readonly HintQuestCumulative _pokemonQuest = new HintQuestCumulative

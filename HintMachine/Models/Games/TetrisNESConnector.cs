@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class TetrisNESConnector : INESConnector
     {
         private readonly HintQuestCumulative _linesQuest = new HintQuestCumulative

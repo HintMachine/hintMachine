@@ -1,12 +1,14 @@
-﻿using Archipelago.MultiClient.Net;
+﻿using HintMachine.Helpers;
 using HintMachine.Models;
+using HintMachine.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
-using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HintMachine.Views
 {
@@ -14,14 +16,15 @@ namespace HintMachine.Views
     {
         public const int TAB_MESSAGE_LOG = 0;
         public const int TAB_HINTS = 1;
-
         // ----------------------------------------------------------------------------------
 
         public MainWindow()
         {
             InitializeComponent();
             SetupChatFilterMenus();
-            DisplayStreamerMode();
+
+            Title = $"{Globals.ProgramName} {Globals.ProgramVersion}";
+
             // Setup the message log by connecting it to the global Logger
             Logger.OnMessageLogged += (string message, LogMessageType logMessageType) =>
             {
@@ -31,9 +34,9 @@ namespace HintMachine.Views
                 }));
             };
 
-            // TODO: Remove when data bindings will be in place
-            HintMachineService.ModelChanged += OnModelChange;
-            OnArchipelagoSessionChange();
+
+            HintMachineService.GameChanged += OnGameChanged;
+            OnArchipelagoSessionChange(); 
 
 
             Logger.Info("Feeling stuck in your Archipelago world?\n" +
@@ -44,9 +47,6 @@ namespace HintMachine.Views
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-
-            // TODO: Remove when data bindings will be in place
-            HintMachineService.ModelChanged -= OnModelChange;
         }
 
         protected void PopulateReconnectAsMenu()
@@ -86,69 +86,61 @@ namespace HintMachine.Views
             if (TabControl.SelectedIndex == TAB_HINTS)
                 SetupHintsTab();
 
-            OnModelChange();
+            
             if (!Settings.StreamerMode)
             {
                 Logger.Log($"Connected to Archipelago session at {HintMachineService.Host} as {HintMachineService.Slot}.", LogMessageType.CONNEXION);
+                ConnectionTextBlock.Visibility = Visibility.Visible;
             }
             else {
                 Logger.Info($"Connected to Archipelago session.");
+                ConnectionTextBlock.Visibility = Visibility.Hidden;
             }
         }
 
-        private void OnModelChange()
+        private void OnGameChanged()
         {
-            // TODO: Replace all of those by bindings
+
             Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
             {
-                ButtonRedeemHintToken.IsEnabled = (HintMachineService.HintTokens > 0);
-                TextHintTokenCount.Text = $"You currently have {HintMachineService.HintTokens} hint tokens.";
-
-                LabelHost.Text = HintMachineService.Host;
-                LabelSlot.Text = HintMachineService.Slot;
-
-                GridQuests.Children.Clear();
-                GridQuests.RowDefinitions.Clear();
-
                 var game = HintMachineService.CurrentGameConnection?.Game;
                 if (game != null)
                 {
-                    Title = $"{Globals.ProgramName} - {game.Name}";
-                    LabelGame.Text = game.Name;
-
-                    GridGameConnect.Visibility = Visibility.Hidden;
-                    GridQuests.Visibility = Visibility.Visible;
-                    ButtonChangeGame.Visibility = Visibility.Visible;
-
-                    // Init game quests
+                    // Init game quest widgets
                     foreach (HintQuest quest in game.Quests)
-                    {
-                        quest.InitComponents(GridQuests);
-                        quest.UpdateComponents();
-                    }
+                        quest.InitComponents(StackPanelQuests);
+
+                    TextCurrentGame.Visibility = Visibility.Visible;
+                    ButtonDisconnectFromGame.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    Title = Globals.ProgramName;
-                    LabelGame.Text = "-";
+                    // Clear game quest widgets
+                    StackPanelQuests.Children.Clear();
 
-                    GridGameConnect.Visibility = Visibility.Visible;
-                    GridQuests.Visibility = Visibility.Hidden;
-                    ButtonChangeGame.Visibility = Visibility.Hidden;
+                    TextCurrentGame.Visibility = Visibility.Hidden;
+                    ButtonDisconnectFromGame.Visibility = Visibility.Hidden;
                 }
             }));
         }
 
         private void OnConnectToGameButtonClick(object sender, RoutedEventArgs e)
         {
-            new GameSelectionWindow().ShowDialog();
+            ShowGameSelectionWindow();
         }
 
         private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
         {
             HintMachineService.DisconnectFromGame();
+            ShowGameSelectionWindow();
         }
 
+        private void ShowGameSelectionWindow()
+        {
+            GameSelectionWindow gsw = new GameSelectionWindow();
+            gsw.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            gsw.ShowDialog();
+        }
         private void OnArchipelagoDisconnectButtonClick(object sender, RoutedEventArgs e)
         {
             HintMachineService.DisconnectFromArchipelago();
@@ -284,7 +276,6 @@ namespace HintMachine.Views
                 Close();
                 return;
             }
-
         }
 
         private void OnAboutClick(object sender, RoutedEventArgs e) => HintMachineService.ShowAboutMessage();
@@ -292,22 +283,15 @@ namespace HintMachine.Views
         private void OnRedeemHintTokenClick(object sender, RoutedEventArgs e) => HintMachineService.RedeemHintToken();
 
         private void DisplayStreamerMode() {
-            if (Settings.StreamerMode)
+
+            if (!Settings.StreamerMode)
             {
-                StreamerModeLabel.Visibility = Visibility.Visible;
-                Host.Visibility = Visibility.Hidden;
-                LabelHost.Visibility = Visibility.Hidden;
-                Slot.Visibility = Visibility.Hidden;
-                LabelSlot.Visibility = Visibility.Hidden;
+                ConnectionTextBlock.Visibility = Visibility.Visible;
             }
-            else 
+            else
             {
-                StreamerModeLabel.Visibility = Visibility.Hidden;
-                Host.Visibility = Visibility.Visible;
-                LabelHost.Visibility = Visibility.Visible;
-                LabelSlot.Visibility = Visibility.Visible;
+                ConnectionTextBlock.Visibility = Visibility.Hidden;
             }
-            MessageLog.UpdateMessagesVisibility();
         }
     }
 }

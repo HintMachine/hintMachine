@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Windows;
+using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Media;
+using HintMachine.Helpers;
+using HintMachine.Views;
 
 namespace HintMachine.Models
 {
@@ -61,6 +62,7 @@ namespace HintMachine.Models
                 }
                 
                 _currentValue = value;
+                NotifyPropertyChanged(nameof(CurrentValue));
             }
         }
         private long _currentValue = 0;
@@ -71,20 +73,12 @@ namespace HintMachine.Models
         /// </summary>
         public int CooldownBetweenIncrements { get; set; } = 0;
 
-        private Label _label = null;
-        private Label _labelDetail = null;
-        private ProgressBar _progressBar = null;
-        private TextBlock _progressBarOverlayText = null;
+        private QuestControl _control = null;
 
         // ----------------------------------------------------------------------------------
 
         public HintQuestCounter()
         {}
- 
-        public float GetProgression()
-        {
-            return (float)CurrentValue / GoalValue;
-        }
 
         public override int CheckAndCommitCompletion()
         {
@@ -102,70 +96,16 @@ namespace HintMachine.Models
             return obtainedHints;
         }
 
-        public override void InitComponents(Grid questsGrid)
+        public override void InitComponents(StackPanel questsPanel)
         {
-            RowDefinition rowDef = new RowDefinition();
-            rowDef.Height = new GridLength(30);
-            questsGrid.RowDefinitions.Add(rowDef);
-
-            // Add a label for the quest name
-            _label = new Label
-            {
-                Content = Name,
-                Margin = new Thickness(0, 0, 8, 4),
-                FontWeight = FontWeights.Bold,
-            };
-            Grid.SetColumn(_label, 0);
-            Grid.SetRow(_label, questsGrid.RowDefinitions.Count - 1);
-            questsGrid.Children.Add(_label);
-
-            // If there is a detailed quest description available, add a question mark with this detailed
-            // description as a tooltip
-            if (Description.Trim().Length != 0)
-            {
-                _labelDetail = new Label
-                {
-                    Content = "(?)",
-                    Foreground = new SolidColorBrush(Color.FromRgb(0, 150, 200)),
-                    Margin = new Thickness(-4, 0, 8, 4),
-                    FontWeight = FontWeights.Bold,
-                    ToolTip = Description,
-                };
-
-                Grid.SetColumn(_labelDetail, 1);
-                Grid.SetRow(_labelDetail, questsGrid.RowDefinitions.Count - 1);
-                questsGrid.Children.Add(_labelDetail);
-            }
-
-            // Add a grid containing overlapped ProgressBar + TextBlock to have an overlay text over the progressbar
-            _progressBar = new ProgressBar
-            {
-                Minimum = 0,
-                Maximum = GoalValue,
-            };
-            _progressBarOverlayText = new TextBlock
-            {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-            };
-
-            Grid progressBarGrid = new Grid { Margin = new Thickness(0, 0, 0, 4) };
-            progressBarGrid.Children.Add(_progressBar);
-            progressBarGrid.Children.Add(_progressBarOverlayText);
-            Grid.SetColumn(progressBarGrid, 2);
-            Grid.SetRow(progressBarGrid, questsGrid.RowDefinitions.Count - 1);
-            questsGrid.Children.Add(progressBarGrid);
+            _control = new QuestControl { DataContext = this };
+            questsPanel.Children.Add(_control);
         }
 
+        /*
         public override void UpdateComponents()
         {
-            _label.Content = Name;
-
-            _progressBar.Value = CurrentValue;
-            _progressBarOverlayText.Text = CurrentValue + " / " + GoalValue;
-
-#if DEBUG
-            if (CooldownBetweenIncrements > 0)
+            if (HintMachineService.DebugBuild && CooldownBetweenIncrements > 0)
             {
                 DateTime now = DateTime.UtcNow;
                 TimeSpan t = now - _lastIncrementTime;
@@ -173,8 +113,8 @@ namespace HintMachine.Models
                 if(cooldown > 0)
                     _progressBarOverlayText.Text += $" ({Math.Ceiling(cooldown)}s cooldown)";
             }
-#endif
         }
+        */
     }
 }
 

@@ -8,8 +8,9 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using HintMachine.Models;
 
-namespace HintMachine.Models
+namespace HintMachine.Helpers
 {
     public enum MemoryRegionType : uint
     {
@@ -69,9 +70,10 @@ namespace HintMachine.Models
         public bool IsBigEndian { get; set; } = false;
 
         public long Threadstack0
-        { 
-            get { 
-                if(_threadstack0 == null)
+        {
+            get
+            {
+                if (_threadstack0 == null)
                     _threadstack0 = GetThreadstack0Address();
 
                 return _threadstack0 ?? 0;
@@ -82,7 +84,7 @@ namespace HintMachine.Models
         // ----------------------------------------------------------------------------------
 
         public ProcessRamWatcher()
-        {}
+        { }
         public ProcessRamWatcher(BinaryTarget target)
         {
             SupportedTargets.Add(target);
@@ -99,7 +101,7 @@ namespace HintMachine.Models
 
         ~ProcessRamWatcher()
         {
-            if(_processHandle != IntPtr.Zero)
+            if (_processHandle != IntPtr.Zero)
                 NativeMethods.CloseHandle(_processHandle);
         }
 
@@ -180,8 +182,8 @@ namespace HintMachine.Models
             {
                 if (target.ProcessName != processName)
                     continue;
-                
-                if(target.Hash == "" || string.Equals(hash, target.Hash, StringComparison.OrdinalIgnoreCase))
+
+                if (target.Hash == "" || string.Equals(hash, target.Hash, StringComparison.OrdinalIgnoreCase))
                     return target;
             }
 
@@ -206,15 +208,15 @@ namespace HintMachine.Models
             IntPtr pModules = gch.AddrOfPinnedObject();
 
             // Setting up the rest of the parameters for EnumProcessModules
-            uint uiSize = (uint)(Marshal.SizeOf(typeof(IntPtr)) * (hMods.Length));
+            uint uiSize = (uint)(Marshal.SizeOf(typeof(IntPtr)) * hMods.Length);
             uint cbNeeded;
             if (NativeMethods.EnumProcessModulesEx(_processHandle, pModules, uiSize, out cbNeeded, DwFilterFlag.LIST_MODULES_ALL))
             {
-                int modulesCount = (int)(cbNeeded / (Marshal.SizeOf(typeof(IntPtr))));
+                int modulesCount = (int)(cbNeeded / Marshal.SizeOf(typeof(IntPtr)));
                 for (int i = 0; i < modulesCount; i++)
                 {
                     StringBuilder strbld = new StringBuilder(1024);
-                    NativeMethods.GetModuleFileNameEx(_processHandle, hMods[i], strbld, (int)(strbld.Capacity));
+                    NativeMethods.GetModuleFileNameEx(_processHandle, hMods[i], strbld, strbld.Capacity);
                     string moduleName = strbld.ToString();
 
                     if (CultureInfo.CurrentCulture.CompareInfo.IndexOf(moduleName, targetName, CompareOptions.IgnoreCase) >= 0)
@@ -244,7 +246,7 @@ namespace HintMachine.Models
         {
             if (_processHandle == IntPtr.Zero)
                 throw new ProcessRamWatcherException("Could not read memory from a ProcessRamWatcher which failed to initialize");
-            
+
             int bytesRead = 0;
             byte[] buffer = new byte[length];
             NativeMethods.ReadProcessMemory((int)_processHandle, address, buffer, length, ref bytesRead);
@@ -258,10 +260,10 @@ namespace HintMachine.Models
             return buffer;
         }
 
-        public byte ReadUint8(long address) 
+        public byte ReadUint8(long address)
             => ReadBytes(address, sizeof(byte))[0];
 
-        public ushort ReadUint16(long address) 
+        public ushort ReadUint16(long address)
             => BitConverter.ToUInt16(ReadBytes(address, sizeof(ushort), IsBigEndian), 0);
 
         public uint ReadUint32(long address)
@@ -298,7 +300,7 @@ namespace HintMachine.Models
         /// <returns>The address pointed by the pointer path, or 0 if the path is broken in any way.</returns>
         private long ResolvePointerPath(long baseAddress, int[] offsets, bool is64Bit)
         {
-            if(!TestProcess())
+            if (!TestProcess())
                 throw new ProcessRamWatcherException("Process was shutdown while connected");
 
             try
@@ -313,8 +315,8 @@ namespace HintMachine.Models
                     addr += offset;
                 }
                 return addr;
-            } 
-            catch(ProcessRamWatcherException)
+            }
+            catch (ProcessRamWatcherException)
             {
                 return 0;
             }
@@ -349,7 +351,7 @@ namespace HintMachine.Models
 
             return regions;
         }
-        
+
         /// <summary>
         /// Test if the attached process memory is still accessible.
         /// </summary>
@@ -361,7 +363,7 @@ namespace HintMachine.Models
                 ReadUint8(BaseAddress);
                 return true;
             }
-            catch(ProcessRamWatcherException) 
+            catch (ProcessRamWatcherException)
             {
                 return false;
             }
@@ -379,9 +381,9 @@ namespace HintMachine.Models
             NativeMethods.QueryFullProcessImageName(_processHandle, 0, stringBuilder, ref size);
             string binaryFilePath = stringBuilder.ToString();
 
-            using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))
-                using (var stream = File.OpenRead(binaryFilePath))
-                    return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
+            using (var sha = SHA256.Create())
+            using (var stream = File.OpenRead(binaryFilePath))
+                return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
         }
 
         /// <summary>

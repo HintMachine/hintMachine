@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     class Rollcage2Connector : IPlayStationConnector
     {
         private readonly HintQuestCounter _firstPlacesQuest = new HintQuestCounter

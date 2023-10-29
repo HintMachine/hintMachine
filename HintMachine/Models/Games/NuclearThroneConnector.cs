@@ -1,7 +1,10 @@
-﻿using HintMachine.Models.GenericConnectors;
+﻿using HintMachine.Helpers;
+using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    // Unstable for now, removed from list
+    // [AvailableGameConnector]
     public class NuclearThroneConnector : IGameConnector
     {
         private readonly HintQuestCounter _killThroneQuest = new HintQuestCounter

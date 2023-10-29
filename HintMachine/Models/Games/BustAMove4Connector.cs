@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     class BustAMove4Connector : IPlayStationConnector
     {
         private readonly HintQuestCumulative _winQuest = new HintQuestCumulative

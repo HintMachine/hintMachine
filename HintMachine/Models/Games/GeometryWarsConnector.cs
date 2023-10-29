@@ -1,7 +1,9 @@
-﻿using HintMachine.Models.GenericConnectors;
+﻿using HintMachine.Helpers;
+using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class GeometryWarsConnector : IGameConnector
     {
         private ProcessRamWatcher _ram = null;

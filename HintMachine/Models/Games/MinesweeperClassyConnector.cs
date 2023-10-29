@@ -1,7 +1,9 @@
-﻿using HintMachine.Models.GenericConnectors;
+﻿using HintMachine.Helpers;
+using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class MinesweeperClassyConnector : IGameConnector
     {
         private readonly HintQuestCumulative _beginnerWinsQuest = new HintQuestCumulative

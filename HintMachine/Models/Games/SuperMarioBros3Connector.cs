@@ -3,6 +3,7 @@ using System;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     internal class SuperMarioBros3Connector : INESConnector
     {
         private bool inLevel = false;

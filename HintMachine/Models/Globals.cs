@@ -1,6 +1,4 @@
-﻿using HintMachine.Models.Games;
-using HintMachine.Models.GenericConnectors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -38,73 +36,16 @@ namespace HintMachine.Models
         public static readonly string NotificationSoundPath = 
             $@"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\Assets\Notification.wav";
 
-        public static readonly List<IGameConnector> Games = new List<IGameConnector>()
-        {
-            new XenotiltConnector(),
-            new OneFingerDeathPunchConnector(),
-            new PuyoTetrisConnector(),
-            new TetrisEffectConnector(),
-            new ZachtronicsSolitaireConnector(),
-            new GeometryWarsConnector(),
-            new GeometryWarsGalaxiesConnector(),
-            //new NuclearThroneConnector(), //Instabilities, must be investigated
-            new SonicBlueSpheresConnector(),
-            new StargunnerConnector(),
-            new BustAMove4Connector(),
-            new Rollcage2Connector(),
-            new FZeroGXConnector(),
-            new IslandersConnector(),
-            new DorfromantikConnector(),
-            new MeteosConnector(),
-            new PacManChampionshipEditionDXConnector(),
-            new MetroidPrimePinballConnector(),
-            new ColumnsConnector(),
-            new BPMConnector(),
-            new MiniMetroConnector(),
-            new LuckBeALandlordConnector(),
-            new SuperHexagonConnector(),
-            new SuperMonkeyBall2Connector(),
-            new Operator911Connector(),
-            new DragonCrownConnector(),
-            new SuperMegaBaseball2Connector(),
-            new TonyHawksProSkater12Connector(),
-            new PokemonPinballRSConnector(),
-            new TMNTShreddersRevengeConnector(),
-            new SuperMonkeyBallConnector(),
-            new NexMachinaConnector(),
-            new PokemonPuzzleChallengeConnector(),
-            new PapersPleaseConnector(),
-            new KatamariDamacyRerollConnector(),
-            new MinesweeperClassyConnector(),
-            new TetrisNESConnector(),
-            new PuyoPuyo2MDConnector(),
-            new PaintTheTownRedConnector(),
-            new PeggleDeluxeConnector(),
-            new PeggleNightsConnector(),
-            new AdvanceWarsDualStrikeConnector(),
-            new SuperMarioBros3Connector(),
-            new PinballFX3Connector(),
-        };
-
-        public static IGameConnector FindGameFromName(string name)
-        {
-            foreach (IGameConnector game in Games)
-                if (game.Name == name)
-                    return game;
-
-            return null;
-        }
-
         // Easter egg commands
         public static readonly List<string> HitMachineFacts = new List<string>() {
-            "Le saviez vous ? Avant d'être présenté par Charly et Lulu, le Hit Machine était animé par Ophelie Winter et Yves Noel.",
+            "Le saviez vous ? Avant d'être présenté par Charly et Lulu, le Hit Machine était animé par Ophélie Winter et Yves Noël.",
             "Le saviez vous ? Le Hit Machine a été diffusé sur M6 entre 1994 et 2009",
             "Le saviez vous ? Le developpement de la HintMachine a demarré en Septembre 2023.",
             "✨ Je m'appelle Charly - Et je m'appelle Lulu - On est sur M6 - pour le HitMachine ✨",
             "♪ Tous les oiseaux volent dans le ciel ♫"
         };
         public static readonly List<string> CharlyMachineFacts = new List<string>() {
-            "Le saviez vous ? Charly se nomme Charly Nestor.",
+            "Le saviez vous ? Charly se nomme Charly Nestor",
             "Le saviez vous ? Charly est né le 10 avril 1964",
             "Le feu ça brule"
         };

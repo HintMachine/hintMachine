@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class PokemonPuzzleChallengeConnector : IGameboyColorConnector
     {
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
