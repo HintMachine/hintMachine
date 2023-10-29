@@ -247,7 +247,9 @@ namespace HintMachine.Views
             ManualHintWindow window = new ManualHintWindow()
             {
                 HintLocationCallback = OnManualLocationHint,
-                HintItemCallback = OnManualItemHint
+                HintItemCallback = OnManualItemHint,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = this
             };
             window.ShowDialog();
         }
