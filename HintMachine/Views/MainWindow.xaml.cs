@@ -1,5 +1,6 @@
-﻿using HintMachine.Helpers;
 using HintMachine.Models;
+using HintMachine.ViewModels;
+using HintMachine.Helpers;
 using HintMachine.Services;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,18 @@ namespace HintMachine.Views
     {
         public const int TAB_MESSAGE_LOG = 0;
         public const int TAB_HINTS = 1;
+
+        public HintsViewModel HintsViewModel { get; }
+
         // ----------------------------------------------------------------------------------
 
         public MainWindow()
         {
             InitializeComponent();
+
+            HintsViewModel = new HintsViewModel();
+            HintsView.DataContext = HintsViewModel;
+
             SetupChatFilterMenus();
 
             Title = $"{Globals.ProgramName} {Globals.ProgramVersion}";
@@ -75,7 +83,7 @@ namespace HintMachine.Views
                 Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
                     if (TabControl.SelectedIndex == TAB_HINTS)
-                        HintsView.UpdateItems(knownHints);
+                        HintsViewModel.UpdateHintList(knownHints);
                 }));
             };
 
@@ -200,7 +208,7 @@ namespace HintMachine.Views
             LabelAvailableHints.Content = text;
 
             // Update the hints list view
-            HintsView.UpdateItems(HintMachineService.ArchipelagoSession.KnownHints);
+            HintsViewModel.UpdateHintList(HintMachineService.ArchipelagoSession.KnownHints);
         }
 
         private void OnSettingChange(object sender, RoutedEventArgs e)
