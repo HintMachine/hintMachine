@@ -21,7 +21,8 @@
                                  x:Name="textSource" 
                                  Background="Transparent" 
                                  Panel.ZIndex="2"
-                                 VerticalContentAlignment="Center" />
+                                 VerticalContentAlignment="Center"
+                                 Padding="4,0,0,0"/>
                             <TextBox Text="{TemplateBinding Tag}" Background="{TemplateBinding Background}" Panel.ZIndex="1" VerticalContentAlignment="Center">
                                 <TextBox.Style>
                                     <Style TargetType="{x:Type TextBox}">
@@ -45,9 +46,21 @@
             <Separator DockPanel.Dock="Top" Margin="0, 0, 0, 8"/>
             <Button DockPanel.Dock="Right" Content="❌ Cancel" Padding="4" Margin="6,0,8,0" Command="{Binding Cancel}" KeyboardNavigation.TabIndex="3"/>
             <Button DockPanel.Dock="Right" Content="✔️ Validate" Padding="4" Command="{Binding Validate}" KeyboardNavigation.TabIndex="3"/>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="305" Height="26" Margin="8,0" VerticalContentAlignment="Center" 
-                     Style="{StaticResource WatermarkedTextbox}" Tag="🔎 Search for games..." KeyboardNavigation.TabIndex="1"/>
-            <Button Width="25" FontSize="16" Padding="0,0,0,2" VerticalContentAlignment="Center" Command="{Binding ClearSearchText}" KeyboardNavigation.TabIndex="2">🗑️</Button>
+            <TextBox Name="TextboxSearch" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="305" Height="26" 
+                     Margin="8,0" VerticalContentAlignment="Center" Style="{StaticResource WatermarkedTextbox}"
+                     Tag="🔎 Search for games..." KeyboardNavigation.TabIndex="1"/>
+            <Button Width="25" FontSize="16" Padding="0,0,0,2" VerticalContentAlignment="Center" Command="{Binding ClearSearchText}" 
+                    Content="🗑️" KeyboardNavigation.TabIndex="2">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text.Length, ElementName=TextboxSearch, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </DockPanel>
 
         <DockPanel LastChildFill="True" Margin="8, 8, 8, 8">
