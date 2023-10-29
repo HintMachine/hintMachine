@@ -22,7 +22,7 @@
                                  Background="Transparent" 
                                  Panel.ZIndex="2"
                                  VerticalContentAlignment="Center"
-                                 Padding="4,0,0,0"/>
+                                 Padding="2,0,0,0"/>
                             <TextBox Text="{TemplateBinding Tag}" Background="{TemplateBinding Background}" Panel.ZIndex="1" VerticalContentAlignment="Center">
                                 <TextBox.Style>
                                     <Style TargetType="{x:Type TextBox}">

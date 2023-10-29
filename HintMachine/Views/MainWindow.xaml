@@ -68,19 +68,36 @@
                     </StackPanel.Style>
                 </StackPanel>
 
-                <StackPanel Name="GridGameConnect" Visibility="Visible">
-                    <Button Content="🔌 Connect to a game" FontSize="14" Click="OnConnectToGameButtonClick" Height="40">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                <StackPanel Name="GridGameConnect">
+                    <Button Content="🔌 Connect to a game" FontSize="14" Click="OnConnectToGameButtonClick" Height="40"/>
+                    <TextBlock TextWrapping="Wrap" Margin="0,24,0,0" FontSize="14">
+                        <Run>Feeling stuck in your Archipelago world?</Run>
+                    </TextBlock>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <TextBlock TextWrapping="Wrap" Width="240" FontSize="14">
+                            <Run>Connect to a game, start playing and complete quests to earn</Run>
+                            <Run FontWeight="Bold"> hint tokens</Run>
+                        </TextBlock>
+                        <Image Height="20" Width="20" Stretch="Fill" Margin="-4,19,0,0" Source="/Assets/hint_token_small.png"/>
+                    </StackPanel>
+
+                    <TextBlock TextWrapping="Wrap" Margin="0,12,0,0" FontSize="14">
+                        <Run>You can then redeem those tokens using the dedicated button to earn</Run>
+                        <Run FontWeight="Bold"> random location hints </Run>
+                        <Run>for your world.</Run>
+                    </TextBlock>
+
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
                 </StackPanel>
 
                 <DockPanel VerticalAlignment="Bottom" LastChildFill="True">
