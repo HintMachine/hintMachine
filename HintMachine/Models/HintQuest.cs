@@ -1,13 +1,22 @@
-﻿using System.Windows.Controls;
+﻿using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace HintMachine.Models
 {
-    public abstract class HintQuest
+    public abstract class HintQuest : INotifyPropertyChanged
     {
         /// <summary>
         /// The name of the quest, as shown to the user in the quests list
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public string Name
+        {
+            get { return _name; }
+            set { 
+                _name = value;
+                NotifyPropertyChanged(nameof(Name));
+            }
+        }
+        private string _name = string.Empty;
 
         /// <summary>
         /// A detailed description of what must be accomplished in the quest in order to get hints.
@@ -19,6 +28,8 @@ namespace HintMachine.Models
         /// The number of hints awarded on quest completion
         /// </summary>
         public int AwardedHints { get; set; } = 1;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         // ----------------------------------------------------------------------------------
 
@@ -33,6 +44,11 @@ namespace HintMachine.Models
         public abstract int CheckAndCommitCompletion();
 
         public abstract void InitComponents(StackPanel questsPanel);
+
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
 
