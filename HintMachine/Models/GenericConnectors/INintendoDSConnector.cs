@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using HintMachine.Helpers;
 
 namespace HintMachine.Models.GenericConnectors
 {
@@ -55,7 +56,7 @@ namespace HintMachine.Models.GenericConnectors
         {
             // Hash the relevant part of the ROM header
             byte[] bytes = _ram.ReadBytes(RomBaseAddress, 0xB0);
-            using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))
+            using (var sha = SHA256.Create())
                 return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "");
         }
     }

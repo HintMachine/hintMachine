@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Models.GenericConnectors
+﻿using HintMachine.Helpers;
+
+namespace HintMachine.Models.GenericConnectors
 {
     public abstract class INESConnector : IEmulatorConnector
     {
@@ -54,7 +56,7 @@
             return "";
             // Hash the 0x800 first ROM bytes as identity
             // byte[] romStart = _ram.ReadBytes(RomBaseAddress, 0x800);
-            // using (var sha = SHA256.Create("System.Security.Cryptography.SHA256Cng"))
+            // using (var sha = SHA256.Create())
             //     return BitConverter.ToString(sha.ComputeHash(romStart)).Replace("-", "");
         }
     }

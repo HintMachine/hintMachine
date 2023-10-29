@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     class AdvanceWarsDualStrikeConnector : INintendoDSConnector
     {
         private readonly HintQuestCumulative _basesCapturedQuest = new HintQuestCumulative

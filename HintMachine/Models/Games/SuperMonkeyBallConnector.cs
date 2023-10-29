@@ -2,6 +2,7 @@ using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class SuperMonkeyBallConnector : IDolphinConnector
     {
         private readonly HintQuestCumulative _bananaQuest = new HintQuestCumulative

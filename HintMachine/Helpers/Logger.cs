@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HintMachine.Models
+namespace HintMachine.Helpers
 {
     public enum LogMessageType
     {
@@ -32,9 +32,9 @@ namespace HintMachine.Models
         public static void Debug(string message)
         {
             // Only has an effect in debug builds
-            #if DEBUG
-                Log(message, LogMessageType.RAW);
-            #endif
+#if DEBUG
+            Log(message, LogMessageType.RAW);
+#endif
         }
 
         public static void Info(string message)

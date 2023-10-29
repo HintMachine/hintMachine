@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class PuyoPuyo2MDConnector : IMegadriveConnector
     {
         private readonly HintQuestCumulative _poppedPuyosQuest = new HintQuestCumulative

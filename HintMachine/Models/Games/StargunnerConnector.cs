@@ -1,7 +1,9 @@
-﻿using HintMachine.Models.GenericConnectors;
+﻿using HintMachine.Helpers;
+using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     class StargunnerConnector : IGameConnector
     {
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using HintMachine.Models;
+using HintMachine.Services;
 
 namespace HintMachine
 {

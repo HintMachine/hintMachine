@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class FZeroGXConnector : IDolphinConnector
     {
         private readonly HintQuestCumulative _cupPointsQuest = new HintQuestCumulative

@@ -1,7 +1,9 @@
-﻿using HintMachine.Models.GenericConnectors;
+﻿using HintMachine.Helpers;
+using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class BPMConnector : IGameConnector
     {
         private readonly HintQuestCumulative _enemiesKilledQuest = new HintQuestCumulative

@@ -1,4 +1,5 @@
-﻿using HintMachine.Models.GenericConnectors;
+﻿using HintMachine.Helpers;
+using HintMachine.Models.GenericConnectors;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     public class ZachtronicsSolitaireConnector : IGameConnector
     {
         private readonly HintQuestCounter _winsQuest = new HintQuestCounter {

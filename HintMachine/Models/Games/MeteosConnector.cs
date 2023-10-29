@@ -2,6 +2,7 @@
 
 namespace HintMachine.Models.Games
 {
+    [AvailableGameConnector]
     class MeteosConnector : INintendoDSConnector
     {
         private readonly HintQuestCumulative _sendBlocksQuest = new HintQuestCumulative

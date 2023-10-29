@@ -3,6 +3,13 @@ using System.Linq;
 
 namespace HintMachine.Models.GenericConnectors
 {
+    [System.AttributeUsage(System.AttributeTargets.Class)]
+    public class AvailableGameConnectorAttribute : System.Attribute
+    {
+        public AvailableGameConnectorAttribute()
+        { }
+    }
+
     public abstract class IGameConnector
     {
         /// <summary>

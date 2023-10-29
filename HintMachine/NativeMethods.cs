@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using HintMachine.Helpers;
 
-namespace HintMachine.Models
+namespace HintMachine
 {
     [Flags]
     public enum ThreadAccess : int
     {
-        TERMINATE = (0x0001),
-        SUSPEND_RESUME = (0x0002),
-        GET_CONTEXT = (0x0008),
-        SET_CONTEXT = (0x0010),
-        SET_INFORMATION = (0x0020),
-        QUERY_INFORMATION = (0x0040),
-        SET_THREAD_TOKEN = (0x0080),
-        IMPERSONATE = (0x0100),
-        DIRECT_IMPERSONATION = (0x0200)
+        TERMINATE = 0x0001,
+        SUSPEND_RESUME = 0x0002,
+        GET_CONTEXT = 0x0008,
+        SET_CONTEXT = 0x0010,
+        SET_INFORMATION = 0x0020,
+        QUERY_INFORMATION = 0x0040,
+        SET_THREAD_TOKEN = 0x0080,
+        IMPERSONATE = 0x0100,
+        DIRECT_IMPERSONATION = 0x0200
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -35,7 +36,7 @@ namespace HintMachine.Models
         LIST_MODULES_DEFAULT = 0x0,
         LIST_MODULES_32BIT = 0x01,
         LIST_MODULES_64BIT = 0x02,
-        LIST_MODULES_ALL = (LIST_MODULES_32BIT | LIST_MODULES_64BIT)
+        LIST_MODULES_ALL = LIST_MODULES_32BIT | LIST_MODULES_64BIT
     }
 
     internal static class NativeMethods
@@ -59,7 +60,7 @@ namespace HintMachine.Models
         [DllImport("kernel32.dll")]
         public static extern bool ReadProcessMemory(
             int hProcess,
-            Int64 lpBaseAddress,
+            long lpBaseAddress,
             byte[] lpBuffer,
             int dwSize,
             ref int lpNumberOfBytesRead);
