@@ -9,7 +9,7 @@ namespace HintMachine.Views.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is string coverFileName))
+            if (value is not string coverFileName)
             {
                 throw new ArgumentException($"Argument is not of type {typeof(string)}");
             }
@@ -17,7 +17,7 @@ namespace HintMachine.Views.Converters
             string coverFullPath = Path.GetFullPath($"./Assets/covers/{coverFileName}");
             if (!File.Exists(coverFullPath))
             {
-                coverFullPath = $"./Assets/covers/unknown.png";
+                coverFullPath = "pack://application:,,,/Assets/Covers/unknown.png";
             }
 
             return coverFullPath;
