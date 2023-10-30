@@ -54,6 +54,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Geometry Wars : Retro Evolved    | PC        |
 | ISLANDERS                        | PC        |
 | Katamari Damacy REROLL           | PC        |
+| Kirby's Avalanche                | SNES      |
 | Luck be a Landlord               | PC        |
 | Meteos                           | DS        |
 | Metroid Prime Pinball            | DS        |
