@@ -215,6 +215,9 @@
     <Content Include="Assets\Covers\katamari_damacy_reroll.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Covers\sanrio_world_smash_ball.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -224,6 +227,9 @@
   <ItemGroup>
     <PackageReference Include="Archipelago.MultiClient.Net" Version="5.0.6" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HintMachine.SNI\HintMachine.SNIConnection.csproj" />
   </ItemGroup>
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="ROBOCOPY &quot;$(TargetDir) &quot; &quot;$(TargetDir)Libs\ &quot; /XF HintMachine.dll *.exe *.config *.manifest *.cfg HintMachine.pdb /XD Libs Assets /E /IS /MOV
