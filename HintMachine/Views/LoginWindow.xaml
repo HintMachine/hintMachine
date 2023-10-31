@@ -17,13 +17,23 @@
 
         <Label Content="Password (optional) :" HorizontalAlignment="Left" Margin="0,62,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="InputPassword" Height="23" Margin="122,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-
         <Label Content="Streamer mode :" HorizontalAlignment="Left" Margin="0,93,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="CheckboxStreamerMode" HorizontalAlignment="Left" Margin="122,99,0,0" VerticalAlignment="Top"/>
-        
-        <Button Content="🔗 Connect to Archipelago" HorizontalAlignment="Center" Margin="0,124,0,0" VerticalAlignment="Top" 
-                Width="232" Click="OnConnectButtonClick" Height="37" IsDefault="True"/>
-        
 
+        <Button Content="🔗 Connect to Archipelago" HorizontalAlignment="Center" Margin="0,113,0,0" VerticalAlignment="Top" 
+                Width="232" Click="OnConnectButtonClick" Height="37" IsDefault="True">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text.Length, ElementName=InputSlot, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Text.Length, ElementName=InputHost, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </Window>

@@ -69,35 +69,50 @@
                     </StackPanel.Style>
                 </StackPanel>
 
-                <StackPanel Name="GridGameConnect" Visibility="Visible">
-                    <Button Content="🔌 Connect to a game" FontSize="14" Click="OnConnectToGameButtonClick" Height="40">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
+                <StackPanel Name="GridGameConnect">
+                    <Button Content="🔌 Connect to a game" FontSize="14" Click="OnConnectToGameButtonClick" Height="40"/>
+                    <TextBlock TextWrapping="Wrap" Margin="0,24,0,0" FontSize="14">
+                        <Run>Feeling stuck in your Archipelago world?</Run>
+                    </TextBlock>
 
-                <StackPanel VerticalAlignment="Bottom">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Name="TextHintTokenCount" FontWeight="Bold" HorizontalAlignment="Center">
-                            <Run>You currently have </Run>
-                            <Run Text="{Binding Path=(srv:HintMachineService.HintTokens), Mode=OneWay}"/>
-                            <Run> hint token(s)</Run>
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <TextBlock TextWrapping="Wrap" Width="240" FontSize="14">
+                            <Run>Connect to a game, start playing and complete quests to earn</Run>
+                            <Run FontWeight="Bold"> hint tokens</Run>
                         </TextBlock>
-                        <Image Height="20" Width="20" Margin="6,-2,4,0" Stretch="Fill" Source="/Assets/hint_token_small.png"/>
+                        <Image Height="20" Width="20" Stretch="Fill" Margin="-4,19,0,0" Source="/Assets/hint_token_small.png"/>
                     </StackPanel>
 
-                    <Button Name="ButtonRedeemHintToken" Margin="0,4,0,0" Height="30" Background="#FFA8E0A9" Click="OnRedeemHintTokenClick">
+                    <TextBlock TextWrapping="Wrap" Margin="0,12,0,0" FontSize="14">
+                        <Run>You can then redeem those tokens using the dedicated button to earn</Run>
+                        <Run FontWeight="Bold"> random location hints </Run>
+                        <Run>for your world.</Run>
+                    </TextBlock>
+
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+
+                <DockPanel VerticalAlignment="Bottom" LastChildFill="True">
+                    <Border BorderThickness="1" BorderBrush="#FFAAAAAA" Height="30" Margin="0,0,8,0" Padding="8,0" DockPanel.Dock="Left">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding Path=(srv:HintMachineService.HintTokens), Mode=OneWay}" FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
+                            <Image Height="20" Width="20" Margin="8,0,0,0" Stretch="Fill" Source="/Assets/hint_token_small.png"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Button Name="ButtonRedeemHintToken" Padding="6,0" Height="30" Background="#FFA8E0A9" Click="OnRedeemHintTokenClick" DockPanel.Dock="Right">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock>Get a random location hint for 1 </TextBlock>
-                            <Image Height="20" Width="20" Margin="4,-2,4,0" Stretch="Fill" Source="/Assets/hint_token_small.png"/>
+                            <Image Height="20" Width="20" Margin="4,-2,0,0" Stretch="Fill" Source="/Assets/hint_token_small.png"/>
                         </StackPanel>
                         <Button.Style>
                             <Style TargetType="Button">
@@ -109,7 +124,7 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                </StackPanel>
+                </DockPanel>
 
                 <TabControl Name="TabControl" Margin="12,0,0,0" Grid.Column="1" SelectionChanged="OnTabChange">
                     <TabItem Header="Message log" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
