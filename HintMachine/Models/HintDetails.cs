@@ -22,7 +22,6 @@ namespace HintMachine.Models
                 FindingPlayerName == other.FindingPlayerName &&
                 ItemName == other.ItemName &&
                 LocationName == other.LocationName &&
-                // HintDetails properties
                 ReceivingPlayer == other.ReceivingPlayer &&
                 FindingPlayer == other.FindingPlayer &&
                 ItemId == other.ItemId &&
