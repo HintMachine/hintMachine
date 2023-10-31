@@ -128,6 +128,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\BizhawkHelper.cs" />
     <Compile Include="Models\ArchipelagoHintSession.cs" />
     <Compile Include="Models\Games\BPMConnector.cs" />
     <Compile Include="Models\Games\AdvanceWarsDualStrikeConnector.cs" />
@@ -162,7 +163,7 @@
     <Compile Include="Models\GenericConnectors\IGameboyAdvanceConnector.cs" />
     <Compile Include="Models\GenericConnectors\IPlayStationConnector.cs" />
     <Compile Include="Models\GenericConnectors\IEmulatorConnector.cs" />
-    <Compile Include="Models\GenericConnectors\MegadriveRamAdapter.cs" />
+    <Compile Include="Helpers\MegadriveRamAdapter.cs" />
     <Compile Include="Models\Globals.cs" />
     <Compile Include="Models\HintDetails.cs" />
     <Compile Include="Models\Games\SonicBlueSpheresConnector.cs" />

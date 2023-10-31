@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Models.GenericConnectors
+﻿using HintMachine.Helpers;
+
+namespace HintMachine.Models.GenericConnectors
 {
     public abstract class INESConnector : IEmulatorConnector
     {
@@ -44,8 +46,7 @@
 
         public override long GetCurrentFrameCount()
         {
-            long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
-            return _ram.ReadUint32(framecountAddr);
+            return BizhawkHelper.GetCurrentFrameCount(_ram);
         }
 
         public override string GetRomIdentity()

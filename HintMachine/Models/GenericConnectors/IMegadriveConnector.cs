@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Cryptography;
+using HintMachine.Helpers;
 
 namespace HintMachine.Models.GenericConnectors
 {
@@ -64,24 +65,7 @@ namespace HintMachine.Models.GenericConnectors
 
         public override long GetCurrentFrameCount()
         {
-            return 0;
-            /*
-            try
-            {
-                long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
-                if (framecountAddr == 0)
-                {
-                    Logger.Debug("Framecount addr is null, skipping checks...");
-                    return 0;
-                }
-                return _ram.ReadUint32(framecountAddr);
-            } 
-            catch(ProcessRamWatcherException)
-            {
-                Logger.Debug("RAM couldn't be read following framecount pointer path, skipping checks...");
-                return 0;
-            }
-            */
+            return BizhawkHelper.GetCurrentFrameCount(_ram);
         }
 
         public override string GetRomIdentity()
