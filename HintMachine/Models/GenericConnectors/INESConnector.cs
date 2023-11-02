@@ -15,13 +15,12 @@ namespace HintMachine.Models.GenericConnectors
         public INESConnector()
         {
             Platform = "NES";
-            SupportedEmulators.Add("BizHawk 2.9.1 (QuickNES core)");
+            SupportedEmulators.Add("BizHawk 2.9.1 (NesHawk core)");
         }
 
         protected override bool Connect()
         {
-            _ram = new MegadriveRamAdapter(new BinaryTarget
-            {
+            _ram = new ProcessRamWatcher(new BinaryTarget {
                 DisplayName = "2.9.1",
                 ProcessName = "EmuHawk",
                 Hash = "6CE622D4ED4E8460CE362CF35EF67DC70096FEC2C9A174CBEF6A3E5B04F18BCC"
@@ -30,7 +29,7 @@ namespace HintMachine.Models.GenericConnectors
             if (!_ram.TryConnect())
                 return false;
 
-            RamBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x208, 0x90, 0xEC }) + 2;
+            RamBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x1F0, 0x20, 0x10 });
             // RomBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x240, 0x68, 0x10, 0x250, 0x10 });
             return true;
         }
