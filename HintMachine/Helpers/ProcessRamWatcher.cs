@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using HintMachine.Models;
@@ -53,10 +51,7 @@ namespace HintMachine.Helpers
 
     public class ProcessRamWatcher
     {
-
-        // ----------------------------------------------------------------------------------
-
-        private Process _process = null;
+        public Process Process { get; private set; } = null;
         private IntPtr _processHandle = IntPtr.Zero;
 
         public List<BinaryTarget> SupportedTargets { get; private set; } = new List<BinaryTarget>();
@@ -69,16 +64,7 @@ namespace HintMachine.Helpers
 
         public bool IsBigEndian { get; set; } = false;
 
-        public long Threadstack0
-        {
-            get
-            {
-                if (_threadstack0 == null)
-                    _threadstack0 = GetThreadstack0Address();
-
-                return _threadstack0 ?? 0;
-            }
-        }
+        public long Threadstack0 => _threadstack0 ??= ThreadstackFinder.FindThreadstack0(this);
         private long? _threadstack0 = null;
 
         // ----------------------------------------------------------------------------------
@@ -155,14 +141,14 @@ namespace HintMachine.Helpers
             // Find the process using its name
             Process[] processes = Process.GetProcessesByName(processName);
             if (processes.Length > 0)
-                _process = processes[0];
-            if (_process == null)
+                Process = processes[0];
+            if (Process == null)
                 return false;
 
             // Open the process
             const int PROCESS_WM_READ = 0x0010;
             const int PROCESS_QUERY_INFORMATION = 0x0400;
-            _processHandle = NativeMethods.OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, _process.Id);
+            _processHandle = NativeMethods.OpenProcess(PROCESS_WM_READ | PROCESS_QUERY_INFORMATION, false, Process.Id);
             if (_processHandle == IntPtr.Zero)
                 return false;
 
@@ -195,10 +181,10 @@ namespace HintMachine.Helpers
         /// </summary>
         /// <param name="targetName">the name of the module (or an empty string)</param>
         /// <returns>the base address for the given module (or the main module base address if empty)</returns>
-        private long FindModuleBaseAddress(string targetName)
+        public long FindModuleBaseAddress(string targetName)
         {
             if (targetName == "")
-                return _process.MainModule.BaseAddress.ToInt64();
+                return Process.MainModule.BaseAddress.ToInt64();
 
             long result = 0;
 
@@ -242,12 +228,12 @@ namespace HintMachine.Helpers
         /// Thrown when the object is in a bad state (no attached process) or if data could not be read from the process
         /// for any reason.
         /// </exception>
-        public byte[] ReadBytes(long address, int length, bool isBigEndian = false)
+        public byte[] ReadBytes(long address, uint length, bool isBigEndian = false)
         {
             if (_processHandle == IntPtr.Zero)
                 throw new ProcessRamWatcherException("Could not read memory from a ProcessRamWatcher which failed to initialize");
 
-            int bytesRead = 0;
+            uint bytesRead = 0;
             byte[] buffer = new byte[length];
             NativeMethods.ReadProcessMemory((int)_processHandle, address, buffer, length, ref bytesRead);
             if (bytesRead < length)
@@ -384,33 +370,6 @@ namespace HintMachine.Helpers
             using (var sha = SHA256.Create())
             using (var stream = File.OpenRead(binaryFilePath))
                 return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
-        }
-
-        /// <summary>
-        /// Fetch the infamous THREADSTACK0 address (as specified by the CheatEngine software) to use as a base address
-        /// for further data retrieval.
-        /// </summary>
-        private long GetThreadstack0Address()
-        {
-            string binaryName = Is64Bit ? "ThreadstackFinder64.exe" : "ThreadstackFinder32.exe";
-
-            var proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = binaryName,
-                    Arguments = _process.Id.ToString(),
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
-                }
-            };
-
-            proc.Start();
-
-            while (!proc.StandardOutput.EndOfStream)
-                return long.Parse(proc.StandardOutput.ReadLine());
-            return 0;
         }
     }
 }
