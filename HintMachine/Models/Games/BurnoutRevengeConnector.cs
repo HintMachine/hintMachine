@@ -32,11 +32,11 @@ namespace HintMachine.Models.Games
         public BurnoutRevengeConnector()
         {
             Name = "Burnout Revenge";
-            Description = "";
+            Description = "In Burnout Revenge, players compete in a range of racing game types with different aims. These take place within rush-hour traffic, and include circuit racing, Road Rage (where players cause as many rivals to crash as possible within a time limit, or until the player's car is wrecked), Burning Lap (a single-lap, single-racer time attack mode), Eliminator (a circuit race where every thirty seconds, the last-placed racer's car is detonated; the race continues until only one racer is left), and Crash (where the player is placed at a junction with the aim of accumulating as many \"Crash Dollars\" as possible";
             SupportedVersions.Add("US ISO");
             SupportedEmulators.Add("PCSX2 Nightly v1.7.5158");
 
-            //CoverFilename = "burnout_revenge.png";
+            CoverFilename = "burnoutRevenge.png";
             Platform = "PS2";
             Author = "CalDrac";
 
