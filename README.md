@@ -56,6 +56,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Katamari Damacy REROLL           | PC        |
 | Kirby's Avalanche                | SNES      |
 | Luck be a Landlord               | PC        |
+| Mario Pinball Land               | GBA       |
 | Meteos                           | DS        |
 | Metroid Prime Pinball            | DS        |
 | Minesweeper Classy               | PC        |
