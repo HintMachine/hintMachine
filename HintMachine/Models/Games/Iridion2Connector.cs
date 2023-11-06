@@ -28,7 +28,7 @@ namespace HintMachine.Models.Games
 
             Quests.Add(_scoreQuest);
 
-            //ValidROMs.Add("BPPP01");
+            ValidROMs.Add("AI2P7D");
         }
 
         protected override bool Poll()
