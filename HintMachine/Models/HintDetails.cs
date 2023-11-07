@@ -41,5 +41,7 @@ namespace HintMachine.Models
             else
                 return false;
         }
+
+        public override int GetHashCode() { return 0; }
     }
 }

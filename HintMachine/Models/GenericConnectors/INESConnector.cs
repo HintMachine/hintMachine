@@ -20,8 +20,7 @@ namespace HintMachine.Models.GenericConnectors
 
         protected override bool Connect()
         {
-            _ram = new MegadriveRamAdapter(new BinaryTarget
-            {
+            _ram = new ProcessRamWatcher(new BinaryTarget {
                 DisplayName = "2.9.1",
                 ProcessName = "EmuHawk",
                 Hash = "6CE622D4ED4E8460CE362CF35EF67DC70096FEC2C9A174CBEF6A3E5B04F18BCC"
