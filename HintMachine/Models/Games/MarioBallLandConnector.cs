@@ -7,8 +7,7 @@ namespace HintMachine.Models.Games
     {
         private readonly HintQuestCumulative _starsQuest = new HintQuestCumulative
         {
-            Name = "Stars",
-            Description = "Collect stars",
+            Name = "Collect Stars",
             GoalValue = 2,
             MaxIncrease = 1,
         };
@@ -21,7 +20,7 @@ namespace HintMachine.Models.Games
                 "Now you must use your flippers to shoot a much rounder Mario into doors that lead to new areas. In his new form, Mario is also useful for knocking down enemies, picking up special bonuses, and finding power-ups.";
             SupportedVersions.Add("USA ROM");
             Author = "CalDrac";
-            CoverFilename = "marioPinballLand.png";
+            CoverFilename = "mario_pinball_land.png";
 
             Quests.Add(_starsQuest);
 
