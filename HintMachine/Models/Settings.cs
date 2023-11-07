@@ -16,6 +16,7 @@ namespace HintMachine.Models
         public static bool DisplayItemSentMessages = false;
         public static bool PlaySoundOnHint = true;
         public static bool ShowUpdatePopUp = true;
+        public static bool StreamerMode = false;
 
         // ----------------------------------------------------------------------------------
 
@@ -35,6 +36,7 @@ namespace HintMachine.Models
                 { "displayItemSentMessages",        DisplayItemSentMessages.ToString() },
                 { "playSoundOnHint",                PlaySoundOnHint.ToString() },
                 { "showUpdatePopUp",                ShowUpdatePopUp.ToString() },
+                { "streamerMode",                StreamerMode.ToString() },
             };
             File.WriteAllLines("settings.cfg", dict.Select(x => x.Key + "=" + x.Value).ToArray());
         }
@@ -74,6 +76,8 @@ namespace HintMachine.Models
                         PlaySoundOnHint = bool.Parse(value);
                     else if (line.StartsWith("showUpdatePopUp"))
                         ShowUpdatePopUp = bool.Parse(value);
+                    else if (line.StartsWith("streamerMode"))
+                        StreamerMode = bool.Parse(value);
                 }
             }
             catch { }

@@ -143,6 +143,7 @@ namespace HintMachine.Views
                 case LogMessageType.INFO:
                 case LogMessageType.JOIN_LEAVE:
                 case LogMessageType.SERVER_RESPONSE:
+                case LogMessageType.STREAMER_SENSITIVE_INFO:
                     return Color.FromRgb(0, 150, 200);
 
                 case LogMessageType.ITEM_SENT:
@@ -204,7 +205,9 @@ namespace HintMachine.Views
                 return false;
             if (logMessageType == LogMessageType.ITEM_SENT && !Settings.DisplayItemSentMessages)
                 return false;
-
+            if (logMessageType == LogMessageType.STREAMER_SENSITIVE_INFO && Settings.StreamerMode)
+                return false;
+            
             return true;
         }
     }

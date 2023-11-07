@@ -21,6 +21,7 @@ namespace HintMachine.Views
             Settings.LoadFromFile();
             InputHost.Text = Settings.Host;
             InputSlot.Text = Settings.Slot;
+            CheckboxStreamerMode.IsChecked = Settings.StreamerMode;
 
             if (Settings.ShowUpdatePopUp) {
                 _ = CheckIfUpdateAvailableAsync();
@@ -37,6 +38,7 @@ namespace HintMachine.Views
             try
             {
                 HintMachineService.ConnectToArchipelago(host, slot, password);
+                Settings.StreamerMode = CheckboxStreamerMode.IsChecked.Value;
                 new MainWindow().Show();
                 Close();
             }

@@ -15,6 +15,7 @@ namespace HintMachine.Helpers
         GOAL = 8,
         SERVER_RESPONSE = 9,
         JOIN_LEAVE = 10,
+        STREAMER_SENSITIVE_INFO = 11,
     }
 
     public static class Logger

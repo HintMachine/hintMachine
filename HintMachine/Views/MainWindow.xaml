@@ -26,6 +26,7 @@
                     <MenuItem Name="MenuDisplayReceivedItems" Header="Received items notifications" IsCheckable="True" />
                 </MenuItem>
                 <MenuItem Name="MenuShowUpdatePopup" Header="Notify on launch if an update is available" IsCheckable="True" />
+                <MenuItem Name="MenuStreamerMode" Header="Hide hostname (streamer mode)" IsCheckable="True" />
             </MenuItem>
             <MenuItem Header="?">
                 <MenuItem Header="_About HintMachine" Click="OnAboutClick" />
@@ -34,7 +35,7 @@
 
         <DockPanel DockPanel.Dock="Bottom">
             <StatusBar DockPanel.Dock="Bottom" Height="22">
-                <TextBlock>
+                <TextBlock x:Name="ConnectionTextBlock">
                     <Run>🔗 Connected to </Run>
                     <Run Text="{Binding Path=(srv:HintMachineService.Host), Mode=OneWay}"/>
                     <Run> as </Run>
