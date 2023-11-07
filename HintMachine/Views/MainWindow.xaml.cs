@@ -38,7 +38,7 @@ namespace HintMachine.Views
             {
                 Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
-                    MessageLog.AddMessage(message, logMessageType);
+                    MessageLogControl.AddMessage(message, logMessageType);
                 }));
             };
 
@@ -222,7 +222,7 @@ namespace HintMachine.Views
             Settings.ShowUpdatePopUp = MenuShowUpdatePopup.IsChecked;
             Settings.StreamerMode = MenuStreamerMode.IsChecked;
             ConnectionTextBlock.Visibility = Settings.StreamerMode ? Visibility.Collapsed : Visibility.Visible;
-            MessageLog.UpdateMessagesVisibility();
+            MessageLogControl.UpdateMessagesVisibility();
         }
 
         private void OnExitMenuClick(object sender, RoutedEventArgs e) => Close();

@@ -131,10 +131,10 @@
                         <DockPanel LastChildFill="True">
                             <DockPanel DockPanel.Dock="Bottom" Margin="0,2,0,0" LastChildFill="True">
                                 <Button DockPanel.Dock="Right" Width="60" Margin="2,0,0,0" Click="OnSendButtonClick">💬 Send</Button>
-                                <TextBox x:Name="TextboxChatInput" Height="23" TextWrapping="Wrap" KeyDown="OnChatInputKeyDown" />
+                                <TextBox x:Name="TextboxChatInput" Height="23" VerticalContentAlignment="Center" KeyDown="OnChatInputKeyDown" />
                             </DockPanel>
 
-                            <local:MessageLog x:Name="MessageLog"/>
+                            <local:MessageLog x:Name="MessageLogControl"/>
                         </DockPanel>
                     </TabItem>
                     <TabItem Header="Hints">
