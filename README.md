@@ -80,6 +80,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Stargunner                       | PC        |
 | Super Bomberman 4                | SNES      |
 | Super Hexagon                    | PC        |
+| Super Mario Bros. 2              | NES       |
 | Super Mario Bros. 3              | NES       |
 | Super Mega Baseball 2            | PC        |
 | Super Monkey Ball                | GameCube  |
