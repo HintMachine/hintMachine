@@ -45,8 +45,8 @@ namespace HintMachine.Models.Games
             bool isPALVersion = (CurrentROM == "GFZP01");
 
             long isRacingAddr = isPALVersion ? 0x17BF7D : 0x17D7A9;
-            long knockoutsAddr = isPALVersion ? 0xC10102 : 0xC46A22;
-            long cupPointsAddr = isPALVersion ? 0x386D48 : 0x378668;
+            long knockoutsAddr = isPALVersion ? 0xC10122 : 0xC46A22;
+            long cupPointsAddr = isPALVersion ? 0x386D68 : 0x378668;
 
             bool isRacing = (_ram.ReadUint8(MEM1 + isRacingAddr) != 0);
             if (_wasRacingLastTick)

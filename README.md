@@ -54,7 +54,9 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Geometry Wars : Retro Evolved    | PC        |
 | ISLANDERS                        | PC        |
 | Katamari Damacy REROLL           | PC        |
+| Kirby's Avalanche                | SNES      |
 | Luck be a Landlord               | PC        |
+| Mario Pinball Land               | GBA       |
 | Meteos                           | DS        |
 | Metroid Prime Pinball            | DS        |
 | Minesweeper Classy               | PC        |
@@ -74,7 +76,9 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Rollcage Stage 2                 | PS1       |
 | Skyrim Special Edition           | PC        |
 | Sonic 3 Blue Spheres             | Megadrive |
+| Sonic Mania                      | PC        |
 | Stargunner                       | PC        |
+| Super Bomberman 4                | SNES      |
 | Super Hexagon                    | PC        |
 | Super Mario Bros. 3              | NES       |
 | Super Mega Baseball 2            | PC        |
@@ -84,5 +88,6 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Tetris                           | NES       |
 | Tetris Effect Connected          | PC        |
 | Tony Hawk's Pro Skater 1 + 2     | PC        |
+| WarioWare, Inc.: Mega Microgames!| GBA        |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |

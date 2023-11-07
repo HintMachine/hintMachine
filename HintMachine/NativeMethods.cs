@@ -39,6 +39,95 @@ namespace HintMachine
         LIST_MODULES_ALL = LIST_MODULES_32BIT | LIST_MODULES_64BIT
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct THREAD_BASIC_INFORMATION
+    {
+        public ulong ExitStatus;
+        public ulong TebBaseAddress;
+        public ulong ClientId;
+        public ulong AffinityMask;
+        public ulong Priority;
+        public ulong BasePriority;
+    }
+
+    public enum ThreadInfoClass : int
+    {
+        ThreadBasicInformation = 0,
+        ThreadQuerySetWin32StartAddress = 9
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NT_TIB
+    {
+        public ulong ExceptionListPointer;
+        public long StackBase;
+        public ulong StackLimit;
+        public ulong SubSystemTib;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct MODULEINFO
+    {
+        public ulong lpBaseOfDll;
+        public uint SizeOfImage;
+        public ulong EntryPoint;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WOW64_FLOATING_SAVE_AREA
+    {
+        public uint ControlWord;
+        public uint StatusWord;
+        public uint TagWord;
+        public uint ErrorOffset;
+        public uint ErrorSelector;
+        public uint DataOffset;
+        public uint DataSelector;
+        public unsafe fixed byte RegisterArea[80];
+        public uint Cr0NpxState;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WOW64_CONTEXT
+    {
+        public uint ContextFlags;
+        public uint Dr0;
+        public uint Dr1;
+        public uint Dr2;
+        public uint Dr3;
+        public uint Dr6;
+        public uint Dr7;
+        public WOW64_FLOATING_SAVE_AREA FloatSave;
+        public uint SegGs;
+        public uint SegFs;
+        public uint SegEs;
+        public uint SegDs;
+        public uint Edi;
+        public uint Esi;
+        public uint Ebx;
+        public uint Edx;
+        public uint Ecx;
+        public uint Eax;
+        public uint Ebp;
+        public uint Eip;
+        public uint SegCs;
+        public uint EFlags;
+        public uint Esp;
+        public uint SegSs;
+        public unsafe fixed byte ExtendedRegisters[512];
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WOW64_LDT_ENTRY
+    {
+        public ushort LimitLow;
+        public ushort BaseLow;
+        public byte BaseMid;
+        public byte Flags1;
+        public byte Flags2;
+        public byte BaseHi;
+    }
+
     internal static class NativeMethods
     {
         [DllImport("kernel32.dll")]
@@ -52,7 +141,7 @@ namespace HintMachine
             IntPtr hHandle);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern Microsoft.Win32.SafeHandles.SafeAccessTokenHandle OpenThread(
+        public static extern IntPtr OpenThread(
             ThreadAccess dwDesiredAccess,
             bool bInheritHandle,
             uint dwThreadId);
@@ -62,8 +151,8 @@ namespace HintMachine
             int hProcess,
             long lpBaseAddress,
             byte[] lpBuffer,
-            int dwSize,
-            ref int lpNumberOfBytesRead);
+            uint dwSize,
+            ref uint lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern int VirtualQueryEx(
@@ -93,5 +182,40 @@ namespace HintMachine
             uint dwFlags,
             [Out] StringBuilder lpExeName,
             ref uint lpdwSize);
+
+        [DllImport("ntdll.dll", SetLastError = true)]
+        public static extern int NtQueryInformationThread(
+            IntPtr threadHandle,
+            ThreadInfoClass threadInformationClass,
+            out THREAD_BASIC_INFORMATION threadInformation,
+            ulong threadInformationLength,
+            IntPtr returnLengthPtr);
+
+        [DllImport("psapi.dll", SetLastError = true)]
+        public static extern bool GetModuleInformation(
+            IntPtr hProcess,
+            IntPtr hModule,
+            out MODULEINFO lpmodinfo,
+            uint cb);
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr GetModuleHandle(
+            string lpModuleName);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool Wow64GetThreadContext(
+          IntPtr hThread,
+          out WOW64_CONTEXT lpContext);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool Wow64GetThreadSelectorEntry(
+          IntPtr hThread,
+          uint dwSelector,
+          out WOW64_LDT_ENTRY lpSelectorEntry);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool IsWow64Process(
+            IntPtr hProcess,
+            out bool Wow64Process);
     }
 }
