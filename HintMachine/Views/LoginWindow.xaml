@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="HintMachine" SizeToContent="WidthAndHeight" Background="#FFEEEEEE" ResizeMode="CanMinimize" Icon="/assets/icon.png">
     <StackPanel>
-        <Image VerticalAlignment="Top" Width="180" Margin="16,8,0,20" HorizontalAlignment="Center" Source="/Assets/logo_small.png"/>
+        <Image VerticalAlignment="Top" Width="180" Margin="16,8,0,25" HorizontalAlignment="Center" Source="/Assets/logo_small.png"/>
         <Grid HorizontalAlignment="Center" Width="400" Margin="30,0" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -20,20 +20,20 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,8">Archipelago host:</Label>
-            <TextBox x:Name="InputHost" Grid.Row="0" Grid.Column="1" Height="23" VerticalContentAlignment="Center" 
-                     Margin="8,0,0,8" Text="archipelago.gg:12345"/>
+            <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5">Archipelago host:</Label>
+            <TextBox x:Name="InputHost" Grid.Row="0" Grid.Column="1" Height="25" VerticalContentAlignment="Center" 
+                     Margin="8,0,0,5" Padding="3,0,0,0" Text="archipelago.gg:12345"/>
 
-            <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,8">Slot name:</Label>
-            <TextBox x:Name="InputSlot" Grid.Row="1" Grid.Column="1" Height="23" VerticalContentAlignment="Center" 
-                     Margin="8,0,0,8" />
+            <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5">Slot name:</Label>
+            <TextBox x:Name="InputSlot" Grid.Row="1" Grid.Column="1" Height="25" VerticalContentAlignment="Center" 
+                     Margin="8,1,0,5" Padding="3,0,0,0"/>
 
-            <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,8">Password (optional):</Label>
-            <TextBox x:Name="InputPassword" Grid.Row="2" Grid.Column="1" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" 
-                     Margin="8,2,0,0"/>
+            <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,5">Password (optional):</Label>
+            <TextBox x:Name="InputPassword" Grid.Row="2" Grid.Column="1" Height="25" VerticalContentAlignment="Center" 
+                     Margin="8,2,0,5" Padding="3,0,0,0"/>
 
             <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="CheckboxStreamerMode" HorizontalAlignment="Left" 
-                      VerticalAlignment="Top" Margin="4,8,0,0">
+                      VerticalAlignment="Top" Margin="4,6,0,0">
                 Hide hostname in the interface (Streamer mode)
             </CheckBox>
 

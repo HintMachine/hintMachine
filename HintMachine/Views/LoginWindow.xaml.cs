@@ -21,6 +21,7 @@ namespace HintMachine.Views
             Settings.LoadFromFile();
             InputHost.Text = Settings.Host;
             InputSlot.Text = Settings.Slot;
+            CheckboxStreamerMode.IsChecked = Settings.StreamerMode;
 
             if (Settings.ShowUpdatePopUp) {
                 _ = CheckIfUpdateAvailableAsync();

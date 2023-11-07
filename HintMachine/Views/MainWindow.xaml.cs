@@ -90,16 +90,9 @@ namespace HintMachine.Views
             if (TabControl.SelectedIndex == TAB_HINTS)
                 SetupHintsTab();
 
-            
-            if (!Settings.StreamerMode)
-            {
-                Logger.Log($"Connected to Archipelago session at {HintMachineService.Host} as {HintMachineService.Slot}.", LogMessageType.CONNEXION);
-                ConnectionTextBlock.Visibility = Visibility.Visible;
-            }
-            else {
-                Logger.Info($"Connected to Archipelago session.");
-                ConnectionTextBlock.Visibility = Visibility.Hidden;
-            }
+            Logger.Log($"Connected to Archipelago session at {HintMachineService.Host} as {HintMachineService.Slot}.", 
+                    LogMessageType.STREAMER_SENSITIVE_INFO);
+            ConnectionTextBlock.Visibility = Settings.StreamerMode ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void OnGameChanged()
@@ -228,7 +221,7 @@ namespace HintMachine.Views
             Settings.PlaySoundOnHint = MenuSoundNotification.IsChecked;
             Settings.ShowUpdatePopUp = MenuShowUpdatePopup.IsChecked;
             Settings.StreamerMode = MenuStreamerMode.IsChecked;
-            DisplayStreamerMode();
+            ConnectionTextBlock.Visibility = Settings.StreamerMode ? Visibility.Collapsed : Visibility.Visible;
             MessageLog.UpdateMessagesVisibility();
         }
 
@@ -287,17 +280,5 @@ namespace HintMachine.Views
         private void OnAboutClick(object sender, RoutedEventArgs e) => HintMachineService.ShowAboutMessage();
 
         private void OnRedeemHintTokenClick(object sender, RoutedEventArgs e) => HintMachineService.RedeemHintToken();
-
-        private void DisplayStreamerMode() {
-
-            if (!Settings.StreamerMode)
-            {
-                ConnectionTextBlock.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ConnectionTextBlock.Visibility = Visibility.Hidden;
-            }
-        }
     }
 }
