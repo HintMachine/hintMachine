@@ -52,7 +52,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | F-Zero GX                        | GameCube  |
 | Geometry Wars Galaxies           | Wii       |
 | Geometry Wars : Retro Evolved    | PC        |
-| Iridion II					   | GBA       |
+| Iridion II					             | GBA       |
 | ISLANDERS                        | PC        |
 | Katamari Damacy REROLL           | PC        |
 | Kirby's Avalanche                | SNES      |
