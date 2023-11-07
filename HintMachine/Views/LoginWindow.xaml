@@ -4,36 +4,55 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="HintMachine" Height="345" Width="466" Background="#FFEEEEEE" ResizeMode="CanMinimize" Icon="/assets/icon.png">
-    <Grid HorizontalAlignment="Center" Width="400" Height="171" VerticalAlignment="Top" Margin="30,138,30,0">
-        <Image HorizontalAlignment="Left" Height="110" Margin="122,-132,0,0" VerticalAlignment="Top" Width="180" 
-                Source="/Assets/logo_small.png"/>
+        Title="HintMachine" SizeToContent="WidthAndHeight" Background="#FFEEEEEE" ResizeMode="CanMinimize" Icon="/assets/icon.png">
+    <StackPanel>
+        <Image VerticalAlignment="Top" Width="180" Margin="16,8,0,20" HorizontalAlignment="Center" Source="/Assets/logo_small.png"/>
+        <Grid HorizontalAlignment="Center" Width="400" Margin="30,0" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-        <Label Content="Archipelago host :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="InputHost" Height="23" Margin="122,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="archipelago.gg:12345"/>
+            <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,8">Archipelago host:</Label>
+            <TextBox x:Name="InputHost" Grid.Row="0" Grid.Column="1" Height="23" VerticalContentAlignment="Center" 
+                     Margin="8,0,0,8" Text="archipelago.gg:12345"/>
 
-        <Label Content="Slot name :" HorizontalAlignment="Left" Margin="0,31,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="InputSlot" Height="23" Margin="122,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+            <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,8">Slot name:</Label>
+            <TextBox x:Name="InputSlot" Grid.Row="1" Grid.Column="1" Height="23" VerticalContentAlignment="Center" 
+                     Margin="8,0,0,8" />
 
-        <Label Content="Password (optional) :" HorizontalAlignment="Left" Margin="0,62,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="InputPassword" Height="23" Margin="122,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Label Content="Streamer mode :" HorizontalAlignment="Left" Margin="0,93,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CheckboxStreamerMode" HorizontalAlignment="Left" Margin="122,99,0,0" VerticalAlignment="Top"/>
+            <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,8">Password (optional):</Label>
+            <TextBox x:Name="InputPassword" Grid.Row="2" Grid.Column="1" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" 
+                     Margin="8,2,0,0"/>
 
-        <Button Content="🔗 Connect to Archipelago" HorizontalAlignment="Center" Margin="0,113,0,0" VerticalAlignment="Top" 
-                Width="232" Click="OnConnectButtonClick" Height="37" IsDefault="True">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text.Length, ElementName=InputSlot, UpdateSourceTrigger=PropertyChanged}" Value="0">
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Text.Length, ElementName=InputHost, UpdateSourceTrigger=PropertyChanged}" Value="0">
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-    </Grid>
+            <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="CheckboxStreamerMode" HorizontalAlignment="Left" 
+                      VerticalAlignment="Top" Margin="4,8,0,0">
+                Hide hostname in the interface (Streamer mode)
+            </CheckBox>
+
+            <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="🔗 Connect to Archipelago" Width="280" Height="37" 
+                    Margin="0,20,0,25" Click="OnConnectButtonClick" IsDefault="True">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text.Length, ElementName=InputSlot, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Text.Length, ElementName=InputHost, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </StackPanel>
+
 </Window>
