@@ -32,7 +32,8 @@ namespace HintMachine.Models.GenericConnectors
             if (!_ram.TryConnect())
                 return false;
 
-            RamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x278, 0 });
+            // 0xB78 looks as an alternative
+            RamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x278, 0 }); 
             RomBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x10 });
 
             // RamBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x1F0, 0x18, 0x90, 0 });

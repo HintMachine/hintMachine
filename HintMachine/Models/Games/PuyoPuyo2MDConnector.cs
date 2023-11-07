@@ -38,7 +38,8 @@ namespace HintMachine.Models.Games
             Quests.Add(_chainsQuest);
             Quests.Add(_allClearsQuest);
 
-            ValidROMs.Add("33C3F80F36DA94E25F11F1A2FCEBD5DF22E495567754DB47F330855F6DF91430");
+            ValidROMs.Add("33C3F80F36DA94E25F11F1A2FCEBD5DF22E495567754DB47F330855F6DF91430"); // REV00
+            ValidROMs.Add("2A092BAEF14D5A2BFCC34D60CFF23D08FAF19BCEAAF319AF36D00E9D634B4B8A"); // REV01
         }
 
         protected override bool Poll()
