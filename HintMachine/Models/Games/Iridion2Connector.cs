@@ -8,9 +8,8 @@ namespace HintMachine.Models.Games
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
         {
             Name = "Score",
-            Description = "Catch, hatch and evolve Pokémon",
             GoalValue = 25000,
-            MaxIncrease = 1000,
+            MaxIncrease = 15000,
         };
 
         public Iridion2Connector()
