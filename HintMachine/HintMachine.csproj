@@ -43,10 +43,12 @@
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Assets\covers\wariowareinc.png" />
     <None Remove="Assets\hint_token_small.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\covers\marioPinballLand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Covers\paint_the_town_red.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
