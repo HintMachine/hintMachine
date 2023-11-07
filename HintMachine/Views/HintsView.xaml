@@ -6,29 +6,28 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
-        <CheckBox Name="CheckboxProgression" Content="Only show hints for progression items" IsChecked="True" DockPanel.Dock="Bottom" 
-                    Margin="0,6,0,0" Checked="OnCheckboxProgressionChecked" Unchecked="OnCheckboxProgressionChecked"/>
-        <ListView Name="ListViewHints" DockPanel.Dock="Top">
+        <CheckBox IsChecked="{Binding ProgressionChecked}" Content="Only show hints for progression items" DockPanel.Dock="Bottom" Margin="0,6,0,0"/>
+        <ListView ItemsSource="{Binding HintListView}" DockPanel.Dock="Top">
             <ListView.View>
-                <GridView x:Name="grid">
+                <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=ReceivingPlayerName}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="ReceivingPlayerName" Click="OnHintsListColumnClick">Receiving player</GridViewColumnHeader>
+                            <GridViewColumnHeader Command="{Binding SortColumn}" CommandParameter="ReceivingPlayerName">Receiving player</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=ItemName}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="ItemName" Click="OnHintsListColumnClick">Item</GridViewColumnHeader>
+                            <GridViewColumnHeader Command="{Binding SortColumn}" CommandParameter="ItemName">Item</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=FindingPlayerName}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="FindingPlayerName" Click="OnHintsListColumnClick">Finding player</GridViewColumnHeader>
+                            <GridViewColumnHeader Command="{Binding SortColumn}" CommandParameter="FindingPlayerName">Finding player</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=LocationName}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="LocationName" Click="OnHintsListColumnClick">Location</GridViewColumnHeader>
+                            <GridViewColumnHeader Command="{Binding SortColumn}" CommandParameter="LocationName">Location</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                 </GridView>

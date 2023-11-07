@@ -6,7 +6,7 @@ using HintMachine.Views;
 
 namespace HintMachine.Models
 {
-    public class HintQuestCounter : HintQuest, INotifyPropertyChanged
+    public class HintQuestCounter : HintQuest
     {
         /// <summary>
         /// The target value that must be reached 
@@ -62,7 +62,7 @@ namespace HintMachine.Models
                 }
                 
                 _currentValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentValue)));
+                NotifyPropertyChanged(nameof(CurrentValue));
             }
         }
         private long _currentValue = 0;
@@ -75,17 +75,10 @@ namespace HintMachine.Models
 
         private QuestControl _control = null;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         // ----------------------------------------------------------------------------------
 
         public HintQuestCounter()
         {}
- 
-        public float GetProgression()
-        {
-            return (float)CurrentValue / GoalValue;
-        }
 
         public override int CheckAndCommitCompletion()
         {
@@ -105,8 +98,7 @@ namespace HintMachine.Models
 
         public override void InitComponents(StackPanel questsPanel)
         {
-            _control = new QuestControl();
-            _control.DataContext = this;
+            _control = new QuestControl { DataContext = this };
             questsPanel.Children.Add(_control);
         }
 

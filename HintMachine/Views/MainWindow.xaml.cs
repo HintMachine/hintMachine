@@ -1,5 +1,6 @@
-﻿using HintMachine.Helpers;
 using HintMachine.Models;
+using HintMachine.ViewModels;
+using HintMachine.Helpers;
 using HintMachine.Services;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,17 @@ namespace HintMachine.Views
         public const int TAB_MESSAGE_LOG = 0;
         public const int TAB_HINTS = 1;
 
+        public HintsViewModel HintsViewModel { get; }
+
         // ----------------------------------------------------------------------------------
 
         public MainWindow()
         {
             InitializeComponent();
+
+            HintsViewModel = new HintsViewModel();
+            HintsView.DataContext = HintsViewModel;
+
             SetupChatFilterMenus();
 
             Title = $"{Globals.ProgramName} {Globals.ProgramVersion}";
@@ -35,12 +42,9 @@ namespace HintMachine.Views
                 }));
             };
 
-            HintMachineService.GameChanged += OnGameChanged;
-            OnArchipelagoSessionChange(); 
 
-            Logger.Info("Feeling stuck in your Archipelago world?\n" +
-                        "Connect to a game and start playing to earn hint tokens by completing quests.\n" + 
-                        "You can then redeem those tokens using the dedicated button to earn a random location hint for your world.");
+            HintMachineService.GameChanged += OnGameChanged;
+            OnArchipelagoSessionChange();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -75,7 +79,7 @@ namespace HintMachine.Views
                 Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
                     if (TabControl.SelectedIndex == TAB_HINTS)
-                        HintsView.UpdateItems(knownHints);
+                        HintsViewModel.UpdateHintList(knownHints);
                 }));
             };
 
@@ -90,7 +94,8 @@ namespace HintMachine.Views
 
         private void OnGameChanged()
         {
-            Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => 
+
+            Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
             {
                 var game = HintMachineService.CurrentGameConnection?.Game;
                 if (game != null)
@@ -115,14 +120,21 @@ namespace HintMachine.Views
 
         private void OnConnectToGameButtonClick(object sender, RoutedEventArgs e)
         {
-            new GameSelectionWindow().ShowDialog();
+            ShowGameSelectionWindow();
         }
 
         private void OnDisconnectFromGameButtonClick(object sender, RoutedEventArgs e)
         {
             HintMachineService.DisconnectFromGame();
+            ShowGameSelectionWindow();
         }
 
+        private void ShowGameSelectionWindow()
+        {
+            GameSelectionWindow gsw = new GameSelectionWindow();
+            gsw.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            gsw.ShowDialog();
+        }
         private void OnArchipelagoDisconnectButtonClick(object sender, RoutedEventArgs e)
         {
             HintMachineService.DisconnectFromArchipelago();
@@ -175,7 +187,7 @@ namespace HintMachine.Views
 
             // Calculate the available hints using hint points
             int remainingHints = HintMachineService.ArchipelagoSession.GetAvailableHintsWithHintPoints();
-            if(remainingHints == int.MaxValue)
+            if (remainingHints == int.MaxValue)
                 text = "You have infinite hints";
             else
                 text = $"You have {remainingHints} remaining hints";
@@ -192,7 +204,7 @@ namespace HintMachine.Views
             LabelAvailableHints.Content = text;
 
             // Update the hints list view
-            HintsView.UpdateItems(HintMachineService.ArchipelagoSession.KnownHints);
+            HintsViewModel.UpdateHintList(HintMachineService.ArchipelagoSession.KnownHints);
         }
 
         private void OnSettingChange(object sender, RoutedEventArgs e)
@@ -231,7 +243,9 @@ namespace HintMachine.Views
             ManualHintWindow window = new ManualHintWindow()
             {
                 HintLocationCallback = OnManualLocationHint,
-                HintItemCallback = OnManualItemHint
+                HintItemCallback = OnManualItemHint,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = this
             };
             window.ShowDialog();
         }
@@ -247,7 +261,7 @@ namespace HintMachine.Views
                 HintMachineService.ConnectToArchipelago(host, slotName, password);
                 OnArchipelagoSessionChange(); // TODO: Data binding!
             }
-            catch(ArchipelagoConnectionException)
+            catch (ArchipelagoConnectionException)
             {
                 MessageBox.Show("Could not reconnect to Archipelago server.", "Connection error",
                      MessageBoxButton.OK, MessageBoxImage.Error);
