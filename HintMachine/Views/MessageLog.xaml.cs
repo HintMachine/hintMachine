@@ -1,5 +1,6 @@
 ﻿using HintMachine.Helpers;
 using HintMachine.Models;
+using HintMachine.Services;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -207,7 +208,9 @@ namespace HintMachine.Views
                 return false;
             if (logMessageType == LogMessageType.STREAMER_SENSITIVE_INFO && Settings.StreamerMode)
                 return false;
-            
+            if (logMessageType == LogMessageType.DEBUG && !HintMachineService.DebugBuild && !Settings.ForceDebugMessagesDisplay)
+                return false;
+
             return true;
         }
     }

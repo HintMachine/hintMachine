@@ -18,6 +18,9 @@ namespace HintMachine.Models
         public static bool ShowUpdatePopUp = true;
         public static bool StreamerMode = false;
 
+        // Temporary settings (not saved to file)
+        public static bool ForceDebugMessagesDisplay { get; set; } = false;
+
         // ----------------------------------------------------------------------------------
 
         /// <summary>
