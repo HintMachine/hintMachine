@@ -25,18 +25,18 @@ namespace HintMachine.Models.GenericConnectors
             {
                 DisplayName = "2.9.1",
                 ProcessName = "EmuHawk",
-                //ModuleName = "libgambatte.DLL",
+                ModuleName = "libgambatte.DLL",
                 Hash = "6CE622D4ED4E8460CE362CF35EF67DC70096FEC2C9A174CBEF6A3E5B04F18BCC"
             });
 
             if (!_ram.TryConnect())
                 return false;
 
-            //RamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x278, 0 });
-            RamBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x1F0, 0x18, 0x90, 0 });
+            RamBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x278, 0 });
+            RomBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x10 });
 
-            //RomBaseAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x7E050, new int[] { 0x10 });
-            RomBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x1F0, 0x120, 0, 0 });
+            // RamBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x1F0, 0x18, 0x90, 0 });
+            // RomBaseAddress = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x1F0, 0x120, 0, 0 });
 
             return true;
         }
