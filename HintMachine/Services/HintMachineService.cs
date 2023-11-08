@@ -189,6 +189,11 @@ namespace HintMachine.Services
             {
                 ShowAboutMessage();
             }
+            else if (normalizedMessage == "!debug")
+            {
+                Settings.ForceDebugMessagesDisplay = true;
+                Logger.Debug("> Debug messages enabled");
+            }
             else if (DebugBuild && normalizedMessage == "!gethint")
             {
                 HintTokens += 1;

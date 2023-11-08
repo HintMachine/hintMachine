@@ -15,6 +15,8 @@ namespace HintMachine.Helpers
         GOAL = 8,
         SERVER_RESPONSE = 9,
         JOIN_LEAVE = 10,
+        STREAMER_SENSITIVE_INFO = 11,
+        DEBUG = 12,
     }
 
     public static class Logger
@@ -31,10 +33,7 @@ namespace HintMachine.Helpers
 
         public static void Debug(string message)
         {
-            // Only has an effect in debug builds
-#if DEBUG
-            Log(message, LogMessageType.RAW);
-#endif
+            Log(message, LogMessageType.DEBUG);
         }
 
         public static void Info(string message)

@@ -38,12 +38,13 @@ namespace HintMachine.Views
             {
                 Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
                 {
-                    MessageLog.AddMessage(message, logMessageType);
+                    MessageLogControl.AddMessage(message, logMessageType);
                 }));
             };
 
 
             HintMachineService.GameChanged += OnGameChanged;
+
             OnArchipelagoSessionChange();
         }
 
@@ -89,7 +90,9 @@ namespace HintMachine.Views
             if (TabControl.SelectedIndex == TAB_HINTS)
                 SetupHintsTab();
 
-            Logger.Info($"Connected to Archipelago session at {HintMachineService.Host} as {HintMachineService.Slot}.");
+            Logger.Log($"Connected to Archipelago session at {HintMachineService.Host} as {HintMachineService.Slot}.", 
+                    LogMessageType.STREAMER_SENSITIVE_INFO);
+            ConnectionTextBlock.Visibility = Settings.StreamerMode ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void OnGameChanged()
@@ -167,6 +170,7 @@ namespace HintMachine.Views
                 { MenuDisplaySentItems, Settings.DisplayItemSentMessages },
                 { MenuSoundNotification, Settings.PlaySoundOnHint },
                 { MenuShowUpdatePopup, Settings.ShowUpdatePopUp},
+                { MenuStreamerMode, Settings.StreamerMode},
             };
 
             foreach (var kv in MENU_ITEMS)
@@ -216,7 +220,9 @@ namespace HintMachine.Views
             Settings.DisplayItemSentMessages = MenuDisplaySentItems.IsChecked;
             Settings.PlaySoundOnHint = MenuSoundNotification.IsChecked;
             Settings.ShowUpdatePopUp = MenuShowUpdatePopup.IsChecked;
-            MessageLog.UpdateMessagesVisibility();
+            Settings.StreamerMode = MenuStreamerMode.IsChecked;
+            ConnectionTextBlock.Visibility = Settings.StreamerMode ? Visibility.Collapsed : Visibility.Visible;
+            MessageLogControl.UpdateMessagesVisibility();
         }
 
         private void OnExitMenuClick(object sender, RoutedEventArgs e) => Close();
