@@ -43,22 +43,33 @@
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="ThreadstackFinder32.exe" />
-    <None Remove="ThreadstackFinder64.exe" />
+    <None Remove="Assets\hint_token_small.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\covers\mario_pinball_land.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Covers\paint_the_town_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\skyrim_special_edition.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Covers\sonic_mania.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\covers\super_bomberman_4.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Covers\tetris_nes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ThreadstackFinder32.exe">
+    <Content Include="Assets\covers\wariowareinc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ThreadstackFinder64.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Assets\hint_token_small.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +217,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Covers\katamari_damacy_reroll.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	  <Content Include="Assets\Covers\super_mario_bros_2.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  	</Content>
+    <Content Include="Assets\covers\kirby_avalanche.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 	<Content Include="Assets\Covers\super_mario_bros.png">

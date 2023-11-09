@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Archipelago.MultiClient.Net;
+using HintMachine.Models;
 using HintMachine.Models.GenericConnectors;
-using Newtonsoft.Json.Linq;
+using HintMachine.Services;
 
-namespace HintMachine.Models
+namespace HintMachine.Helpers
 {
     public class GameConnectionHandler
     {
@@ -31,7 +31,8 @@ namespace HintMachine.Models
             _dispatcher = dispatcher;
 
             // Setup a timer that will trigger a tick every 100ms to poll the currently connected game
-            _gameWatchingThread = new Thread(() => {
+            _gameWatchingThread = new Thread(() =>
+            {
                 while (!_terminateThread)
                 {
                     OnTimerTick();
@@ -81,9 +82,6 @@ namespace HintMachine.Models
                         if (obtainedHintTokens > 0)
                             Logger.Debug($"Quest '{quest.Name}' completed");
 
-                        _dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => {
-                            quest.UpdateComponents();
-                        }));
                         totalObtainedHintTokens += obtainedHintTokens;
                     }
 
@@ -120,7 +118,7 @@ namespace HintMachine.Models
                 Disconnect();
             }
         }
-        
+
         public void Disconnect()
         {
             lock (_gameLock)

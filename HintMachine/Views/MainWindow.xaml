@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HintMachine.Views"
-        xmlns:models="clr-namespace:HintMachine.Models"
+        xmlns:srv="clr-namespace:HintMachine.Services"
         mc:Ignorable="d"
-        Title="HintMachine" Height="700" Width="1100" MinHeight="700" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
+        Height="700" Width="1100" MinHeight="700" MinWidth="800" Background="#FFEEEEEE" Icon="/assets/icon.png">
 
     <DockPanel>
         <Menu DockPanel.Dock="Top" Background="#FFFFFFFF">
@@ -26,122 +26,129 @@
                     <MenuItem Name="MenuDisplayReceivedItems" Header="Received items notifications" IsCheckable="True" />
                 </MenuItem>
                 <MenuItem Name="MenuShowUpdatePopup" Header="Notify on launch if an update is available" IsCheckable="True" />
+                <MenuItem Name="MenuStreamerMode" Header="Hide hostname (streamer mode)" IsCheckable="True" />
             </MenuItem>
             <MenuItem Header="?">
                 <MenuItem Header="_About HintMachine" Click="OnAboutClick" />
             </MenuItem>
         </Menu>
 
-        <Grid Name="GridMain" Margin="12,12,12,12">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="320" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <DockPanel DockPanel.Dock="Bottom">
+            <StatusBar DockPanel.Dock="Bottom" Height="22">
+                <TextBlock x:Name="ConnectionTextBlock">
+                    <Run>🔗 Connected to </Run>
+                    <Run Text="{Binding Path=(srv:HintMachineService.Host), Mode=OneWay}"/>
+                    <Run> as </Run>
+                    <Run Text="{Binding Path=(srv:HintMachineService.Slot), Mode=OneWay}"/>
+                </TextBlock>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <TextBlock Name="TextCurrentGame" Visibility="Hidden">
+                    <Run>🔌 Current game: </Run>
+                    <Run Text="{Binding Path=(srv:HintMachineService.GameName), Mode=OneWay}"/>
+                </TextBlock>
+                <Button Name="ButtonDisconnectFromGame" Content="❌" Click="OnDisconnectFromGameButtonClick" 
+                        Height="20" Margin="-2" Visibility="Hidden"/>
+            </StatusBar>
 
-            <Grid Name="GridQuests" Margin="8,8,8,8" Visibility="Hidden">
+            <Grid Name="GridMain" Margin="12,12,12,12" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="320" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-            </Grid>
 
-            <StackPanel Name="GridGameConnect" Margin="8,8,8,8" Visibility="Visible">
-                <Button Width="304" Click="OnConnectToGameButtonClick" Height="37">
-                    🔗 Connect to a game
+                <StackPanel Name="StackPanelQuests" Margin="0,0,0,0">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
 
-                    <Button.Style>
-                        <Style TargetType="Button">
+                <StackPanel Name="GridGameConnect">
+                    <Button Content="🔌 Connect to a game" FontSize="14" Click="OnConnectToGameButtonClick" Height="40"/>
+                    <TextBlock TextWrapping="Wrap" Margin="0,24,0,0" FontSize="14">
+                        <Run>Feeling stuck in your Archipelago world?</Run>
+                    </TextBlock>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <TextBlock TextWrapping="Wrap" Width="240" FontSize="14">
+                            <Run>Connect to a game, start playing and complete quests to earn</Run>
+                            <Run FontWeight="Bold"> hint tokens</Run>
+                        </TextBlock>
+                        <Image Height="20" Width="20" Stretch="Fill" Margin="-4,19,0,0" Source="/Assets/hint_token_small.png"/>
+                    </StackPanel>
+
+                    <TextBlock TextWrapping="Wrap" Margin="0,12,0,0" FontSize="14">
+                        <Run>You can then redeem those tokens using the dedicated button to earn</Run>
+                        <Run FontWeight="Bold"> random location hints </Run>
+                        <Run>for your world.</Run>
+                    </TextBlock>
+
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=(models:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding Path=(srv:HintMachineService.CurrentGameConnection), Mode=OneWay}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Button.Style>
-                </Button>
-            </StackPanel>
+                    </StackPanel.Style>
+                </StackPanel>
 
-            <StackPanel VerticalAlignment="Bottom">
-                <TextBlock Name="TextHintTokenCount" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Center">
-                    <Run>You currently have </Run>
-                    <Run Text="{Binding Path=(models:HintMachineService.HintTokens), Mode=OneWay}"/>
-                    <Run> Hint Tokens</Run>
-                </TextBlock>
+                <DockPanel VerticalAlignment="Bottom" LastChildFill="True">
+                    <Border BorderThickness="1" BorderBrush="#FFAAAAAA" Height="30" Margin="0,0,8,0" Padding="8,0" DockPanel.Dock="Left">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding Path=(srv:HintMachineService.HintTokens), Mode=OneWay}" FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
+                            <Image Height="20" Width="20" Margin="8,0,0,0" Stretch="Fill" Source="/Assets/hint_token_small.png"/>
+                        </StackPanel>
+                    </Border>
 
-                <Button Name="ButtonRedeemHintToken" Margin="0,12" Height="30" Background="#FFA8E0A9" Click="OnRedeemHintTokenClick">
-                    ❓ Get a random location hint
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=(models:HintMachineService.HintTokens), Mode=OneWay}" Value="0">
-                                    <Setter Property="IsEnabled" Value="False"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                    <Button Name="ButtonRedeemHintToken" Padding="6,0" Height="30" Background="#FFA8E0A9" Click="OnRedeemHintTokenClick" DockPanel.Dock="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>Get a random location hint for 1 </TextBlock>
+                            <Image Height="20" Width="20" Margin="4,-2,0,0" Stretch="Fill" Source="/Assets/hint_token_small.png"/>
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=(srv:HintMachineService.HintTokens), Mode=OneWay}" Value="0">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </DockPanel>
 
-                <Border BorderThickness="1" BorderBrush="#FFABADB3" Grid.Column="0"  RenderTransformOrigin="0.5,0.5">
-                    <Border.Background>
-                        <ImageBrush ImageSource="/Assets/logo_small.png" Stretch="Uniform" TileMode="None" Opacity="0.15"/>
-                    </Border.Background>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+                <TabControl Name="TabControl" Margin="12,0,0,0" Grid.Column="1" SelectionChanged="OnTabChange">
+                    <TabItem Header="Message log" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
+                        <DockPanel LastChildFill="True">
+                            <DockPanel DockPanel.Dock="Bottom" Margin="0,2,0,0" LastChildFill="True">
+                                <Button DockPanel.Dock="Right" Width="60" Margin="2,0,0,0" Click="OnSendButtonClick">💬 Send</Button>
+                                <TextBox x:Name="TextboxChatInput" Height="23" VerticalContentAlignment="Center" KeyDown="OnChatInputKeyDown" />
+                            </DockPanel>
 
-                        <Label Content="Host: " FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Path=(models:HintMachineService.Host), Mode=OneWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
-
-                        <Label Content="Slot: " FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Path=(models:HintMachineService.Slot), Mode=OneWay}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
-
-                        <Label Content="Game: " FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Path=(models:HintMachineService.GameName), Mode=OneWay}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
-
-                        <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Button Name="ButtonChangeGame" Content="◀️ Pick another game" Click="OnDisconnectFromGameButtonClick" Grid.Column="0" Margin="0,0,2,0" Visibility="Hidden"/>
-                            <Button Content="❌ Disconnect" Grid.Column="1" Margin="2,0,0,0" Click="OnArchipelagoDisconnectButtonClick"/>
-                        </Grid>
-                    </Grid>
-                </Border>
-            </StackPanel>
-
-            <TabControl Name="TabControl" Margin="12,0,0,0" Grid.Column="1" SelectionChanged="OnTabChange">
-                <TabItem Header="Message log" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
-                    <DockPanel LastChildFill="True">
-                        <DockPanel DockPanel.Dock="Bottom" Margin="0,2,0,0" LastChildFill="True">
-                            <Button DockPanel.Dock="Right" Width="60" Margin="2,0,0,0" Click="OnSendButtonClick">💬 Send</Button>
-                            <TextBox x:Name="TextboxChatInput" Height="23" TextWrapping="Wrap" KeyDown="OnChatInputKeyDown" />
+                            <local:MessageLog x:Name="MessageLogControl"/>
                         </DockPanel>
+                    </TabItem>
+                    <TabItem Header="Hints">
+                        <DockPanel LastChildFill="True" Margin="8">
+                            <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                                <Button Name="ButtonManualHint" DockPanel.Dock="Right" HorizontalAlignment="Left" Margin="0,0,0,8" Padding="5" Background="#FFA8E0A9" Click="OnManualHintButtonClick">❓ Request a hint</Button>
+                                <Label Name="LabelAvailableHints" DockPanel.Dock="Left">You have 0 remaining hints, you will get a new hint in 0 checks.</Label>
+                            </DockPanel>
 
-                        <local:MessageLog x:Name="MessageLog"/>
-                    </DockPanel>
-                </TabItem>
-                <TabItem Header="Hints">
-                    <DockPanel LastChildFill="True" Margin="8">
-                        <DockPanel DockPanel.Dock="Top" LastChildFill="True">
-                            <Button Name="ButtonManualHint" DockPanel.Dock="Right" HorizontalAlignment="Left" Margin="0,0,0,8" Padding="5" Background="#FFA8E0A9" Click="OnManualHintButtonClick">❓ Request a hint</Button>
-                            <Label Name="LabelAvailableHints" DockPanel.Dock="Left">You have 0 remaining hints, you will get a new hint in 0 checks.</Label>
+                            <local:HintsView x:Name="HintsView" DockPanel.Dock="Bottom"/>
                         </DockPanel>
-                        
-                        <local:HintsView x:Name="HintsView" DockPanel.Dock="Bottom"/>
-                    </DockPanel>
-                </TabItem>
-            </TabControl>
-        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </DockPanel>
     </DockPanel>
 </Window>

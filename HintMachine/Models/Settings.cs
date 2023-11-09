@@ -6,16 +6,20 @@ namespace HintMachine.Models
 {
     public static class Settings
     {
-        public static string Host = "archipelago.gg:12345";
-        public static string Slot = "";
-        public static string LastConnectedGame = "";
-        public static bool DisplayChatMessages = true;
-        public static bool DisplayFoundHintMessages = true;
-        public static bool DisplayJoinLeaveMessages = false;
-        public static bool DisplayItemReceivedMessages = true;
-        public static bool DisplayItemSentMessages = false;
-        public static bool PlaySoundOnHint = true;
-        public static bool ShowUpdatePopUp = true;
+        public static string Host { get; set; } = "archipelago.gg:12345";
+        public static string Slot { get; set; } = "";
+        public static string LastConnectedGame { get; set; } = "";
+        public static bool DisplayChatMessages { get; set; } = true;
+        public static bool DisplayFoundHintMessages { get; set; } = true;
+        public static bool DisplayJoinLeaveMessages { get; set; } = false;
+        public static bool DisplayItemReceivedMessages { get; set; } = true;
+        public static bool DisplayItemSentMessages { get; set; } = false;
+        public static bool PlaySoundOnHint { get; set; } = true;
+        public static bool ShowUpdatePopUp { get; set; } = true;
+        public static bool StreamerMode { get; set; } = false;
+
+        // Temporary settings (not saved to file)
+        public static bool ForceDebugMessagesDisplay { get; set; } = false;
 
         // ----------------------------------------------------------------------------------
 
@@ -35,6 +39,7 @@ namespace HintMachine.Models
                 { "displayItemSentMessages",        DisplayItemSentMessages.ToString() },
                 { "playSoundOnHint",                PlaySoundOnHint.ToString() },
                 { "showUpdatePopUp",                ShowUpdatePopUp.ToString() },
+                { "streamerMode",                StreamerMode.ToString() },
             };
             File.WriteAllLines("settings.cfg", dict.Select(x => x.Key + "=" + x.Value).ToArray());
         }
@@ -74,6 +79,8 @@ namespace HintMachine.Models
                         PlaySoundOnHint = bool.Parse(value);
                     else if (line.StartsWith("showUpdatePopUp"))
                         ShowUpdatePopUp = bool.Parse(value);
+                    else if (line.StartsWith("streamerMode"))
+                        StreamerMode = bool.Parse(value);
                 }
             }
             catch { }

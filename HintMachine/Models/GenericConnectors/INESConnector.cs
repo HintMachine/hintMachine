@@ -1,4 +1,6 @@
-﻿namespace HintMachine.Models.GenericConnectors
+﻿using HintMachine.Helpers;
+
+namespace HintMachine.Models.GenericConnectors
 {
     public abstract class INESConnector : IEmulatorConnector
     {
@@ -18,8 +20,7 @@
 
         protected override bool Connect()
         {
-            _ram = new MegadriveRamAdapter(new BinaryTarget
-            {
+            _ram = new ProcessRamWatcher(new BinaryTarget {
                 DisplayName = "2.9.1",
                 ProcessName = "EmuHawk",
                 Hash = "6CE622D4ED4E8460CE362CF35EF67DC70096FEC2C9A174CBEF6A3E5B04F18BCC"
@@ -44,9 +45,7 @@
 
         public override long GetCurrentFrameCount()
         {
-            return 0;
-            // long framecountAddr = _ram.ResolvePointerPath64(_ram.Threadstack0 - 0xF48, new int[] { 0x8, 0x200, 0x10, 0x38 });
-            // return _ram.ReadUint32(framecountAddr);
+            return BizhawkHelper.GetCurrentFrameCount(_ram);
         }
 
         public override string GetRomIdentity()

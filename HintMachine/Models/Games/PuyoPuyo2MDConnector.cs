@@ -38,11 +38,19 @@ namespace HintMachine.Models.Games
             Quests.Add(_chainsQuest);
             Quests.Add(_allClearsQuest);
 
-            ValidROMs.Add("33C3F80F36DA94E25F11F1A2FCEBD5DF22E495567754DB47F330855F6DF91430");
+            ValidROMs.Add("33C3F80F36DA94E25F11F1A2FCEBD5DF22E495567754DB47F330855F6DF91430"); // REV00
+            ValidROMs.Add("2A092BAEF14D5A2BFCC34D60CFF23D08FAF19BCEAAF319AF36D00E9D634B4B8A"); // REV01
         }
 
         protected override bool Poll()
         {
+            bool isDemo = (_ram.ReadUint8(RamBaseAddress + 0xC8D2) == 0);
+            if (isDemo)
+            {
+                _poppedPuyosQuest.IgnoreNextValue();
+                _chainsQuest.IgnoreNextValue();
+            }
+
             _poppedPuyosQuest.UpdateValue(_ram.ReadUint16(RamBaseAddress + 0xD098));
 
             byte currentChain = _ram.ReadUint8(RamBaseAddress + 0xD089);
@@ -55,7 +63,7 @@ namespace HintMachine.Models.Games
 
             // If there are no more puyos on board and we are not at the first pair, this means
             // it's an All-Clear!
-            if (puyosOnBoard == 0 && _previousPuyosOnBoard > 0 && currentPairCount > 0)
+            if (puyosOnBoard == 0 && _previousPuyosOnBoard > 0 && currentPairCount > 0 && !isDemo)
                 _allClearsQuest.CurrentValue += 1;
 
             _previousPuyosOnBoard = puyosOnBoard;

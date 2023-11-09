@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows;
 using HintMachine.Models;
+using HintMachine.Services;
 using Newtonsoft.Json.Linq;
 
 namespace HintMachine.Views
@@ -20,6 +21,7 @@ namespace HintMachine.Views
             Settings.LoadFromFile();
             InputHost.Text = Settings.Host;
             InputSlot.Text = Settings.Slot;
+            CheckboxStreamerMode.IsChecked = Settings.StreamerMode;
 
             if (Settings.ShowUpdatePopUp) {
                 _ = CheckIfUpdateAvailableAsync();
@@ -36,6 +38,7 @@ namespace HintMachine.Views
             try
             {
                 HintMachineService.ConnectToArchipelago(host, slot, password);
+                Settings.StreamerMode = CheckboxStreamerMode.IsChecked.Value;
                 new MainWindow().Show();
                 Close();
             }

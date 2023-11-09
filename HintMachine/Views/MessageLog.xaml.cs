@@ -1,21 +1,51 @@
-﻿using HintMachine.Models;
+﻿using HintMachine.Helpers;
+using HintMachine.Models;
+using HintMachine.Services;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace HintMachine.Views
 {
     public partial class MessageLog : UserControl
     {
-        private class Message
+        private class Message : Border
         {
-            public LogMessageType MessageType { get; set; } = LogMessageType.RAW;
-            
-            public Rectangle Rectangle { get; set; } = null;
+            public LogMessageType MessageType { get; private set; } = LogMessageType.RAW;
 
-            public TextBox TextBox { get; set; } = null;
+            public TextBox TextBox { get; private set; } = null;
+
+            public Message(LogMessageType logMessageType, string message) : base()
+            {
+                MessageType = logMessageType;
+
+                Color textColor = GetColorForMessageType(logMessageType);
+                Color backgroundColor = textColor;
+                backgroundColor.A = 20;
+                Color borderColor = textColor;
+                borderColor.A = 200;
+
+                // Add a colored decoration rectangle to quickly see message type
+                VerticalAlignment = VerticalAlignment.Stretch;
+                BorderThickness = new Thickness(5, 0, 0, 0.5);
+                BorderBrush = new SolidColorBrush(borderColor);
+                
+                TextBox = new TextBox {
+                    // Add a readonly TextBox containing the message text
+                    // (we use a TextBox instead of a TextBlock to enable text selection) 
+                    Text = GetPrefixForMessageType(logMessageType) + message,
+                    TextWrapping = TextWrapping.Wrap,
+                    Foreground = new SolidColorBrush(textColor),
+                    Padding = new Thickness(6, 4, 6, 4),
+                    FontSize = 14,
+                    BorderThickness = new Thickness(0),
+                    IsReadOnly = true,
+                    Background = new SolidColorBrush(backgroundColor)
+                };
+
+                Child = TextBox;
+            }
         }
 
         // ----------------------------------------------------------------------------------
@@ -42,68 +72,25 @@ namespace HintMachine.Views
             // having to scroll manually each time there are new messages
             bool scrollToBottom = (ScrollViewer.VerticalOffset == ScrollViewer.ScrollableHeight);
 
-            // If there already are other messages and the last message has the same type, we can "merge"
-            // this message with the previous one for performance reasons. We only do this for SERVER_RESPONSE
-            // messages since they are the most prone to flooding (e.g. with !missing)
             Message lastMessage = (_messages.Count > 0) ? _messages[_messages.Count - 1] : null;
             if(lastMessage != null && lastMessage.MessageType == logMessageType && logMessageType == LogMessageType.SERVER_RESPONSE)
             {
+                // If there already are other messages and the last message has the same type, we can "merge"
+                // this message with the previous one for performance reasons. We only do this for SERVER_RESPONSE
+                // messages since they are the most prone to flooding (e.g. with !missing)
                 lastMessage.TextBox.Text += "\n" + GetPrefixForMessageType(logMessageType) + message;
             }
             else
             {
-                int rowID = GridMessages.RowDefinitions.Count;
-                RowDefinition rowDef = new RowDefinition();
-                rowDef.Height = GridLength.Auto;
-                GridMessages.RowDefinitions.Add(rowDef);
-
-                Color textColor = GetColorForMessageType(logMessageType);
-                Color backgroundColor = textColor;
-                backgroundColor.A = 20;
-              
                 // Usual case: just add a new message
-                Message newMessage = new Message
-                {
-                    MessageType = logMessageType,
-                    Rectangle = new Rectangle
-                    {
-                        // Add a colored decoration rectangle to quickly see message type
-                        VerticalAlignment = VerticalAlignment.Stretch,
-                        Width = 5,
-                        Fill = new SolidColorBrush(textColor)
-                    },
-                    TextBox = new TextBox
-                    {
-                        // Add a readonly TextBox containing the message text
-                        // (we use a TextBox instead of a TextBlock to enable text selection) 
-                        Text = GetPrefixForMessageType(logMessageType) + message,
-                        TextWrapping = TextWrapping.Wrap,
-                        Foreground = new SolidColorBrush(textColor),
-                        Padding = new Thickness(6, 4, 6, 4),
-                        FontSize = 14,
-                        BorderThickness = new Thickness(0),
-                        IsReadOnly = true,
-                        Background = new SolidColorBrush(backgroundColor),
-                        
-                    }
-                };
+                Message newMessage = new Message(logMessageType, message);
 
                 if (logMessageType == LogMessageType.HINT && !Settings.DisplayFoundHintMessages && message.EndsWith("(found)"))
-                {
-                    newMessage.Rectangle.Opacity = 0.6;
-                    newMessage.TextBox.Opacity = 0.6;
-                }
-
+                    newMessage.Opacity = 0.6;
                 _messages.Add(newMessage);
+
                 UpdateMessagesVisibility();
-
-                Grid.SetColumn(newMessage.Rectangle, 0);
-                Grid.SetRow(newMessage.Rectangle, rowID);
-                GridMessages.Children.Add(newMessage.Rectangle);
-
-                Grid.SetColumn(newMessage.TextBox, 1);
-                Grid.SetRow(newMessage.TextBox, rowID);
-                GridMessages.Children.Add(newMessage.TextBox);
+                StackPanelMessages.Children.Add(newMessage);
             }
     
             if (scrollToBottom)
@@ -125,15 +112,13 @@ namespace HintMachine.Views
             foreach (Message message in _messages)
             {
                 bool visible = CanDisplayMessage(message.TextBox.Text, message.MessageType);
-                message.Rectangle.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
-                message.TextBox.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+                message.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
             }
 
             // Truncate all message widgets above the safe-keeping limit
             while(_messages.Count > MAX_KEPT_MESSAGES) 
             {
-                GridMessages.Children.Remove(_messages[0].Rectangle);
-                GridMessages.Children.Remove(_messages[0].TextBox);
+                StackPanelMessages.Children.Remove(_messages[0]);
                 _messages.Remove(_messages[0]);
             }
 
@@ -142,10 +127,7 @@ namespace HintMachine.Views
             for (int i = _messages.Count-1 ; i >= 0 ; --i)
             {
                 if (messagesCount > MAX_DISPLAYED_MESSAGES)
-                {
-                    _messages[i].Rectangle.Visibility = Visibility.Collapsed;
-                    _messages[i].TextBox.Visibility = Visibility.Collapsed;
-                }
+                    _messages[i].Visibility = Visibility.Collapsed;
                 else if (_messages[i].TextBox.Visibility == Visibility.Visible)
                     messagesCount++;
             }
@@ -162,6 +144,7 @@ namespace HintMachine.Views
                 case LogMessageType.INFO:
                 case LogMessageType.JOIN_LEAVE:
                 case LogMessageType.SERVER_RESPONSE:
+                case LogMessageType.STREAMER_SENSITIVE_INFO:
                     return Color.FromRgb(0, 150, 200);
 
                 case LogMessageType.ITEM_SENT:
@@ -222,6 +205,10 @@ namespace HintMachine.Views
             if (logMessageType == LogMessageType.ITEM_RECEIVED && !Settings.DisplayItemReceivedMessages)
                 return false;
             if (logMessageType == LogMessageType.ITEM_SENT && !Settings.DisplayItemSentMessages)
+                return false;
+            if (logMessageType == LogMessageType.STREAMER_SENSITIVE_INFO && Settings.StreamerMode)
+                return false;
+            if (logMessageType == LogMessageType.DEBUG && !HintMachineService.DebugBuild && !Settings.ForceDebugMessagesDisplay)
                 return false;
 
             return true;
