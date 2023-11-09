@@ -49,6 +49,7 @@ namespace HintMachine.Models.Games
             Description = "Bowser has taken over the Mushroom Kingdom, kidnapped their princess, and turned the residents into objects like blocks! Only Mario can save the day from the King of the Koopas and restore the people of the Mushroom Kingdom.\n\n"
                         + "Traverse through 8 worlds including lovely plains, underground caverns, treetops, underwater, giants mushrooms, and of course, Bowser's many castles. Can you manage to defeat his army of minions and save the princess?";
             SupportedVersions.Add("(World)");
+            SupportedVersions.Add("(E)");
             CoverFilename = "super_mario_bros.png";
             Author = "RadzPrower";
 
@@ -58,6 +59,7 @@ namespace HintMachine.Models.Games
             Quests.Add(_damagelessQuest);
 
             ValidROMs.Add("F61548FDF1670CFFEFCC4F0B7BDCDD9EABA0C226E3B74F8666071496988248DE");
+            ValidROMs.Add("EC299B990E8BFEE8BA46E3F61D63B2E1AE5B8A2E431DE84E2E4BBD692DC53586");
         }
 
         protected override bool Poll()
