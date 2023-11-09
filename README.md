@@ -75,6 +75,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Sonic 3 Blue Spheres             | Megadrive |
 | Stargunner                       | PC        |
 | Super Hexagon                    | PC        |
+| Super Mario Bros.                | NES       |
 | Super Mario Bros. 3              | NES       |
 | Super Mega Baseball 2            | PC        |
 | Super Monkey Ball                | GameCube  |
