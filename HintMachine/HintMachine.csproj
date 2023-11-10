@@ -41,11 +41,15 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\hint_token_small.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\covers\dr_mario.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\covers\mario_pinball_land.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
