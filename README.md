@@ -90,5 +90,6 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Tetris Effect Connected          | PC        |
 | Tony Hawk's Pro Skater 1 + 2     | PC        |
 | WarioWare, Inc.: Mega Microgames!| GBA        |
+| Windowkill                       | PC        |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |
