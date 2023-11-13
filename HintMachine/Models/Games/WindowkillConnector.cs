@@ -36,8 +36,7 @@ namespace HintMachine.Models.Games
 
         protected override bool Connect()
         {
-            _ram = new ProcessRamWatcher();
-            _ram.SupportedTargets.Add(GAME_VERSION_ITCH);
+            _ram = new ProcessRamWatcher(GAME_VERSION_ITCH);
             return _ram.TryConnect();
         }
 
@@ -49,7 +48,7 @@ namespace HintMachine.Models.Games
         protected override bool Poll()
         {
             try {
-                long coinAddress = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x0344FFC0, new int[] { 0x348, 0x1C0, 0x10, 0x68, 0x28, 0x3C8 });
+                long coinAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x344FFC0, new int[] { 0x348, 0x1C0, 0x10, 0x68, 0x28, 0x3C8 });
                 _coinsQuest.UpdateValue(_ram.ReadUint32(coinAddress));
             }
             catch
