@@ -43,7 +43,6 @@
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Assets\covers\iridion2.png" />
     <None Remove="Assets\hint_token_small.png" />
   </ItemGroup>
   <ItemGroup>

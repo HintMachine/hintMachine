@@ -52,7 +52,7 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | F-Zero GX                        | GameCube  |
 | Geometry Wars Galaxies           | Wii       |
 | Geometry Wars : Retro Evolved    | PC        |
-| Iridion II					             | GBA       |
+| Iridion II                       | GBA       |
 | ISLANDERS                        | PC        |
 | Katamari Damacy REROLL           | PC        |
 | Kirby's Avalanche                | SNES      |
@@ -90,6 +90,6 @@ You can check [this document](https://github.com/CalDrac/hintMachine/blob/dev/ad
 | Tetris                           | NES       |
 | Tetris Effect Connected          | PC        |
 | Tony Hawk's Pro Skater 1 + 2     | PC        |
-| WarioWare, Inc.: Mega Microgames!| GBA        |
+| WarioWare, Inc.: Mega Microgames!| GBA       |
 | Xenotilt                         | PC        |
 | Zachtronics Solitaire Collection | PC        |
