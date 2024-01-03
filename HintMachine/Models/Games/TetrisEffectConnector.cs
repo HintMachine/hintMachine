@@ -10,7 +10,7 @@ namespace HintMachine.Models.Games
         {
             DisplayName = "Steam",
             ProcessName = "TetrisEffect-Win64-Shipping",
-            Hash = "1981E9829739E3C2E7549E9DEC3384A3E649632A514D9D5F0711A37CC945279D"
+            Hash = "5DDF8150DC3ECF1E66E00677A569BE955DFF41591CEF752E643A4946B23D1207" //"1981E9829739E3C2E7549E9DEC3384A3E649632A514D9D5F0711A37CC945279D"
         };
 
         private BinaryTarget GAME_VERSION_EPIC = new BinaryTarget
@@ -96,9 +96,8 @@ namespace HintMachine.Models.Games
 
         protected override bool Poll()
         {
-            long baseOffset = (_ram.CurrentTarget == GAME_VERSION_STEAM) ? 0x4ED9990 : 0x4ECE880;
+            long baseOffset = (_ram.CurrentTarget == GAME_VERSION_STEAM) ? 0x04EC0900 : 0x4ECE880;
             int[] OFFSETS = new int[] { 0x8, 0x8, 0x220, 0x200, 0x64 };
-
             long linesAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + baseOffset, OFFSETS);
             if (linesAddress != 0)
             {
