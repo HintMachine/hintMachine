@@ -94,10 +94,11 @@ namespace HintMachine.Models.Games
             Quests.Add(_worldQuest);
             Quests.Add(_cherryQuest);
             Quests.Add(_coinQuest);
-            Quests.Add(_marioQuest);
-            Quests.Add(_luigiQuest);
-            Quests.Add(_toadQuest);
-            Quests.Add(_peachQuest);
+//          Those quests are temporarily disabled until we find a proper way to display it
+//            Quests.Add(_marioQuest);
+//            Quests.Add(_luigiQuest);
+//            Quests.Add(_toadQuest);
+//            Quests.Add(_peachQuest);
 
             ValidROMs.Add("6CA47E9DA206914730895E45FEF4F7393E59772C1C80E9B9BEFC1A01D7ECF724");
         }

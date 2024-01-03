@@ -3,7 +3,8 @@ using HintMachine.Models.GenericConnectors;
 
 namespace HintMachine.Models.Games
 {
-    [AvailableGameConnector]
+    // Connector is currently inavailable until we find a way to display all quests in the panel
+    // [AvailableGameConnector]
     public class SkyrimSpecialEditionConnector : IGameConnector
     {
         private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
