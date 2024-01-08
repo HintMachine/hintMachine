@@ -10,7 +10,7 @@ namespace HintMachine.Models.Games
         {
             DisplayName = "Steam",
             ProcessName = "TMNT",
-            Hash = "8AAA6D910754E1B84D62702BF66BE4C22D46EA23D6DC0B80AD9761909EE22389"
+            Hash = "3D812412D2E41FF3452CA6D6077CC9276970BE15D796B88F06C70D573A4051A6"
         };
 
         private readonly HintQuestCumulative _enemyQuest = new HintQuestCumulative

@@ -11,7 +11,7 @@ namespace HintMachine.Models.Games
             DisplayName = "Steam",
             ProcessName = "ISLANDERS",
             ModuleName = "mono-2.0-bdwgc.dll",
-            Hash = "1D29EAED8E610CE4370DB1B396D4DD7C5FED0DB267D18BF97CA91E865100B71E"
+            Hash = "9631CBCFC993231121691740FF8D1B80EA671E548A3D74274E625BD51676997D"
         };
 
         private readonly HintQuestCumulative _scoreQuest = new HintQuestCumulative
