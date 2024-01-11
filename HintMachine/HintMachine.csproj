@@ -41,6 +41,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\hint_token_small.png" />
