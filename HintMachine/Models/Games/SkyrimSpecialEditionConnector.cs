@@ -11,7 +11,7 @@ namespace HintMachine.Models.Games
         {
             DisplayName = "Steam",
             ProcessName = "SkyrimSE",
-            Hash = "EB77D225CDD1832076001281C3C570DD0C95864AC5748701E0CF5652B2A24517"
+            Hash = "537527CEC58E458425255B320844F0F1DAC1A902A93D21891A50DF7C1F238B8D"
         };
 
         private readonly HintQuestCumulative _dungeonsClearedQuest = new HintQuestCumulative
@@ -213,7 +213,7 @@ namespace HintMachine.Models.Games
 
         protected override bool Poll()
         {
-            long generalStatsStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x2F5F128, new int[] { 0x240 });
+            long generalStatsStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x30F0018, new int[] { 0x240 });
 
             if (generalStatsStructAddress != 0)
             {
