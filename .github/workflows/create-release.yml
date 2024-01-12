@@ -17,5 +17,7 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "README.md"
-        commit: ${{ steps.get_version.outputs.VERSION_OR_COMMIT_SHA }}
+        commit: "dev"
         body: "Test"
+        
+        
