@@ -12,7 +12,10 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v3
+    - name: Version or Commit SHA
+      uses: hsblhsn/version-or-commit-sha@v1.0.1
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "README.md"
+        commit: ${{ steps.get_version.outputs.VERSION_OR_COMMIT_SHA }}
         body: "Test"
