@@ -17,7 +17,7 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "README.md"
-        commit: ${{ github.ref }}
+        commit: ${{ github.sha }}
         body: "Test"
         
         
