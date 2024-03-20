@@ -25,7 +25,7 @@ namespace HintMachine.Models.Games
         public WindowkillConnector()
         {
             Name = "Windowkill";
-            Description = "Welcome to windowkill.\nIt's just your normal shoot-em-up, but something's wrong with the window....";
+            Description = "Welcome to windowkill.\nIt's just your normal shoot-em-up, but something's wrong with the window....\nOnly works with version 1.6 of Windowkill.";
             Platform = "PC";
             SupportedVersions.Add("itch.io");
             CoverFilename = "windowkill.png";
