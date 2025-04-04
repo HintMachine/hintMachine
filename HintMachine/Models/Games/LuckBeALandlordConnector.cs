@@ -8,9 +8,9 @@ namespace HintMachine.Models.Games
     {
         private readonly BinaryTarget GAME_VERSION_STEAM = new BinaryTarget
         {
-            DisplayName = "Steam",
+            DisplayName = "Steam + Itch",
             ProcessName = "Luck be a Landlord",
-            Hash = "8A6EB15E774ED5F85B2CC8F70CCA4FC3EEFE69898A6AE418982065CAB5665740"
+            Hash = "29A32075AB8D092BDDC107FE0A1B6BF21192F67D665525C2B1218E9C754608E0"
         };
 
         private readonly HintQuestCumulative _coinQuest = new HintQuestCumulative
@@ -49,8 +49,8 @@ namespace HintMachine.Models.Games
 
         protected override bool Poll()
         {
-            long coinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x21EFC90, new int[] { 0x218, 0x108, 0x10, 0x58, 0x20, 0x660 });
-            long spinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x21EFC90, new int[] { 0x218, 0x108, 0x38, 0x108, 0x0, 0x58, 0x20, 0x2D0 });
+            long coinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x2048900, new int[] { 0x218, 0x108, 0x10, 0x58, 0x20, 0x678 });
+            long spinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x2048900, new int[] { 0x218, 0x108, 0x38, 0x108, 0x0, 0x58, 0x20, 0x300 });
 
             if (coinStructAddress != 0 && spinStructAddress != 0)
             {
