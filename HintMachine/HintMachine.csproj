@@ -342,6 +342,7 @@
     <Resource Include="Assets\Covers\tony_hawks_pro_skater_1_2.png" />
     <Resource Include="Assets\Covers\tmnt_shredders_revenge.png" />
     <Resource Include="Assets\Covers\katamari_damacy_reroll.png" />
+    <Resource Include="Assets\Covers\nubbysnumberfactory.png"
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="WMPLib">
