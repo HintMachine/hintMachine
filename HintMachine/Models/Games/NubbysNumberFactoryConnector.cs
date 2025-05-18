@@ -4,13 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Printing.IndexedProperties;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HintMachine.Models.Games
 {
-    [AvailableGameConnector]
     public class NubbysNumberFactoryConnector : IGameConnector
     {
         private ProcessRamWatcher _ram = null;
