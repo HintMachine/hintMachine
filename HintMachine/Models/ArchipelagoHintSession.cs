@@ -15,7 +15,7 @@ namespace HintMachine.Models
     public class ArchipelagoHintSession
     {
         private static readonly string[] TAGS = { "AP", "HintGenerator", "TextOnly" };
-        private static readonly Version VERSION = new Version(0, 6, 3);
+        private static readonly Version VERSION = new Version(0, 6, 6);
 
         public ArchipelagoSession Client { get; private set; }
 
@@ -190,7 +190,7 @@ namespace HintMachine.Models
                         Client.Socket.SendPacketAsync(new LocationScoutsPacket
                         {
                             Locations = new long[] { pendingHintLocationID },
-                            CreateAsHint = true
+                            CreateAsHint = 1
                         });
                         Thread.Sleep(Globals.HintQueueInterval);
                     }
