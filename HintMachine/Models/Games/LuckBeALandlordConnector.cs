@@ -24,6 +24,13 @@ namespace HintMachine.Models.Games
 
         private long? _bufferedSpinCount = null;
 
+        private static readonly int[] COIN_OFFSETS = new int[] { 0x218, 0x108, 0x10, 0x58, 0x20, 0x750 };
+        private static readonly int[] SPIN_OFFSETS = new int[] { 0x218, 0x108, 0x38, 0x108, 0x0, 0x58, 0x20, 0x300 };
+
+        private const int GODOT_VARIANT_TYPE_INT = 2;
+        private const int GODOT_VARIANT_TYPE_REAL = 3;
+        private const int GODOT_VARIANT_VALUE_OFFSET = 0x8;
+
         public LuckBeALandlordConnector()
         {
             Name = "Luck be a Landlord";
@@ -45,32 +52,54 @@ namespace HintMachine.Models.Games
         public override void Disconnect()
         {
             _ram = null;
+            _bufferedSpinCount = null;
         }
 
         protected override bool Poll()
         {
-            long coinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x2048900, new int[] { 0x218, 0x108, 0x10, 0x58, 0x20, 0x678 });
-            long spinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x2048900, new int[] { 0x218, 0x108, 0x38, 0x108, 0x0, 0x58, 0x20, 0x300 });
+            long coinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x2048900, COIN_OFFSETS);
+            long spinStructAddress = _ram.ResolvePointerPath64(_ram.BaseAddress + 0x2048900, SPIN_OFFSETS);
 
-            if (coinStructAddress != 0 && spinStructAddress != 0)
+            if (coinStructAddress == 0 || spinStructAddress == 0)
             {
-                try
+                _coinQuest.IgnoreNextValue();
+                _bufferedSpinCount = null;
+                return true;
+            }
+
+            try
+            {
+                long coinValue = ReadGodotNumericVariant(coinStructAddress);
+                long spinValue = ReadGodotNumericVariant(spinStructAddress);
+
+                // Check if spin count reset (new round/game state change)
+                if (_bufferedSpinCount != null && spinValue < (long)_bufferedSpinCount)
                 {
-                    long coinValue = (long)_ram.ReadDouble(coinStructAddress + 0x8);
-                    long spinValue = _ram.ReadUint32(spinStructAddress + 0x8);
-
-                    if (_bufferedSpinCount == null) { _bufferedSpinCount = spinValue; }
-
-                    if (spinValue < (long)_bufferedSpinCount) { _coinQuest.IgnoreNextValue(); }
-
-                    _coinQuest.UpdateValue(coinValue);
-
-                    _bufferedSpinCount = spinValue;
+                    _coinQuest.IgnoreNextValue();
                 }
-                catch { }
+
+                _coinQuest.UpdateValue(coinValue);
+                _bufferedSpinCount = spinValue;
+            }
+            catch
+            {
+                _coinQuest.IgnoreNextValue();
+                _bufferedSpinCount = null;
             }
 
             return true;
+        }
+
+        private long ReadGodotNumericVariant(long variantAddress)
+        {
+            uint variantType = _ram.ReadUint32(variantAddress);
+
+            return variantType switch
+            {
+                GODOT_VARIANT_TYPE_INT => _ram.ReadInt64(variantAddress + GODOT_VARIANT_VALUE_OFFSET),
+                GODOT_VARIANT_TYPE_REAL => (long)_ram.ReadDouble(variantAddress + GODOT_VARIANT_VALUE_OFFSET),
+                _ => throw new ProcessRamWatcherException($"Unexpected Godot Variant type {variantType} at 0x{variantAddress:X}")
+            };
         }
     }
 }
