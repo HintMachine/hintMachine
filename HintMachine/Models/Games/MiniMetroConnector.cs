@@ -14,6 +14,7 @@ namespace HintMachine.Models.Games
         };
 
         private ProcessRamWatcher _ram = null;
+        private uint? _lastValidValue = null;
 
         public MiniMetroConnector()
         {
@@ -40,13 +41,35 @@ namespace HintMachine.Models.Games
 
         protected override bool Poll()
         {
-            try {
-                long address = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x3A1574, new int[] { 0x690, 0x20, 0x8, 0x4C, 0x8, 0xC, 0x88 });
-                _passengersQuest.UpdateValue(_ram.ReadUint32(address));
+            try
+            {
+                long address = _ram.ResolvePointerPath32(_ram.BaseAddress + 0x0058010C, new int[] { 0x5EC, 0x24, 0x8, 0x54, 0x10 });
+                uint value = _ram.ReadUint32(address);
+                if (address == 0)
+                    return true;
+
+                if (_lastValidValue.HasValue)
+                {
+                    long delta = (long)value - (long)_lastValidValue.Value;
+
+                    // Returning to Menu causes Passenger Count to become -1 (255 unsigned int), which is frequently flagging the MaxIncrease warning.
+                    // This hides this warning when the value was specifically set to 255 from far away.
+                    bool likelyMainMenuReturn = (value == 255 && delta > _passengersQuest.MaxIncrease);
+                    if (likelyMainMenuReturn)
+                        return true;
+                }
+
+                _passengersQuest.UpdateValue(value);
+                _lastValidValue = value;
             }
-            catch
-            { }
-            
+            catch (ProcessRamWatcherException)
+            {
+                if (_ram?.Process == null || _ram.Process.HasExited)
+                    return false;
+
+                return true;
+            }
+
             return true;
         }
     }
